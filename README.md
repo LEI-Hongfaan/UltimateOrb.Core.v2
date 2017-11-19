@@ -11,5 +11,5 @@ UltimateOrb Base Class Library.
 
 UltimateOrb.Core is licensed under the [MIT license](LICENSE).
 
-Some portions of UltimateOrb.Core use source code form [.NET Reference Source](https://github.com/Microsoft/referencesource).
+Some portions of UltimateOrb.Core use the source code form [.NET Reference Source](https://github.com/Microsoft/referencesource).
 .NET Reference Source is licensed under the [MIT license](https://github.com/Microsoft/referencesource/blob/master/LICENSE.txt).
