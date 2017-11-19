@@ -2,6 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>LEI Hongfaan</Authors>
+    <Company>LEI Hongfaan</Company>
+    <Product>UltimateOrb Libraries</Product>
+    <Description>UltimateOrb Base Class Library.</Description>
+    <Copyright>Copyright © 2017 LEI Hongfaan. Distributed under the MIT License.</Copyright>
+    <PackageLicenseUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Core/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Core</PackageProjectUrl>
+    <PackageTags>UltimateOrb Core BCL ref</PackageTags>
+    <AssemblyVersion>1</AssemblyVersion>
+    <FileVersion>1</FileVersion>
+    <Version>1.0.2</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
 
 </Project>
