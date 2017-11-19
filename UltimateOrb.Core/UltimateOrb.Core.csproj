@@ -9,7 +9,11 @@
     <Copyright>Copyright © 2017 LEI Hongfaan. Distributed under the MIT License.</Copyright>
     <PackageLicenseUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Core/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Core</PackageProjectUrl>
+    <PackageReleaseNotes>Experimental.
+This package does not include the test suite. See Project Site for more information.
+</PackageReleaseNotes>
     <PackageTags>UltimateOrb Core BCL ref</PackageTags>
+    <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
     <AssemblyVersion>1</AssemblyVersion>
     <FileVersion>1</FileVersion>
     <Version>1.0.2</Version>
@@ -24,5 +28,33 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="SignConverter.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SignConverter.cs</LastGenOutput>
+    </None>
+    <None Update="IO.Core.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IO.Core.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="SignConverter.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SignConverter.tt</DependentUpon>
+    </Compile>
+    <Compile Update="IO.Core.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IO.Core.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
 </Project>
