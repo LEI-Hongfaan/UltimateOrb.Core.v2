@@ -353,7 +353,8 @@ namespace UltimateOrb {
                 null == array ||
                 0 > offset ||
                 0 > count ||
-                unchecked(array.Length - offset) < count) {
+                unchecked(array.Length - offset) < count
+            ) {
                 ThrowArgumentException_CheckArraySegment(array, offset, count);
             }
         }
@@ -362,6 +363,29 @@ namespace UltimateOrb {
         [PureAttribute()]
         internal static void ThrowArgumentException_CheckArraySegment(T[] array, int offset, int count) {
             new ArraySegment<T>(array, offset, count).Ignore();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static void CheckArraySegmentBuffer(int capacity, T[] array, int offset, int count) {
+            if (
+                null == array ||
+                0 <= capacity && (
+                    0 > offset ||
+                    capacity > count ||
+                    unchecked(array.Length - offset) < count
+                )
+            ) {
+                ThrowArgumentException_CheckArraySegmentBuffer(capacity, array, offset, count);
+            }
+        }
+
+        [MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+        [PureAttribute()]
+        internal static void ThrowArgumentException_CheckArraySegmentBuffer(int capacity, T[] array, int offset, int count) {
+            new ArraySegment<T>(array, offset, count).Ignore();
+            // TODO
+            throw new ArgumentException();
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
