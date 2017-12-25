@@ -244,8 +244,12 @@ namespace UltimateOrb.Plain {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Enumerator GetEnumerator() {
             var @this = this;
-            var length = @this.buffer.Length; // null check
-            return new Enumerator(@this);
+            if (null != @this.buffer) { // null check
+                return new Enumerator(@this);
+            }
+            {
+                throw (NullReferenceException)null;
+            }
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]

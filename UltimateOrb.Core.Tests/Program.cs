@@ -1,15 +1,130 @@
-﻿using System;
+﻿using FsCheck.Xunit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
 namespace UltimateOrb.Core.Tests {
 
-    internal partial class Program {
+    public partial class Program {
 
         private static AsyncLocal<long> item_id_1 = new AsyncLocal<long>();
 
         private static AsyncLocal<UltimateOrb.Plain.Queue<long>> collection_1 = new AsyncLocal<UltimateOrb.Plain.Queue<long>>();
+
+        private static AsyncLocal<Random> random = new AsyncLocal<Random>();
+
+        [Property(MaxTest = 40000, QuietOnSuccess = true)]
+        public bool Test_1() {
+            var ff = 2345;
+            var rr = Program.random.Value;
+            if (null == rr) {
+                rr = new Random();
+                Program.random.Value = rr;
+            }
+            {
+                var deque0 = new LinkedList<long>();
+                var deque1 = new Plain.Queue<long>(0);
+                var iid = 1001;
+                for (var i = 0; 300 > i; ++i) {
+                    var m = rr.NextDouble();
+                    if (m < 0.150) {
+                        if (deque0.Count > 0) {
+                            deque0.RemoveLast();
+                            deque1.Pop();
+                        }
+                        continue;
+                    } else if (m < 0.425) {
+                        {
+                            var d = iid++;
+                            deque0.AddLast(d);
+                            deque1.Push(d);
+                        }
+                    } else if (m < 0.475) {
+                        if (deque0.Count >= ff) {
+                            continue;
+                        }
+                        var n0 = 1 + rr.Next(deque0.Count);
+                        for (var n = n0; n > 0; --n) {
+                            var d = iid++;
+                            deque0.AddLast(d);
+                            deque1.Push(d);
+                        }
+                    } else if (m < 0.490) {
+                        if (deque0.Count > 0) {
+                        } else {
+                            continue;
+                        }
+                        var n0 = 1 + rr.Next(deque0.Count);
+                        for (var n = n0; n > 0; --n) {
+                            deque0.RemoveLast();
+                            deque1.Pop();
+                        }
+                    } else if (m < 0.500) {
+                        if (deque0.Count > 0) {
+                        } else {
+                            continue;
+                        }
+                        var n0 = deque0.Count;
+                        for (var n = n0; n > 0; --n) {
+                            deque0.RemoveLast();
+                            deque1.Pop();
+                        }
+                    } else if (m < 0.650) {
+                        if (deque0.Count > 0) {
+                            deque0.RemoveFirst();
+                            deque1.Shift();
+                        }
+                        continue;
+                    } else if (m < 0.925) {
+                        {
+                            var d = iid++;
+                            deque0.AddFirst(d);
+                            deque1.Unshift(d);
+                        }
+                    } else if (m < 0.975) {
+                        if (deque0.Count >= ff) {
+                            continue;
+                        }
+                        var n0 = 1 + rr.Next(deque0.Count);
+                        for (var n = n0; n > 0; --n) {
+                            var d = iid++;
+                            deque0.AddFirst(d);
+                            deque1.Unshift(d);
+                        }
+                    } else if (m < 0.990) {
+                        if (deque0.Count > 0) {
+                        } else {
+                            continue;
+                        }
+                        var n0 = 1 + rr.Next(deque0.Count);
+                        for (var n = n0; n > 0; --n) {
+                            deque0.RemoveFirst();
+                            deque1.Shift();
+                        }
+                    } else if (m < 1.000) {
+                        if (deque0.Count > 0) {
+                        } else {
+                            continue;
+                        }
+                        var n0 = deque0.Count;
+                        for (var n = n0; n > 0; --n) {
+                            deque0.RemoveFirst();
+                            deque1.Shift();
+                        }
+                    }
+                    {
+                        var s0 = deque0.ToArray();
+                        var s1 = deque1.ToArray();
+                        var ss = s0.SequenceEqual(s1);
+                        if (!ss) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
 
         private static int Main(string[] args) {
             {
@@ -18,6 +133,7 @@ namespace UltimateOrb.Core.Tests {
                 deque1.Unshift(iid);
             }
             var rr = new Random();
+            var ff = 2345;
             for (var g = 1000; g > 0; --g) {
                 var deque0 = new LinkedList<long>();
                 var deque1 = new Plain.Queue<long>(0);
@@ -39,6 +155,9 @@ namespace UltimateOrb.Core.Tests {
                             deque1.Push(d);
                         }
                     } else if (m < 0.475) {
+                        if (deque0.Count >= ff) {
+                            continue;
+                        }
                         var n0 = 1 + rr.Next(deque0.Count);
                         Console.Out.WriteLine("Push*{0}", n0);
                         for (var n = n0; n > 0; --n) {
@@ -83,6 +202,9 @@ namespace UltimateOrb.Core.Tests {
                             deque1.Unshift(d);
                         }
                     } else if (m < 0.975) {
+                        if (deque0.Count >= ff) {
+                            continue;
+                        }
                         var n0 = 1 + rr.Next(deque0.Count);
                         Console.Out.WriteLine("Unshift*{0}", n0);
                         for (var n = n0; n > 0; --n) {
