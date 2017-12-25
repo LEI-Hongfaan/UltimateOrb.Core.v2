@@ -8,91 +8,6 @@ namespace UltimateOrb.Plain {
     using ArrayModule = Internal.System.ArrayModule;
     using UltimateOrb.Collections.Generic.RefReturnSupported;
 
-    public partial struct Queue<T> {
-
-        public partial struct Enumerator : IEnumerator<T> {
-
-            private readonly T[] buffer;
-
-            private readonly int offset;
-
-            private int count;
-
-            private int index;
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public Enumerator(Queue<T> collection) {
-                this.buffer = collection.buffer;
-                var s = collection.offset;
-                this.offset = s;
-                this.count = collection.count;
-                this.index = unchecked(s - 1);
-            }
-
-
-            public T Current {
-
-                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get {
-                    return this.buffer[this.index];
-                }
-            }
-
-            ref T IEnumerator<T>.Current {
-
-                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get {
-                    return ref this.buffer[this.index];
-                }
-            }
-
-            object System.Collections.IEnumerator.Current {
-
-                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get {
-                    return this.buffer[this.index];
-                }
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public void Dispose() {
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public bool MoveNext() {
-                var b = this.buffer;
-                if (null != b) {
-                    var c = this.count;
-                    if (c > 0) {
-                        var d = this.index;
-                        ref var result = ref b[d];
-                        unchecked {
-                            --c;
-                        }
-                        this.count = c;
-                        unchecked {
-                            ++d;
-                        }
-                        if (b.Length == d) {
-                            d = 0;
-                        }
-                        this.index = d;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public void Reset() {
-                this.index = this.count;
-            }
-        }
-    }
-
     public partial struct Queue<T> : IEnumerable<T, Queue<T>.Enumerator> {
 
         public T[] buffer;
@@ -107,6 +22,19 @@ namespace UltimateOrb.Plain {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.buffer.Length;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public Queue(int capacity) {
+            if (0 <= capacity) {
+                this.buffer = (capacity > 0 ? Array_Empty<T>.Value : new T[capacity]);
+                this.count = 0;
+                this.offset = 0;
+                this.current = -1;
+                return;
+            }
+            // TODO
+            throw List_ThrowHelper.ThrowArgumentOutOfRangeException_capacity();
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -141,8 +69,10 @@ namespace UltimateOrb.Plain {
                         d = 0;
                     }
                     @this.buffer[d] = item;
-                    @this.current = d;
-                    this = @this;
+                    this.buffer = @this.buffer;
+                    this.offset = @this.offset;
+                    this.current = d;
+                    this.count = c;
                     return;
                 }
             }
@@ -177,8 +107,8 @@ namespace UltimateOrb.Plain {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public void Enqueue(T value) {
-            this.Push(value);
+        public void Enqueue(T item) {
+            this.Push(item);
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -245,8 +175,10 @@ namespace UltimateOrb.Plain {
                         --d;
                     }
                     @this.buffer[d] = item;
-                    @this.offset = d;
-                    this = @this;
+                    this.buffer = @this.buffer;
+                    this.current = @this.current;
+                    this.offset = d;
+                    this.count = c;
                     return;
                 }
             }
@@ -260,19 +192,22 @@ namespace UltimateOrb.Plain {
             var buffer = this.buffer;
             var offset = this.offset;
             var current = this.current;
-            var result = new T[count];
-            if (offset <= current) {
-                Array.Copy(buffer, offset, result, 0, count);
-            } else {
-                var d = unchecked(buffer.Length - offset);
-                Array.Copy(buffer, offset, result, 0, d);
-                Array.Copy(buffer, 0, result, d, unchecked(1 + current));
+            if (count > 0) {
+                var result = new T[count];
+                if (offset <= current) {
+                    Array.Copy(buffer, offset, result, 0, count);
+                } else {
+                    var d = unchecked(buffer.Length - offset);
+                    Array.Copy(buffer, offset, result, 0, d);
+                    Array.Copy(buffer, 0, result, d, unchecked(1 + current));
+                }
+                return result;
             }
-            return result;
+            return Array_Empty<T>.Value;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        private void EnsureCapacity(int min) {
+        public void EnsureCapacity(int min) {
             var buffer = this.buffer;
             var buffer_Length = buffer.Length;
             if (min > buffer_Length) {
@@ -292,7 +227,7 @@ namespace UltimateOrb.Plain {
                         var a = unchecked(1 + t);
                         var b = unchecked(c - a);
                         Array.Copy(buffer, s, d, 0, b);
-                        Array.Copy(buffer, 0, d, c, a);
+                        Array.Copy(buffer, 0, d, b, a);
                     } else {
                         Array.Copy(buffer, s, d, 0, c);
                     }
