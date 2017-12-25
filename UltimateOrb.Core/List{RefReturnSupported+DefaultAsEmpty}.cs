@@ -48,7 +48,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         ///     <para>The capacity can be decreased by calling the <see cref="TrimExcess"/> method or by setting the <see cref="Capacity"/> property explicitly. Decreasing the capacity reallocates memory and copies all the elements in the <see cref="List{T}"/>.</para>
         ///     <para>This constructor is an O(<paramref name="n"/>) operation, where <paramref name="n"/> is <paramref name="capacity"/>.</para>
         /// </remarks>
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public List(int capacity) {
             if (0 <= capacity) {
@@ -58,7 +58,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             throw ThrowArgumentOutOfRangeException_capacity();
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private List(T[] buffer, int count) {
             this.buffer = buffer;
@@ -165,7 +165,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
 
         public int Capacity {
 
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 Contract.Ensures(0 <= Contract.Result<int>());
@@ -176,7 +176,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
                 return 0;
             }
 
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             set {
                 var count = this.count;
@@ -212,7 +212,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
 
         public int Count {
 
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 return this.count;
@@ -221,7 +221,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
 
         public bool IsReadOnly {
 
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 return false;
@@ -230,7 +230,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
 
         public ref T this[int index] {
 
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 Contract.Requires(null != this.buffer);
@@ -241,14 +241,14 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
 
         T IList<T>.this[int index] {
 
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 this.CheckIndex(index);
                 return this.buffer[index];
             }
 
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             set {
                 this.CheckIndex(index);
@@ -258,7 +258,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
 
         T IReadOnlyList<T>.this[int index] {
 
-            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 this.CheckIndex(index);
@@ -266,7 +266,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             }
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private void CheckIndex(int index) {
             if (List_CompilationOptions.Checking) {
@@ -277,7 +277,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             }
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private void CheckIteratorIndex(int index) {
             if (List_CompilationOptions.Checking) {
@@ -288,7 +288,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             }
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         void ICollection<T>.Add(T item) {
             var buffer = this.buffer;
@@ -300,7 +300,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             this.count = count;
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T Add(T item) {
             var buffer = this.buffer;
@@ -314,7 +314,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             return ref ret;
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void AddRange(IEnumerable<T> collection) {
             Contract.Ensures(Contract.OldValue(Count) <= Count);
@@ -352,7 +352,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         }
         */
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Clear() {
             var count = this.count;
@@ -462,7 +462,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         // capacity is increased to twice the current capacity or to min,
         // whichever is larger.
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         private void EnsureCapacity(int min) {
             var buffer = this.buffer;
             var buffer_Length = buffer.Length;
@@ -621,25 +621,25 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         }
         */
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Enumerator GetEnumerator() {
             return new Enumerator(this);
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         System.Collections.Generic.IEnumerator<T> IEnumerable<T>.GetEnumerator() {
             return new Enumerator(this);
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
             return new Enumerator(this);
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public List<T> GetRange(int index, int count) {
             if (index < 0) {
@@ -746,7 +746,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         // is increased by one. If required, the capacity of the list is doubled
         // before inserting the new element.
         // 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         void IList<T>.Insert(int index, T item) {
             this.CheckIteratorIndex(index);
@@ -761,7 +761,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             count++;
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T Insert(int index, T item) {
             var buffer = this.buffer;

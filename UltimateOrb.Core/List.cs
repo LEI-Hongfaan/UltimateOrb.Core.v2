@@ -47,37 +47,37 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
     internal static class List_ThrowHelper {
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         internal static ArgumentOutOfRangeException ThrowArgumentOutOfRangeException_capacity() {
             throw new ArgumentOutOfRangeException("capacity");
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         internal static ArgumentOutOfRangeException ThrowArgumentOutOfRangeException_value() {
             throw new ArgumentOutOfRangeException("value");
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         internal static ArgumentOutOfRangeException CheckIndex_ArgumentOutOfRangeException() {
             throw new ArgumentOutOfRangeException("index");
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         internal static ArgumentOutOfRangeException CheckIteratorIndex_ArgumentOutOfRangeException() {
             throw new ArgumentOutOfRangeException("index");
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         internal static ArgumentNullException ThrowArgumentNullException_collection() {
             throw new ArgumentNullException("collection");
         }
 
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         internal static ArgumentException ThrowArgumentException() {
             throw new ArgumentException();
