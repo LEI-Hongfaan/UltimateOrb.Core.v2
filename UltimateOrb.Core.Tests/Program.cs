@@ -126,6 +126,127 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+        [Property(MaxTest = 50000, QuietOnSuccess = true)]
+        public bool Test_2() {
+            var ff = 2345;
+            var rr = Program.random.Value;
+            if (null == rr) {
+                rr = new Random();
+                Program.random.Value = rr;
+            }
+            {
+                var cc = rr.Next(100);
+                var deque0 = new LinkedList<long>();
+                var deque1 = new Plain.Queue<long>(cc);
+                var iid = 1001;
+                for (var i = 0; 150 > i; ++i) {
+                    var m = rr.NextDouble();
+                    if (m < 0.150) {
+                        if (deque0.Count > 0) {
+                            deque0.RemoveLast();
+                            deque1.Pop();
+                        }
+                        continue;
+                    } else if (m < 0.425) {
+                        {
+                            var d = iid++;
+                            deque0.AddLast(d);
+                            deque1.Push(d);
+                        }
+                    } else if (m < 0.475) {
+                        if (deque0.Count >= ff) {
+                            continue;
+                        }
+                        var n0 = 1 + rr.Next(deque0.Count);
+                        for (var n = n0; n > 0; --n) {
+                            var d = iid++;
+                            deque0.AddLast(d);
+                            deque1.Push(d);
+                        }
+                    } else if (m < 0.490) {
+                        if (deque0.Count > 0) {
+                        } else {
+                            continue;
+                        }
+                        var n0 = 1 + rr.Next(deque0.Count);
+                        for (var n = n0; n > 0; --n) {
+                            deque0.RemoveLast();
+                            deque1.Pop();
+                        }
+                    } else if (m < 0.500) {
+                        if (deque0.Count > 0) {
+                        } else {
+                            continue;
+                        }
+                        var n0 = deque0.Count;
+                        for (var n = n0; n > 0; --n) {
+                            deque0.RemoveLast();
+                            deque1.Pop();
+                        }
+                    } else if (m < 0.650) {
+                        if (deque0.Count > 0) {
+                            deque0.RemoveFirst();
+                            deque1.Shift();
+                        }
+                        continue;
+                    } else if (m < 0.925) {
+                        {
+                            var d = iid++;
+                            deque0.AddFirst(d);
+                            deque1.Unshift(d);
+                        }
+                    } else if (m < 0.975) {
+                        if (deque0.Count >= ff) {
+                            continue;
+                        }
+                        var n0 = 1 + rr.Next(deque0.Count);
+                        for (var n = n0; n > 0; --n) {
+                            var d = iid++;
+                            deque0.AddFirst(d);
+                            deque1.Unshift(d);
+                        }
+                    } else if (m < 0.990) {
+                        if (deque0.Count > 0) {
+                        } else {
+                            continue;
+                        }
+                        var n0 = 1 + rr.Next(deque0.Count);
+                        for (var n = n0; n > 0; --n) {
+                            deque0.RemoveFirst();
+                            deque1.Shift();
+                        }
+                    } else if (m < 1.000) {
+                        if (deque0.Count > 0) {
+                        } else {
+                            continue;
+                        }
+                        var n0 = deque0.Count;
+                        for (var n = n0; n > 0; --n) {
+                            deque0.RemoveFirst();
+                            deque1.Shift();
+                        }
+                    }
+                    {
+                        var s0 = deque0.ToArray();
+                        var s1 = deque1.ToArray();
+                        var ss = s0.SequenceEqual(s1);
+                        if (!ss) {
+                            return false;
+                        }
+                    }
+                    {
+                        var s1 = deque1.ToArray();
+                        var s1a = deque1.AsEnumerable().ToArray();
+                        var ssa = s1.SequenceEqual(s1a);
+                        if (!ssa) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
         private static int Main(string[] args) {
             {
                 var deque1 = new Plain.Queue<long>(0);
