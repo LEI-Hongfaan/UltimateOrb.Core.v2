@@ -32,10 +32,6 @@ This package does not include the test suite. See Project Site for more informat
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Plain.Queue{Dequeue}.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="SignConverter.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SignConverter.cs</LastGenOutput>

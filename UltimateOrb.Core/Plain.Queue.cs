@@ -20,12 +20,6 @@ namespace UltimateOrb.Plain {
 
             private int index;
 
-            private int capacity {
-
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => this.buffer.Length;
-            }
-
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public Enumerator(Queue<T> collection) {
                 this.buffer = collection.buffer;
@@ -82,7 +76,7 @@ namespace UltimateOrb.Plain {
                         unchecked {
                             ++d;
                         }
-                        if (this.capacity == d) {
+                        if (b.Length == d) {
                             d = 0;
                         }
                         this.index = d;
@@ -115,8 +109,6 @@ namespace UltimateOrb.Plain {
             get => this.buffer.Length;
         }
 
-
-
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Push(T item) {
@@ -131,7 +123,7 @@ namespace UltimateOrb.Plain {
                     unchecked {
                         ++d;
                     }
-                    if (this.capacity == d) {
+                    if (@this.capacity == d) {
                         d = 0;
                     }
                     @this.buffer[d] = item;
@@ -171,7 +163,7 @@ namespace UltimateOrb.Plain {
                     }
                     this.count = c;
                     if (0 == d) {
-                        d = this.capacity;
+                        d = b.Length;
                     }
                     unchecked {
                         --d;
@@ -205,7 +197,7 @@ namespace UltimateOrb.Plain {
                     unchecked {
                         ++d;
                     }
-                    if (this.capacity == d) {
+                    if (b.Length == d) {
                         d = 0;
                     }
                     this.offset = d;
@@ -233,7 +225,7 @@ namespace UltimateOrb.Plain {
                 if (c <= @this.capacity) {
                     var d = @this.offset;
                     if (0 == d) {
-                        d = this.capacity;
+                        d = @this.capacity;
                     }
                     unchecked {
                         --d;
@@ -247,7 +239,7 @@ namespace UltimateOrb.Plain {
                     @this.EnsureCapacity(c);
                     var d = @this.offset;
                     if (0 == d) {
-                        d = this.capacity;
+                        d = @this.capacity;
                     }
                     unchecked {
                         --d;
