@@ -4,7 +4,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UltimateOrb.Plain {
+namespace UltimateOrb.Plain.ValueTypes {
     using ArrayModule = Internal.System.ArrayModule;
     using UltimateOrb.Collections.Generic.RefReturnSupported;
 
@@ -20,10 +20,23 @@ namespace UltimateOrb.Plain {
 
         private int capacity {
 
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.buffer.Length;
         }
 
+        public T Peek() {
+            var b = this.buffer;
+            if (null != b) {
+                if (this.count > 0) {
+                    return b[this.current];
+                }
+                throw new InvalidOperationException();
+            }
+            throw (NullReferenceException)null;
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue(int capacity) {
             if (0 <= capacity) {

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 
-namespace UltimateOrb.Plain {
+namespace UltimateOrb.Plain.ValueTypes {
     using UltimateOrb.Collections.Generic.RefReturnSupported;
 
     public partial struct Queue<T> {

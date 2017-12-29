@@ -1,16 +1,18 @@
 ﻿using FsCheck.Xunit;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
 namespace UltimateOrb.Core.Tests {
+    using UltimateOrb.Plain.ValueTypes;
 
     public partial class Program {
 
         private static AsyncLocal<long> item_id_1 = new AsyncLocal<long>();
 
-        private static AsyncLocal<UltimateOrb.Plain.Queue<long>> collection_1 = new AsyncLocal<UltimateOrb.Plain.Queue<long>>();
+        private static AsyncLocal<Queue<long>> collection_1 = new AsyncLocal<Queue<long>>();
 
         private static AsyncLocal<Random> random = new AsyncLocal<Random>();
 
@@ -24,7 +26,7 @@ namespace UltimateOrb.Core.Tests {
             }
             {
                 var deque0 = new LinkedList<long>();
-                var deque1 = new Plain.Queue<long>(0);
+                var deque1 = new Queue<long>(0);
                 var iid = 1001;
                 for (var i = 0; 300 > i; ++i) {
                     var m = rr.NextDouble();
@@ -137,7 +139,7 @@ namespace UltimateOrb.Core.Tests {
             {
                 var cc = rr.Next(100);
                 var deque0 = new LinkedList<long>();
-                var deque1 = new Plain.Queue<long>(cc);
+                var deque1 = new Queue<long>(cc);
                 var iid = 1001;
                 for (var i = 0; 150 > i; ++i) {
                     var m = rr.NextDouble();
@@ -249,7 +251,7 @@ namespace UltimateOrb.Core.Tests {
 
         private static int Main(string[] args) {
             {
-                var deque1 = new Plain.Queue<long>(0);
+                var deque1 = new Queue<long>(0);
                 var iid = 1001;
                 deque1.Unshift(iid);
             }
@@ -257,7 +259,7 @@ namespace UltimateOrb.Core.Tests {
             var ff = 2345;
             for (var g = 1000; g > 0; --g) {
                 var deque0 = new LinkedList<long>();
-                var deque1 = new Plain.Queue<long>(0);
+                var deque1 = new Queue<long>(0);
                 var iid = 1001;
                 for (var i = 0; 300 > i; ++i) {
                     var m = rr.NextDouble();
@@ -377,7 +379,7 @@ namespace UltimateOrb.Core.Tests {
             }
             {
                 var deque0 = new LinkedList<long>();
-                var deque1 = new Plain.Queue<long>(0);
+                var deque1 = new Queue<long>(0);
                 var iid = 1001;
                 for (var i = 0; 10000 > i; ++i) {
                     var m = rr.NextDouble();
@@ -437,7 +439,7 @@ namespace UltimateOrb.Core.Tests {
                 }
             }
             {
-                var stack1 = new Plain.Queue<long>(0);
+                var stack1 = new Queue<long>(0);
                 var stack0 = new System.Collections.Generic.Stack<long>(0);
                 var iid = 1001;
                 for (var i = 0; 10000 > i; ++i) {
