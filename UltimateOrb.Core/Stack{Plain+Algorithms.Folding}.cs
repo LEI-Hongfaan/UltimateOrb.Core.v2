@@ -11,6 +11,27 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public TAccumulate default_accumulate;
 
+        internal FoldingStack(TStack _, TAccumulate default_accumulate) {
+            this._ = _;
+            this.default_accumulate = default_accumulate;
+        }
+
+        public static FoldingStack<T, TAccumulate, TFunc, TStack> Create<TStackConstructor>(int capacity) where TStackConstructor: IO.IFunc<int, TStack> {
+            return new FoldingStack<T, TAccumulate, TFunc, TStack>(default(TStackConstructor).Invoke(capacity), default);
+        }
+
+        public static FoldingStack<T, TAccumulate, TFunc, TStack> Create<TStackConstructor>() where TStackConstructor : IO.IFunc<TStack> {
+            return new FoldingStack<T, TAccumulate, TFunc, TStack>(default(TStackConstructor).Invoke(), default);
+        }
+
+        public static FoldingStack<T, TAccumulate, TFunc, TStack> Create<TStackConstructor>(int capacity, TAccumulate accumulate) where TStackConstructor : IO.IFunc<int, TStack> {
+            return new FoldingStack<T, TAccumulate, TFunc, TStack>(default(TStackConstructor).Invoke(capacity), accumulate);
+        }
+
+        public static FoldingStack<T, TAccumulate, TFunc, TStack> Create<TStackConstructor>(TAccumulate accumulate) where TStackConstructor : IO.IFunc<TStack> {
+            return new FoldingStack<T, TAccumulate, TFunc, TStack>(default(TStackConstructor).Invoke(), accumulate);
+        }
+
         private TAccumulate accumulate {
 
             get {

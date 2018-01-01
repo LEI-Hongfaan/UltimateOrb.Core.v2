@@ -305,5 +305,20 @@ namespace UltimateOrb.Plain.ValueTypes {
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => 0 == this.count;
         }
+
+        public TResult[] ToArray<TResult, TFunc>() where TFunc : IO.IFunc<T, TResult> {
+            var a = this.buffer;
+            if (null != a) {
+                var f = default(TFunc);
+                var c = this.count;
+                var r = new TResult[c];
+                for (var i = c; i > 0;) {
+                    --i;
+                    r[i] = f.Invoke(a[i]);
+                }
+                return r;
+            }
+            throw (NullReferenceException)null;
+        }
     }
 }
