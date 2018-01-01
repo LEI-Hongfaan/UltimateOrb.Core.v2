@@ -315,6 +315,18 @@ namespace UltimateOrb.Core.Tests {
                 }
             }
 
+
+            private struct Adfsad : IFunc<(int, int?), int> {
+
+                public int Invoke((int, int?) arg) {
+                    return arg.Item1;
+                }
+            }
+
+            public int[] ToArray() {
+                return this._._.ToArray<int, Adfsad>();
+            }
+
             IEnumerator IEnumerable.GetEnumerator() {
                 throw new NotImplementedException();
             }

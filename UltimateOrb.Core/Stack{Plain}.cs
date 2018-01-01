@@ -306,19 +306,36 @@ namespace UltimateOrb.Plain.ValueTypes {
             get => 0 == this.count;
         }
 
-        public TResult[] ToArray<TResult, TFunc>() where TFunc : IO.IFunc<T, TResult> {
+        private struct MoveFunctor : IO.IFunc<T, T> {
+
+            public T Invoke(T arg) {
+                return arg;
+            }
+        }
+
+        public T[] ToArray() {
+            return ToArray<T, MoveFunctor>();
+        }
+
+        public TResult[] ToArray<TResult, TFunc>(TFunc func) where TFunc : IO.IFunc<T, TResult> {
             var a = this.buffer;
             if (null != a) {
-                var f = default(TFunc);
                 var c = this.count;
                 var r = new TResult[c];
-                for (var i = c; i > 0;) {
-                    --i;
-                    r[i] = f.Invoke(a[i]);
+                {
+                    var i = c;
+                    var j = 0;
+                    for (; a.Length > j && i > 0;) {
+                        r[--i] = func.Invoke(a[j++]);
+                    }
                 }
                 return r;
             }
             throw (NullReferenceException)null;
+        }
+
+        public TResult[] ToArray<TResult, TFunc>() where TFunc : IO.IFunc<T, TResult> {
+            return this.ToArray<TResult, TFunc>(default(TFunc));
         }
     }
 }
