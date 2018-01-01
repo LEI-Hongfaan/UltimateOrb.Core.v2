@@ -308,15 +308,21 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         private struct MoveFunctor : IO.IFunc<T, T> {
 
+            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public T Invoke(T arg) {
                 return arg;
             }
         }
 
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T[] ToArray() {
             return ToArray<T, MoveFunctor>();
         }
 
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public TResult[] ToArray<TResult, TFunc>(TFunc func) where TFunc : IO.IFunc<T, TResult> {
             var a = this.buffer;
             if (null != a) {
@@ -334,6 +340,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             throw (NullReferenceException)null;
         }
 
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public TResult[] ToArray<TResult, TFunc>() where TFunc : IO.IFunc<T, TResult> {
             return this.ToArray<TResult, TFunc>(default(TFunc));
         }
