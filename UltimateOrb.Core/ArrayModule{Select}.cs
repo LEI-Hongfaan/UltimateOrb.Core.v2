@@ -17,9 +17,22 @@ namespace UltimateOrb {
         [PureAttribute()]
         public static TResult[] Select<TResult, TSelector>(T[] array, TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             if (null != array) {
-                var c = array.Length;
-                var result = new TResult[c];
-                for (var i = 0; c > i; ++i) {
+                var count = array.Length;
+                var result = new TResult[count];
+                for (var i = 0; count > i; ++i) {
+                    result[i] = selector.Invoke(array[i]);
+                }
+                return result;
+            }
+            return null;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static TResult[] Select<TResult, TSelector>(T[] array, int count, TSelector selector) where TSelector : IO.IFunc<T, TResult> {
+            if (null != array) {
+                var result = new TResult[count];
+                for (var i = 0; count > i && array.Length > i; ++i) {
                     result[i] = selector.Invoke(array[i]);
                 }
                 return result;

@@ -46,7 +46,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         ///     <para>The capacity of a <see cref="List{T}"/> is the number of elements that the <see cref="List{T}"/> can hold. As elements are added to a <see cref="List{T}"/>, the capacity is automatically increased as required by reallocating the internal array.</para>
         ///     <para>If the size of the collection can be estimated, specifying the initial capacity eliminates the need to perform a number of resizing operations while adding elements to the <see cref="List{T}"/>.</para>
         ///     <para>The capacity can be decreased by calling the <see cref="TrimExcess"/> method or by setting the <see cref="Capacity"/> property explicitly. Decreasing the capacity reallocates memory and copies all the elements in the <see cref="List{T}"/>.</para>
-        ///     <para>This constructor is an O(<paramref name="n"/>) operation, where <paramref name="n"/> is <paramref name="capacity"/>.</para>
+        ///     <para>This constructor is an O(n) operation, where n is <paramref name="capacity"/>.</para>
         /// </remarks>
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

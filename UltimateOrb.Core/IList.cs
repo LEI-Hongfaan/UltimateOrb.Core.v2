@@ -58,13 +58,32 @@ namespace Internal.System.Collections.Generic {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable IDE1006 // Naming Styles
+        public static T get_Item<TList>(ref TList @this, int index) where TList : struct, Generic.IList<T> {
+#pragma warning restore IDE1006 // Naming Styles
+            return @this[index];
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable IDE1006 // Naming Styles
         public static void set_Item<TList>(TList @this, int index, T value) where TList : Generic.IList<T> {
 #pragma warning restore IDE1006 // Naming Styles
             @this[index] = value;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable IDE1006 // Naming Styles
+        public static void set_Item<TList>(ref TList @this, int index, T value) where TList : struct, Generic.IList<T> {
+#pragma warning restore IDE1006 // Naming Styles
+            @this[index] = value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void Insert<TList>(TList @this, int index, T item) where TList : Generic.IList<T> {
+            @this.Insert(index, item);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void Insert<TList>(ref TList @this, int index, T item) where TList : struct, Generic.IList<T> {
             @this.Insert(index, item);
         }
     }

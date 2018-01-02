@@ -12,26 +12,58 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public const NodeId RootIndex = 0;
 
-        public Stack<Node> Value;
+        public Stack<Node> data;
+
+        public Tree(Stack<Node> data) {
+            this.data = data;
+        }
 
         public ref Node this[NodeId id] {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                return ref this.Value.buffer[id];
+                return ref this.data.buffer[id];
             }
         }
 
         [MethodImplAttribute(default(MethodImplOptions))]
         public void IncreaseCapacity() {
-            Array.Resize(ref Value.buffer, (NodeCount)(22 + 2.6180339887498948482045868343656 * Value.count));
+            Array.Resize(ref data.buffer, checked((NodeCount)(22 + 2.6180339887498948482045868343656 * data.count0)));
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Tree(T root, NodeCount capacity) {
-            this.Value = new Stack<Node>(capacity);
-            ref var r = ref this.Value.Push();
+            this.data = new Stack<Node>(capacity);
+            ref var r = ref this.data.Push();
             r.Value = root;
+        }
+
+        internal struct NodeSelector0<TResult, TSelector> : IO.IFunc<Tree<T>.Node, Tree<TResult>.Node> where TSelector : IO.IFunc<T, TResult> {
+
+            public Tree<TResult>.Node Invoke(Node arg) {
+                return new Tree<TResult>.Node(arg.forwarding, arg.firstChild, arg.nextSibling, default(TSelector).Invoke(arg.Value));
+            }
+        }
+
+        internal struct NodeSelector1<TResult, TSelector> : IO.IFunc<Tree<T>.Node, Tree<TResult>.Node> where TSelector : IO.IFunc<T, TResult> {
+
+            public readonly TSelector selector;
+
+            public NodeSelector1(TSelector selector) {
+                this.selector = selector;
+            }
+
+            public Tree<TResult>.Node Invoke(Node arg) {
+                return new Tree<TResult>.Node(arg.forwarding, arg.firstChild, arg.nextSibling, selector.Invoke(arg.Value));
+            }
+        }
+
+        public Tree<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
+            return new Tree<TResult>(this.data.Select<Tree<TResult>.Node, NodeSelector1<TResult, TSelector>>(new NodeSelector1<TResult, TSelector>(selector)));
+        }
+
+        public Tree<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> {
+            return new Tree<TResult>(this.data.Select<Tree<TResult>.Node, NodeSelector0<TResult, TSelector>>(default));
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -41,56 +73,56 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId CreateNewNode(T value) {
-            var a = Value.count + 1;
-            if (null == Value.buffer || a > Value.buffer.Length) {
+            var a = data.count0 + 1;
+            if (null == data.buffer || a > data.buffer.Length) {
                 IncreaseCapacity();
             }
-            Value.buffer[a - 1].Value = value;
-            Value.count = a;
+            data.buffer[a - 1].Value = value;
+            data.count0 = a;
             return a - 1;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref Node CreateNewNodeAsNodeRef(T value) {
-            var a = checked(Value.count + 1);
-            if (null == Value.buffer || a > Value.buffer.Length) {
+            var a = checked(data.count0 + 1);
+            if (null == data.buffer || a > data.buffer.Length) {
                 IncreaseCapacity();
             }
-            ref var node = ref Value.buffer[unchecked(a - 1)];
+            ref var node = ref data.buffer[unchecked(a - 1)];
             node.Value = value;
-            Value.count = a;
+            data.count0 = a;
             return ref node;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void NodeSetNextSiblingValue(NodeId node, NodeId nextSibling) {
-            Value.buffer[node].nextSibling = nextSibling;
+            data.buffer[node].nextSibling = nextSibling;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void NodeSetNextSiblingValueVolatile(NodeId node, NodeId nextSibling) {
-            System.Threading.Volatile.Write(ref Value.buffer[node].nextSibling, nextSibling);
+            System.Threading.Volatile.Write(ref data.buffer[node].nextSibling, nextSibling);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId NodeGetNextSiblingValue(NodeId node) {
-            return Value.buffer[node].nextSibling;
+            return data.buffer[node].nextSibling;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref NodeId NodeGetNextSiblingValueRef(NodeId node) {
-            return ref Value.buffer[node].nextSibling;
+            return ref data.buffer[node].nextSibling;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId NodeGetNextSiblingValueVolatile(NodeId node) {
-            return System.Threading.Volatile.Read(ref Value.buffer[node].nextSibling);
+            return System.Threading.Volatile.Read(ref data.buffer[node].nextSibling);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId AddFirst(NodeId node, T value) {
             var result = CreateNewNode(value);
-            var buffer = Value.buffer;
+            var buffer = data.buffer;
             ref var nc = ref buffer[node].firstChild;
             if (NilIndex != nc) {
                 buffer[result].nextSibling = nc;
@@ -104,7 +136,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public NodeId AddAfter(NodeId node, T value) {
             if (NilIndex != node && RootIndex != node) {
                 var result = CreateNewNode(value);
-                var buffer = Value.buffer;
+                var buffer = data.buffer;
                 ref var ns = ref buffer[node].nextSibling;
                 if (NilIndex != ns) {
                     buffer[result].nextSibling = ns;
@@ -117,27 +149,27 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void NodeSetFirstChildValue(NodeId node, NodeId firstChild) {
-            Value.buffer[node].firstChild = firstChild;
+            data.buffer[node].firstChild = firstChild;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void NodeSetFirstChildValueVolatile(NodeId node, NodeId firstChild) {
-            System.Threading.Volatile.Write(ref Value.buffer[node].firstChild, firstChild);
+            System.Threading.Volatile.Write(ref data.buffer[node].firstChild, firstChild);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId NodeGetFirstChildValue(NodeId node) {
-            return Value.buffer[node].firstChild;
+            return data.buffer[node].firstChild;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref NodeId NodeGetFirstChildValueRef(NodeId node) {
-            return ref Value.buffer[node].firstChild;
+            return ref data.buffer[node].firstChild;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId NodeGetFirstChildValueVolatile(NodeId node) {
-            return System.Threading.Volatile.Read(ref Value.buffer[node].firstChild);
+            return System.Threading.Volatile.Read(ref data.buffer[node].firstChild);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -155,7 +187,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public NodeNavigator GetNodeNavigator() {
-            return new NodeNavigator(this.Value.buffer);
+            return new NodeNavigator(this.data.buffer);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -163,24 +195,24 @@ namespace UltimateOrb.Plain.ValueTypes {
             return new NodeEnumerator(this);
         }
 
-        [System.Runtime.CompilerServices.MethodImplAttribute(default(System.Runtime.CompilerServices.MethodImplOptions))]
+        [MethodImplAttribute(default(MethodImplOptions))]
         public void Collect() {
             var n = RootIndex;
-            if (Value.buffer[n].firstChild == NilIndex) {
+            if (data.buffer[n].firstChild == NilIndex) {
                 return;
             }
             Stack<NodeId> s = Stack<NodeId>.Create();
-            s.Push(Value.buffer[n].nextSibling);
+            s.Push(data.buffer[n].nextSibling);
             var a = 2;
-            for (NodeId ni = Value.buffer[n].firstChild; ; ++a) {
+            for (NodeId ni = data.buffer[n].firstChild; ; ++a) {
                 n = ni;
-                Value.buffer[n].forwarding = ~RootIndex;
-                ni = Value.buffer[n].firstChild;
+                data.buffer[n].forwarding = ~RootIndex;
+                ni = data.buffer[n].firstChild;
                 if (ni != NilIndex) {
-                    s.Push(Value.buffer[n].nextSibling);
+                    s.Push(data.buffer[n].nextSibling);
                     continue;
                 }
-                ni = Value.buffer[n].nextSibling;
+                ni = data.buffer[n].nextSibling;
                 if (ni != NilIndex) {
                     continue;
                 }
@@ -197,43 +229,43 @@ namespace UltimateOrb.Plain.ValueTypes {
             L_CompactS:;
             for (NodeId i = RootIndex + 1, j = a - 1, k = i; j > 0; --j, ++k) {
                 L_2:;
-                if (Value.buffer.Length <= i) {
+                if (data.buffer.Length <= i) {
                     break;
                 }
                 n = ++i;
-                if (Value.buffer[n].forwarding == RootIndex) {
+                if (data.buffer[n].forwarding == RootIndex) {
                     goto L_2;
                 }
-                Value.buffer[n].forwarding = k;
+                data.buffer[n].forwarding = k;
             }
             // L_CompactM:;
             var m = RootIndex;
-            Value.buffer[m].firstChild = Value.buffer[Value.buffer[m].firstChild].forwarding;
+            data.buffer[m].firstChild = data.buffer[data.buffer[m].firstChild].forwarding;
             for (NodeId i = RootIndex + 1, j = a - 1, k = i; j > 0; --j, ++k) {
                 L_3:;
-                if (Value.buffer.Length <= i) {
+                if (data.buffer.Length <= i) {
                     break;
                 }
                 n = ++i;
-                if (Value.buffer[n].forwarding == RootIndex) {
+                if (data.buffer[n].forwarding == RootIndex) {
                     goto L_3;
                 }
                 if (i == k) {
                     continue;
                 }
                 m = k;
-                Value.buffer[m].firstChild = Value.buffer[Value.buffer[n].firstChild].forwarding;
-                Value.buffer[m].nextSibling = Value.buffer[Value.buffer[n].nextSibling].forwarding;
-                Value.buffer[m].Value = Value.buffer[n].Value;
+                data.buffer[m].firstChild = data.buffer[data.buffer[n].firstChild].forwarding;
+                data.buffer[m].nextSibling = data.buffer[data.buffer[n].nextSibling].forwarding;
+                data.buffer[m].Value = data.buffer[n].Value;
             }
-            for (NodeId i = RootIndex + 1, j = a - 1; Value.buffer.Length <= i && j > 0;) {
+            for (NodeId i = RootIndex + 1, j = a - 1; data.buffer.Length <= i && j > 0;) {
                 n = ++i;
-                if (Value.buffer[n].forwarding != RootIndex) {
-                    Value.buffer[n].forwarding = RootIndex;
+                if (data.buffer[n].forwarding != RootIndex) {
+                    data.buffer[n].forwarding = RootIndex;
                     --j;
                 }
             }
-            Value.count = a;
+            data.count0 = a;
         }
     }
 }

@@ -28,8 +28,8 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public NodeEnumerator(Tree<T> tree) {
-                this.data = tree.Value.buffer;
-                var count = tree.Value.count;
+                this.data = tree.data.buffer;
+                var count = tree.data.count0;
                 this.count = count;
                 this.id = count;
                 this.ancestors = default(Stack<NodeId>);
@@ -71,14 +71,14 @@ namespace UltimateOrb.Plain.ValueTypes {
                             this.id = nx;
                             return true;
                         }
-                        for (var ancestors = this.ancestors; ancestors.count > 0;) {
+                        for (var ancestors = this.ancestors; ancestors.count0 > 0;) {
                             if (NilIndex != (id = data[ancestors.Pop()].nextSibling)) {
-                                this.ancestors.count = ancestors.count;
+                                this.ancestors.count0 = ancestors.count0;
                                 this.id = id;
                                 return true;
                             }
                         }
-                        this.ancestors.count = 0;
+                        this.ancestors.count0 = 0;
                         return false;
                     }
                     this.ancestors.Push(id);
@@ -91,7 +91,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {
-                this.ancestors.count = 0;
+                this.ancestors.count0 = 0;
                 this.id = RootPreviousIndex;
             }
 

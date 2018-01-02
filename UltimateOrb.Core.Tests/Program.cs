@@ -308,8 +308,8 @@ namespace UltimateOrb.Core.Tests {
             }
 
             public IEnumerator<int> GetEnumerator() {
-                var b = this._._.buffer;
-                var c = this._._.count;
+                var b = this._.data.buffer;
+                var c = this._.data.count0;
                 for (; c > 0;) {
                     yield return b[--c].Item1;
                 }
@@ -324,7 +324,7 @@ namespace UltimateOrb.Core.Tests {
             }
 
             public int[] ToArray() {
-                return this._._.ToArray<int, Adfsad>();
+                return this._.data.ToArray<int, Adfsad>();
             }
 
             IEnumerator IEnumerable.GetEnumerator() {
@@ -497,6 +497,15 @@ namespace UltimateOrb.Core.Tests {
         }
 
         private static int Main(string[] args) {
+            {
+                var a = default(DefaultConstuctor<System.Collections.Generic.List<long>>).Invoke();
+                Console.Out.WriteLine(a);
+                var b = default(DefaultConstuctor<long>).Invoke();
+                Console.Out.WriteLine(b);
+                Console.ReadKey(true);
+            }
+
+
             {
                 new Program().Test_3();
             }

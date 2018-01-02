@@ -43,7 +43,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public NodeId GetParentId() {
                 if (this.ancestor_previous_id_count_collection.TryPeek(out var c)) {
-                    var d = this.ancestor_previous_id_count_collection.count;
+                    var d = this.ancestor_previous_id_count_collection.count0;
                     var t = d;
                     unchecked {
                         t -= unchecked((NodeCount)c);
@@ -113,7 +113,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 if (this.ancestor_previous_id_count_collection.TryPeek(out var c)) {
                     if (c > 2) {
                         unchecked {
-                            --this.ancestor_previous_id_count_collection.count;
+                            --this.ancestor_previous_id_count_collection.count0;
                         }
                         unchecked {
                             --c;
@@ -138,7 +138,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public bool MoveToParent() {
                 if (this.ancestor_previous_id_count_collection.TryPeek(out var c)) {
-                    ref var d = ref this.ancestor_previous_id_count_collection.count;
+                    ref var d = ref this.ancestor_previous_id_count_collection.count0;
                     var t = d;
                     unchecked {
                         t -= unchecked((NodeCount)c);
@@ -158,7 +158,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public bool MoveToRoot() {
-                this.ancestor_previous_id_count_collection.count = 0;
+                this.ancestor_previous_id_count_collection.count0 = 0;
                 this.current_id = RootIndex;
                 return true;
             }

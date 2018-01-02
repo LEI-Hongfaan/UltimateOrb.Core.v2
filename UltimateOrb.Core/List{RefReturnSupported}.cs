@@ -29,7 +29,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
         [ContractPublicPropertyNameAttribute("Count")]
         private int count;
-
+        
         /// <summary>
         ///     <para>
         ///         Initializes a new instance of the <see cref="List{T}"/> type that is empty and has sufficient capacity to accommodate the specified number of elements.
@@ -1100,6 +1100,36 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public List<T> Select() {
+            Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
+            var buffer = this.buffer;
+            var count = this.count;
+            var new_buffer = new T[count];
+            Array.Copy(buffer, 0, new_buffer, 0, count);
+            return new List<T>(new_buffer, count);
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public List<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult>, new() {
+            Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
+            var buffer = this.buffer;
+            var count = this.count;
+            return new List<TResult>(ArrayModule<T>.Select<TResult, TSelector>(buffer, count, selector), count);
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public List<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() {
+            Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
+            return this.Select<TResult, TSelector>(DefaultConstuctor.Invoke<TSelector>());
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T[] ToArray() {
             Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
             Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
@@ -1144,8 +1174,8 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public int IndexOf<TEqualityComparer>(T item) where TEqualityComparer : struct, IEqualityComparer<T> {
-            return this.IndexOf(default(TEqualityComparer), item);
+        public int IndexOf<TEqualityComparer>(T item) where TEqualityComparer : IEqualityComparer<T>, new() {
+            return this.IndexOf(DefaultConstuctor.Invoke<TEqualityComparer>(), item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

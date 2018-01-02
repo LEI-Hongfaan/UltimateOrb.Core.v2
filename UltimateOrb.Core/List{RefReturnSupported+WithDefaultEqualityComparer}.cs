@@ -112,7 +112,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         void IList<T>.Insert(int index, T item) {
-            TList<T>.Insert(this.value, index, item);
+            TList<T>.Insert(ref this.value, index, item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

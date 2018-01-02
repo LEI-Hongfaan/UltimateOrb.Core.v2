@@ -10,9 +10,9 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             public NodeId forwarding;
 
-            public NodeId nextSibling;
-
             public NodeId firstChild;
+
+            public NodeId nextSibling;
 
             public T Value;
 
@@ -22,6 +22,14 @@ namespace UltimateOrb.Plain.ValueTypes {
                 nextSibling = default(NodeId);
                 firstChild = default(NodeId);
                 Value = value;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public Node(NodeId forwarding, NodeId firstChild, NodeId nextSibling, T value) {
+                this.forwarding = forwarding;
+                this.firstChild = firstChild;
+                this.nextSibling = nextSibling;
+                this.Value = value;
             }
         }
     }

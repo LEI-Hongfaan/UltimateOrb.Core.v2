@@ -7,12 +7,12 @@ namespace UltimateOrb.Plain.ValueTypes {
            where TFunc : IO.IFunc<TAccumulate, T, TAccumulate>
            where TStack : IStack<(T Item, TAccumulate Accumulate)> {
 
-        public TStack _;
+        public TStack data;
 
         public TAccumulate default_accumulate;
 
         internal FoldingStack(TStack _, TAccumulate default_accumulate) {
-            this._ = _;
+            this.data = _;
             this.default_accumulate = default_accumulate;
         }
 
@@ -35,7 +35,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         private TAccumulate accumulate {
 
             get {
-                var b = this._;
+                var b = this.data;
                 return b.IsEmpty ? this.default_accumulate : b.Peek().Accumulate;
             }
         }
@@ -46,27 +46,27 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public bool IsEmpty {
-            get => this._.IsEmpty;
+            get => this.data.IsEmpty;
         }
 
         public ref T Peek() {
-            return ref this._.Peek().Item;
+            return ref this.data.Peek().Item;
         }
 
         T Collections.Generic.IStack<T>.Peek() {
-            return this._.Peek().Item;
+            return this.data.Peek().Item;
         }
 
         public T Pop() {
-            return this._.Pop().Item;
+            return this.data.Pop().Item;
         }
 
         public void Push(T item) {
-            this._.Push((item, default(TFunc).Invoke(this.accumulate, item)));
+            this.data.Push((item, default(TFunc).Invoke(this.accumulate, item)));
         }
 
         public bool TryPeek(out T item) {
-            if (this._.TryPeek(out var t)) {
+            if (this.data.TryPeek(out var t)) {
                 item = t.Item;
                 return true;
             }
@@ -75,7 +75,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public bool TryPop(out T item) {
-            if (this._.TryPop(out var t)) {
+            if (this.data.TryPop(out var t)) {
                 item = t.Item;
                 return true;
             }
@@ -84,7 +84,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public bool TryPush(T item) {
-            return this._.TryPush((item, default(TFunc).Invoke(this.accumulate, item)));
+            return this.data.TryPush((item, default(TFunc).Invoke(this.accumulate, item)));
         }
     }
 }

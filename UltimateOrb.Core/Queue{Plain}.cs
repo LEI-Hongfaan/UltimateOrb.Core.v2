@@ -12,11 +12,18 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public T[] buffer;
 
-        public int offset;
-
         public int count;
 
+        public int offset;
+
         public int current;
+
+        public Queue(T[] buffer, int count, int offset, int current) {
+            this.buffer = buffer;
+            this.count = count;
+            this.offset = offset;
+            this.current = current;
+        }
 
         private int capacity {
 
@@ -198,26 +205,122 @@ namespace UltimateOrb.Plain.ValueTypes {
             throw (NullReferenceException)null;
         }
 
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public Queue<T> Select() {
+            var buffer = this.buffer;
+            var count = this.count;
+            var offset = this.offset;
+            var current = this.current;
+            if (null != buffer) {
+                if (count > 0) {
+                    var new_buffer = new T[count];
+                    if (offset <= current) {
+                        Array.Copy(buffer, offset, new_buffer, 0, count);
+                    } else {
+                        var d = unchecked(buffer.Length - offset);
+                        Array.Copy(buffer, offset, new_buffer, 0, d);
+                        Array.Copy(buffer, 0, new_buffer, d, unchecked(1 + current));
+                    }
+                    return new Queue<T>(new_buffer, count, 0, unchecked(count - 1));
+                }
+                return new Queue<T>(0);
+            }
+            return default;
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public Queue<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
+            var buffer = this.buffer;
+            var count = this.count;
+            var offset = this.offset;
+            var current = this.current;
+            if (null != buffer) {
+                if (count > 0) {
+                    var new_buffer = new TResult[count];
+                    if (offset <= current) {
+                        for (var i = 0; new_buffer.Length > i; ++i) {
+                            new_buffer[i] = selector.Invoke(buffer[unchecked(offset + i)]);
+                        }
+                    } else {
+                        var d = unchecked(buffer.Length - offset);
+                        for (var i = 0; d > i; ++i) {
+                            new_buffer[i] = selector.Invoke(buffer[unchecked(offset + i)]);
+                        }
+                        for (var i = 0; unchecked(1 + current) > i; ++i) {
+                            new_buffer[unchecked(d + i)] = selector.Invoke(buffer[i]);
+                        }
+                    }
+                    return new Queue<TResult>(new_buffer, count, 0, unchecked(count - 1));
+                }
+                return new Queue<TResult>(0);
+            }
+            return default;
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public Queue<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> => Select<TResult, TSelector>(default);
+
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T[] ToArray() {
-            var count = this.count;
             var buffer = this.buffer;
+            var count = this.count;
             var offset = this.offset;
             var current = this.current;
-            if (count > 0) {
-                var result = new T[count];
-                if (offset <= current) {
-                    Array.Copy(buffer, offset, result, 0, count);
-                } else {
-                    var d = unchecked(buffer.Length - offset);
-                    Array.Copy(buffer, offset, result, 0, d);
-                    Array.Copy(buffer, 0, result, d, unchecked(1 + current));
+            if (null != buffer) {
+                if (count > 0) {
+                    var result = new T[count];
+                    if (offset <= current) {
+                        Array.Copy(buffer, offset, result, 0, count);
+                    } else {
+                        var d = unchecked(buffer.Length - offset);
+                        Array.Copy(buffer, offset, result, 0, d);
+                        Array.Copy(buffer, 0, result, d, unchecked(1 + current));
+                    }
+                    return result;
                 }
-                return result;
+                return Array_Empty<T>.Value;
             }
-            return Array_Empty<T>.Value;
+            return null;
         }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public TResult[] ToArray<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
+            var buffer = this.buffer;
+            var count = this.count;
+            var offset = this.offset;
+            var current = this.current;
+            if (null != buffer) {
+                if (count > 0) {
+                    var result = new TResult[count];
+                    if (offset <= current) {
+                        for (var i = 0; result.Length > i; ++i) {
+                            result[i] = selector.Invoke(buffer[unchecked(offset + i)]);
+                        }
+                    } else {
+                        var d = unchecked(buffer.Length - offset);
+                        for (var i = 0; d > i; ++i) {
+                            result[i] = selector.Invoke(buffer[unchecked(offset + i)]);
+                        }
+                        for (var i = 0; unchecked(1 + current) > i; ++i) {
+                            result[unchecked(d + i)] = selector.Invoke(buffer[i]);
+                        }
+                    }
+                    return result;
+                }
+                return Array_Empty<TResult>.Value;
+            }
+            return null;
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public TResult[] ToArray<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> => this.ToArray<TResult, TSelector>(default);
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         public void EnsureCapacity(int min) {
