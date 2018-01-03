@@ -62,8 +62,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             return new Tree<TResult>(this.data.Select<Tree<TResult>.Node, NodeSelector1<TResult, TSelector>>(new NodeSelector1<TResult, TSelector>(selector)));
         }
 
-        public Tree<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> {
-            return new Tree<TResult>(this.data.Select<Tree<TResult>.Node, NodeSelector0<TResult, TSelector>>(default));
+        public Tree<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() {
+            return null == default(TSelector) ? this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>()) : new Tree<TResult>(this.data.Select<Tree<TResult>.Node, NodeSelector0<TResult, TSelector>>(default));
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

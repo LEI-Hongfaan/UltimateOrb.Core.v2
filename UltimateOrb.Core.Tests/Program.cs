@@ -498,12 +498,27 @@ namespace UltimateOrb.Core.Tests {
 
         private static int Main(string[] args) {
             {
+                var a = DefaultConstructor.Invoke<object>();
+                Console.Out.WriteLine(a);
+            }
+            {
+                var a = DefaultConstructor.Invoke<RuntimeTypeHandle>();
+                Console.Out.WriteLine(a);
+                try {
+                    var b = a.GetModuleHandle();
+                    Console.Out.WriteLine(b);
+                } catch (Exception) {
+                }
+            }
+            {
                 var a = default(DefaultConstructor<System.Collections.Generic.List<long>>).Invoke();
                 Console.Out.WriteLine(a);
                 var b = default(DefaultConstructor<long>).Invoke();
                 Console.Out.WriteLine(b);
                 var c = DefaultConstructor.Invoke<long>();
                 Console.Out.WriteLine(c);
+                var d = DefaultConstructor.Invoke<System.Collections.Generic.List<long>>();
+                Console.Out.WriteLine(d);
                 Console.ReadKey(true);
             }
 
