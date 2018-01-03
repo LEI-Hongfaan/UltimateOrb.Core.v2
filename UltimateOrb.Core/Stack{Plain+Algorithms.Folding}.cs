@@ -6,7 +6,8 @@ namespace UltimateOrb.Plain.ValueTypes {
 
     public struct FoldingStack<T, TAccumulate, TFunc, TStack>
         : IStack<T>
-        where TFunc : IO.IFunc<TAccumulate, T, TAccumulate>
+        where TAccumulate : new()
+        where TFunc : struct, IO.IFunc<TAccumulate, T, TAccumulate>
         where TStack : IStack<(T Item, TAccumulate Accumulate)> {
 
         public TStack data;
@@ -22,12 +23,12 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static FoldingStack<T, TAccumulate, TFunc, TStack> Create<TStackConstructor>(int capacity) where TStackConstructor : IO.IFunc<int, TStack>, new() {
-            return new FoldingStack<T, TAccumulate, TFunc, TStack>(DefaultConstructor.Invoke<TStackConstructor>().Invoke(capacity), default);
+            return new FoldingStack<T, TAccumulate, TFunc, TStack>(DefaultConstructor.Invoke<TStackConstructor>().Invoke(capacity), DefaultConstructor.Invoke<TAccumulate>());
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static FoldingStack<T, TAccumulate, TFunc, TStack> Create<TStackConstructor>() where TStackConstructor : IO.IFunc<TStack>, new() {
-            return new FoldingStack<T, TAccumulate, TFunc, TStack>(DefaultConstructor.Invoke<TStackConstructor>().Invoke(), default);
+            return new FoldingStack<T, TAccumulate, TFunc, TStack>(DefaultConstructor.Invoke<TStackConstructor>().Invoke(), DefaultConstructor.Invoke<TAccumulate>());
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
