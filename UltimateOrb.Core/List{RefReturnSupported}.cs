@@ -1125,7 +1125,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         public List<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() {
             Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
             Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
-            return this.Select<TResult, TSelector>(DefaultConstuctor.Invoke<TSelector>());
+            return this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>());
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -1175,7 +1175,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public int IndexOf<TEqualityComparer>(T item) where TEqualityComparer : IEqualityComparer<T>, new() {
-            return this.IndexOf(DefaultConstuctor.Invoke<TEqualityComparer>(), item);
+            return this.IndexOf(DefaultConstructor.Invoke<TEqualityComparer>(), item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

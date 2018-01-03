@@ -320,7 +320,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public TResult[] ToArray<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> => this.ToArray<TResult, TSelector>(default);
+        public TResult[] ToArray<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() => this.ToArray<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>());
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         public void EnsureCapacity(int min) {

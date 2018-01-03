@@ -498,10 +498,12 @@ namespace UltimateOrb.Core.Tests {
 
         private static int Main(string[] args) {
             {
-                var a = default(DefaultConstuctor<System.Collections.Generic.List<long>>).Invoke();
+                var a = default(DefaultConstructor<System.Collections.Generic.List<long>>).Invoke();
                 Console.Out.WriteLine(a);
-                var b = default(DefaultConstuctor<long>).Invoke();
+                var b = default(DefaultConstructor<long>).Invoke();
                 Console.Out.WriteLine(b);
+                var c = DefaultConstructor.Invoke<long>();
+                Console.Out.WriteLine(c);
                 Console.ReadKey(true);
             }
 

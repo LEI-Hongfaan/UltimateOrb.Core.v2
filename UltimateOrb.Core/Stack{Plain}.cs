@@ -90,6 +90,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             count0 = 0;
         }
 
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Stack(T[] buffer, int count) {
             this.buffer = buffer;
             this.count0 = count;
@@ -342,7 +344,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public Stack<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> => this.Select<TResult, TSelector>(default);
+        public Stack<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() => this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>());
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -369,6 +371,6 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public TResult[] ToArray<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> => this.ToArray<TResult, TSelector>(default);
+        public TResult[] ToArray<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() => this.ToArray<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>());
     }
 }

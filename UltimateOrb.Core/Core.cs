@@ -22,7 +22,7 @@ namespace UltimateOrb {
 namespace UltimateOrb {
     using System.Linq.Expressions;
 
-    public struct DefaultConstuctor<T>
+    public struct DefaultConstructor<T>
         : IO.IFunc<T>
         where T : new() {
 
@@ -37,11 +37,11 @@ namespace UltimateOrb {
         }
     }
 
-    public static class DefaultConstuctor {
+    public static class DefaultConstructor {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static T Invoke<T>() where T : new() {
-            return default(DefaultConstuctor<T>).Invoke();
+            return default(DefaultConstructor<T>).Invoke();
         }
     }
 }
