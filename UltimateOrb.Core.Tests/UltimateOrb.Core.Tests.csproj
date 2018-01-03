@@ -8,10 +8,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

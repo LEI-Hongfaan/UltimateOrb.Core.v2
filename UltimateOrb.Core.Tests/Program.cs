@@ -401,6 +401,67 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+        [Property(MaxTest = 100, QuietOnSuccess = true)]
+        public bool Test_X100() {
+            return true;
+        }
+
+        [Property(MaxTest = 1000, QuietOnSuccess = true)]
+        public bool Test_X1000() {
+            return true;
+        }
+
+        [Property(MaxTest = 10000, QuietOnSuccess = true)]
+        public bool Test_X10000() {
+            return true;
+        }
+
+        [Property(MaxTest = 100000, QuietOnSuccess = true)]
+        public bool Test_X100000() {
+            return true;
+        }
+
+        [Property(MaxTest = 1000000, QuietOnSuccess = true)]
+        public bool Test_X1000000() {
+            return true;
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_XA3300000000() {
+            var a = false;
+            for (var i = 0UL; 3300000000 > i; ++i) {
+                a ^= a;
+            }
+            return !a;
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_X1A330000000() {
+            var a = (bool?)false;
+            for (var i = 0UL; 330000000 > i; ++i) {
+                a ^= null;
+            }
+            return !a.GetValueOrDefault();
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_X2A330000000() {
+            var a = (bool?)false;
+            for (var i = 0UL; 330000000 > i; ++i) {
+                a ^= DefaultConstructor.Invoke<bool?>();
+            }
+            return !a.GetValueOrDefault();
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_X3A330000000() {
+            var a = (bool?)false;
+            for (var i = 0UL; 330000000 > i; ++i) {
+                a ^= DefaultConstructor.Invoke<bool>();
+            }
+            return !a.GetValueOrDefault();
+        }
+
         [Property(MaxTest = 500, QuietOnSuccess = true)]
         public bool Test_3() {
             var ff = 2345;
@@ -496,7 +557,39 @@ namespace UltimateOrb.Core.Tests {
             return rr;
         }
 
+        private static long? dddd1 = default;
+
         private static int Main(string[] args) {
+
+            {
+                System.Threading.Thread.MemoryBarrier();
+                dddd1 = DefaultConstructor.Invoke<long?>();
+                System.Threading.Thread.MemoryBarrier();
+                return 0;
+                Console.Out.WriteLine("...");
+                Console.ReadKey(true);
+            }
+
+            {
+                new Program().Test_X2A330000000();
+            }
+            {
+                System.Threading.Thread.MemoryBarrier();
+                var b = DefaultConstructor.Invoke<long>();
+                System.Threading.Thread.MemoryBarrier();
+                Dummy<long>.Value = b;
+                Console.Out.WriteLine(b);
+                System.Threading.Thread.MemoryBarrier();
+                var c = DefaultConstructor.Invoke<long?>();
+                System.Threading.Thread.MemoryBarrier();
+                Dummy<long?>.Value = c;
+                Console.Out.WriteLine(c);
+                Console.Out.WriteLine("...");
+                Console.ReadKey(true);
+            }
+            {
+                new Program().Test_3();
+            }
             {
                 var a = DefaultConstructor.Invoke<object>();
                 Console.Out.WriteLine(a);
@@ -520,11 +613,6 @@ namespace UltimateOrb.Core.Tests {
                 var d = DefaultConstructor.Invoke<System.Collections.Generic.List<long>>();
                 Console.Out.WriteLine(d);
                 Console.ReadKey(true);
-            }
-
-
-            {
-                new Program().Test_3();
             }
             {
                 var deque1 = new Queue<long>(0);

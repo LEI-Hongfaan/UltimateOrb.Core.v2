@@ -22,22 +22,36 @@ namespace UltimateOrb {
 namespace UltimateOrb {
     using System.Linq.Expressions;
 
+    public static class IsNullableValueType<T> {
+
+        public static readonly bool Value = GetValue();
+                
+        private static bool GetValue() {
+            return null != Nullable.GetUnderlyingType(typeof(T));
+        }
+    }
+
     public struct DefaultConstructor<T>
         : IO.IFunc<T>
         where T : new() {
 
-        private static readonly Type[] Array_Empty_Type = Type.EmptyTypes;
-
-        private static readonly Func<T> Constructor = Expression.Lambda<Func<T>>(Expression.New(typeof(T).GetConstructor(Array_Empty_Type))).Compile();
+        private static readonly Func<T> Constructor = GetConstructor();
+        
+        private static Func<T> GetConstructor() {
+            return Expression.Lambda<Func<T>>(Expression.New(typeof(T).GetConstructor(DefaultConstructor.Array_Empty_Type))).Compile();
+            // return IsNullableValueType<T>.Value ? null : Expression.Lambda<Func<T>>(Expression.New(typeof(T).GetConstructor(DefaultConstructor.Array_Empty_Type))).Compile();
+        }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T Invoke() {
             var t = default(T);
-            return null == t ? Constructor.Invoke() : t;
+            return IsNullableValueType<T>.Value ? t : (null == t ? Constructor.Invoke() : t);
         }
     }
 
     public static class DefaultConstructor {
+
+        internal static readonly Type[] Array_Empty_Type = Type.EmptyTypes;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static T Invoke<T>() where T : new() {
