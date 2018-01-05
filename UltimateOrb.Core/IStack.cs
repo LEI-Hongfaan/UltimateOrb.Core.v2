@@ -19,4 +19,41 @@
             get;
         }
     }
+
+    public partial interface IStack_1<T> : IStack<T> {
+
+        new void Pop();
+
+        T PeekPop();
+        
+        void PopPush(T item);
+
+        T PeekPopPush(T item);
+        
+        bool TryPop();
+
+        bool TryPeekPop(out T result);
+
+        bool TryPopPush(T item);
+
+        bool TryPeekPopPush(T item, out T result);
+    }
+
+    public partial interface IStack_1_1<T> : IStack_1<T> {
+
+        bool IsFinite {
+
+            get;
+        }
+
+        int Count {
+
+            get;
+        }
+
+        long LongCount {
+
+            get;
+        }
+    }
 }

@@ -25,7 +25,7 @@ namespace UltimateOrb {
     public static class IsNullableValueType<T> {
 
         public static readonly bool Value = GetValue();
-                
+
         private static bool GetValue() {
             return null != Nullable.GetUnderlyingType(typeof(T));
         }
@@ -36,7 +36,7 @@ namespace UltimateOrb {
         where T : new() {
 
         private static readonly Func<T> Constructor = GetConstructor();
-        
+
         private static Func<T> GetConstructor() {
             return Expression.Lambda<Func<T>>(Expression.New(typeof(T).GetConstructor(DefaultConstructor.Array_Empty_Type))).Compile();
             // return IsNullableValueType<T>.Value ? null : Expression.Lambda<Func<T>>(Expression.New(typeof(T).GetConstructor(DefaultConstructor.Array_Empty_Type))).Compile();
@@ -56,6 +56,18 @@ namespace UltimateOrb {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static T Invoke<T>() where T : new() {
             return default(DefaultConstructor<T>).Invoke();
+        }
+    }
+}
+
+namespace UltimateOrb {
+    using Contract = System.Diagnostics.Contracts.Contract;
+
+    public static partial class Miscellaneous {
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void IgnoreOutParameter<T>(out T value) {
+            Contract.ValueAtReturn(out value);
         }
     }
 }

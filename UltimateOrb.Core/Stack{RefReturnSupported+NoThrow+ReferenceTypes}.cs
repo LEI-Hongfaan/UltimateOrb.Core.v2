@@ -1,25 +1,36 @@
-﻿namespace UltimateOrb.Collections.Generic.RefReturnSupported.NoThrow.ReferenceTypes {
+﻿using UltimateOrb.Plain.ValueTypes.NoThrow;
 
-    public partial interface IStackEx<T> : Plain.ValueTypes.IStackEx<T>  {
+namespace UltimateOrb.Collections.Generic.RefReturnSupported.NoThrow.ReferenceTypes {
+
+    public partial interface IStackEx<T> : Plain.ValueTypes.IStackEx<T> {
     }
 
     public partial class Stack<T> : IStackEx<T> {
 
-        private Plain.ValueTypes.Stack<T> value;
+        private Plain.ValueTypes.NoThrow.Stack<T> value;
 
         public Stack() {
-            this.value = new Plain.ValueTypes.Stack<T>(4); // default capacity
+            this.value = new Plain.ValueTypes.NoThrow.Stack<T>(4); // default capacity
         }
 
         public Stack(int capacity) {
-            this.value = new Plain.ValueTypes.Stack<T>(capacity);
+            this.value = new Plain.ValueTypes.NoThrow.Stack<T>(capacity);
         }
 
-        public int Count => this.value.Count;
+        public int Count {
 
-        public long LongCount => this.value.LongCount;
+            get => this.value.Count;
+        }
 
-        public bool IsEmpty => this.value.IsEmpty;
+        public long LongCount {
+
+            get => this.value.LongCount;
+        }
+
+        public bool IsEmpty {
+
+            get => this.value.IsEmpty;
+        }
 
         public void IncreaseCapacity() {
             this.value.IncreaseCapacity();

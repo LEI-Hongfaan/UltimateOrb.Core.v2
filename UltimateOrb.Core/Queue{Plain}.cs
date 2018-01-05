@@ -32,17 +32,6 @@ namespace UltimateOrb.Plain.ValueTypes {
             get => this.buffer.Length;
         }
 
-        public T Peek() {
-            var b = this.buffer;
-            if (null != b) {
-                if (this.count > 0) {
-                    return b[this.current];
-                }
-                throw new InvalidOperationException();
-            }
-            throw (NullReferenceException)null;
-        }
-
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue(int capacity) {
@@ -120,6 +109,103 @@ namespace UltimateOrb.Plain.ValueTypes {
                     }
                     this.current = d;
                     return result;
+                }
+            }
+            throw (NullReferenceException)null;
+        }
+
+        public void RemoveLast() {
+            var b = this.buffer;
+            if (null != b) {
+                var c = this.count;
+                if (c > 0) {
+                    var d = this.current;
+                    unchecked {
+                        --c;
+                    }
+                    this.count = c;
+                    if (0 == d) {
+                        d = b.Length;
+                    }
+                    unchecked {
+                        --d;
+                    }
+                    this.current = d;
+                }
+            }
+            throw (NullReferenceException)null;
+        }
+
+        public void AddLast(T item) {
+            this.Push(item);
+        }
+
+        public ref T PeekLast() {
+            var b = this.buffer;
+            if (null != b) {
+                if (this.count > 0) {
+                    return ref b[this.current];
+                }
+                throw new InvalidOperationException();
+            }
+            throw (NullReferenceException)null;
+        }
+
+        public T Last {
+
+            get => this.PeekLast();
+
+            set {
+                this.PeekLast() = value;
+            }
+        }
+
+        public bool IsEmpty {
+
+            get => this.count > 0;
+        }
+
+        public T First {
+
+            get => this.PeekFirst();
+
+            set {
+                this.PeekFirst() = value;
+            }
+        }
+
+        public ref T PeekFirst() {
+            var b = this.buffer;
+            if (null != b) {
+                if (this.count > 0) {
+                    return ref b[this.offset];
+                }
+                throw new InvalidOperationException();
+            }
+            throw (NullReferenceException)null;
+        }
+
+        public void AddFirst(T item) {
+            this.Unshift(item);
+        }
+
+        public void RemoveFirst() {
+            var b = this.buffer;
+            if (null != b) {
+                var c = this.count;
+                if (c > 0) {
+                    var d = this.offset;
+                    unchecked {
+                        --c;
+                    }
+                    this.count = c;
+                    unchecked {
+                        ++d;
+                    }
+                    if (b.Length == d) {
+                        d = 0;
+                    }
+                    this.offset = d;
                 }
             }
             throw (NullReferenceException)null;
@@ -204,8 +290,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
             throw (NullReferenceException)null;
         }
-
-
+        
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue<T> Select() {
@@ -381,4 +466,3 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
     }
 }
-
