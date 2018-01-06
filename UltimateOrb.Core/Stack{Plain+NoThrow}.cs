@@ -205,7 +205,7 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
                 this.count0 = a;
                 return this.buffer[a];
             }
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
             if (0 <= a) {
                 return this.buffer[a];
             }
-            return default(T);
+            return default;
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]

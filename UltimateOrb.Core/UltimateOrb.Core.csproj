@@ -34,6 +34,10 @@ This package does not include the test suite. See Project Site for more informat
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="IInitializable.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IInitializable.cs</LastGenOutput>
+    </None>
     <None Update="SignConverter.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SignConverter.cs</LastGenOutput>
@@ -49,6 +53,11 @@ This package does not include the test suite. See Project Site for more informat
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="IInitializable.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IInitializable.tt</DependentUpon>
+    </Compile>
     <Compile Update="SignConverter.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

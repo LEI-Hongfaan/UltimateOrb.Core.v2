@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using UltimateOrb.Collections.Generic.RefReturnSupported;
@@ -15,7 +14,7 @@ namespace UltimateOrb.Plain.ValueTypes {
     /// <remarks>
     ///     <para>Value assignments of the <see cref="Stack{T}"/> have move semantics.</para>
     /// </remarks>
-    public partial struct Stack<T> : IStack_1_1<T>, IStackEx<T> {
+    public partial struct Stack<T> : IStack_1_1<T>, IStackEx<T>, IInitializable, IInitializable<int> {
 
         public T[] buffer;
 
@@ -48,8 +47,11 @@ namespace UltimateOrb.Plain.ValueTypes {
                 }
                 return;
             }
+            this = default;
+            /*
             buffer = null;
             count0 = 0;
+            */
         }
 
         /// <summary>
@@ -479,6 +481,41 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return true;
             }
             Miscellaneous.IgnoreOutParameter(out result);
+            return false;
+        }
+
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void Initialize() {
+            var default_capacity = 4;
+            this.Initialize(default_capacity);
+        }
+
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public bool TryInitialize() {
+            var default_capacity = 4;
+            return this.TryInitialize(default_capacity);
+        }
+
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void Initialize(int capacity) {
+            this = new Stack<T>(capacity);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public bool TryInitialize(int capacity) {
+            var buffer = (T[])null;
+            try {
+                buffer = capacity <= 0 ? Array_Empty<T>.Value : new T[capacity];
+            } catch (OutOfMemoryException) {
+            }
+            if (null != buffer) {
+                this.buffer = buffer;
+                this.count0 = 0;
+                return true;
+            }
             return false;
         }
     }

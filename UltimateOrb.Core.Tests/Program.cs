@@ -562,6 +562,14 @@ namespace UltimateOrb.Core.Tests {
         private static int Main(string[] args) {
 
             {
+                UltimateOrb.Plain.ValueTypes.Stack<int> a = default;
+                System.Threading.Thread.MemoryBarrier();
+                a.TryInitialize(args.Length);
+                System.Threading.Thread.MemoryBarrier();
+                Console.Out.WriteLine(a.Count);
+                return 0;
+            }
+            {
                 System.Threading.Thread.MemoryBarrier();
                 dddd1 = DefaultConstructor.Invoke<long?>();
                 System.Threading.Thread.MemoryBarrier();

@@ -25,6 +25,7 @@ namespace UltimateOrb.IO {
 #>
 
 	public partial interface IAction<# if (n > 0) { #><<# for (var i = 1; i <= n; ++i) { #><# if (i > 1) { #>, <# } #>in T<# if (n > 1) { #><#= i #><# } #><# } #>><# } #> {
+
 		void Invoke(<# for (var i = 1; i <= n; ++i) { #><# if (i > 1) { #>, <# } #>T<# if (n > 1) { #><#= i #><# } #> arg<# if (n > 1) { #><#= i #><# } #><# } #>);
 	}
 	
