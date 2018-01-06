@@ -14,7 +14,7 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
     /// <remarks>
     ///     <para>Value assignments of the <see cref="Stack{T}"/> have move semantics.</para>
     /// </remarks>
-    public partial struct Stack<T> : IStack_1_1<T>, IStackEx<T> {
+    public partial struct Stack<T> : IStack_2_A1_B1_1<T>, IStackEx<T>, IInitializable, IInitializable<int> {
 
         public T[] buffer;
 
@@ -75,19 +75,12 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
         /// <exception cref="OutOfMemoryException">
         ///     <para>There is insufficient memory to satisfy the request.</para>
         /// </exception>
-        /// <remarks>
-        ///     <para>Initializes to a dummy value if <paramref name="capacity"/> is negative.</para>
-        /// </remarks>
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Stack(int capacity) {
-            if (0 <= capacity) {
-                this.buffer = capacity > 0 ? Array_Empty<T>.Value : new T[capacity];
-                this.count0 = 0;
-                return;
-            }
-            buffer = null;
-            count0 = 0;
+            this.buffer = capacity > 0 ? Array_Empty<T>.Value : new T[capacity];
+            this.count0 = 0;
+            return;
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
@@ -143,6 +136,7 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Push(T item) {
             var @this = this;
+
             var c = checked(@this.count0 + 1);
             if (null == @this.buffer || c > buffer.Length) {
                 @this.IncreaseCapacity();
@@ -261,7 +255,7 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
                 item = this.buffer[a];
                 return true;
             }
-            item = default(T);
+            Miscellaneous.IgnoreOutParameter(out item);
             return false;
         }
 
@@ -276,7 +270,7 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
                 item = this.buffer[a];
                 return true;
             }
-            item = default(T);
+            Miscellaneous.IgnoreOutParameter(out item);
             return false;
         }
 
@@ -334,10 +328,10 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
                 return arg;
             }
         }
-        
+
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Stack<T> Select() => Select<T, MoveFunctor>();
-        
+
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Stack<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             var c = this.count0;
@@ -351,10 +345,10 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Stack<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() => this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>());
-        
+
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T[] ToArray() => ToArray<T, MoveFunctor>();
-        
+
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public TResult[] ToArray<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             var a = this.buffer;
@@ -379,7 +373,7 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        void Collections.Generic.IStack_1<T>.Pop() {
+        void Collections.Generic.IStack_A1<T>.Pop() {
             var a = this.count0;
             if (0 < a) {
                 unchecked {
@@ -398,7 +392,10 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void PopPush(T item) {
-            this.Peek() = item;
+            var a = unchecked(this.count0 - 1);
+            if (0 <= a) {
+                this.buffer[a] = item;
+            }
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
@@ -440,22 +437,69 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
                 result = this.buffer[a];
                 return true;
             }
-            result = default;
+            Miscellaneous.IgnoreOutParameter(out result);
             return false;
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPopPush(T item) {
-            this.PopPush(item);
-            return true;
+            var a = unchecked(this.count0 - 1);
+            if (0 <= a) {
+                this.buffer[a] = item;
+                return true;
+            }
+            return false;
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPeekPopPush(T item, out T result) {
-            result = this.PeekPopPush(item);
-            return true;
+            var a = unchecked(this.count0 - 1);
+            if (0 <= a) {
+                var b = this.buffer;
+                var result0 = b[a];
+                b[a] = item;
+                result = result0;
+                return true;
+            }
+            Miscellaneous.IgnoreOutParameter(out result);
+            return false;
+        }
+
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void Initialize() {
+            var default_capacity = 4;
+            this.Initialize(default_capacity);
+        }
+
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public bool TryInitialize() {
+            var default_capacity = 4;
+            return this.TryInitialize(default_capacity);
+        }
+
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void Initialize(int capacity) {
+            this = new Stack<T>(capacity);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public bool TryInitialize(int capacity) {
+            var buffer = (T[])null;
+            try {
+                buffer = capacity <= 0 ? Array_Empty<T>.Value : new T[capacity];
+            } catch (OutOfMemoryException) {
+            }
+            if (null != buffer) {
+                this.buffer = buffer;
+                this.count0 = 0;
+                return true;
+            }
+            return false;
         }
     }
 }
