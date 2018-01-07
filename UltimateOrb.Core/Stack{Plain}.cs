@@ -501,19 +501,26 @@ namespace UltimateOrb.Plain.ValueTypes {
             this = new Stack<T>(capacity);
         }
 
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryInitialize(int capacity) {
-            var buffer = (T[])null;
+                var buffer = (T[])null;
+                buffer = GetBuffer(capacity);
+                if (null != buffer) {
+                    this.buffer = buffer;
+                    this.count0 = 0;
+                    return true;
+                }
+                return false;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        private static T[] GetBuffer(int capacity) {
             try {
-                buffer = capacity <= 0 ? Array_Empty<T>.Value : new T[capacity];
+                return capacity <= 0 ? Array_Empty<T>.Value : new T[capacity];
             } catch (OutOfMemoryException) {
+                return null;
             }
-            if (null != buffer) {
-                this.buffer = buffer;
-                this.count0 = 0;
-                return true;
-            }
-            return false;
         }
 
         public Enumerator GetEnumerator() {

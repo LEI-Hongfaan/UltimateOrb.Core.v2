@@ -95,12 +95,26 @@ namespace UltimateOrb.Utilities {
             checked((uint)first - second).Ignore();
         }
 
-        [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnNotEqual(this int first, int second) {
             checked(-unchecked((uint)(first - second))).Ignore();
+        }
+
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void Throw<TException>() where TException: Exception, new() {
+            throw new TException();
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static T Throw<TException, T>() where TException : Exception, new() {
+            throw new TException();
         }
     }
 }

@@ -491,16 +491,22 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryInitialize(int capacity) {
             var buffer = (T[])null;
-            try {
-                buffer = capacity <= 0 ? Array_Empty<T>.Value : new T[capacity];
-            } catch (OutOfMemoryException) {
-            }
+            buffer = GetBuffer(capacity);
             if (null != buffer) {
                 this.buffer = buffer;
                 this.count0 = 0;
                 return true;
             }
             return false;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        private static T[] GetBuffer(int capacity) {
+            try {
+                return capacity <= 0 ? Array_Empty<T>.Value : new T[capacity];
+            } catch (OutOfMemoryException) {
+                return null;
+            }
         }
 
         public Enumerator GetEnumerator() {

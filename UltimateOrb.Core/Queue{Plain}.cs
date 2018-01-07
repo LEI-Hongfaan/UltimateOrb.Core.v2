@@ -18,6 +18,8 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public int current;
 
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue(T[] buffer, int count, int offset, int current) {
             this.buffer = buffer;
             this.count0 = count;
@@ -110,10 +112,13 @@ namespace UltimateOrb.Plain.ValueTypes {
                     this.current = d;
                     return result;
                 }
+                throw new InvalidOperationException();
             }
             throw (NullReferenceException)null;
         }
 
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void RemoveLast() {
             var b = this.buffer;
             if (null != b) {
@@ -136,10 +141,14 @@ namespace UltimateOrb.Plain.ValueTypes {
             throw (NullReferenceException)null;
         }
 
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void AddLast(T item) {
             this.Push(item);
         }
 
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T PeekLast() {
             var b = this.buffer;
             if (null != b) {
