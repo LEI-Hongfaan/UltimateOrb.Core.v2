@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using UltimateOrb.Collections.Generic.RefReturnSupported;
@@ -14,7 +16,7 @@ namespace UltimateOrb.Plain.ValueTypes {
     /// <remarks>
     ///     <para>Value assignments of the <see cref="Stack{T}"/> have move semantics.</para>
     /// </remarks>
-    public partial struct Stack<T> : IStack_2_A1_B1_1<T>, IStackEx<T>, IInitializable, IInitializable<int> {
+    public partial struct Stack<T> : IEnumerable<T, Stack<T>.Enumerator>, IStack_2_A1_B1_1<T>, IStackEx<T>, IInitializable, IInitializable<int> {
 
         public T[] buffer;
 
@@ -512,6 +514,18 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return true;
             }
             return false;
+        }
+
+        public Enumerator GetEnumerator() {
+            return new Enumerator(this);
+        }
+
+        System.Collections.Generic.IEnumerator<T> IEnumerable<T>.GetEnumerator() {
+            return new Enumerator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return new Enumerator(this);
         }
     }
 }

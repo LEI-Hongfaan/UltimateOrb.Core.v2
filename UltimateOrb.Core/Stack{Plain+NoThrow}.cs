@@ -136,19 +136,14 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Push(T item) {
             var @this = this;
-
-            var c = checked(@this.count0 + 1);
-            if (null == @this.buffer || c > buffer.Length) {
-                @this.IncreaseCapacity();
-                @this.buffer[unchecked(c - 1)] = item;
-                this.buffer = @this.buffer;
+            if (int.MaxValue > @this.count0) {
+                var c = unchecked(@this.count0 + 1);
+                if (null == @this.buffer || c > @this.buffer.Length) {
+                    @this.IncreaseCapacity();
+                    this.buffer = @this.buffer;
+                }
+                @this.buffer[@this.count0] = item;
                 this.count0 = c;
-                return;
-            }
-            {
-                @this.buffer[unchecked(c - 1)] = item;
-                this.count0 = c;
-                return;
             }
         }
 
@@ -170,13 +165,17 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T Push() {
-            var c = checked(this.count0 + 1);
-            var buffer = this.buffer;
-            if (null == buffer || c > buffer.Length) {
-                this.IncreaseCapacity();
+            var @this = this;
+            if (int.MaxValue > @this.count0) {
+                var c = unchecked(@this.count0 + 1);
+                if (null == @this.buffer || c > @this.buffer.Length) {
+                    @this.IncreaseCapacity();
+                    this.buffer = @this.buffer;
+                }
+                this.count0 = c;
+                return ref @this.buffer[@this.count0];
             }
-            this.count0 = c;
-            return ref buffer[unchecked(c - 1)];
+            return ref Dummy<T>.Value;
         }
 
         /// <summary>
