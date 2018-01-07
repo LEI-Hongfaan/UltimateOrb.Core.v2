@@ -99,4 +99,3 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
     }
 }
-
