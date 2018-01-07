@@ -11,7 +11,7 @@ namespace UltimateOrb {
     [DiscardableAttribute()]
     public static partial class ThrowHelper_ArrayModule {
 
-        internal static class Identifiers {
+        internal static partial class Identifiers {
             public const int array = 0;
             public const int index = 1;
         }

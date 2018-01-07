@@ -47,7 +47,7 @@ namespace Internal.System.Collections.Generic {
 
     using global::System.Runtime.CompilerServices;
 
-    public static class TList<T> {
+    public static partial class TList<T> {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable IDE1006 // Naming Styles

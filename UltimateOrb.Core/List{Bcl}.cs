@@ -32,9 +32,9 @@ namespace UltimateOrb.Collections.Generic {
             get => this.value.Count;
         }
 
-        private static class Private {
+        private static partial class Private {
 
-            public static class TCollection {
+            public static partial class TCollection {
 
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 public static bool get_IsReadOnly<TCollection>(TCollection @this) where TCollection : ICollection<T> {

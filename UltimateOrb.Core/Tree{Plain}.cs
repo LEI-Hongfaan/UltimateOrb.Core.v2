@@ -38,14 +38,14 @@ namespace UltimateOrb.Plain.ValueTypes {
             r.Value = root;
         }
 
-        internal struct NodeSelector0<TResult, TSelector> : IO.IFunc<Tree<T>.Node, Tree<TResult>.Node> where TSelector : IO.IFunc<T, TResult> {
+        internal partial struct NodeSelector0<TResult, TSelector> : IO.IFunc<Tree<T>.Node, Tree<TResult>.Node> where TSelector : IO.IFunc<T, TResult> {
 
             public Tree<TResult>.Node Invoke(Node arg) {
                 return new Tree<TResult>.Node(arg.forwarding, arg.firstChild, arg.nextSibling, default(TSelector).Invoke(arg.Value));
             }
         }
 
-        internal struct NodeSelector1<TResult, TSelector> : IO.IFunc<Tree<T>.Node, Tree<TResult>.Node> where TSelector : IO.IFunc<T, TResult> {
+        internal partial struct NodeSelector1<TResult, TSelector> : IO.IFunc<Tree<T>.Node, Tree<TResult>.Node> where TSelector : IO.IFunc<T, TResult> {
 
             public readonly TSelector selector;
 

@@ -11,18 +11,18 @@ namespace UltimateOrb {
 
     [ComVisibleAttribute(true)]
     [SerializableAttribute()]
-    public struct Void {
+    public partial struct Void {
     }
 
     [AttributeUsageAttribute(AttributeTargets.Method | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class ImplementShouldNotHideBaseOverloadsAttribute : Attribute {
+    public sealed partial class ImplementShouldNotHideBaseOverloadsAttribute : Attribute {
     }
 }
 
 namespace UltimateOrb {
     using System.Linq.Expressions;
 
-    public static class IsNullableValueType<T> {
+    public static partial class IsNullableValueType<T> {
 
         public static readonly bool Value = GetValue();
 
@@ -31,7 +31,7 @@ namespace UltimateOrb {
         }
     }
 
-    public struct DefaultConstructor<T>
+    public partial struct DefaultConstructor<T>
         : IO.IFunc<T>
         where T : new() {
 
@@ -49,7 +49,7 @@ namespace UltimateOrb {
         }
     }
 
-    public static class DefaultConstructor {
+    public static partial class DefaultConstructor {
 
         internal static readonly Type[] Array_Empty_Type = Type.EmptyTypes;
 

@@ -18,7 +18,7 @@ namespace Internal.System.Collections.Generic {
 
     using global::System.Runtime.CompilerServices;
 
-    public static class TReadOnlyList<T> {
+    public static partial class TReadOnlyList<T> {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable IDE1006 // Naming Styles

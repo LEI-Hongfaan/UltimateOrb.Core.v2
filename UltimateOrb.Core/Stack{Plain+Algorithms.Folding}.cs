@@ -4,7 +4,7 @@ using UltimateOrb.Collections.Generic.RefReturnSupported;
 
 namespace UltimateOrb.Plain.ValueTypes {
 
-    public struct FoldingStack<T, TAccumulate, TFunc, TStack>
+    public partial struct FoldingStack<T, TAccumulate, TFunc, TStack>
         : IStack<T>
         where TAccumulate : new()
         where TFunc : struct, IO.IFunc<TAccumulate, T, TAccumulate>

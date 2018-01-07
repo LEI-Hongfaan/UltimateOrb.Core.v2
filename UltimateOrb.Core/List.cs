@@ -45,7 +45,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
     using static List_ThrowHelper;
 
-    internal static class List_ThrowHelper {
+    internal static partial class List_ThrowHelper {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]

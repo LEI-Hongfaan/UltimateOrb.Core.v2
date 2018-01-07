@@ -327,7 +327,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             get => true;
         }
 
-        private struct MoveFunctor : IO.IFunc<T, T> {
+        private partial struct MoveFunctor : IO.IFunc<T, T> {
 
             [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

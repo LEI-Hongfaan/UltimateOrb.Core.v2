@@ -243,16 +243,16 @@ namespace UltimateOrb.Core.Tests {
         }
 
 
-        private class AA : Collections.Generic.IStack<int>, IEnumerable<int> {
+        private partial class AA : Collections.Generic.IStack<int>, IEnumerable<int> {
 
-            private struct AAA : IFunc<int?, int, int?> {
+            private partial struct AAA : IFunc<int?, int, int?> {
 
                 public int? Invoke(int? arg1, int arg2) {
                     return !(arg1 < arg2) ? arg2 : arg1;
                 }
             }
 
-            private struct AAAss : IFunc<Plain.ValueTypes.Stack<(int, int?)>>, IFunc<int, Plain.ValueTypes.Stack<(int, int?)>> {
+            private partial struct AAAss : IFunc<Plain.ValueTypes.Stack<(int, int?)>>, IFunc<int, Plain.ValueTypes.Stack<(int, int?)>> {
 
                 public Stack<(int, int?)> Invoke() {
                     return new Stack<(int, int?)>();
@@ -316,7 +316,7 @@ namespace UltimateOrb.Core.Tests {
             }
 
 
-            private struct Adfsad : IFunc<(int, int?), int> {
+            private partial struct Adfsad : IFunc<(int, int?), int> {
 
                 public int Invoke((int, int?) arg) {
                     return arg.Item1;
@@ -333,7 +333,7 @@ namespace UltimateOrb.Core.Tests {
         }
 
 
-        private class AB : Collections.Generic.IStack<int>, IEnumerable<int> {
+        private partial class AB : Collections.Generic.IStack<int>, IEnumerable<int> {
 
             private System.Collections.Generic.Stack<int> _;
 
