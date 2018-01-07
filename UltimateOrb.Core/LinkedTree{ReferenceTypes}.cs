@@ -195,7 +195,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 Stack<Node.ChildrenEnumerator> s
                     = new Stack<Node.ChildrenEnumerator>();
                 if (null != tree.root) {
-                    yield return tree.root.value_;
+                    yield return tree.root.value;
                     s.Push(tree.root.GetChildrenEnumerator());
                 }
                 for (; ; ) {
@@ -205,7 +205,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                     var i = s.Pop();
                     while (i.MoveNext()) {
                         var t = i.Current;
-                        yield return t.value_;
+                        yield return t.value;
                         if (null != t.first_child) {
                             s.Push(i);
                             i = t.GetChildrenEnumerator();
@@ -606,7 +606,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public T Current {
                 get {
-                    return @this.Current.value_;
+                    return @this.Current.value;
                 }
             }
 
@@ -644,7 +644,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public T Current {
                 get {
-                    return @this.Current.value_;
+                    return @this.Current.value;
                 }
             }
 
@@ -682,7 +682,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public T Current {
                 get {
-                    return @this.Current.value_;
+                    return @this.Current.value;
                 }
             }
 
@@ -720,7 +720,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public T Current {
                 get {
-                    return @this.Current.value_;
+                    return @this.Current.value;
                 }
             }
 
@@ -916,7 +916,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
         internal Node SubtreeClone(LinkedTree<T> value) {
             Node result;
             var srcParent = value.root;
-            var dstParent = new Node { tree = this, value_ = srcParent.value_ };
+            var dstParent = new Node { tree = this, value = srcParent.value };
             result = dstParent;
             var q = new Queue<Node>();
             Node srcPreviousSibling;
@@ -951,7 +951,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
         }
 
         public Node Add(T value) {
-            var result = new Node { tree = this, value_ = value, first_child = this.root, last_child = this.root };
+            var result = new Node { tree = this, value = value, first_child = this.root, last_child = this.root };
             if (null != this.root) {
                 this.root.parent = result;
             }
@@ -976,7 +976,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             try {
                 System.Threading.Monitor.Enter(this);
                 r = this.root;
-                var result = new Node { tree = this, value_ = value, first_child = r, last_child = r };
+                var result = new Node { tree = this, value = value, first_child = r, last_child = r };
                 if (null != r) {
                     System.Threading.Monitor.Enter(r);
                     r.parent = result;
@@ -1017,7 +1017,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             if (null == node.parent) {
                 ThrowHelper.Throw<ArgumentOutOfRangeException>();
             }
-            var result = new Node { tree = this, value_ = value };
+            var result = new Node { tree = this, value = value };
             AddAfter_PatchNewLinks(node, result);
             AddAfter_PatchOldLinks(node, result);
             return result;
@@ -1088,7 +1088,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             if (null == node.parent) {
                 ThrowHelper.Throw<ArgumentOutOfRangeException>();
             }
-            var result = node.previous_sibling = new Node { tree = this, next_sibling = node, value_ = value, previous_sibling = node.previous_sibling, parent = node.parent };
+            var result = node.previous_sibling = new Node { tree = this, next_sibling = node, value = value, previous_sibling = node.previous_sibling, parent = node.parent };
             if (null != result.previous_sibling) {
                 result.previous_sibling.next_sibling = result;
             }
@@ -1104,9 +1104,9 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
             var t = node.first_child;
             if (null == t) {
-                return node.first_child = node.last_child = new Node { tree = this, parent = node, value_ = value };
+                return node.first_child = node.last_child = new Node { tree = this, parent = node, value = value };
             } else {
-                return node.first_child = t.previous_sibling = new Node { tree = this, parent = node, value_ = value, next_sibling = t };
+                return node.first_child = t.previous_sibling = new Node { tree = this, parent = node, value = value, next_sibling = t };
             }
         }
 
@@ -1116,9 +1116,9 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
             var t = node.last_child;
             if (null == t) {
-                return node.last_child = node.first_child = new Node { tree = this, parent = node, value_ = value };
+                return node.last_child = node.first_child = new Node { tree = this, parent = node, value = value };
             } else {
-                return node.last_child = t.next_sibling = new Node { tree = this, parent = node, value_ = value, previous_sibling = t };
+                return node.last_child = t.next_sibling = new Node { tree = this, parent = node, value = value, previous_sibling = t };
             }
         }
 
@@ -1131,10 +1131,10 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
                 t = node.last_child;
                 if (null == t) {
-                    return node.last_child = node.first_child = new Node { tree = this, parent = node, value_ = value };
+                    return node.last_child = node.first_child = new Node { tree = this, parent = node, value = value };
                 } else {
                     System.Threading.Monitor.Enter(t);
-                    return node.last_child = t.next_sibling = new Node { tree = this, parent = node, value_ = value, previous_sibling = t };
+                    return node.last_child = t.next_sibling = new Node { tree = this, parent = node, value = value, previous_sibling = t };
                 }
             } finally {
                 if (null != t && System.Threading.Monitor.IsEntered(t)) {
@@ -1150,7 +1150,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             if (!object.ReferenceEquals(this, node.tree)) {
                 ThrowHelper.Throw<InvalidOperationException>();
             }
-            Node result = new Node { first_child = node, last_child = node, value_ = value, tree = this, next_sibling = node.next_sibling, previous_sibling = node.previous_sibling, parent = node.parent };
+            Node result = new Node { first_child = node, last_child = node, value = value, tree = this, next_sibling = node.next_sibling, previous_sibling = node.previous_sibling, parent = node.parent };
             if (null != node.parent) {
                 if (null != node.next_sibling) {
                     node.next_sibling.previous_sibling = result;
@@ -1172,7 +1172,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
         public IEnumerable<(long ChildCount, T Value)> GetPreorderNodeInfo() {
             foreach (var item in this.AsPreorderNodeEnumerable()) {
-                yield return (item.GetChildCount(), item.value_);
+                yield return (item.GetChildCount(), item.value);
             }
         }
 
@@ -1180,12 +1180,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
         }
 
         public LinkedTree(T root) {
-            this.root = new Node() { tree = this, value_ = root };
+            this.root = new Node() { tree = this, value = root };
         }
 
         public LinkedTree(T root, IEnumerable<LinkedTree<T>> subtrees) {
             if (null == subtrees) {
-                this.root = new Node() { tree = this, value_ = root };
+                this.root = new Node() { tree = this, value = root };
                 return;
             }
             var l = new List<(long ChildCount, T Value)> {
@@ -1207,7 +1207,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             foreach (var item in l) {
                 if (0 == item.ChildCount) {
                     if (null == p) {
-                        this.root = new Node { tree = this, value_ = item.Value };
+                        this.root = new Node { tree = this, value = item.Value };
                         return;
                     } else {
                         p.AddLast(item.Value);
@@ -1227,7 +1227,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                     }
                 } else {
                     if (null == p) {
-                        p = this.root = new Node { tree = this, value_ = item.Value };
+                        p = this.root = new Node { tree = this, value = item.Value };
                     } else {
                         p = p.AddLast(item.Value);
                     }
@@ -1246,7 +1246,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             foreach (var item in preorderNodeInfo) {
                 if (0 == item.ChildCount) {
                     if (null == p) {
-                        this.root = new Node { tree = this, value_ = item.Value };
+                        this.root = new Node { tree = this, value = item.Value };
                         return;
                     } else {
                         p.AddLast(item.Value);
@@ -1266,7 +1266,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                     }
                 } else {
                     if (null == p) {
-                        p = this.root = new Node { tree = this, value_ = item.Value };
+                        p = this.root = new Node { tree = this, value = item.Value };
                     } else {
                         p = p.AddLast(item.Value);
                     }
@@ -1310,7 +1310,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                             } else {
                             }
                             node = temp.next_sibling;
-                            if (!comparer.Equals(node.value_, temp1.value_)) {
+                            if (!comparer.Equals(node.value, temp1.value)) {
                                 return false;
                             }
                             goto L_0002;
@@ -1327,7 +1327,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                         node1 = temp1;
                     }
                     node = node.first_child;
-                    if (!comparer.Equals(node.value_, node1.value_)) {
+                    if (!comparer.Equals(node.value, node1.value)) {
                         return false;
                     }
                     goto L_0002;
@@ -1431,7 +1431,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             internal Node first_child;
 
-            protected internal T value_;
+            internal T value;
 
 #if DEBUG_LOGIC_TREE
             bool IVerifiable.Verify() {
@@ -1701,7 +1701,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 if (null == this.tree) {
                     ThrowHelper.Throw<InvalidOperationException>();
                 }
-                Node result = new Node { first_child = this, last_child = this, value_ = value, tree = this.tree, next_sibling = this.next_sibling, previous_sibling = this.previous_sibling, parent = this.parent };
+                Node result = new Node { first_child = this, last_child = this, value = value, tree = this.tree, next_sibling = this.next_sibling, previous_sibling = this.previous_sibling, parent = this.parent };
                 if (null != this.parent) {
                     if (null != this.next_sibling) {
                         this.next_sibling.previous_sibling = result;
@@ -1725,7 +1725,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 if (null == this.tree) {
                     ThrowHelper.Throw<InvalidOperationException>();
                 }
-                Node result = new Node { parent = this, value_ = value, tree = this.tree, first_child = this.first_child, last_child = this.last_child };
+                Node result = new Node { parent = this, value = value, tree = this.tree, first_child = this.first_child, last_child = this.last_child };
                 for (var node = this.first_child; null != node; node = node.next_sibling) {
                     node.parent = result;
                 }
@@ -1739,7 +1739,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 if (null == this.parent) {
                     ThrowHelper.Throw<ArgumentOutOfRangeException>();
                 }
-                var result = this.next_sibling = new Node { previous_sibling = this, value_ = value, tree = this.tree, next_sibling = this.next_sibling, parent = this.parent };
+                var result = this.next_sibling = new Node { previous_sibling = this, value = value, tree = this.tree, next_sibling = this.next_sibling, parent = this.parent };
                 if (null != result.next_sibling) {
                     result.next_sibling.previous_sibling = result;
                 }
@@ -1756,7 +1756,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 if (null == this.parent) {
                     ThrowHelper.Throw<ArgumentOutOfRangeException>();
                 }
-                var result = this.previous_sibling = new Node { next_sibling = this, value_ = value, tree = this.tree, previous_sibling = this.previous_sibling, parent = this.parent };
+                var result = this.previous_sibling = new Node { next_sibling = this, value = value, tree = this.tree, previous_sibling = this.previous_sibling, parent = this.parent };
                 if (null != result.previous_sibling) {
                     result.previous_sibling.next_sibling = result;
                 }
@@ -1772,9 +1772,9 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
                 var t = this.first_child;
                 if (null == t) {
-                    return this.first_child = (this.last_child = new Node { parent = this, value_ = value, tree = this.tree });
+                    return this.first_child = (this.last_child = new Node { parent = this, value = value, tree = this.tree });
                 } else {
-                    return this.first_child = (t.previous_sibling = new Node { parent = this, value_ = value, tree = this.tree, next_sibling = t });
+                    return this.first_child = (t.previous_sibling = new Node { parent = this, value = value, tree = this.tree, next_sibling = t });
                 }
             }
 
@@ -1784,20 +1784,20 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
                 var t = this.last_child;
                 if (null == t) {
-                    return this.last_child = (this.first_child = new Node { parent = this, value_ = value, tree = this.tree });
+                    return this.last_child = (this.first_child = new Node { parent = this, value = value, tree = this.tree });
                 } else {
-                    return this.last_child = (t.next_sibling = new Node { parent = this, value_ = value, tree = this.tree, previous_sibling = t });
+                    return this.last_child = (t.next_sibling = new Node { parent = this, value = value, tree = this.tree, previous_sibling = t });
                 }
             }
 
             public T Value {
 
                 get {
-                    return this.value_;
+                    return this.value;
                 }
 
                 set {
-                    this.value_ = value;
+                    this.value = value;
                 }
             }
 
@@ -1964,7 +1964,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public override string ToString() {
                 // TODO: ...
-                return $@"{{{value_.ToString()}}}";
+                return $@"{{{value.ToString()}}}";
             }
 
             IEnumerator<ITreeNode> IEnumerable<ITreeNode>.GetEnumerator() {
