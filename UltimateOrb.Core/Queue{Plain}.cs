@@ -8,7 +8,7 @@ namespace UltimateOrb.Plain.ValueTypes {
     using ArrayModule = Internal.System.ArrayModule;
     using UltimateOrb.Collections.Generic.RefReturnSupported;
 
-    public partial struct Queue<T> : IEnumerable<T, Queue<T>.Enumerator> {
+    public partial struct Queue<T> : IEnumerable<T, Queue<T>.Enumerator>, IDeque_2_A1_B1_1<T> {
 
         public T[] buffer;
 
@@ -174,6 +174,12 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
+        public bool IsFinite => throw new NotImplementedException();
+
+        public int Count => throw new NotImplementedException();
+
+        public long LongCount => throw new NotImplementedException();
+
         public ref T PeekFirst() {
             var b = this.buffer;
             if (null != b) {
@@ -290,7 +296,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
             throw (NullReferenceException)null;
         }
-        
+
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue<T> Select() {
@@ -463,6 +469,122 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         System.Collections.IEnumerator IEnumerable.GetEnumerator() {
             return this.GetEnumerator();
+        }
+
+        public void PopFirst() {
+            this.RemoveFirst();
+        }
+
+        public T PeekPopFirst() {
+            return this.Shift();
+        }
+
+        public void PopPushFirst(T item) {
+            this.First = item;
+        }
+
+        public T PeekPopPushFirst(T item) {
+            var result = this.First;
+            this.First = item;
+            return result;
+        }
+
+        public bool TryPopFirst() {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPeekPopFirst(out T result) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPopPushFirst(T item) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPeekPopPushFirst(T item, out T result) {
+            throw new NotImplementedException();
+        }
+
+        public void PopLast() {
+            this.RemoveLast();
+        }
+
+        public T PeekPopLast() {
+            return this.Pop();
+        }
+
+        public void PopPushLast(T item) {
+            this.Last = item;
+        }
+
+        public T PeekPopPushLast(T item) {
+            var result = this.Last;
+            this.Last = item;
+            return result;
+        }
+
+        public bool TryPopLast() {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPeekPopLast(out T result) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPopPushLast(T item) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPeekPopPushLast(T item, out T result) {
+            throw new NotImplementedException();
+        }
+
+        T Collections.Generic.IDeque<T>.PopFirst() {
+            return this.Shift();
+        }
+
+        T Collections.Generic.IDeque<T>.PeekFirst() {
+            return this.PeekFirst();
+        }
+
+        public void PushFirst(T item) {
+            this.AddFirst(item);
+        }
+
+        public bool TryPushFirst(T item) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPeekFirst(out T item) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPopFirst(out T item) {
+            throw new NotImplementedException();
+        }
+
+        T Collections.Generic.IDeque<T>.PopLast() {
+            return this.Pop();
+        }
+
+        T Collections.Generic.IDeque<T>.PeekLast() {
+            return this.PeekLast();
+        }
+
+        public void PushLast(T item) {
+            this.AddLast(item);
+        }
+
+        public bool TryPushLast(T item) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPeekLast(out T item) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryPopLast(out T item) {
+            throw new NotImplementedException();
         }
     }
 }
