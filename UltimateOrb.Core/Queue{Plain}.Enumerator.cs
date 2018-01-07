@@ -22,7 +22,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 this.buffer = collection.buffer;
                 var s = collection.offset;
                 this.offset = s;
-                this.count = collection.count;
+                this.count = collection.count0;
                 this.index = unchecked(s - 1);
             }
 

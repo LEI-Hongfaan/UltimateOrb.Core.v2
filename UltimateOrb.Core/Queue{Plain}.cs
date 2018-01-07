@@ -12,7 +12,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public T[] buffer;
 
-        public int count;
+        public int count0;
 
         public int offset;
 
@@ -20,7 +20,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public Queue(T[] buffer, int count, int offset, int current) {
             this.buffer = buffer;
-            this.count = count;
+            this.count0 = count;
             this.offset = offset;
             this.current = current;
         }
@@ -37,7 +37,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public Queue(int capacity) {
             if (0 <= capacity) {
                 this.buffer = (capacity > 0 ? Array_Empty<T>.Value : new T[capacity]);
-                this.count = 0;
+                this.count0 = 0;
                 this.offset = 0;
                 this.current = -1;
                 return;
@@ -51,7 +51,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public void Push(T item) {
             var @this = this;
             if (null != @this.buffer) {
-                var c = @this.count;
+                var c = @this.count0;
                 checked {
                     ++c;
                 }
@@ -65,7 +65,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     }
                     @this.buffer[d] = item;
                     this.current = d;
-                    this.count = c;
+                    this.count0 = c;
                     return;
                 }
                 {
@@ -81,7 +81,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     this.buffer = @this.buffer;
                     this.offset = @this.offset;
                     this.current = d;
-                    this.count = c;
+                    this.count0 = c;
                     return;
                 }
             }
@@ -93,14 +93,14 @@ namespace UltimateOrb.Plain.ValueTypes {
         public T Pop() {
             var b = this.buffer;
             if (null != b) {
-                var c = this.count;
+                var c = this.count0;
                 if (c > 0) {
                     var d = this.current;
                     ref var result = ref b[d];
                     unchecked {
                         --c;
                     }
-                    this.count = c;
+                    this.count0 = c;
                     if (0 == d) {
                         d = b.Length;
                     }
@@ -117,13 +117,13 @@ namespace UltimateOrb.Plain.ValueTypes {
         public void RemoveLast() {
             var b = this.buffer;
             if (null != b) {
-                var c = this.count;
+                var c = this.count0;
                 if (c > 0) {
                     var d = this.current;
                     unchecked {
                         --c;
                     }
-                    this.count = c;
+                    this.count0 = c;
                     if (0 == d) {
                         d = b.Length;
                     }
@@ -143,7 +143,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public ref T PeekLast() {
             var b = this.buffer;
             if (null != b) {
-                if (this.count > 0) {
+                if (this.count0 > 0) {
                     return ref b[this.current];
                 }
                 throw new InvalidOperationException();
@@ -162,7 +162,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public bool IsEmpty {
 
-            get => this.count > 0;
+            get => this.count0 > 0;
         }
 
         public T First {
@@ -183,7 +183,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public ref T PeekFirst() {
             var b = this.buffer;
             if (null != b) {
-                if (this.count > 0) {
+                if (this.count0 > 0) {
                     return ref b[this.offset];
                 }
                 throw new InvalidOperationException();
@@ -198,13 +198,13 @@ namespace UltimateOrb.Plain.ValueTypes {
         public void RemoveFirst() {
             var b = this.buffer;
             if (null != b) {
-                var c = this.count;
+                var c = this.count0;
                 if (c > 0) {
                     var d = this.offset;
                     unchecked {
                         --c;
                     }
-                    this.count = c;
+                    this.count0 = c;
                     unchecked {
                         ++d;
                     }
@@ -228,14 +228,14 @@ namespace UltimateOrb.Plain.ValueTypes {
         public T Dequeue() {
             var b = this.buffer;
             if (null != b) {
-                var c = this.count;
+                var c = this.count0;
                 if (c > 0) {
                     var d = this.offset;
                     ref var result = ref b[d];
                     unchecked {
                         --c;
                     }
-                    this.count = c;
+                    this.count0 = c;
                     unchecked {
                         ++d;
                     }
@@ -260,7 +260,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public void Unshift(T item) {
             var @this = this;
             if (null != @this.buffer) {
-                var c = @this.count;
+                var c = @this.count0;
                 checked {
                     ++c;
                 }
@@ -274,7 +274,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     }
                     @this.buffer[d] = item;
                     this.offset = d;
-                    this.count = c;
+                    this.count0 = c;
                     return;
                 }
                 {
@@ -290,7 +290,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     this.buffer = @this.buffer;
                     this.current = @this.current;
                     this.offset = d;
-                    this.count = c;
+                    this.count0 = c;
                     return;
                 }
             }
@@ -301,7 +301,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue<T> Select() {
             var buffer = this.buffer;
-            var count = this.count;
+            var count = this.count0;
             var offset = this.offset;
             var current = this.current;
             if (null != buffer) {
@@ -325,7 +325,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             var buffer = this.buffer;
-            var count = this.count;
+            var count = this.count0;
             var offset = this.offset;
             var current = this.current;
             if (null != buffer) {
@@ -359,7 +359,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T[] ToArray() {
             var buffer = this.buffer;
-            var count = this.count;
+            var count = this.count0;
             var offset = this.offset;
             var current = this.current;
             if (null != buffer) {
@@ -383,7 +383,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public TResult[] ToArray<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             var buffer = this.buffer;
-            var count = this.count;
+            var count = this.count0;
             var offset = this.offset;
             var current = this.current;
             if (null != buffer) {
@@ -426,7 +426,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     new_capacity = min;
                 }
                 var d = new T[new_capacity];
-                var c = this.count;
+                var c = this.count0;
                 if (c > 0) {
                     var s = this.offset;
                     var t = this.current;
