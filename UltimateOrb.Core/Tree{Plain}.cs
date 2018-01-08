@@ -201,8 +201,103 @@ namespace UltimateOrb.Plain.ValueTypes {
             return new NodeEnumerator(this);
         }
 
+        public static Tree<T> FromPreorderNodeInfo<TEnumerator, TEnumerable>(TEnumerable data)
+            where TEnumerable : Collections.Generic.IEnumerable<(long ChildCount, T Value), TEnumerator>
+            where TEnumerator : System.Collections.Generic.IEnumerator<(long ChildCount, T Value)> {
+            var e = data.GetEnumerator();
+            var r = FromPreorderNodeInfo_Enumerator(e);
+            e.Dispose();
+            return r;
+        }
+
+        public static Tree<T> FromPreorderNodeInfo<TEnumerable>(TEnumerable data)
+            where TEnumerable : System.Collections.Generic.IEnumerable<(long ChildCount, T Value)> {
+            var e = data.GetEnumerator();
+            var r = FromPreorderNodeInfo_Enumerator(e);
+            e.Dispose();
+            return r;
+        }
+
+        private static Tree<T> FromPreorderNodeInfo_Enumerator<TEnumerator>(TEnumerator data)
+            where TEnumerator : System.Collections.Generic.IEnumerator<(long ChildCount, T Value)> {
+            for (; data.MoveNext();) {
+                Tree<T> tree;
+                Stack<(long current, NodeId parent, NodeId lastChild)> s;
+                NodeId p;
+                NodeId q;
+                {
+                    var item = data.Current;
+                    if (0 == item.ChildCount) {
+                        return new Tree<T>(item.Value, 1);
+                    } else {
+                        s = new Stack<(long current, NodeId parent, NodeId lastChild)>();
+                        tree = new Tree<T>(item.Value, 5);
+                        p = RootIndex;
+                        q = NilIndex;
+                        s.Push((checked(item.ChildCount - 1), p, q));
+                    }
+                }
+                for (; data.MoveNext();) {
+                    var item = data.Current;
+                    if (0 == item.ChildCount) {
+                        q = NilIndex != q ? tree[q].nextSibling = tree.CreateNewNode(item.Value) : tree[p].firstChild = tree.CreateNewNode(item.Value);
+                        for (; ; ) {
+                            ref var t = ref s.Peek();
+                            if (0 == t.current) {
+                                if (s.Count <= 1) {
+                                    goto L_0001;
+                                } else {
+                                    p = t.parent;
+                                    // TODO
+                                    unchecked {
+                                        --s.count0;
+                                    }
+                                }
+                            } else {
+                                t.current = checked(t.current - 1);
+                                t.lastChild = q;
+                                break;
+                            }
+                        }
+                    } else {
+                        p = NilIndex != q ? tree[q].nextSibling = tree.CreateNewNode(item.Value) : tree[p].firstChild = tree.CreateNewNode(item.Value);
+                        q = NilIndex;
+                        s.Push((checked(item.ChildCount - 1), p, q));
+                    }
+                }
+                L_0001:
+                return tree;
+            }
+            return default;
+        }
+
+        public struct PreorderNodeInfoEnumerable : Collections.Generic.IEnumerable<(long ChildCount, T Value), PreorderNodeInfoEnumerator> {
+            
+            internal readonly Tree<T> tree;
+
+            public PreorderNodeInfoEnumerable(Tree<T> tree) : this() {
+                this.tree = tree;
+            }
+
+            public PreorderNodeInfoEnumerator GetEnumerator() {
+                return tree.GetPreorderNodeInfoEnumerator();
+            }
+
+            System.Collections.Generic.IEnumerator<(long ChildCount, T Value)> System.Collections.Generic.IEnumerable<(long ChildCount, T Value)>.GetEnumerator() {
+                return tree.GetPreorderNodeInfoEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() {
+                return tree.GetPreorderNodeInfoEnumerator();
+            }
+        }
+
         public PreorderNodeInfoEnumerator GetPreorderNodeInfoEnumerator() {
             return new PreorderNodeInfoEnumerator(this);
+        }
+
+        public PreorderNodeInfoEnumerable AsPreorderNodeInfoEnumerable() {
+            return new PreorderNodeInfoEnumerable(this);
         }
 
         public partial struct PreorderNodeInfoEnumerator : System.Collections.Generic.IEnumerator<(long ChildCount, T Value)> {
