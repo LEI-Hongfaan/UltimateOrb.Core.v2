@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
+using UltimateOrb.Collections.Generic.RefReturnSupported;
 
 namespace UltimateOrb.Plain.ValueTypes {
     using NodeId = Int32;
     using NodeCount = Int32;
+    using System.Collections;
 
     public partial struct Tree<T> {
 
@@ -59,11 +61,15 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public Tree<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
-            return new Tree<TResult>(this.data.Select<Tree<TResult>.Node, NodeSelector1<TResult, TSelector>>(new NodeSelector1<TResult, TSelector>(selector)));
+            var @this = this;
+            @this.Collect();
+            return new Tree<TResult>(@this.data.Select<Tree<TResult>.Node, NodeSelector1<TResult, TSelector>>(new NodeSelector1<TResult, TSelector>(selector)));
         }
 
         public Tree<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() {
-            return null == default(TSelector) ? this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>()) : new Tree<TResult>(this.data.Select<Tree<TResult>.Node, NodeSelector0<TResult, TSelector>>(default));
+            var @this = this;
+            @this.Collect();
+            return null == default(TSelector) ? @this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>()) : new Tree<TResult>(@this.data.Select<Tree<TResult>.Node, NodeSelector0<TResult, TSelector>>(default));
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -193,6 +199,109 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeEnumerator GetNodeEnumerator() {
             return new NodeEnumerator(this);
+        }
+
+        public PreorderNodeInfoEnumerator GetPreorderNodeInfoEnumerator() {
+            return new PreorderNodeInfoEnumerator(this);
+        }
+
+        public partial struct PreorderNodeInfoEnumerator : System.Collections.Generic.IEnumerator<(long ChildCount, T Value)> {
+
+            readonly Node[] data;
+
+            readonly NodeCount count;
+
+            NodeId id;
+
+            Stack<NodeId> ancestors;
+
+            private NodeId RootPreviousIndex {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get {
+                    return this.count;
+                }
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public PreorderNodeInfoEnumerator(Tree<T> tree) {
+                this.data = tree.data.buffer;
+                var count = tree.data.count0;
+                this.count = count;
+                this.id = count;
+                this.ancestors = new Stack<NodeId>(5);
+            }
+
+            public (long ChildCount, T Value) Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get {
+                    var data = this.data;
+                    return (NodeGetChildCount(data, id), data[id].Value);
+                }
+            }
+
+            object System.Collections.IEnumerator.Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get {
+                    return this.Current;
+                }
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public bool MoveNext() {
+                var id = this.id;
+                var data = this.data;
+                if (RootPreviousIndex != id) {
+                    var nx = data[id].firstChild;
+                    if (NilIndex == nx) {
+                        nx = data[id].nextSibling;
+                        if (NilIndex != nx) {
+                            this.id = nx;
+                            return true;
+                        }
+                        for (var ancestors = this.ancestors; ancestors.count0 > 0;) {
+                            if (NilIndex != (id = data[ancestors.Pop()].nextSibling)) {
+                                this.ancestors.count0 = ancestors.count0;
+                                this.id = id;
+                                return true;
+                            }
+                        }
+                        this.ancestors.count0 = 0;
+                        return false;
+                    }
+                    this.ancestors.Push(id);
+                    this.id = nx;
+                    return true;
+                }
+                this.id = RootIndex;
+                return true;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public void Reset() {
+                this.ancestors.count0 = 0;
+                this.id = RootPreviousIndex;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public void Dispose() {
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            private static long NodeGetChildCount(Node[] data, NodeId node) {
+                var id = data[node].firstChild;
+                for (long i = 0; ;) {
+                    if (NilIndex == id) {
+                        return i;
+                    }
+                    checked {
+                        ++i;
+                    }
+                    id = data[node].nextSibling;
+                }
+            }
         }
 
         [MethodImplAttribute(default(MethodImplOptions))]

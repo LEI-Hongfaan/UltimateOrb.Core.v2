@@ -32,7 +32,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 var count = tree.data.count0;
                 this.count = count;
                 this.id = count;
-                this.ancestors = default(Stack<NodeId>);
+                this.ancestors = new Stack<NodeId>(5);
             }
 
             public ref Node Current {
