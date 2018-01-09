@@ -292,14 +292,14 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
-        public PreorderNodeInfoEnumerator GetPreorderNodeInfoEnumerator() {
-            return new PreorderNodeInfoEnumerator(this);
-        }
-
-        public PreorderNodeInfoEnumerable AsPreorderNodeInfoEnumerable() {
+        public PreorderNodeInfoEnumerable GetPreorderNodeInfo() {
             return new PreorderNodeInfoEnumerable(this);
         }
 
+        public PreorderNodeInfoEnumerator GetPreorderNodeInfoEnumerator() {
+            return new PreorderNodeInfoEnumerator(this);
+        }
+        
         public partial struct PreorderNodeInfoEnumerator : System.Collections.Generic.IEnumerator<(long ChildCount, T Value)> {
 
             readonly Node[] data;

@@ -19,6 +19,17 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
+        public long Count {
+            
+            get {
+                return this.AsDepthFirstEnumerable().LongCount();
+            }
+        }
+
+        public override string ToString() {
+            return $@"{{Count = {this.Count}}}";
+        }
+
         public struct PostorderNodeEnumerable : IEnumerable<Node, PostorderNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;

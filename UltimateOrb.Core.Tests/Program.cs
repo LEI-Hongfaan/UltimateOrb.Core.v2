@@ -558,9 +558,48 @@ namespace UltimateOrb.Core.Tests {
         }
 
         private static long? dddd1 = default;
+        private struct adfdsaf {
+            
+        }
+
+        private struct  fffff {
+
+            double[] a;
+
+
+        }
 
         private static int Main(string[] args) {
+            {
 
+
+                var rrrrr = new Random();
+
+                var id = 10000L;
+                var tree = new Collections.Generic.ReferenceTypes.LinkedTree<long>(id++);
+                var ll = new Collections.Generic.RefReturnSupported.List<Collections.Generic.ReferenceTypes.LinkedTree<long>.Node> {
+                    tree.Root
+                };
+                var aaa = ll[rrrrr.Next(ll.Count)];
+                {
+
+                }
+                ll.Add(aaa.AddFirst(id++));
+
+
+
+
+
+                var a = tree.GetPreorderNodeInfo();
+                var duzz = Plain.ValueTypes.Tree<long>.FromPreorderNodeInfo(a);
+                var b = duzz.GetPreorderNodeInfo();
+                var duzz2 = Plain.ValueTypes.Tree<long>.FromPreorderNodeInfo(b);
+
+                var tree2 = new Collections.Generic.ReferenceTypes.LinkedTree<long>(duzz2.GetPreorderNodeInfo());
+
+                Console.Out.WriteLine(tree2.ToString());
+
+            }
             {
                 UltimateOrb.Plain.ValueTypes.Stack<int> a = default;
                 System.Threading.Thread.MemoryBarrier();

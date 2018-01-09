@@ -171,13 +171,14 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T Push() {
-            var c = checked(this.count0 + 1);
-            var buffer = this.buffer;
-            if (null == buffer || c > buffer.Length) {
-                this.IncreaseCapacity();
+            var @this = this;
+            var c = checked(@this.count0 + 1);
+            if (null == @this.buffer || c > @this.buffer.Length) {
+                @this.IncreaseCapacity();
+                this.buffer = @this.buffer;
             }
             this.count0 = c;
-            return ref buffer[unchecked(c - 1)];
+            return ref @this.buffer[@this.count0];
         }
 
         /// <summary>
@@ -504,14 +505,14 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryInitialize(int capacity) {
-                var buffer = (T[])null;
-                buffer = GetBuffer(capacity);
-                if (null != buffer) {
-                    this.buffer = buffer;
-                    this.count0 = 0;
-                    return true;
-                }
-                return false;
+            var buffer = (T[])null;
+            buffer = GetBuffer(capacity);
+            if (null != buffer) {
+                this.buffer = buffer;
+                this.count0 = 0;
+                return true;
+            }
+            return false;
         }
 
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
