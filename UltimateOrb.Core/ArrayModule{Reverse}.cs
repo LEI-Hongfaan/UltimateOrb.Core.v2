@@ -51,14 +51,9 @@ namespace UltimateOrb {
             if (null == array) {
                 CheckSegment(array, start, count);
                 if (count > 1) {
-                    var s = unchecked(shift % count);
-                    if (0 > s) {
-                        unchecked {
-                            s += count;
-                        }
-                    }
-                    ReverseInternal(array, 0, shift);
-                    ReverseInternal(array, unchecked(1 + shift), unchecked(count - shift));
+                    var s = NormalizeShiftCount(count, shift);
+                    ReverseInternal(array, 0, s);
+                    ReverseInternal(array, unchecked(1 + s), unchecked(count - s));
                     ReverseInternal(array, 0, count);
                 }
                 return;
@@ -67,19 +62,30 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static int NormalizeShiftCount(int count, int shift) {
+            var s = shift;
+            if (0 > s || count <= s) {
+                unchecked {
+                    s %= count;
+                }
+                if (0 > s) {
+                    unchecked {
+                        s += count;
+                    }
+                }
+            }
+            return s;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void RotateLeftInPlace<T>(this T[] array, IntT start, IntT count, IntT shift) {
             if (null == array) {
                 CheckSegment(array, start, count);
                 if (count > 1) {
-                    var s = unchecked(shift % count);
-                    if (0 > s) {
-                        unchecked {
-                            s += count;
-                        }
-                    }
-                    var t = unchecked(count - shift);
+                    var s = NormalizeShiftCount(count, shift);
+                    var t = unchecked(count - s);
                     ReverseInternal(array, 0, t);
-                    ReverseInternal(array, unchecked(1 + t), shift);
+                    ReverseInternal(array, unchecked(1 + t), s);
                     ReverseInternal(array, 0, count);
                 }
                 return;
