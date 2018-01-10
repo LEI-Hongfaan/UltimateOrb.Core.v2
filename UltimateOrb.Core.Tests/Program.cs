@@ -6,8 +6,18 @@ using System.Linq;
 using System.Threading;
 
 namespace UltimateOrb.Core.Tests {
+    using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
     using UltimateOrb.Plain.ValueTypes;
+
+    public static class AAA {
+
+
+        public static Program.PtrSimulated<T> End<T>(this T[] array) {
+            return new Program.PtrSimulated<T>(array, checked((uint)array.Length));
+        }
+
+    }
 
     public partial class Program {
 
@@ -16,6 +26,147 @@ namespace UltimateOrb.Core.Tests {
         private static AsyncLocal<Queue<long>> collection_1 = new AsyncLocal<Queue<long>>();
 
         private static AsyncLocal<Random> random = new AsyncLocal<Random>();
+
+        [Property(MaxTest = 100000, QuietOnSuccess = true)]
+        public bool Test_Reverse_1(long[] a) {
+            if (null == a) {
+                return true;
+            }
+            var rr = GetRandom();
+            var c = rr.Next(checked(1 + a.Length));
+            var s = rr.Next(checked(1 + a.Length - c));
+            // var t = unchecked(rr.Next() - rr.Next());
+            var r0 = a.Clone() as long[];
+            Array.Reverse<long>(r0, s, c);
+            var r1 = a.Clone() as long[];
+            ArrayModule.Reverse(r1, s, c);
+            return r0.SequenceEqual(r1);
+        }
+
+        [Property(MaxTest = 100000, QuietOnSuccess = true)]
+        public bool Test_Reverse_2(long[] a) {
+            if (null == a) {
+                return true;
+            }
+            var rr = GetRandom();
+            // var c = rr.Next(checked(1 + a.Length));
+            // var s = rr.Next(checked(1 + a.Length - c));
+            // var t = unchecked(rr.Next() - rr.Next());
+            var r0 = a.Clone() as long[];
+            Array.Reverse<long>(r0);
+            var r1 = a.Clone() as long[];
+            ArrayModule.Reverse(r1);
+            return r0.SequenceEqual(r1);
+        }
+
+        public static bool Test_Rotate_Stub_Count_Start_Shift_1(Action<List<(int ProblemSize, int Count, int Start, int Shift, bool Success)>, int, long[], int, int, int> test) {
+            var rr = GetRandom();
+            var rs = new List<(int ProblemSize, int Count, int Start, int Shift, bool Success)>();
+            for (var aL = 0; 85 > aL; ++aL) {
+                var a = Enumerable.Range(0, aL).Select((x) => 10000 + 107L * x).ToArray();
+                for (var c = 0; c <= aL; ++c) {
+                    for (var s = 0; s <= aL - c; ++s) {
+                        for (var i = -2 - c; i <= 2 + c; ++i) {
+                            test(rs, aL, a, c, s, i);
+                        }
+                        for (var i = 3 + c; i > 0; --i) {
+                            var t = unchecked(rr.Next() - rr.Next());
+                            test(rs, aL, a, c, s, t);
+                        }
+                    }
+                }
+            }
+            return rs.All((x) => x.Success);
+        }
+
+        public static bool Test_Rotate_Stub_Start_Mid_EndEx_1(Action<List<(int ProblemSize, int Start, int Mid, int EndEx, bool Success)>, int, long[], int, int, int> test) {
+            var rr = GetRandom();
+            var rs = new List<(int ProblemSize, int Start, int Mid, int EndEx, bool Success)>();
+            for (var aL = 0; 100 > aL; ++aL) {
+                var a = Enumerable.Range(0, aL).Select((x) => 10000 + 107L * x).ToArray();
+                for (var c = 0; c <= aL; ++c) {
+                    for (var s = c; s <= aL; ++s) {
+                        for (var t = s; t <= aL; ++t) {
+                            test(rs, aL, a, c, s, t);
+                        }
+                    }
+                }
+            }
+            return rs.All((x) => x.Success);
+        }
+
+        private static void Test_Rotate_RotateInPlace_RotateLeftInPlace_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateInPlace(r0, s, s + (c == 0 ? 0 : (0 > t ? t % c + c : t % c)), s + c);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace(r1, s, c, t);
+            rs.Add((aL, c, s, t, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateInPlace_RotateLeftInPlace_1() {
+            return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateInPlace_RotateLeftInPlace_1_1);
+        }
+
+        private static void Test_Rotate_RotateInPlace_RotateLeftInPlace_2_1(List<(int ProblemSize, int Start, int Mid, int EndEx, bool Success)> rs, int aL, long[] a, int s, int m, int t) {
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateInPlace(r0, s, m, t);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace(r1, s, checked(t - s), checked(m - s));
+            rs.Add((aL, s, t, m, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateInPlace_RotateLeftInPlace_2() {
+            return Test_Rotate_Stub_Start_Mid_EndEx_1(Test_Rotate_RotateInPlace_RotateLeftInPlace_2_1);
+        }
+
+        private static void Test_Rotate_RotateLeftInPlace_AA_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace(r0, s, c, t);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace_A(r1, s, c, t);
+            rs.Add((aL, c, s, t, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateLeftInPlace_AA_1() {
+            return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_AA_1_1);
+        }
+
+        private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace_A(r0, s, c, t);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateRightInPlace_A(r1, s, c, checked(-t));
+            rs.Add((aL, c, s, t, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1() {
+            return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1_1);
+        }
+
+        [Property(MaxTest = 10000, QuietOnSuccess = true, Verbose = true)]
+        public bool Test_Rotate_5(long[] a) {
+            if (null == a) {
+                return true;
+            }
+            var rr = GetRandom();
+            // var c = rr.Next(checked(1 + a.Length));
+            // var s = rr.Next(checked(1 + a.Length - c));
+            var t = unchecked(rr.Next() - rr.Next());
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace(r0, t);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace_A(r1, t);
+            var rrr = r0.SequenceEqual(r1);
+            if (!rrr) {
+                while (!rrr) {
+                }
+            }
+            return rrr;
+        }
 
         [Property(MaxTest = 40000, QuietOnSuccess = true)]
         public bool Test_1() {
@@ -559,17 +710,220 @@ namespace UltimateOrb.Core.Tests {
 
         private static long? dddd1 = default;
         private struct adfdsaf {
-            
+
         }
 
-        private struct  fffff {
+        private struct fffff {
 
             double[] a;
 
 
         }
 
+        public readonly struct PtrSimulated<T> : IEquatable<PtrSimulated<T>> {
+
+            internal readonly T[] _array;
+
+            internal readonly uint _index;
+
+            public ref T Data {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => ref this._array[this._index];
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public PtrSimulated(T[] array, uint index) {
+                this._array = array;
+                this._index = index;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static PtrSimulated<T> operator +(PtrSimulated<T> @base, int offset) {
+                return new PtrSimulated<T>(@base._array, checked((uint)(@base._index + offset)));
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static PtrSimulated<T> operator +(int offset, PtrSimulated<T> @base) {
+                return @base + offset;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static PtrSimulated<T> operator ++(PtrSimulated<T> @base) {
+                return @base + 1;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static PtrSimulated<T> operator --(PtrSimulated<T> @base) {
+                return @base - 1;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static PtrSimulated<T> operator +(PtrSimulated<T> @base) {
+                return @base;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static PtrSimulated<T> operator -(PtrSimulated<T> @base, int offset) {
+                return new PtrSimulated<T>(@base._array, checked((uint)(@base._index - offset)));
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static int operator -(PtrSimulated<T> first, PtrSimulated<T> second) {
+                if (first._array == second._array) {
+                    return checked((int)((long)first._index - second._index));
+                }
+                // TODO: Perf
+                throw new InvalidOperationException();
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator <(PtrSimulated<T> first, PtrSimulated<T> second) {
+                return first._array == second._array && first._index < second._index;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator <=(PtrSimulated<T> first, PtrSimulated<T> second) {
+                return first._array == second._array && first._index <= second._index;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator >(PtrSimulated<T> first, PtrSimulated<T> second) {
+                return first._array == second._array && first._index > second._index;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator >=(PtrSimulated<T> first, PtrSimulated<T> second) {
+                return first._array == second._array && first._index >= second._index;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator ==(PtrSimulated<T> first, PtrSimulated<T> second) {
+                return first._array == second._array && first._index == second._index;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator ==(PtrSimulated<T> first, long second) {
+                if (0 == second) {
+                    return null == first._array;
+                }
+                return false;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator !=(PtrSimulated<T> first, long second) {
+                if (0 == second) {
+                    return null != first._array;
+                }
+                return false;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator ==(long first, PtrSimulated<T> second) {
+                return second == first;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator !=(long first, PtrSimulated<T> second) {
+                return second != first;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator ==(PtrSimulated<T> first, ulong second) {
+                if (0 == second) {
+                    return null == first._array;
+                }
+                return false;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator !=(PtrSimulated<T> first, ulong second) {
+                if (0 == second) {
+                    return null != first._array;
+                }
+                return false;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator ==(ulong first, PtrSimulated<T> second) {
+                return second == first;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator !=(ulong first, PtrSimulated<T> second) {
+                return second != first;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool operator !=(PtrSimulated<T> first, PtrSimulated<T> second) {
+                return first._index != second._index || first._array != second._array;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public bool Equals(PtrSimulated<T> other) {
+                return this._array == other._array && this._index == other._index;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public override int GetHashCode() {
+                return unchecked((int)this._index);
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public override bool Equals(object obj) {
+                if (obj is PtrSimulated<T> ptr) {
+                    return this.Equals(ptr);
+                }
+                return base.Equals(obj);
+            }
+
+            public ref T this[int offset] {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => ref this._array[checked(this._index + offset)];
+            }
+
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static implicit operator PtrSimulated<T>(T[] array) {
+                return new PtrSimulated<T>(array, 0);
+            }
+        }
+
         private static int Main(string[] args) {
+            {
+                {
+                    var aaa = new Program().Test_Rotate_RotateInPlace_RotateLeftInPlace_1();
+                }
+
+                var asdfs = new object().GetHashCode();
+                if (asdfs > 1) {
+                    if (asdfs == 1) {
+                        Console.Out.WriteLine(1024);
+                    }
+                }
+                bool a = false;
+                for (var i = 100; i > 0; --i) {
+                    // a = new Program().Test_Rotate_3a(new long[] { 0, 1, 0 });
+                }
+                Console.Out.WriteLine(a);
+                Console.Out.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = new long[33];
+                {
+                    long s = 10000;
+                    for (PtrSimulated<long> i = a; i < a.End(); i += 7) {
+                        i.Data = s++;
+                    }
+                }
+                Console.Out.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
+
             {
 
 

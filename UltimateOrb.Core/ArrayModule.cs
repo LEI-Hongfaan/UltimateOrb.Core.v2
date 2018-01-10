@@ -48,12 +48,35 @@ namespace UltimateOrb {
             Contract.Requires(null != array);
             return array.Length.ToUnsignedUnchecked() > unchecked((UIntT)index);
         }
+        
+        /*
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static bool CheckOffset<T>(T[] array, IntT offset) {
+            Contract.Requires(null != array);
+            return unchecked((UIntT)offset) <= array.Length.ToUnsignedUnchecked();
+        }
+        */
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static bool CheckSegment<T>(T[] array, IntT start, IntT count) {
             Contract.Requires(null != array);
-            return (count == 0 && 0 <= start && start <= array.Length) || (CheckIndex(array, start) && count > 0 && CheckIndex(array, unchecked(start + count)));
+            return unchecked(start + count) <= array.Length && 0 <= start && 0 <= count;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static bool CheckSegmentNonEmpty<T>(T[] array, IntT start, IntT count) {
+            Contract.Requires(null != array);
+            return unchecked(start + count) <= array.Length && 0 <= start && count > 0;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static bool CheckSegmentIndex<T>(T[] array, IntT start, IntT count, IntT index) {
+            Contract.Requires(null != array);
+            return CheckSegment(array, start, count) && start <= index && index < unchecked(start + count);
         }
     }
 }
