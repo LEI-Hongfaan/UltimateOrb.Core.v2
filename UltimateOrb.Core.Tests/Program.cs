@@ -147,6 +147,19 @@ namespace UltimateOrb.Core.Tests {
             return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1_1);
         }
 
+        private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace(r0, s, c, t);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateRightInPlace(r1, s, c, checked(-t));
+            rs.Add((aL, c, s, t, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1() {
+            return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1_1);
+        }
+
         [Property(MaxTest = 10000, QuietOnSuccess = true, Verbose = true)]
         public bool Test_Rotate_5(long[] a) {
             if (null == a) {

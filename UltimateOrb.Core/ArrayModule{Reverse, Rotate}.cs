@@ -139,7 +139,9 @@ namespace UltimateOrb {
                 if (count > 1) {
                     if (unchecked(start + count) <= array.Length && 0 <= start) {
                         var s = NormalizeShiftCount(count, shift);
-                        RotateLeftInPlaceInternal(array, start, count, s);
+                        if (s > 0) {
+                            RotateLeftInPlaceInternal(array, start, count, s);
+                        }
                         return;
                     }
                     goto L_a;
@@ -160,7 +162,47 @@ namespace UltimateOrb {
                 var count = array.Length;
                 if (count > 1) {
                     var s = NormalizeShiftCount(count, shift);
-                    RotateLeftInPlaceInternal(array, s);
+                    if (s > 0) {
+                        RotateLeftInPlaceInternal(array, s);
+                    }
+                }
+                return;
+            }
+            ThrowHelper.ThrowArgumentNullException_array();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void RotateRightInPlace<T>(this T[] array, IntT start, IntT count, IntT shift) {
+            if (null != array) {
+                if (count > 1) {
+                    if (unchecked(start + count) <= array.Length && 0 <= start) {
+                        var s = NormalizeShiftCount(count, shift);
+                        if (s > 0) {
+                            RotateLeftInPlaceInternal(array, start, count, unchecked(count - s));
+                        }
+                        return;
+                    }
+                    goto L_a;
+                }
+                if (CheckSegment(array, start, count)) {
+                    return;
+                }
+                L_a:
+                // TODO: Perf
+                throw new ArgumentException();
+            }
+            ThrowHelper.ThrowArgumentNullException_array();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void RotateRightInPlace<T>(this T[] array, IntT shift) {
+            if (null != array) {
+                var count = array.Length;
+                if (count > 1) {
+                    var s = NormalizeShiftCount(count, shift);
+                    if (s > 0) {
+                        RotateLeftInPlaceInternal(array, unchecked(count - s));
+                    }
                 }
                 return;
             }
