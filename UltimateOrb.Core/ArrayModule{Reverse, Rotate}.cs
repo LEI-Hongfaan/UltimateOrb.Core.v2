@@ -348,5 +348,85 @@ namespace UltimateOrb {
             }
             ThrowHelper.ThrowArgumentNullException_array();
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool NextPermutationInternal<T, TLessThan>(T[] array, int start, int count, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+            var c = unchecked(start + count);
+            var i = c;
+            --i;
+            while (true) {
+                var j = i;
+                --i;
+                if (lessThan.Invoke(array[i], array[j])) {
+                    var k = c;
+                    while (!lessThan.Invoke(array[i], array[--k])) {
+                    }
+                    {
+                        var t = k;
+                        k = i;
+                        i = t;
+                    }
+                    Reverse(array, j, c);
+                    return true;
+                }
+                if (i <= start) {
+                    Reverse(array, 0, c);
+                    return false;
+                }
+            }
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool NextPermutation<T, TLessThan>(T[] array, IntT start, IntT count, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+            if (null != array) {
+                if (count > 1) {
+                    if (unchecked(start + count) <= array.Length && 0 <= start) {
+                        return NextPermutationInternal(array, start, count, lessThan);
+                    }
+                    goto L_a;
+                }
+                if (CheckSegment(array, start, count)) {
+                    return false;
+                }
+                L_a:
+                // TODO: Perf
+                throw new ArgumentException();
+            }
+            ThrowHelper.ThrowArgumentNullException_array();
+            throw (ArgumentNullException)null;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool NextPermutation<T, TLessThan>(T[] array, IntT start, IntT count, Func<T, T, bool> lessThan) {
+            return NextPermutation(array, start, count, lessThan.AsIFunc());
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool NextPermutation<T, TLessThan>(T[] array, IntT start, IntT count) where TLessThan : IO.IFunc<T, T, bool>, new() {
+            return NextPermutation(array, start, count, DefaultConstructor.Invoke<TLessThan>());
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool NextPermutation<T, TLessThan>(T[] array, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+            if (null != array) {
+                var c = array.Length;
+                if (c > 1) {
+                    return NextPermutationInternal(array, 0, c, lessThan);
+                }
+                return false;
+            }
+            ThrowHelper.ThrowArgumentNullException_array();
+            throw (ArgumentNullException)null;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool NextPermutation<T, TLessThan>(T[] array, Func<T, T, bool> lessThan) {
+            return NextPermutation(array, lessThan.AsIFunc());
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool NextPermutation<T, TLessThan>(T[] array) where TLessThan : IO.IFunc<T, T, bool>, new() {
+            return NextPermutation(array, DefaultConstructor.Invoke<TLessThan>());
+        }
     }
 }
