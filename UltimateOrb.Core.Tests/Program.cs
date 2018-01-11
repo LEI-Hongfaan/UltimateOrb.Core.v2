@@ -59,6 +59,26 @@ namespace UltimateOrb.Core.Tests {
             return r0.SequenceEqual(r1);
         }
 
+        public static bool Test_Rotate_Stub_Shift_1(Action<List<(int ProblemSize, int Shift, bool Success)>, int, long[], int> test) {
+            var rr = GetRandom();
+            var rs = new List<(int ProblemSize, int Shift, bool Success)>();
+            for (var aL = 0; 121 > aL; ++aL) {
+                var a = Enumerable.Range(0, aL).Select((x) => 10000 + 107L * x).ToArray();
+                for (var c = 0; c <= aL; ++c) {
+                    for (var s = 0; s <= aL - c; ++s) {
+                        for (var i = -2 - c; i <= 2 + c; ++i) {
+                            test(rs, aL, a, i);
+                        }
+                        for (var i = 3 + c; i > 0; --i) {
+                            var t = unchecked(rr.Next() - rr.Next());
+                            test(rs, aL, a, t);
+                        }
+                    }
+                }
+            }
+            return rs.All((x) => x.Success);
+        }
+
         public static bool Test_Rotate_Stub_Count_Start_Shift_1(Action<List<(int ProblemSize, int Count, int Start, int Shift, bool Success)>, int, long[], int, int, int> test) {
             var rr = GetRandom();
             var rs = new List<(int ProblemSize, int Count, int Start, int Shift, bool Success)>();
@@ -108,6 +128,20 @@ namespace UltimateOrb.Core.Tests {
             return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateInPlace_RotateLeftInPlace_1_1);
         }
 
+        private static void Test_Rotate_RotateInPlace_RotateLeftInPlace_3_1(List<(int ProblemSize, int Shift, bool Success)> rs, int aL, long[] a, int t) {
+            var r0 = a.Clone() as long[];
+            var c = r0.Length;
+            ArrayModule.RotateInPlace(r0, 0, (c == 0 ? 0 : (0 > t ? t % c + c : t % c)), c);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace(r1, t);
+            rs.Add((aL, t, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateInPlace_RotateLeftInPlace_3() {
+            return Test_Rotate_Stub_Shift_1(Test_Rotate_RotateInPlace_RotateLeftInPlace_3_1);
+        }
+
         private static void Test_Rotate_RotateInPlace_RotateLeftInPlace_2_1(List<(int ProblemSize, int Start, int Mid, int EndEx, bool Success)> rs, int aL, long[] a, int s, int m, int t) {
             var r0 = a.Clone() as long[];
             ArrayModule.RotateInPlace(r0, s, m, t);
@@ -134,6 +168,19 @@ namespace UltimateOrb.Core.Tests {
             return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_AA_1_1);
         }
 
+        private static void Test_Rotate_RotateLeftInPlace_AA_2_1(List<(int ProblemSize, int Shift, bool Success)> rs, int aL, long[] a, int t) {
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace(r0, t);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace_A(r1, t);
+            rs.Add((aL, t, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateLeftInPlace_AA_2() {
+            return Test_Rotate_Stub_Shift_1(Test_Rotate_RotateLeftInPlace_AA_2_1);
+        }
+
         private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
             var r0 = a.Clone() as long[];
             ArrayModule.RotateLeftInPlace_A(r0, s, c, t);
@@ -147,6 +194,19 @@ namespace UltimateOrb.Core.Tests {
             return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1_1);
         }
 
+        private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_2_1(List<(int ProblemSize, int Shift, bool Success)> rs, int aL, long[] a, int t) {
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace_A(r0, t);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateRightInPlace_A(r1, checked(-t));
+            rs.Add((aL, t, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_2() {
+            return Test_Rotate_Stub_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_2_1);
+        }
+
         private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
             var r0 = a.Clone() as long[];
             ArrayModule.RotateLeftInPlace(r0, s, c, t);
@@ -158,6 +218,19 @@ namespace UltimateOrb.Core.Tests {
         [Property(MaxTest = 1, QuietOnSuccess = true)]
         public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1() {
             return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1_1);
+        }
+
+        private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_2_1(List<(int ProblemSize, int Shift, bool Success)> rs, int aL, long[] a, int t) {
+            var r0 = a.Clone() as long[];
+            ArrayModule.RotateLeftInPlace(r0, t);
+            var r1 = a.Clone() as long[];
+            ArrayModule.RotateRightInPlace(r1, checked(-t));
+            rs.Add((aL, t, r0.SequenceEqual(r1)));
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_2() {
+            return Test_Rotate_Stub_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_2_1);
         }
 
         [Property(MaxTest = 10000, QuietOnSuccess = true, Verbose = true)]
@@ -565,6 +638,7 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+        /*
         [Property(MaxTest = 100, QuietOnSuccess = true)]
         public bool Test_X100() {
             return true;
@@ -625,6 +699,7 @@ namespace UltimateOrb.Core.Tests {
             }
             return !a.GetValueOrDefault();
         }
+        */
 
         [Property(MaxTest = 500, QuietOnSuccess = true)]
         public bool Test_3() {
@@ -717,21 +792,10 @@ namespace UltimateOrb.Core.Tests {
                 rr = new Random();
                 Program.random.Value = rr;
             }
-
             return rr;
         }
 
         private static long? dddd1 = default;
-        private struct adfdsaf {
-
-        }
-
-        private struct fffff {
-
-            double[] a;
-
-
-        }
 
         public readonly struct PtrSimulated<T> : IEquatable<PtrSimulated<T>> {
 
@@ -903,7 +967,163 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+
+        private static void Printf<T>(System.IO.TextWriter textWriter, T value) {
+            var cc = new Microsoft.FSharp.Core.PrintfFormat<Microsoft.FSharp.Core.FSharpFunc<T, Microsoft.FSharp.Core.Unit>, System.IO.TextWriter, Microsoft.FSharp.Core.Unit, Microsoft.FSharp.Core.Unit, T>("%A");
+            var fg = Microsoft.FSharp.Core.PrintfModule.PrintFormatLineToTextWriter(textWriter, cc);
+            fg.Invoke(value);
+        }
+
+        private struct Aaaaaab : ListSearchModule.IRollingHashProvider<char, Aaaaaab.Bdd> {
+
+            public Bdd CreateHashCodeBuilder<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
+                return Bdd.Create(source, start, count);
+            }
+
+            public bool Equals<TListFirst, TListSecond>(TListFirst first, int startFirst, int countFirst, TListSecond second, int startSecond, int countSecond)
+                where TListFirst : IReadOnlyList<char>
+                where TListSecond : IReadOnlyList<char> {
+                if (countFirst == countSecond) {
+                    var i = startFirst;
+                    var j = startSecond;
+                    for (var c = countFirst; c > 0; --c) {
+                        if (first[i++] != second[j++]) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            public bool Equals(char x, char y) {
+                return x == y;
+            }
+
+            public int GetHashCode<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
+                var i = start;
+                var c = i + count;
+                var v = (uint)0;
+                for (; c > i; ++i) {
+                    v = unchecked((uint)(((ulong)st * v + source[i]) % p));
+                }
+                return unchecked((int)v);
+            }
+
+            public int GetHashCode(char obj) {
+                return unchecked((ushort)obj);
+            }
+
+            private const uint st = 256;
+
+            private const uint p = 2147483647;
+            // private const uint p = 101;
+
+            public struct Bdd : ListSearchModule.IRollingHashCodeBuilder<char> {
+
+
+
+
+
+                private readonly uint aaa;
+
+                private uint vvv;
+
+                public Bdd(uint a, uint v) {
+                    this.aaa = a;
+                    this.vvv = v;
+                }
+
+                internal static Bdd Create<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
+                    var i = start;
+                    var c = i + count;
+                    var a = (uint)1;
+                    var v = (uint)0;
+                    for (; c > i; ++i) {
+                        v = unchecked((uint)(((ulong)st * v + source[i]) % p));
+                        a = unchecked((uint)((ulong)st * a % p));
+                    }
+                    return new Bdd(a, v);
+                }
+
+                public int GetCurrentHashCode() {
+                    return unchecked((int)this.vvv);
+                }
+
+                public void Shift(char @out, char @in) {
+                    var o = (uint)unchecked((ushort)@out);
+                    var i = (uint)unchecked((ushort)@in);
+                    var v = this.vvv;
+                    this.vvv = unchecked((uint)((((ulong)aaa * (p - o)) + ((ulong)st * v + i)) % p));
+                }
+            }
+        }
+
         private static int Main(string[] args) {
+
+            {
+                var dsaf = "abc abab bbda bd bba  ba badba dbad db a dcadb bad bab adb b adab d bda　🌍 dsf 地球人好壞 b da b ba a".ToCharArray();
+                var dd = " b ba".ToCharArray();
+                Console.Out.WriteLine(DefaultConstructor.Invoke<Aaaaaab>().GetHashCode(dd, 0, dd.Length));
+                var cccd = DefaultConstructor.Invoke<Aaaaaab>().CreateHashCodeBuilder(dd, 0, dd.Length);
+
+                Console.Out.WriteLine(cccd.GetCurrentHashCode());
+                cccd.Shift(' ', ' ');
+                cccd.Shift('b', 'b');
+                cccd.Shift(' ', ' ');
+                cccd.Shift('b', 'b');
+                cccd.Shift('a', 'a');
+                Console.Out.WriteLine(cccd.GetCurrentHashCode());
+
+                var c = ListSearchModule.SearchRabinKarp<char, char[], char[], Aaaaaab.Bdd, Aaaaaab>(dsaf, dd, DefaultConstructor.Invoke<Aaaaaab>());
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(c);
+                Console.Out.WriteLine(new string(dsaf.Skip(c).Take(dd.Length).ToArray()));
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var b = new int[] { 1, 2, 2, 3, 4, };
+                var a = Enumerable.Range(0, b.Length).ToArray();
+                var dd = 0L;
+                do {
+                    var c = b.Clone() as int[];
+                    ArrayModule.Reorder(c, a.Clone() as int[]);
+                    ++dd;
+                    Printf(System.Console.Out, c);
+                } while (ArrayModule.NextPermutation(a, ((Func<int, int, bool>)((x, y) => x < y)).AsIFunc()));
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(dd);
+                Console.ReadKey(true);
+                return 0;
+            }
+
+            {
+                var b = new int[] { 1, 2, 2, 3, 4, };
+                var a = Enumerable.Range(0, b.Length).ToArray();
+                var dd = 0L;
+                do {
+                    var c = a.Select(x => b[x]).ToArray();
+                    ++dd;
+                    Printf(System.Console.Out, c);
+                } while (ArrayModule.NextPermutation(a, ((Func<int, int, bool>)((x, y) => x < y)).AsIFunc()));
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(dd);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = new int[] { 4, 4, 5, 5, 5, 6 };
+                // a = new int[] { 1, 3, 2, };
+                var b = a.Clone() as int[];
+                do {
+                    Printf(System.Console.Out, b);
+                } while (ArrayModule.NextPermutation(b, ((Func<int, int, bool>)((x, y) => x < y)).AsIFunc()));
+
+                Console.Out.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 {
                     var aaa = new Program().Test_Rotate_RotateInPlace_RotateLeftInPlace_1();
@@ -985,7 +1205,7 @@ namespace UltimateOrb.Core.Tests {
             }
 
             {
-                new Program().Test_X2A330000000();
+                // new Program().Test_X2A330000000();
             }
             {
                 System.Threading.Thread.MemoryBarrier();

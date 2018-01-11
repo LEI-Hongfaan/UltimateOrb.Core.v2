@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace UltimateOrb {
     using IntT = Int32;
@@ -65,7 +64,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void RotateLeftInPlaceInternal<T>(this T[] array, IntT start, IntT count, IntT shift) {
+        internal static void RotateLeftInPlaceInternal<T>(this T[] array, IntT start, IntT count, IntT shift) {
             Contract.Requires(null != array && CheckSegment(array, start, count));
             Contract.Requires(shift > 0);
             Contract.Requires(count > shift);
@@ -92,7 +91,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void RotateLeftInPlaceInternal<T>(this T[] array, IntT shift) {
+        internal static void RotateLeftInPlaceInternal<T>(this T[] array, IntT shift) {
             Contract.Requires(shift > 0);
             Contract.Requires(null != array && array.Length > shift && array.Length > 1);
             var c = 0;
@@ -350,27 +349,34 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool NextPermutationInternal<T, TLessThan>(T[] array, int start, int count, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+        internal static bool NextPermutationInternal<T, TLessThan>(T[] array, int start, int count, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+            Contract.Requires(0 <= count);
+            Contract.Requires(count > 1);
             var c = unchecked(start + count);
             var i = c;
             --i;
-            while (true) {
+            for (; ; ) {
                 var j = i;
                 --i;
                 if (lessThan.Invoke(array[i], array[j])) {
                     var k = c;
-                    while (!lessThan.Invoke(array[i], array[--k])) {
+                    for (; ; ) {
+                        --k;
+                        {
+                            var p = array[i];
+                            var q = array[k];
+                            if (lessThan.Invoke(p, q)) {
+                                array[i] = q;
+                                array[k] = p;
+                                break;
+                            }
+                        }
                     }
-                    {
-                        var t = k;
-                        k = i;
-                        i = t;
-                    }
-                    Reverse(array, j, c);
+                    Reverse(array, j, c - j);
                     return true;
                 }
-                if (i <= start) {
-                    Reverse(array, 0, c);
+                if (i == start) {
+                    Reverse(array, start, count);
                     return false;
                 }
             }
@@ -397,11 +403,6 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool NextPermutation<T, TLessThan>(T[] array, IntT start, IntT count, Func<T, T, bool> lessThan) {
-            return NextPermutation(array, start, count, lessThan.AsIFunc());
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static bool NextPermutation<T, TLessThan>(T[] array, IntT start, IntT count) where TLessThan : IO.IFunc<T, T, bool>, new() {
             return NextPermutation(array, start, count, DefaultConstructor.Invoke<TLessThan>());
         }
@@ -420,13 +421,23 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool NextPermutation<T, TLessThan>(T[] array, Func<T, T, bool> lessThan) {
-            return NextPermutation(array, lessThan.AsIFunc());
+        public static bool NextPermutation<T, TLessThan>(T[] array) where TLessThan : IO.IFunc<T, T, bool>, new() {
+            return NextPermutation(array, DefaultConstructor.Invoke<TLessThan>());
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool NextPermutation<T, TLessThan>(T[] array) where TLessThan : IO.IFunc<T, T, bool>, new() {
-            return NextPermutation(array, DefaultConstructor.Invoke<TLessThan>());
+        public static void Reorder<T>(T[] array, IntT[] indicesAndBuffer) {
+            for (var i = 0; array.Length > i; ++i) {
+                while (indicesAndBuffer[i] != i) {
+                    var k = indicesAndBuffer[i];
+                    var j = indicesAndBuffer[k];
+                    var v = array[k];
+                    indicesAndBuffer[k] = indicesAndBuffer[i];
+                    indicesAndBuffer[i] = j;
+                    array[k] = array[i];
+                    array[i] = v;
+                }
+            }
         }
     }
 }
