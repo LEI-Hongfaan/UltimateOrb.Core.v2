@@ -8,7 +8,7 @@ namespace UltimateOrb {
 
     public static partial class ListSearchModule {
 
-        public partial interface IRollingHashProvider<in T, TRollingHashCodeBuilder>
+        public partial interface ISequenceEqualityComparerWithRollingHash<in T, TRollingHashCodeBuilder>
             : ISequenceEqualityComparer<T>
             where TRollingHashCodeBuilder : IRollingHashCodeBuilder<T> {
 
@@ -26,7 +26,7 @@ namespace UltimateOrb {
             where TListSource : IReadOnlyList<T>
             where TListPattern : IReadOnlyList<T>
             where TRollingHashCodeBuilder : IRollingHashCodeBuilder<T>
-            where THash : IRollingHashProvider<T, TRollingHashCodeBuilder> {
+            where THash : ISequenceEqualityComparerWithRollingHash<T, TRollingHashCodeBuilder> {
             var pL = pattern.Count;
             var h = hash.GetHashCode(pattern, 0, pL);
             var sL = source.Count;

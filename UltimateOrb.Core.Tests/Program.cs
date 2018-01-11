@@ -974,10 +974,10 @@ namespace UltimateOrb.Core.Tests {
             fg.Invoke(value);
         }
 
-        private struct Aaaaaab : ListSearchModule.IRollingHashProvider<char, Aaaaaab.Bdd> {
+        private struct StringRawEqualityComparer : ListSearchModule.ISequenceEqualityComparerWithRollingHash<char, StringRawEqualityComparer.HashCodeBuilder> {
 
-            public Bdd CreateHashCodeBuilder<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
-                return Bdd.Create(source, start, count);
+            public HashCodeBuilder CreateHashCodeBuilder<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
+                return HashCodeBuilder.Create(source, start, count);
             }
 
             public bool Equals<TListFirst, TListSecond>(TListFirst first, int startFirst, int countFirst, TListSecond second, int startSecond, int countSecond)
@@ -1005,7 +1005,7 @@ namespace UltimateOrb.Core.Tests {
                 var c = i + count;
                 var v = (uint)0;
                 for (; c > i; ++i) {
-                    v = unchecked((uint)(((ulong)st * v + source[i]) % p));
+                    v = unchecked((uint)(((ulong)m * v + source[i]) % p));
                 }
                 return unchecked((int)v);
             }
@@ -1014,36 +1014,31 @@ namespace UltimateOrb.Core.Tests {
                 return unchecked((ushort)obj);
             }
 
-            private const uint st = 256;
+            private const uint m = 256;
 
             private const uint p = 2147483647;
-            // private const uint p = 101;
 
-            public struct Bdd : ListSearchModule.IRollingHashCodeBuilder<char> {
-
-
-
-
+            public struct HashCodeBuilder : ListSearchModule.IRollingHashCodeBuilder<char> {
 
                 private readonly uint aaa;
 
                 private uint vvv;
 
-                public Bdd(uint a, uint v) {
+                public HashCodeBuilder(uint a, uint v) {
                     this.aaa = a;
                     this.vvv = v;
                 }
 
-                internal static Bdd Create<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
+                internal static HashCodeBuilder Create<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
                     var i = start;
                     var c = i + count;
                     var a = (uint)1;
                     var v = (uint)0;
                     for (; c > i; ++i) {
-                        v = unchecked((uint)(((ulong)st * v + source[i]) % p));
-                        a = unchecked((uint)((ulong)st * a % p));
+                        v = unchecked((uint)(((ulong)m * v + source[i]) % p));
+                        a = unchecked((uint)((ulong)m * a % p));
                     }
-                    return new Bdd(a, v);
+                    return new HashCodeBuilder(a, v);
                 }
 
                 public int GetCurrentHashCode() {
@@ -1054,7 +1049,7 @@ namespace UltimateOrb.Core.Tests {
                     var o = (uint)unchecked((ushort)@out);
                     var i = (uint)unchecked((ushort)@in);
                     var v = this.vvv;
-                    this.vvv = unchecked((uint)((((ulong)aaa * (p - o)) + ((ulong)st * v + i)) % p));
+                    this.vvv = unchecked((uint)((((ulong)aaa * (p - o)) + ((ulong)m * v + i)) % p));
                 }
             }
         }
@@ -1062,23 +1057,23 @@ namespace UltimateOrb.Core.Tests {
         private static int Main(string[] args) {
 
             {
-                var dsaf = "abc abab bbda bd bba  ba badba dbad db a dcadb bad bab adb b adab d bda　🌍 dsf 地球人好壞 b da b ba a".ToCharArray();
-                var dd = " b ba".ToCharArray();
-                Console.Out.WriteLine(DefaultConstructor.Invoke<Aaaaaab>().GetHashCode(dd, 0, dd.Length));
-                var cccd = DefaultConstructor.Invoke<Aaaaaab>().CreateHashCodeBuilder(dd, 0, dd.Length);
+                var source = "abc abab bbda bd bb🌍a  ba badba dbad db a dcadb bad bab adb b🌍cdab d bda　🌍 dsf 地球人好壞 b da b b🌍a a".ToCharArray();
+                var pattern = " b b🌍a".ToCharArray();
+                Console.Out.WriteLine(DefaultConstructor.Invoke<StringRawEqualityComparer>().GetHashCode(pattern, 0, pattern.Length));
+                var hash = DefaultConstructor.Invoke<StringRawEqualityComparer>().CreateHashCodeBuilder(pattern, 0, pattern.Length);
 
-                Console.Out.WriteLine(cccd.GetCurrentHashCode());
-                cccd.Shift(' ', ' ');
-                cccd.Shift('b', 'b');
-                cccd.Shift(' ', ' ');
-                cccd.Shift('b', 'b');
-                cccd.Shift('a', 'a');
-                Console.Out.WriteLine(cccd.GetCurrentHashCode());
+                Console.Out.WriteLine(hash.GetCurrentHashCode());
+                hash.Shift(' ', ' ');
+                hash.Shift('b', 'b');
+                hash.Shift(' ', ' ');
+                hash.Shift('b', 'b');
+                hash.Shift('a', 'a');
+                Console.Out.WriteLine(hash.GetCurrentHashCode());
 
-                var c = ListSearchModule.SearchRabinKarp<char, char[], char[], Aaaaaab.Bdd, Aaaaaab>(dsaf, dd, DefaultConstructor.Invoke<Aaaaaab>());
+                var c = ListSearchModule.SearchRabinKarp<char, char[], char[], StringRawEqualityComparer.HashCodeBuilder, StringRawEqualityComparer>(source, pattern, DefaultConstructor.Invoke<StringRawEqualityComparer>());
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(c);
-                Console.Out.WriteLine(new string(dsaf.Skip(c).Take(dd.Length).ToArray()));
+                Console.Out.WriteLine(new string(source.Skip(c).Take(pattern.Length).ToArray()));
                 Console.ReadKey(true);
                 return 0;
             }
