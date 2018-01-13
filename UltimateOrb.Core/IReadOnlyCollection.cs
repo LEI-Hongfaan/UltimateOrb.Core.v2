@@ -7,5 +7,10 @@ namespace UltimateOrb.Collections.Generic {
     public partial interface IReadOnlyCollection<out T, out TEnumerator>
         : IReadOnlyCollection<T>, IEnumerable<T, TEnumerator>
         where TEnumerator : IEnumerator<T> {
+
+        long LongCount {
+
+            get;
+        }
     }
 }

@@ -8,6 +8,11 @@ namespace UltimateOrb.Collections.Generic {
         : ICollection<T>, IEnumerable<T, TEnumerator>
         where TEnumerator : IEnumerator<T> {
 
+        long LongCount {
+
+            get;
+        }
+
         bool Contains<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T>;
 
         bool Remove<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T>;

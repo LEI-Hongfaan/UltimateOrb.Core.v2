@@ -170,43 +170,39 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsPermutationInternal<T, TLessThan>(this T[] first, IntT startFirst, IntT countFirst, T[] second, IntT startSecond, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+        internal static bool IsPermutationInternal<T, TEqualityComparer>(this T[] first, IntT startFirst, IntT countFirst, T[] second, IntT startSecond, TEqualityComparer equalityComparer) where TEqualityComparer : IO.IFunc<T, T, bool> {
+            Contract.Requires(null != first && CheckSegment(first, startFirst, countFirst));
+            Contract.Requires(null != second && CheckSegment(second, startSecond, countFirst));
+            Contract.Requires(null != equalityComparer);
             var i = startFirst;
             var u = unchecked(startFirst + countFirst);
             var j = startSecond;
-            for (; i != u;) {
-                if (!lessThan.Invoke(first[i], second[j])) {
-                    unchecked {
-                        j += u - i;
-                    }
-                    var v = j;
-                    return (CheckMatchCounts(first, i, u, second, j, v, lessThan));
+            for (; u > i;) {
+                if (!equalityComparer.Invoke(first[i], second[j])) {
+                    var v = unchecked(u - i + j);
+                    return CheckMatchCounts(first, i, u, second, j, v, equalityComparer);
                 }
-                unchecked {
-                    ++i;
-                }
-                unchecked {
-                    ++j;
-                }
+                ++i;
+                ++j;
             }
-            return (true);
+            return true;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        internal static bool CheckMatchCounts<T, TLessThan>(this T[] first, IntT startFirst, IntT endExFirst, T[] second, IntT startSecond, IntT endExSecond, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
-            var (u, v) = TrimMatchingSuffixes(first, endExFirst, second, endExSecond, lessThan);
-            for (var i = startFirst; i != u; ++i) {
-                if (i == IndexOf(first, startFirst, i, first[i], lessThan)) {
-                    var c2 = CountInternal(first, startSecond, v, first[i], lessThan);
-                    if (c2 == 0) {
+        internal static bool CheckMatchCounts<T, TEqualityComparer>(this T[] first, IntT startFirst, IntT endExFirst, T[] second, IntT startSecond, IntT endExSecond, TEqualityComparer equalityComparer) where TEqualityComparer : IO.IFunc<T, T, bool> {
+            var (u, v) = TrimMatchingSuffixes(first, endExFirst, second, endExSecond, equalityComparer);
+            for (var i = startFirst; u > i; ++i) {
+                if (i == IndexOfInternal(first, startFirst, i, first[i], equalityComparer)) {
+                    var c2 = CountInternal(first, startSecond, v, first[i], equalityComparer);
+                    if (0 == c2) {
                         return false;
                     }
                     var k = i;
                     unchecked {
                         ++k;
                     }
-                    var c1 = 1 + CountInternal(first, k, u, first[i], lessThan);
-                    if (c2 != c1) {
+                    var c1 = 1 + CountInternal(first, k, u, first[i], equalityComparer);
+                    if (c1 != c2) {
                         return false;
                     }
                 }
@@ -215,10 +211,10 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static (IntT, IntT) TrimMatchingSuffixes<T, TLessThan>(this T[] first, IntT endExFirst, T[] second, IntT endExSecond, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+        private static (IntT, IntT) TrimMatchingSuffixes<T, TEqualityComparer>(this T[] first, IntT endExFirst, T[] second, IntT endExSecond, TEqualityComparer equalityComparer) where TEqualityComparer : IO.IFunc<T, T, bool> {
             var i = endExFirst;
             var j = endExSecond;
-            for (; lessThan.Invoke(first[--i], second[--j]);) {
+            for (; equalityComparer.Invoke(first[--i], second[--j]);) {
             }
             ++i;
             ++j;
@@ -226,10 +222,10 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        internal static int CountInternal<T, TLessThan>(this T[] first, IntT start, IntT endEx, T value, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+        internal static int CountInternal<T, TEqualityComparer>(this T[] first, IntT start, IntT endEx, T value, TEqualityComparer equalityComparer) where TEqualityComparer : IO.IFunc<T, T, bool> {
             var result = (int)0;
             for (var i = start; endEx > i; ++i) {
-                if (lessThan.Invoke(first[i], value)) {
+                if (equalityComparer.Invoke(first[i], value)) {
                     checked {
                         ++result;
                     }
@@ -239,25 +235,41 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        internal static IntT IndexOf<T, TLessThan>(this T[] first, IntT start, IntT endEx, T value, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+        internal static IntT IndexOfInternal<T, TEqualityComparer>(this T[] first, IntT start, IntT endEx, T value, TEqualityComparer equalityComparer) where TEqualityComparer : IO.IFunc<T, T, bool> {
             for (var i = start; endEx > i; ++i) {
-                if (lessThan.Invoke(first[i], value)) {
+                if (equalityComparer.Invoke(first[i], value)) {
                     return i;
                 }
             }
-            throw (InvalidOperationException)null;
+            return endEx;
         }
 
-        public static bool IsPermutation<T, TLessThan>(this T[] first, IntT startFirst, IntT countFirst, T[] second, IntT startSecond, IntT countSecond, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPermutation<T, TEqualityComparer>(this T[] first, IntT startFirst, IntT countFirst, T[] second, IntT startSecond, IntT countSecond, TEqualityComparer equalityComparer) where TEqualityComparer : IO.IFunc<T, T, bool> {
             if (null != first && null != second) {
                 if (CheckSegment(first, startFirst, countFirst) && CheckSegment(second, startSecond, countSecond)) {
                     if (countFirst == countSecond) {
-                        return IsPermutationInternal(first, startFirst, countFirst, second, startSecond, lessThan);
+                        return IsPermutationInternal(first, startFirst, countFirst, second, startSecond, equalityComparer);
                     }
                     return false;
                 }
                 // TODO
                 throw new ArgumentException();
+            }
+            // TODO
+            ThrowHelper.ThrowArgumentNullException_array();
+            throw (ArgumentNullException)null;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPermutation<T, TEqualityComparer>(this T[] first, T[] second, TEqualityComparer equalityComparer) where TEqualityComparer : IO.IFunc<T, T, bool> {
+            if (null != first && null != second) {
+                var countFirst = first.Length;
+                var countSecond = second.Length;
+                if (countFirst == countSecond) {
+                    return IsPermutationInternal(first, 0, countFirst, second, 0, equalityComparer);
+                }
+                return false;
             }
             // TODO
             ThrowHelper.ThrowArgumentNullException_array();

@@ -795,6 +795,122 @@ namespace UltimateOrb.Core.Tests {
         private static long? dddd1 = default;
 
 
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_IsPermutation_1() {
+            var a = "Banaan🌍nas".ToCharArray();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var t = 0UL;
+            var s = new List<(ulong Id, bool Value)>(0);            
+            for (var b = a.Clone() as char[]; ;) {
+                var z = ArrayModule.IsPermutation(a.Clone() as char[], b.Clone() as char[], c);
+                s.Add((t++, z));
+                if (ArrayModule.NextPermutation(b, d)) {
+                    continue;
+                }
+                break;
+            }
+            return s.All((x) => x.Value);
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_IsPermutation_2() {
+            var a = "Banaan🌍nas".ToCharArray();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var t = 0UL;
+            var s = new List<(ulong Id, bool Value)>(0);
+            for (var b = a.Clone() as char[]; ;) {
+                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
+                s.Add((t++, z));
+                if (ArrayModule.NextPermutation(b, d)) {
+                    continue;
+                }
+                break;
+            }
+            for (var b = a.Clone() as char[]; ;) {
+                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
+                s.Add((t++, z));
+                if (ArrayModule.PreviousPermutation(b, d)) {
+                    continue;
+                }
+                break;
+            }
+            return s.All((x) => x.Value);
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_NextPermutation_3() {
+            var a = "abcdefgh".ToCharArray();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var t = 0UL;
+            var s = new List<(ulong Id, bool Value)>(0);
+            for (var b = a.Clone() as char[]; ;) {
+                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
+                s.Add((t++, z));
+                if (ArrayModule.NextPermutation(b, d)) {
+                    continue;
+                }
+                break;
+            }
+            return s.All((x) => x.Value) && s.Count == 40320;
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_NextPermutation_4() {
+            var a = "abcdefgg".ToCharArray();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var t = 0UL;
+            var s = new List<(ulong Id, bool Value)>(0);
+            for (var b = a.Clone() as char[]; ;) {
+                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
+                s.Add((t++, z));
+                if (ArrayModule.NextPermutation(b, d)) {
+                    continue;
+                }
+                break;
+            }
+            return s.All((x) => x.Value) && s.Count == 20160;
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_PreviousPermutation_3() {
+            var a = "hgfedcba".ToCharArray();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var t = 0UL;
+            var s = new List<(ulong Id, bool Value)>(0);
+            for (var b = a.Clone() as char[]; ;) {
+                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
+                s.Add((t++, z));
+                if (ArrayModule.PreviousPermutation(b, d)) {
+                    continue;
+                }
+                break;
+            }
+            return s.All((x) => x.Value) && s.Count == 40320;
+        }
+
+        [Property(MaxTest = 1, QuietOnSuccess = true)]
+        public bool Test_PreviousPermutation_4() {
+            var a = "ggfedcba".ToCharArray();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var t = 0UL;
+            var s = new List<(ulong Id, bool Value)>(0);
+            for (var b = a.Clone() as char[]; ;) {
+                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
+                s.Add((t++, z));
+                if (ArrayModule.PreviousPermutation(b, d)) {
+                    continue;
+                }
+                break;
+            }
+            return s.All((x) => x.Value) && s.Count == 20160;
+        }
+
         private static void Printf<T>(System.IO.TextWriter textWriter, T value) {
             var t = new Microsoft.FSharp.Core.PrintfFormat<Microsoft.FSharp.Core.FSharpFunc<T, Microsoft.FSharp.Core.Unit>, System.IO.TextWriter, Microsoft.FSharp.Core.Unit, Microsoft.FSharp.Core.Unit, T>("%A");
             var f = Microsoft.FSharp.Core.PrintfModule.PrintFormatLineToTextWriter(textWriter, t);
@@ -802,7 +918,27 @@ namespace UltimateOrb.Core.Tests {
         }
 
         private static int Main(string[] args) {
-
+            {
+                new Program().Test_IsPermutation_2();
+                {
+                    var a = "Banaan🌍nas".ToCharArray();
+                    var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
+                    var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+                    var t = 0UL;
+                    var s = new List<(ulong Id, bool Value)>(0);
+                    for (var b = a.Clone() as char[]; ;) {
+                        Console.Out.WriteLine(b);
+                        var z = ArrayModule.IsPermutation(a.Clone() as char[], b.Clone() as char[], c);
+                        s.Add((t++, z));
+                        if (ArrayModule.PreviousPermutation(b, d)) {
+                            continue;
+                        }
+                        break;
+                    }
+                    var f = s.All((x) => x.Value);
+                }
+                return 0;
+            }
             {
                 var source = "abc abab bbda bd bb🌍a  ba badba dbad db a dcadb bad bab adb b🌍cdab d bda　🌍 dsf 地球人好壞 b da b b🌍a a".ToCharArray();
                 var pattern = " b b🌍a".ToCharArray();
@@ -817,7 +953,7 @@ namespace UltimateOrb.Core.Tests {
                 hash.Shift('a', 'a');
                 Console.Out.WriteLine(hash.GetCurrentHashCode());
 
-                var c = ListSearchModule.SearchRabinKarp<char, char[], char[], StringRawEqualityComparer.HashCodeBuilder, StringRawEqualityComparer>(source, pattern, DefaultConstructor.Invoke<StringRawEqualityComparer>());
+                var c = SequenceSearchModule.IndexOf_A_RabinKarp<char, char[], char[], StringRawEqualityComparer.HashCodeBuilder, StringRawEqualityComparer>(source, pattern, DefaultConstructor.Invoke<StringRawEqualityComparer>());
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(c);
                 Console.Out.WriteLine(new string(source.Skip(c).Take(pattern.Length).ToArray()));

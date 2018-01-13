@@ -32,6 +32,12 @@ namespace UltimateOrb.Collections.Generic {
             get => this.value.Count;
         }
 
+        public long LongCount {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.value.Count;
+        }
+
         private static partial class Private {
 
             public static partial class TCollection {

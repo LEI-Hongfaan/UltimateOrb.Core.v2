@@ -55,6 +55,12 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             get => this.value.Count;
         }
 
+        public long LongCount {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.value.LongCount;
+        }
+
         public bool IsReadOnly {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

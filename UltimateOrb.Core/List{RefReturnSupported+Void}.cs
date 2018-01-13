@@ -32,6 +32,15 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
+                return checked((int)this.count);
+            }
+        }
+
+        public long LongCount {
+
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get {
                 return this.count;
             }
         }

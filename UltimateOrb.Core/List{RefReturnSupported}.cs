@@ -158,6 +158,18 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 if (null != this.buffer) {
+                    return checked((int)this.count);
+                }
+                throw (NullReferenceException)null;
+            }
+        }
+
+        public long LongCount {
+
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get {
+                if (null != this.buffer) {
                     return this.count;
                 }
                 throw (NullReferenceException)null;

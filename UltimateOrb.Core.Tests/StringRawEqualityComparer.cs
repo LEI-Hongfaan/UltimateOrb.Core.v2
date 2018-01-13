@@ -2,7 +2,7 @@
 
 namespace UltimateOrb.Core.Tests {
 
-    public partial struct StringRawEqualityComparer : ListSearchModule.ISequenceEqualityComparerWithRollingHash<char, StringRawEqualityComparer.HashCodeBuilder> {
+    public partial struct StringRawEqualityComparer : SequenceSearchModule.ISequenceEqualityComparerWithRollingHash<char, StringRawEqualityComparer.HashCodeBuilder> {
 
         public HashCodeBuilder CreateHashCodeBuilder<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
             return HashCodeBuilder.Create(source, start, count);
@@ -46,7 +46,7 @@ namespace UltimateOrb.Core.Tests {
 
         private const uint p = 2147483647;
 
-        public partial struct HashCodeBuilder : ListSearchModule.IRollingHashCodeBuilder<char> {
+        public partial struct HashCodeBuilder : SequenceSearchModule.IRollingHashCodeBuilder<char> {
 
             private readonly uint shiftMultiplier;
 
