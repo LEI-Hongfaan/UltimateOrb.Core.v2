@@ -347,9 +347,87 @@ namespace UltimateOrb {
             }
             ThrowHelper.ThrowArgumentNullException_array();
         }
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        internal static bool PreviousPermutationInternal<T, TLessThan>(T[] array, IntT start, IntT count, TLessThan lessThan)
+                   where TLessThan : IO.IFunc<T, T, bool> {
+            Contract.Requires(0 <= count);
+            Contract.Requires(count > 1);
+            var c = unchecked(start + count);
+            var i = c;
+            --i;
+            for (; ; ) {
+                var j = i;
+                --i;
+                if (lessThan.Invoke(array[j], array[i])) {
+                    var k = c;
+                    for (; ; ) {
+                        --k;
+                        {
+                            var p = array[k];
+                            var q = array[i];
+                            if (lessThan.Invoke(p, q)) {
+                                array[k] = q;
+                                array[i] = p;
+                                break;
+                            }
+                        }
+                    }
+                    Reverse(array, j, c - j);
+                    return true;
+                }
+                if (i == start) {
+                    Reverse(array, start, count);
+                    return false;
+                }
+            }
+        }
+
+        public static bool PreviousPermutation<T, TLessThan>(T[] array, IntT start, IntT count, TLessThan lessThan)
+            where TLessThan : IO.IFunc<T, T, bool> {
+            if (null != array) {
+                if (count > 1) {
+                    if (unchecked(start + count) <= array.Length && 0 <= start) {
+                        PreviousPermutationInternal(array, start, count, lessThan);
+                    }
+                    goto L_a;
+                }
+                if (CheckSegment(array, start, count)) {
+                    return false;
+                }
+                L_a:
+                // TODO: Perf
+                throw new ArgumentException();
+            }
+            ThrowHelper.ThrowArgumentNullException_array();
+            throw (ArgumentNullException)null;
+        }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        internal static bool NextPermutationInternal<T, TLessThan>(T[] array, int start, int count, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+        public static bool PreviousPermutation<T, TLessThan>(T[] array, IntT start, IntT count) where TLessThan : IO.IFunc<T, T, bool>, new() {
+            return PreviousPermutation(array, start, count, DefaultConstructor.Invoke<TLessThan>());
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool PreviousPermutation<T, TLessThan>(T[] array, TLessThan lessThan) where TLessThan : IO.IFunc<T, T, bool> {
+            if (null != array) {
+                var c = array.Length;
+                if (c > 1) {
+                    return PreviousPermutationInternal(array, 0, c, lessThan);
+                }
+                return false;
+            }
+            ThrowHelper.ThrowArgumentNullException_array();
+            throw (ArgumentNullException)null;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool PreviousPermutation<T, TLessThan>(T[] array) where TLessThan : IO.IFunc<T, T, bool>, new() {
+            return PreviousPermutation(array, DefaultConstructor.Invoke<TLessThan>());
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        internal static bool NextPermutationInternal<T, TLessThan>(T[] array, IntT start, IntT count, TLessThan lessThan)
+            where TLessThan : IO.IFunc<T, T, bool> {
             Contract.Requires(0 <= count);
             Contract.Requires(count > 1);
             var c = unchecked(start + count);
