@@ -1,4 +1,4 @@
-﻿#define DEBUG_LOGIC_TREE
+﻿#define DEBUG_LOGIC_LINKEDTREE
 
 using System;
 using System.Collections.Generic;
@@ -204,7 +204,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public IEnumerator<T> GetEnumerator() {
                 Stack<Node.ChildrenEnumerator> s
-                    = new Stack<Node.ChildrenEnumerator>();
+                    = new Stack<Node.ChildrenEnumerator>(5);
                 if (null != tree.root) {
                     yield return tree.root.value;
                     s.Push(tree.root.GetChildrenEnumerator());
@@ -259,7 +259,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public PostorderNodeEnumerator(LinkedTree<T> tree) {
                 this.node = new Node { next_sibling = tree.root };
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(this.node);
                 }
@@ -314,7 +314,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public PreorderReversedNodeEnumerator(LinkedTree<T> tree) {
                 this.node = new Node { previous_sibling = tree.root };
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(this.node);
                 }
@@ -369,7 +369,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public PreorderNodeEnumerator(LinkedTree<T> tree) {
                 this.node = new Node { first_child = tree.root };
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(this.node);
                 }
@@ -430,7 +430,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public BreadthFirstNodeEnumerator(LinkedTree<T> tree) {
                 this.node = new Node { next_sibling = tree.root };
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(this.node);
                 }
@@ -538,7 +538,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 this.next_sibling = null;
                 this.first_child = null;
                 this.node = new Node { };
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(this.node);
                 }
@@ -608,7 +608,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public PostorderEnumerator(LinkedTree<T> tree) {
                 @this = new PostorderNodeEnumerator(tree);
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(@this.node);
                 }
@@ -646,7 +646,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public PreorderReversedEnumerator(LinkedTree<T> tree) {
                 @this = new PreorderReversedNodeEnumerator(tree);
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(@this.node);
                 }
@@ -684,7 +684,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public PreorderEnumerator(LinkedTree<T> tree) {
                 @this = new PreorderNodeEnumerator(tree);
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(@this.node);
                 }
@@ -722,7 +722,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public BreadthFirstEnumerator(LinkedTree<T> tree) {
                 @this = new BreadthFirstNodeEnumerator(tree);
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
                     Node.NodesSkippingVerification.Add(@this.node);
                 }
@@ -1213,7 +1213,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
             }
             l[0] = (c, root);
-            var s = new Stack<long>();
+            var s = new Stack<long>(0);
             Node p = null;
             foreach (var item in l) {
                 if (0 == item.ChildCount) {
@@ -1419,14 +1419,14 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
     public partial class LinkedTree<T> {
 
         public partial class Node
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
             : DebugObject, IVerifiable, ITreeNode, ITreeNodeTyped<Node>
 #else
             : ITreeNode, ITreeNodeTyped<Node>
 #endif
             {
 
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
             internal static readonly ISet<Node> NodesSkippingVerification = new HashSet<Node>();
 #endif
 
@@ -1444,13 +1444,13 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             internal T value;
 
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
             bool IVerifiable.Verify() {
                 return this.Verify();
             }
 #endif
 
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
             [System.Runtime.CompilerServices.DiscardableAttribute()]
             [System.Diagnostics.Contracts.PureAttribute()]
             public bool Verify() {
@@ -1894,7 +1894,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
                 public ChildrenEnumerator(Node parent) {
                     this.node = new Node { next_sibling = parent.first_child };
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
                     lock (NodesSkippingVerification) {
                         Node.NodesSkippingVerification.Add(this.node);
                     }
@@ -2008,7 +2008,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
         public static IEnumerator<ITreeNodeTyped<TNode>> GetDescendants<TNode>(this ITreeNodeTyped<TNode> node) where TNode : ITreeNodeTyped<TNode> {
             Stack<IEnumerator<TNode>> s
-                = new Stack<IEnumerator<TNode>>();
+                = new Stack<IEnumerator<TNode>>(5);
             for (IEnumerator<TNode> enumerator = node.GetEnumerator(); ;) {
                 while (enumerator.MoveNext()) {
                     var t = enumerator.Current;
@@ -2027,7 +2027,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
         public static IEnumerator<ITreeNode> GetDescendants(this ITreeNode node) {
             Stack<IEnumerator<ITreeNode>> s
-                = new Stack<IEnumerator<ITreeNode>>();
+                = new Stack<IEnumerator<ITreeNode>>(5);
             for (IEnumerator<ITreeNode> enumerator = node.GetEnumerator(); ;) {
                 while (enumerator.MoveNext()) {
                     var t = enumerator.Current;
@@ -2048,7 +2048,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
 namespace UltimateOrb.Collections.Generic.Testing {
 
-#if DEBUG_LOGIC_TREE
+#if DEBUG_LOGIC_LINKEDTREE
     [System.Runtime.CompilerServices.DiscardableAttribute()]
     public interface IVerifiable {
 

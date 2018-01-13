@@ -230,7 +230,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     if (0 == item.ChildCount) {
                         return new Tree<T>(item.Value, 1);
                     } else {
-                        s = new Stack<(long current, NodeId parent, NodeId lastChild)>();
+                        s = Stack<(long current, NodeId parent, NodeId lastChild)>.Create();
                         tree = new Tree<T>(item.Value, 5);
                         p = RootIndex;
                         q = NilIndex;
@@ -324,7 +324,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 var count = tree.data.count0;
                 this.count = count;
                 this.id = count;
-                this.ancestors = new Stack<NodeId>(5);
+                this.ancestors = Stack<NodeId>.Create();
             }
 
             public (long ChildCount, T Value) Current {

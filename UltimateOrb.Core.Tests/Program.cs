@@ -6,17 +6,14 @@ using System.Linq;
 using System.Threading;
 
 namespace UltimateOrb.Core.Tests {
-    using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
     using UltimateOrb.Plain.ValueTypes;
 
     public static class AAA {
 
-
-        public static Program.PtrSimulated<T> End<T>(this T[] array) {
-            return new Program.PtrSimulated<T>(array, checked((uint)array.Length));
+        public static PtrSimulated<T> End<T>(this T[] array) {
+            return new PtrSimulated<T>(array, checked((uint)array.Length));
         }
-
     }
 
     public partial class Program {
@@ -492,7 +489,7 @@ namespace UltimateOrb.Core.Tests {
             private partial struct AAAss : IFunc<Plain.ValueTypes.Stack<(int, int?)>>, IFunc<int, Plain.ValueTypes.Stack<(int, int?)>> {
 
                 public Stack<(int, int?)> Invoke() {
-                    return new Stack<(int, int?)>();
+                    return new Stack<(int, int?)>(0);
                 }
 
                 public Stack<(int, int?)> Invoke(int arg) {
@@ -797,261 +794,11 @@ namespace UltimateOrb.Core.Tests {
 
         private static long? dddd1 = default;
 
-        public readonly struct PtrSimulated<T> : IEquatable<PtrSimulated<T>> {
-
-            internal readonly T[] _array;
-
-            internal readonly uint _index;
-
-            public ref T Data {
-
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => ref this._array[this._index];
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public PtrSimulated(T[] array, uint index) {
-                this._array = array;
-                this._index = index;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static PtrSimulated<T> operator +(PtrSimulated<T> @base, int offset) {
-                return new PtrSimulated<T>(@base._array, checked((uint)(@base._index + offset)));
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static PtrSimulated<T> operator +(int offset, PtrSimulated<T> @base) {
-                return @base + offset;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static PtrSimulated<T> operator ++(PtrSimulated<T> @base) {
-                return @base + 1;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static PtrSimulated<T> operator --(PtrSimulated<T> @base) {
-                return @base - 1;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static PtrSimulated<T> operator +(PtrSimulated<T> @base) {
-                return @base;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static PtrSimulated<T> operator -(PtrSimulated<T> @base, int offset) {
-                return new PtrSimulated<T>(@base._array, checked((uint)(@base._index - offset)));
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static int operator -(PtrSimulated<T> first, PtrSimulated<T> second) {
-                if (first._array == second._array) {
-                    return checked((int)((long)first._index - second._index));
-                }
-                // TODO: Perf
-                throw new InvalidOperationException();
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator <(PtrSimulated<T> first, PtrSimulated<T> second) {
-                return first._array == second._array && first._index < second._index;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator <=(PtrSimulated<T> first, PtrSimulated<T> second) {
-                return first._array == second._array && first._index <= second._index;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator >(PtrSimulated<T> first, PtrSimulated<T> second) {
-                return first._array == second._array && first._index > second._index;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator >=(PtrSimulated<T> first, PtrSimulated<T> second) {
-                return first._array == second._array && first._index >= second._index;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator ==(PtrSimulated<T> first, PtrSimulated<T> second) {
-                return first._array == second._array && first._index == second._index;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator ==(PtrSimulated<T> first, long second) {
-                if (0 == second) {
-                    return null == first._array;
-                }
-                return false;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator !=(PtrSimulated<T> first, long second) {
-                if (0 == second) {
-                    return null != first._array;
-                }
-                return false;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator ==(long first, PtrSimulated<T> second) {
-                return second == first;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator !=(long first, PtrSimulated<T> second) {
-                return second != first;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator ==(PtrSimulated<T> first, ulong second) {
-                if (0 == second) {
-                    return null == first._array;
-                }
-                return false;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator !=(PtrSimulated<T> first, ulong second) {
-                if (0 == second) {
-                    return null != first._array;
-                }
-                return false;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator ==(ulong first, PtrSimulated<T> second) {
-                return second == first;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator !=(ulong first, PtrSimulated<T> second) {
-                return second != first;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool operator !=(PtrSimulated<T> first, PtrSimulated<T> second) {
-                return first._index != second._index || first._array != second._array;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public bool Equals(PtrSimulated<T> other) {
-                return this._array == other._array && this._index == other._index;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public override int GetHashCode() {
-                return unchecked((int)this._index);
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public override bool Equals(object obj) {
-                if (obj is PtrSimulated<T> ptr) {
-                    return this.Equals(ptr);
-                }
-                return base.Equals(obj);
-            }
-
-            public ref T this[int offset] {
-
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => ref this._array[checked(this._index + offset)];
-            }
-
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static implicit operator PtrSimulated<T>(T[] array) {
-                return new PtrSimulated<T>(array, 0);
-            }
-        }
-
 
         private static void Printf<T>(System.IO.TextWriter textWriter, T value) {
-            var cc = new Microsoft.FSharp.Core.PrintfFormat<Microsoft.FSharp.Core.FSharpFunc<T, Microsoft.FSharp.Core.Unit>, System.IO.TextWriter, Microsoft.FSharp.Core.Unit, Microsoft.FSharp.Core.Unit, T>("%A");
-            var fg = Microsoft.FSharp.Core.PrintfModule.PrintFormatLineToTextWriter(textWriter, cc);
-            fg.Invoke(value);
-        }
-
-        private struct StringRawEqualityComparer : ListSearchModule.ISequenceEqualityComparerWithRollingHash<char, StringRawEqualityComparer.HashCodeBuilder> {
-
-            public HashCodeBuilder CreateHashCodeBuilder<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
-                return HashCodeBuilder.Create(source, start, count);
-            }
-
-            public bool Equals<TListFirst, TListSecond>(TListFirst first, int startFirst, int countFirst, TListSecond second, int startSecond, int countSecond)
-                where TListFirst : IReadOnlyList<char>
-                where TListSecond : IReadOnlyList<char> {
-                if (countFirst == countSecond) {
-                    var i = startFirst;
-                    var j = startSecond;
-                    for (var c = countFirst; c > 0; --c) {
-                        if (first[i++] != second[j++]) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-                return false;
-            }
-
-            public bool Equals(char x, char y) {
-                return x == y;
-            }
-
-            public int GetHashCode<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
-                var i = start;
-                var c = i + count;
-                var v = (uint)0;
-                for (; c > i; ++i) {
-                    v = unchecked((uint)(((ulong)m * v + source[i]) % p));
-                }
-                return unchecked((int)v);
-            }
-
-            public int GetHashCode(char obj) {
-                return unchecked((ushort)obj);
-            }
-
-            private const uint m = 256;
-
-            private const uint p = 2147483647;
-
-            public struct HashCodeBuilder : ListSearchModule.IRollingHashCodeBuilder<char> {
-
-                private readonly uint aaa;
-
-                private uint vvv;
-
-                public HashCodeBuilder(uint a, uint v) {
-                    this.aaa = a;
-                    this.vvv = v;
-                }
-
-                internal static HashCodeBuilder Create<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
-                    var i = start;
-                    var c = i + count;
-                    var a = (uint)1;
-                    var v = (uint)0;
-                    for (; c > i; ++i) {
-                        v = unchecked((uint)(((ulong)m * v + source[i]) % p));
-                        a = unchecked((uint)((ulong)m * a % p));
-                    }
-                    return new HashCodeBuilder(a, v);
-                }
-
-                public int GetCurrentHashCode() {
-                    return unchecked((int)this.vvv);
-                }
-
-                public void Shift(char @out, char @in) {
-                    var o = (uint)unchecked((ushort)@out);
-                    var i = (uint)unchecked((ushort)@in);
-                    var v = this.vvv;
-                    this.vvv = unchecked((uint)((((ulong)aaa * (p - o)) + ((ulong)m * v + i)) % p));
-                }
-            }
+            var t = new Microsoft.FSharp.Core.PrintfFormat<Microsoft.FSharp.Core.FSharpFunc<T, Microsoft.FSharp.Core.Unit>, System.IO.TextWriter, Microsoft.FSharp.Core.Unit, Microsoft.FSharp.Core.Unit, T>("%A");
+            var f = Microsoft.FSharp.Core.PrintfModule.PrintFormatLineToTextWriter(textWriter, t);
+            f.Invoke(value);
         }
 
         private static int Main(string[] args) {
