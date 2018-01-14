@@ -91,23 +91,28 @@ namespace UltimateOrb {
             }
 
             public static SearchProcessingUnit_A_KnuthMorrisPratt<T, TListPattern, TEqualityComparer, TAllocator> Create(TListPattern pattern, IntT start, IntT count, TEqualityComparer equalityComparer, TAllocator allocator) {
-                var (skip_table, skip_table_start) = allocator.Invoke(checked(1 + count));
-                var i = (IntT)0;
-                var j = -1;
-                skip_table[0] = j;
-                while (count > i) {
-                    while (j > -1 && !equalityComparer.Invoke(pattern[start + i], pattern[start + j])) {
-                        j = skip_table[skip_table_start + j];
+                if (count > 0) {
+                    var (skip_table, skip_table_start) = allocator.Invoke(count);
+                    var i = (IntT)0;
+                    var j = -1;
+                    skip_table[skip_table_start] = j;
+                    while (count - 1 > i) {
+                        while (j > -1 && !equalityComparer.Invoke(pattern[start + i], pattern[start + j])) {
+                            j = skip_table[skip_table_start + j];
+                        }
+                        ++i;
+                        ++j;
+                        if (equalityComparer.Invoke(pattern[start + i], pattern[start + j])) {
+                            skip_table[skip_table_start + i] = skip_table[skip_table_start + j];
+                        } else {
+                            skip_table[skip_table_start + i] = j;
+                        }
                     }
-                    ++i;
-                    ++j;
-                    if (equalityComparer.Invoke(pattern[start + i], pattern[start + j])) {
-                        skip_table[skip_table_start + i] = skip_table[skip_table_start + j];
-                    } else {
-                        skip_table[skip_table_start + i] = j;
-                    }
+                    return new SearchProcessingUnit_A_KnuthMorrisPratt<T, TListPattern, TEqualityComparer, TAllocator>(skip_table, skip_table_start, pattern, start, count, equalityComparer);
                 }
-                return new SearchProcessingUnit_A_KnuthMorrisPratt<T, TListPattern, TEqualityComparer, TAllocator>(skip_table, skip_table_start, pattern, start, count, equalityComparer);
+                {
+                    return new SearchProcessingUnit_A_KnuthMorrisPratt<T, TListPattern, TEqualityComparer, TAllocator>(Array_Empty<IntT>.Value, 0, pattern, start, count, equalityComparer);
+                }
             }
 
             public IntT IndexOf<TListSource>(TListSource source, IntT start, IntT count)
@@ -165,6 +170,33 @@ namespace UltimateOrb {
             where TAllocator : IO.IFunc<IntT, (IntT[] Array, IntT Start)> {
             var p = SearchProcessingUnit_A_KnuthMorrisPratt<T, TListPattern, TEqualityComparer, TAllocator>.Create(pattern, pattern_start, pattern_count, equalityComparer, allocator);
             return p.IndexOf(source, source_start, source_count);
+        }
+
+        private partial struct DefaultAllocator<T> : IO.IFunc<IntT, (T[], IntT)> {
+
+            public (T[], int) Invoke(IntT arg) {
+                return (new T[arg], 0);
+            }
+        }
+
+        public static IntT IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer, TAllocator>(TListSource source, TListPattern pattern, TEqualityComparer equalityComparer, TAllocator allocator)
+            where TListSource : IReadOnlyList<T>
+            where TListPattern : IReadOnlyList<T>
+            where TEqualityComparer : IO.IFunc<T, T, bool>
+            where TAllocator : IO.IFunc<IntT, (IntT[] Array, IntT Start)> {
+            if (null != source && null != pattern) {
+                var p = SearchProcessingUnit_A_KnuthMorrisPratt<T, TListPattern, TEqualityComparer, TAllocator>.Create(pattern, 0, pattern.Count, equalityComparer, allocator);
+                return p.IndexOf(source, 0, source.Count);
+            }
+            // TODO
+            throw new ArgumentNullException();
+        }
+
+        public static IntT IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer>(TListSource source, TListPattern pattern, TEqualityComparer equalityComparer)
+            where TListSource : IReadOnlyList<T>
+            where TListPattern : IReadOnlyList<T>
+            where TEqualityComparer : IO.IFunc<T, T, bool> {
+            return IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer, DefaultAllocator<IntT>>(source, pattern, equalityComparer, DefaultConstructor.Invoke<DefaultAllocator<IntT>>());
         }
     }
 }

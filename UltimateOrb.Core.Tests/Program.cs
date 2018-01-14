@@ -16,6 +16,14 @@ namespace UltimateOrb.Core.Tests {
         }
     }
 
+    public static partial class AAAf {
+
+        public static BclStringAsIReadOnlyList AsIReadOnlyList(this string str) {
+            return new BclStringAsIReadOnlyList(str);
+        }
+    }
+
+
     public partial class Program {
 
         private static AsyncLocal<long> item_id_1 = new AsyncLocal<long>();
@@ -801,7 +809,7 @@ namespace UltimateOrb.Core.Tests {
             var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
             var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
             var t = 0UL;
-            var s = new List<(ulong Id, bool Value)>(0);            
+            var s = new List<(ulong Id, bool Value)>(0);
             for (var b = a.Clone() as char[]; ;) {
                 var z = ArrayModule.IsPermutation(a.Clone() as char[], b.Clone() as char[], c);
                 s.Add((t++, z));
@@ -917,7 +925,48 @@ namespace UltimateOrb.Core.Tests {
             f.Invoke(value);
         }
 
+        private struct Asadf : IO.IFunc<char, char, bool> {
+
+            public bool Invoke(char arg1, char arg2) {
+                return arg1 == arg2;
+            }
+        }
+
+        [Property(MaxTest = 50000, QuietOnSuccess = true)]
+        public bool Test_SearchKnuthMorrisPratt_1(string a, string b) {
+            if (null == a || null == b) {
+                return true;
+            }
+            var r0 = a.IndexOf(b);
+            var r1 = (int?)null;
+            var a1 = a.AsIReadOnlyList();
+            var b1 = b.AsIReadOnlyList();
+            try {
+                r1 = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, BclStringAsIReadOnlyList, BclStringAsIReadOnlyList, Asadf>(a1, b1, DefaultConstructor.Invoke<Asadf>());
+            } catch (Exception) {
+            }
+            return r0 == r1;
+        }
+
         private static int Main(string[] args) {
+            {
+                Console.Out.WriteLine("".IndexOf(""));
+                Console.Out.WriteLine(SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], Asadf>("".ToCharArray(), "".ToCharArray(), DefaultConstructor.Invoke<Asadf>()));
+
+                var source = "abc abab bbda bd bb🌍a  ba badba dbad db a dcadb bad bab adb b🌍cdab d bda　🌍 dsf 地球人好壞 b da b b🌍a a".ToCharArray();
+                var pattern = " b b🌍a".ToCharArray();
+
+                var c = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], Asadf>(source, pattern, DefaultConstructor.Invoke<Asadf>());
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(c);
+                Console.Out.WriteLine(new string(source.Skip(c).Take(pattern.Length).ToArray()));
+                c = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], Asadf>(source, pattern, DefaultConstructor.Invoke<Asadf>());
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(c);
+                Console.Out.WriteLine(new string(source.Skip(c).Take(pattern.Length).ToArray()));
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 new Program().Test_IsPermutation_2();
                 {
