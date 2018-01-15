@@ -21,6 +21,474 @@ namespace UltimateOrb.Core.Tests {
         public static BclStringAsIReadOnlyList AsIReadOnlyList(this string str) {
             return new BclStringAsIReadOnlyList(str);
         }
+
+        public partial interface IAsEnumerable<out T, TEnumerable, out TEnumerator>
+            where TEnumerator : IEnumerator<T> {
+
+            TEnumerator Invoke(in TEnumerable enumerable);
+        }
+
+        public partial interface IAccumulatorHeterogeneous<in T, TAccumulate, TAccumulateForeign> {
+
+            bool Invoke(in TAccumulateForeign accumulate, T value, out TAccumulate result);
+        }
+
+
+        public static void kkkk<T, TAccumulate, TEnumerator, TStack, TAsEnumerable, TAccumulator>(TStack stack, TAsEnumerable asEnumerable, TAccumulator accumulator)
+            where TEnumerator : IEnumerator<T>
+            where TStack : IStack<TAccumulate>
+            where TAsEnumerable : IAsEnumerable<T, TStack, TEnumerator>
+            where TAccumulator : IAccumulatorHeterogeneous<T, TAccumulate, TStack> {
+            for (; !stack.IsEmpty;) {
+                var en = asEnumerable.Invoke(stack);
+                for (; en.MoveNext();) {
+                    var move = en.Current;
+                    if (accumulator.Invoke(in stack, move, out var state)) {
+                        stack.Push(state);
+                        en = asEnumerable.Invoke(stack);
+                        continue;
+                    }
+                }
+                en.Dispose();
+                stack.Pop();
+            }
+        }
+
+        public partial interface IAccumulatorHeterogeneous3<in T, TAccumulate, TAccumulateForeign> {
+
+            bool Invoke(ref TAccumulateForeign accumulate, T value, out TAccumulate result);
+        }
+
+
+        public partial interface IFoldingStack<in T, out TAccumulate> {
+
+            bool IsEmpty {
+
+                get;
+            }
+
+            TAccumulate Accumulate {
+
+                get;
+            }
+
+            void Push(T item);
+
+            void Pop(T item);
+
+            TAccumulate PeekAccumulatePop();
+
+            TAccumulate PushPeekAccumulate(T item);
+        }
+
+
+        public partial interface IAsEnumerable2<out T, TAccumulate, out TEnumerator>
+            where TEnumerator : IEnumerator<T> {
+
+            TEnumerator Create(in TAccumulate a);
+
+            TEnumerator Restore(in TAccumulate a);
+        }
+
+        public static void kkkffk<T, TAccumulate, TEnumerator, TStack, TAsEnumerable, TAccumulator>(TAccumulate accumulate, TStack stack, TAsEnumerable asEnumerable, TAccumulator accumulator)
+        where TEnumerator : IEnumerator<T>
+        where TStack : IFoldingStack<T, TAccumulate>
+        where TAsEnumerable : IAsEnumerable2<T, TAccumulate, TEnumerator>
+        where TAccumulator : IO.IFunc<TAccumulate, bool> {
+            for (var en = asEnumerable.Create(accumulate); ;) {
+                for (; en.MoveNext();) {
+                    var move = en.Current;
+                    if (accumulator.Invoke(stack.PushPeekAccumulate(move))) {
+                        en = asEnumerable.Create(stack.Accumulate);
+                        continue;
+                    } else {
+                        stack.Pop(move);
+                    }
+                }
+                en.Dispose();
+                if (!stack.IsEmpty) {
+                    en = asEnumerable.Restore(stack.PeekAccumulatePop());
+                    continue;
+                }
+                break;
+            }
+        }
+
+        public static Collections.Generic.RefReturnSupported.List<BitArrayUnchecked> dsafsf(int[] a, long b) {
+            var s = new FStack(a);
+            var dfsa = new adsaddfasee(a.Length, b);
+            kkkffk<bool, (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference), FalseTrueEnumerator, FStack, adsaddfas, adsaddfasee>((default, 0, 0, default, s.m_MaxNegativeDifference, s.m_MaxPositiveDifference), s, default(adsaddfas), dfsa);
+            return (Collections.Generic.RefReturnSupported.List<BitArrayUnchecked>)dfsa.a;
+        }
+
+        public partial struct adsaddfasee : IO.IFunc<(BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference), bool> {
+
+            public readonly Collections.Generic.RefReturnSupported.IList<BitArrayUnchecked, Collections.Generic.RefReturnSupported.List<BitArrayUnchecked>.Enumerator> a;
+
+            public readonly int MaxCount;
+
+            public readonly long TargetSum;
+
+            public adsaddfasee(int c, long b) {
+                this.a = new Collections.Generic.RefReturnSupported.List<BitArrayUnchecked>(0);
+                this.MaxCount = c;
+                this.TargetSum = b;
+            }
+
+            public bool Invoke((BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference) arg) {
+
+                if (this.TargetSum == arg.CurrentSum) {
+                    this.a.Add(arg.Solution.Clone());
+                    return false;
+                }
+                if (arg.Count >= this.MaxCount) {
+                    return false;
+                }
+                var c = this.TargetSum - arg.CurrentSum;
+                if (c > arg.MaxPositiveDifference) {
+                    return false;
+                }
+                if (c < arg.MaxNegativeDifference) {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        public partial struct adsaddfas : IAsEnumerable2<bool, (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference), FalseTrueEnumerator> {
+
+            public FalseTrueEnumerator Create(in (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference) a) {
+                return new FalseTrueEnumerator(-1);
+            }
+
+            public FalseTrueEnumerator Restore(in (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference) a) {
+                return new FalseTrueEnumerator(a.LastMove ? 1 : 0);
+            }
+        }
+
+        public partial struct FalseTrueEnumerator : IEnumerator<bool> {
+
+            private int index;
+
+            public bool Current {
+
+                get => 0 != this.index;
+            }
+
+            internal FalseTrueEnumerator(int a) {
+                this.index = a;
+            }
+
+            private static readonly object TrueBoxed = true;
+
+            private static readonly object FalseBoxed = true;
+
+            object IEnumerator.Current {
+
+                get => 0 != this.index ? TrueBoxed : FalseBoxed;
+            }
+
+            public void Dispose() {
+            }
+
+            public bool MoveNext() {
+                var i = (int)this.index;
+                unchecked {
+                    ++i;
+                }
+                if (2 <= i) {
+                    return false;
+                }
+                this.index = unchecked((int)i);
+                return true;
+            }
+
+            public void Reset() {
+                throw new NotSupportedException();
+            }
+        }
+
+        public partial struct Boolean64FoldingStack {
+
+            internal UInt64 m_Item_BitArray;
+
+            internal UInt64 m_Flag_BitArray;
+
+            internal int m_Count;
+
+            internal int m_Capacity;
+
+
+        }
+
+        public partial interface IBox<T> {
+
+            ref T Value {
+
+                get;
+            }
+        }
+
+        public static UInt64 SetFlag(UInt64 bitArray, int index, bool value) {
+            return value ? bitArray | ((UInt64)1 << index) : bitArray & ~((UInt64)1 << index);
+        }
+
+        public partial interface IMoveNextState<T, TState, TStateEx>
+            where TStateEx : IBox<TState> {
+
+            FFFF Invoke(ref TStateEx state, T item);
+        }
+
+        public partial interface IInitializeStateEx<T, TList, TState, TStateEx>
+           where TList : IList<T> {
+
+            TStateEx Invoke(TList collection, TState state);
+        }
+
+        [FlagsAttribute()]
+        public enum FFFF {
+            NotRejecting = 1,
+            Accepting = 2,
+        }
+
+        public static void Tdsf<T, TList, TState, TStateEx, TInitializeStateEx, TMoveNextState>(TList collection, TState initial, Func<TList, TState, TStateEx> g,/* Func<TState, T, bool> f,*/ Action<UInt64> h, TMoveNextState moveNextStateTrue, TMoveNextState moveNextStateFalse)
+            where TList : IList<T>
+            where TStateEx : IBox<TState>
+            where TInitializeStateEx : IInitializeStateEx<T, TList, TState, TStateEx>
+            where TMoveNextState : IMoveNextState<T, TState, TStateEx> {
+            var m_Capacity = checked((int)collection.Count);
+            if (m_Capacity <= 64) {
+                var m_Count = (int)0;
+                var m_Flag0_BitArray = (UInt64)0;
+                var m_Flag1_BitArray = (UInt64)0;
+                var m_Item_BitArray = (UInt64)0;
+                for (var t = g.Invoke(collection, initial); 0 <= m_Count;) {
+                    if (0 == (m_Flag0_BitArray & ((UInt64)1 << m_Count))) {
+                        {
+                            m_Flag0_BitArray |= ((UInt64)1 << m_Count);
+                            if (m_Capacity > m_Count) {
+                                var x = collection[m_Count];
+                                /*
+                                if (f(t.Value, x)) {
+                                    h(m_Item_BitArray | ((UInt64)1 << m_Count));
+                                }
+                                */
+                                var r = moveNextStateTrue.Invoke(ref t, x);
+                                if (0 != (FFFF.NotRejecting & r)) {
+                                    m_Item_BitArray |= ((UInt64)1 << m_Count);
+                                    unchecked {
+                                        ++m_Count;
+                                    }
+                                }
+                                if (0 != (FFFF.Accepting & r)) {
+                                    h.Invoke(m_Item_BitArray);
+                                }
+                                continue;
+                            }
+                        }
+                    } else {
+                        if (0 == (m_Flag0_BitArray & ((UInt64)1 << m_Count))) {
+                            m_Flag1_BitArray |= ((UInt64)1 << m_Count);
+                            var x = collection[m_Count];
+                            if (0 != (FFFF.NotRejecting & moveNextStateFalse.Invoke(ref t, x))) {
+                                m_Item_BitArray &= ~((UInt64)1 << m_Count);
+                                unchecked {
+                                    ++m_Count;
+                                }
+                                continue;
+                            }
+                        }
+                    }
+                    unchecked {
+                        --m_Count;
+                    }
+                }
+                return;
+            }
+            throw new NotSupportedException();
+        }
+
+        public partial struct FStack : IFoldingStack<bool, (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference)> {
+
+            internal readonly BitArrayUnchecked m_BitArray;
+
+            private uint m_Count;
+
+            private readonly uint m_Capacity;
+
+            private readonly int[] m_Collection;
+
+            private readonly uint m_NegativeCount;
+
+            private long m_CurrentSum;
+
+            internal long m_MaxPositiveDifference;
+
+            internal long m_MaxNegativeDifference;
+
+            private partial struct Comparer : IComparer<int> {
+
+                public int Compare(int x, int y) {
+                    return x >= y ? (x == y ? 0 : 1) : -1;
+                }
+            }
+
+            public FStack(int[] collection) {
+                ArrayModule<int>.Sort(collection, default(Comparer), 0, collection.Length, ArrayModule.Null);
+                var count = unchecked((uint)collection.Length);
+                var t = Array.BinarySearch(collection, 0);
+                if (0 > t) {
+                    t = ~t;
+                }
+                var a = new BitArrayUnchecked(count);
+                var n = (long)0;
+                var p = (long)0;
+                var ignored = collection.All((x) => {
+                    ref var o = ref (0 > x ? ref n : ref p);
+                    unchecked {
+                        o += x;
+                    }
+                    return true;
+                });
+                this.m_BitArray = a;
+                this.m_Count = 0;
+                this.m_Capacity = count;
+                this.m_Collection = collection;
+                this.m_NegativeCount = unchecked((uint)t);
+                this.m_CurrentSum = 0;
+                this.m_MaxPositiveDifference = p;
+                this.m_MaxNegativeDifference = n;
+            }
+
+            public bool IsEmpty {
+
+                get => this.m_Count <= 0;
+            }
+
+            public (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference) Accumulate {
+
+                get => (this.m_BitArray, this.m_CurrentSum, checked((int)this.m_Count), this.m_BitArray[this.m_Count - 1], this.m_MaxNegativeDifference, this.m_MaxPositiveDifference);
+            }
+
+            public void Push(bool item) {
+                var count = this.m_Count;
+                var aaa = this.m_Collection;
+                if (aaa.Length > count) {
+                    var vv = aaa[count];
+                    ref var o = ref (m_NegativeCount > count ? ref this.m_MaxNegativeDifference : ref this.m_MaxPositiveDifference);
+                    unchecked {
+                        o -= vv;
+                    }
+                    unchecked {
+                        this.m_CurrentSum += item ? vv : 0;
+                    }
+                    this.m_BitArray.Set(count, item);
+                    unchecked {
+                        ++count;
+                    }
+                    this.m_Count = count;
+                    return;
+                }
+                throw new InvalidOperationException();
+            }
+
+            public void Pop(bool item) {
+                var count = (long)this.m_Count;
+                unchecked {
+                    --count;
+                }
+                if (0 <= count) {
+                    var vv = this.m_Collection[count];
+                    ref var o = ref (m_NegativeCount > count ? ref this.m_MaxNegativeDifference : ref this.m_MaxPositiveDifference);
+                    unchecked {
+                        o += vv;
+                    }
+                    unchecked {
+                        this.m_CurrentSum -= item ? vv : 0;
+                    }
+                    this.m_Count = unchecked((uint)count);
+                    return;
+                }
+                throw new InvalidOperationException();
+            }
+
+            public (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference) PeekAccumulatePop() {
+                var count = (long)this.m_Count;
+                unchecked {
+                    --count;
+                }
+                if (0 <= count) {
+                    var vv = this.m_Collection[count];
+                    var no = this.m_MaxNegativeDifference;
+                    var po = this.m_MaxPositiveDifference;
+                    var item = this.m_BitArray[count];
+                    ref var o = ref (m_NegativeCount > count ? ref this.m_MaxNegativeDifference : ref this.m_MaxPositiveDifference);
+                    unchecked {
+                        o += vv;
+                    }
+                    var v = this.m_CurrentSum;
+                    if (item) {
+                        this.m_CurrentSum = v - vv;
+                    }
+                    this.m_Count = unchecked((uint)count);
+                    return (this.m_BitArray, v, checked((int)this.m_Count), item, no, po);
+                }
+                throw new InvalidOperationException();
+            }
+
+            public (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference) PushPeekAccumulate(bool item) {
+                this.Push(item);
+                return this.Accumulate;
+            }
+        }
+
+        public partial struct BitArrayUnchecked {
+
+            private readonly UInt64[] m_array;
+
+            public bool this[long index] {
+
+                get {
+                    return 0 != (this.m_array[index >> 8] & (UInt64)1 << (unchecked((int)index) & (64 - 1)));
+                }
+
+                set {
+                    if (value) {
+                        this.m_array[index >> 8] |= ((UInt64)1 << (unchecked((int)index) & (64 - 1)));
+                    } else {
+                        this.m_array[index >> 8] &= ~((UInt64)1 << (unchecked((int)index) & (64 - 1)));
+                    }
+                }
+            }
+
+            public void Set(long index, bool value) {
+                if (value) {
+                    this.m_array[index >> 8] |= ((UInt64)1 << (unchecked((int)index) & (64 - 1)));
+                } else {
+                    this.m_array[index >> 8] &= ~((UInt64)1 << (unchecked((int)index) & (64 - 1)));
+                }
+            }
+
+            public BitArrayUnchecked(long bitCount) {
+                var c = (bitCount >> 8);
+                if (0 != (unchecked((int)bitCount) & (64 - 1))) {
+                    unchecked {
+                        ++c;
+                    }
+                }
+                var b = new UInt64[c];
+                this.m_array = b;
+            }
+
+            internal BitArrayUnchecked(UInt64[] v) {
+                this.m_array = v;
+            }
+
+            public BitArrayUnchecked Clone() {
+                return new BitArrayUnchecked(this.m_array.Clone() as UInt64[]);
+            }
+        }
     }
 
 
@@ -919,7 +1387,7 @@ namespace UltimateOrb.Core.Tests {
             return s.All((x) => x.Value) && s.Count == 20160;
         }
 
-        private static void Printf<T>(System.IO.TextWriter textWriter, T value) {
+        internal static void Printf<T>(System.IO.TextWriter textWriter, T value) {
             var t = new Microsoft.FSharp.Core.PrintfFormat<Microsoft.FSharp.Core.FSharpFunc<T, Microsoft.FSharp.Core.Unit>, System.IO.TextWriter, Microsoft.FSharp.Core.Unit, Microsoft.FSharp.Core.Unit, T>("%A");
             var f = Microsoft.FSharp.Core.PrintfModule.PrintFormatLineToTextWriter(textWriter, t);
             f.Invoke(value);
@@ -949,6 +1417,20 @@ namespace UltimateOrb.Core.Tests {
         }
 
         private static int Main(string[] args) {
+            {
+                var c = new int[] { -3, -2, -1, -1, 0, 1, 2, 2, 3 };
+                var s = AAAf.dsafsf(c, 7);
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(s.Count);
+                Console.Out.WriteLine("...");
+                c = Enumerable.Range(1, 26).ToArray();
+                s = AAAf.dsafsf(c, 200);
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(s.Count);
+                Console.Out.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 Console.Out.WriteLine("".IndexOf(""));
                 Console.Out.WriteLine(SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], Asadf>("".ToCharArray(), "".ToCharArray(), DefaultConstructor.Invoke<Asadf>()));

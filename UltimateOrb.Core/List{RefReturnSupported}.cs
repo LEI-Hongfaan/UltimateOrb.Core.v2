@@ -51,6 +51,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             if (0 <= capacity) {
                 this.buffer = (capacity > 0 ? Array_Empty<T>.Value : new T[capacity]);
                 this.count = 0;
+                return;
             }
             throw ThrowArgumentOutOfRangeException_capacity();
         }

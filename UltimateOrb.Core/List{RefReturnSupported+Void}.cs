@@ -18,9 +18,11 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
     [SerializableAttribute()]
     public partial struct List : IList<Void, List.Enumerator>, IReadOnlyList<Void, List.Enumerator> {
 
-        private static readonly Void[] array_empty = new Void[0];
+        private static readonly Void @void;
 
-        private static Void @void;
+        private static Void @void1;
+
+        private static readonly Void[] array_empty = new Void[0];
 
         [ContractPublicPropertyNameAttribute("Count")]
         private int count;
@@ -54,28 +56,29 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
         Void IList<Void>.this[int index] {
 
-            get {
-                return @void;
-            }
+            get => @void;
 
-            set => throw new NotImplementedException();
+            set {
+            }
         }
 
         Void IReadOnlyList<Void>.this[int index] {
 
-            get => throw new NotImplementedException();
+            get => @void;
         }
 
         public ref Void this[int index] {
 
-            get => throw new NotImplementedException();
+            get {
+                return ref @void1;
+            }
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref Void Insert(int index, Void item) {
             this.count = checked(1 + this.count);
-            return ref @void;
+            return ref @void1;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -127,7 +130,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref Void Add(Void item) {
             this.count = checked(1 + this.count);
-            return ref @void;
+            return ref @void1;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -254,7 +257,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 get {
-                    return ref @void;
+                    return ref @void1;
                 }
             }
 

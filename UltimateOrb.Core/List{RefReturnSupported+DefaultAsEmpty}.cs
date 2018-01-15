@@ -54,6 +54,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             if (0 <= capacity) {
                 this.buffer = ((0 == capacity) ? null : new T[capacity]);
                 this.count = 0;
+                return;
             }
             throw ThrowArgumentOutOfRangeException_capacity();
         }
