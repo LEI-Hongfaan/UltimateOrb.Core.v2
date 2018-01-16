@@ -11,11 +11,11 @@ namespace UltimateOrb {
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
 
-    public static partial class ArrayModule<T> {
+    public static partial class ArrayModule {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static TResult[] Select<TResult, TSelector>(T[] array, TSelector selector) where TSelector : IO.IFunc<T, TResult> {
+        public static TResult[] Select<T, TResult, TSelector>(this T[] array, TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             if (null != array) {
                 var count = array.Length;
                 var result = new TResult[count];
@@ -29,7 +29,7 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static TResult[] Select<TResult, TSelector>(T[] array, int count, TSelector selector) where TSelector : IO.IFunc<T, TResult> {
+        public static TResult[] Select<T, TResult, TSelector>(this T[] array, int count, TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             if (null != array) {
                 var result = new TResult[count];
                 for (var i = 0; count > i && array.Length > i; ++i) {

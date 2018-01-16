@@ -367,30 +367,30 @@ namespace UltimateOrb {
     using System.Runtime.CompilerServices;
     using System.Diagnostics.Contracts;
 
-    public static partial class ArrayModule<T> {
+    public static partial class ArrayModule {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static void CheckArraySegment(T[] array, int offset, int count) {
+        public static void CheckArraySegmentThrowIfFailed<T>(T[] array, int offset, int count) {
             if (
                 null == array ||
                 0 > offset ||
                 0 > count ||
                 unchecked(array.Length - offset) < count
             ) {
-                ThrowArgumentException_CheckArraySegment(array, offset, count);
+                ThrowArgumentException_CheckArraySegment<T>(array, offset, count);
             }
         }
 
         [MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
         [PureAttribute()]
-        internal static void ThrowArgumentException_CheckArraySegment(T[] array, int offset, int count) {
+        internal static void ThrowArgumentException_CheckArraySegment<T>(T[] array, int offset, int count) {
             new ArraySegment<T>(array, offset, count).Ignore();
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static void CheckArraySegmentBuffer(int capacity, T[] array, int offset, int count) {
+        public static void CheckArraySegmentBufferThrowIfFailed<T>(int capacity, T[] array, int offset, int count) {
             if (
                 null == array ||
                 0 <= capacity && (
@@ -405,7 +405,7 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
         [PureAttribute()]
-        internal static void ThrowArgumentException_CheckArraySegmentBuffer(int capacity, T[] array, int offset, int count) {
+        internal static void ThrowArgumentException_CheckArraySegmentBuffer<T>(int capacity, T[] array, int offset, int count) {
             new ArraySegment<T>(array, offset, count).Ignore();
             // TODO
             throw new ArgumentException();
@@ -413,14 +413,14 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static bool CheckCompatibleDimension<TValue>(T[] first, TValue[] second) {
+        public static bool CheckCompatibleDimension<T, TValue>(T[] first, TValue[] second) {
             Contract.Requires(null != first);
             Contract.Requires(null != second);
             return first.Length == second.Length;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void Swap<TValue>(T[] keys, IntT i, IntT j, TValue[] values) {
+        public static void Swap<T, TValue>(T[] keys, IntT i, IntT j, TValue[] values) {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, i));
             Contract.Requires(CheckIndex(keys, j));
@@ -435,7 +435,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void Swap(T[] keys, IntT first, IntT second) {
+        public static void Swap<T>(T[] keys, IntT first, IntT second) {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, first));
             Contract.Requires(CheckIndex(keys, second));
@@ -443,7 +443,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SwapIfGreater<TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT second, TValue[] values) where TComparer : IComparer<T> {
+        public static void SwapIfGreater<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT second, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, first));
             Contract.Requires(CheckIndex(keys, second));
@@ -454,7 +454,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SwapIfGreater<TComparer, TValue>(T[] keys, IntT first, IntT second, TValue[] values) where TComparer : struct, IComparer<T> {
+        public static void SwapIfGreater<T, TComparer, TValue>(T[] keys, IntT first, IntT second, TValue[] values) where TComparer : struct, IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, first));
             Contract.Requires(CheckIndex(keys, second));
@@ -462,7 +462,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SwapIfGreater<TComparer>(T[] keys, TComparer comparer, IntT first, IntT second) where TComparer : IComparer<T> {
+        public static void SwapIfGreater<T, TComparer>(T[] keys, TComparer comparer, IntT first, IntT second) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, first));
             Contract.Requires(CheckIndex(keys, second));
@@ -471,7 +471,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SwapIfGreater<TComparer>(T[] keys, IntT first, IntT second) where TComparer : struct, IComparer<T> {
+        public static void SwapIfGreater<T, TComparer>(T[] keys, IntT first, IntT second) where TComparer : struct, IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, first));
             Contract.Requires(CheckIndex(keys, second));
@@ -479,7 +479,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeapWalkSiftDown<TComparer, TValue>(T[] keys, TComparer comparer, IntT root, IntT start, IntT count, TValue[] values) where TComparer : IComparer<T> {
+        public static void SortHeapWalkSiftDown<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT root, IntT start, IntT count, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, start));
             Contract.Requires(null != comparer);
@@ -511,7 +511,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeapWalkSiftDown<TComparer, TValue>(T[] keys, IntT root, IntT start, IntT count, TValue[] values) where TComparer : struct, IComparer<T> {
+        public static void SortHeapWalkSiftDown<T, TComparer, TValue>(T[] keys, IntT root, IntT start, IntT count, TValue[] values) where TComparer : struct, IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, root));
             Contract.Requires(CheckIndex(keys, start));
@@ -519,7 +519,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeapWalkSiftDown<TComparer>(T[] keys, TComparer comparer, IntT root, IntT start, IntT count) where TComparer : IComparer<T> {
+        public static void SortHeapWalkSiftDown<T, TComparer>(T[] keys, TComparer comparer, IntT root, IntT start, IntT count) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, root));
             Contract.Requires(CheckIndex(keys, start));
@@ -528,14 +528,14 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeapWalkSiftDown<TComparer>(T[] keys, IntT root, IntT start, IntT count) where TComparer : struct, IComparer<T> {
+        public static void SortHeapWalkSiftDown<T, TComparer>(T[] keys, IntT root, IntT start, IntT count) where TComparer : struct, IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckIndex(keys, start));
             SortHeapWalkSiftDown(keys, default(TComparer), root, start, count);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeap<TComparer, TValue>(T[] keys, TComparer comparer, IntT start, IntT count, TValue[] values) where TComparer : IComparer<T> {
+        public static void SortHeap<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT start, IntT count, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckSegment(keys, start, count));
             Contract.Requires(null == values || CheckSegment(values, start, count));
@@ -553,7 +553,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeap<TComparer, TValue>(T[] keys, IntT start, IntT count, TValue[] values) where TComparer : struct, IComparer<T> {
+        public static void SortHeap<T, TComparer, TValue>(T[] keys, IntT start, IntT count, TValue[] values) where TComparer : struct, IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckSegment(keys, start, count));
             Contract.Requires(null == values || CheckSegment(values, start, count));
@@ -561,7 +561,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeap<TComparer>(T[] keys, TComparer comparer, IntT start, IntT count) where TComparer : IComparer<T> {
+        public static void SortHeap<T, TComparer>(T[] keys, TComparer comparer, IntT start, IntT count) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckSegment(keys, start, count));
             Contract.Requires(null != comparer);
@@ -569,14 +569,14 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeap<TComparer>(T[] keys, IntT start, IntT count) where TComparer : struct, IComparer<T> {
+        public static void SortHeap<T, TComparer>(T[] keys, IntT start, IntT count) where TComparer : struct, IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckSegment(keys, start, count));
             SortHeap(keys, default(TComparer), start, count);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeap<TComparer, TValue>(T[] keys, TComparer comparer, TValue[] values) where TComparer : IComparer<T> {
+        public static void SortHeap<T, TComparer, TValue>(T[] keys, TComparer comparer, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(null != comparer);
             Contract.Requires(null == values || values.Length > keys.Length);
@@ -584,27 +584,27 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeap<TComparer, TValue>(T[] keys, TValue[] values) where TComparer : struct, IComparer<T> {
+        public static void SortHeap<T, TComparer, TValue>(T[] keys, TValue[] values) where TComparer : struct, IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(null == values || keys.Length == values.Length);
             SortHeap(keys, default(TComparer), values);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeap<TComparer>(T[] keys, TComparer comparer) where TComparer : IComparer<T> {
+        public static void SortHeap<T, TComparer>(T[] keys, TComparer comparer) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(null != comparer);
             SortHeap(keys, comparer, ArrayModule.Null);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortHeap<TComparer>(T[] keys) where TComparer : struct, IComparer<T> {
+        public static void SortHeap<T, TComparer>(T[] keys) where TComparer : struct, IComparer<T> {
             Contract.Requires(null != keys);
             SortHeap(keys, default(TComparer));
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortPartInsertion<TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, TValue[] values) where TComparer : IComparer<T> {
+        public static void SortPartInsertion<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(first <= last);
             Contract.Requires(CheckIndex(keys, first));
@@ -633,7 +633,7 @@ namespace UltimateOrb {
             }
         }
 
-        public static void SortInsertion<TComparer, TValue>(T[] keys, TComparer comparer, IntT start, IntT count, TValue[] values) where TComparer : IComparer<T> {
+        public static void SortInsertion<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT start, IntT count, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(CheckSegment(keys, start, count));
             Contract.Requires(null != comparer);
@@ -641,7 +641,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static IntT PickPivotAndPartition<TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, TValue[] values) where TComparer : IComparer<T> {
+        public static IntT PickPivotAndPartition<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(first <= last);
             Contract.Requires(CheckIndex(keys, first));
@@ -677,7 +677,7 @@ namespace UltimateOrb {
 
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortPartIntrospectiveRecursionLimited<TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, int depthLimit, TValue[] values) where TComparer : IComparer<T> {
+        public static void SortPartIntrospectiveRecursionLimited<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, int depthLimit, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(values != null);
             Contract.Requires(first >= 0);
@@ -714,7 +714,7 @@ namespace UltimateOrb {
 
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortIntrospective<TComparer, TValue>(T[] keys, TComparer comparer, IntT start, IntT count, TValue[] values) where TComparer : IComparer<T> {
+        public static void SortIntrospective<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT start, IntT count, TValue[] values) where TComparer : IComparer<T> {
             Contract.Requires(null != keys);
             Contract.Requires(0 <= start);
             Contract.Requires(0 <= count);
@@ -728,7 +728,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SortQuickRecursionLimited<TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, int recLimit, TValue[] values) where TComparer : IComparer<T> {
+        public static void SortQuickRecursionLimited<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, int recLimit, TValue[] values) where TComparer : IComparer<T> {
             do {
                 if (recLimit == 0) {
                     SortHeap(keys, comparer, first, last, values);
@@ -785,7 +785,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void Sort<TComparer, TValue>(T[] keys, TComparer comparer, IntT index, IntT length, TValue[] values) where TComparer : IComparer<T> {
+        public static void Sort<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT index, IntT length, TValue[] values) where TComparer : IComparer<T> {
             Contract.Assert(null != keys);
             Contract.Assert(0 <= index && 0 <= length && (length <= keys.Length - index));
             SortIntrospective(keys, comparer, index, length, values);
@@ -802,15 +802,15 @@ namespace UltimateOrb {
 
     using System.Runtime.CompilerServices;
 
-    public static partial class ArrayModule<T> {
+    public static partial class ArrayModule {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void PartialSortQuick<TComparer, TValue>(T[] keys, TComparer comparer, IntT start, IntT count, int k, TValue[] values) where TComparer : IComparer<T> {
+        public static void PartialSortQuick<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT start, IntT count, int k, TValue[] values) where TComparer : IComparer<T> {
             PartialSortPartQuick(keys, comparer, start, start + count - 1, k, values);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void PartialSortPartQuick<TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, int k, TValue[] values) where TComparer : IComparer<T> {
+        public static void PartialSortPartQuick<T, TComparer, TValue>(T[] keys, TComparer comparer, IntT first, IntT last, int k, TValue[] values) where TComparer : IComparer<T> {
             if (last > first) {
                 var pivot = PickPivotAndPartition(keys, comparer, first, last, values);
                 if (pivot == k - 1) {

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading;
 
 namespace UltimateOrb.Core.Tests {
+    using System.Diagnostics;
+    using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
     using UltimateOrb.Plain.ValueTypes;
 
@@ -222,6 +224,7 @@ namespace UltimateOrb.Core.Tests {
 
         }
 
+        /*
         public partial interface IBox<T> {
 
             ref T Value {
@@ -229,15 +232,20 @@ namespace UltimateOrb.Core.Tests {
                 get;
             }
         }
+        */
 
         public static UInt64 SetFlag(UInt64 bitArray, int index, bool value) {
             return value ? bitArray | ((UInt64)1 << index) : bitArray & ~((UInt64)1 << index);
         }
 
-        public partial interface IMoveNextState<T, TState, TStateEx>
-            where TStateEx : IBox<TState> {
+        public partial interface IMoveNextState<T, TStateEx, BooleanT> {
 
-            FFFF Invoke(ref TStateEx state, T item);
+            NextStateAcceptance Invoke(ref TStateEx state, T item);
+        }
+
+        public partial interface IMovePreviousState<T, TStateEx> {
+
+            void Invoke(ref TStateEx state, T item, bool move);
         }
 
         public partial interface IInitializeStateEx<T, TList, TState, TStateEx>
@@ -247,66 +255,231 @@ namespace UltimateOrb.Core.Tests {
         }
 
         [FlagsAttribute()]
-        public enum FFFF {
+        public enum NextStateAcceptance {
             NotRejecting = 1,
             Accepting = 2,
         }
 
-        public static void Tdsf<T, TList, TState, TStateEx, TInitializeStateEx, TMoveNextState>(TList collection, TState initial, Func<TList, TState, TStateEx> g,/* Func<TState, T, bool> f,*/ Action<UInt64> h, TMoveNextState moveNextStateTrue, TMoveNextState moveNextStateFalse)
+        public partial struct TrueT {
+        }
+
+        public partial struct FalseT {
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void SolveManyBranchAndBound<T, TList, TState, TStateEx, TInitializeStateEx, TStackRecorder, TMoveNextStateTrue, TMoveNextStateFalse, TMovePreviousState>(TList collection, TState initial, TInitializeStateEx initializer, ref TStackRecorder recorder, TMoveNextStateTrue moveNextStateTrue, TMoveNextStateFalse moveNextStateFalse, TMovePreviousState movePreviousState)
             where TList : IList<T>
-            where TStateEx : IBox<TState>
+            // where TStateEx : IBox<TState>
             where TInitializeStateEx : IInitializeStateEx<T, TList, TState, TStateEx>
-            where TMoveNextState : IMoveNextState<T, TState, TStateEx> {
+            where TStackRecorder : IO.IAction<UInt64>
+            where TMoveNextStateTrue : IMoveNextState<T, TStateEx, TrueT>
+            where TMoveNextStateFalse : IMoveNextState<T, TStateEx, FalseT>
+            where TMovePreviousState : IMovePreviousState<T, TStateEx> {
             var m_Capacity = checked((int)collection.Count);
             if (m_Capacity <= 64) {
                 var m_Count = (int)0;
                 var m_Flag0_BitArray = (UInt64)0;
                 var m_Flag1_BitArray = (UInt64)0;
                 var m_Item_BitArray = (UInt64)0;
-                for (var t = g.Invoke(collection, initial); 0 <= m_Count;) {
-                    if (0 == (m_Flag0_BitArray & ((UInt64)1 << m_Count))) {
-                        {
-                            m_Flag0_BitArray |= ((UInt64)1 << m_Count);
-                            if (m_Capacity > m_Count) {
-                                var x = collection[m_Count];
-                                /*
-                                if (f(t.Value, x)) {
-                                    h(m_Item_BitArray | ((UInt64)1 << m_Count));
-                                }
-                                */
+                if (m_Capacity > m_Count) {
+                    var x = collection[m_Count];
+                    for (var t = initializer.Invoke(collection, initial); ;) {
+                        if (0 == (m_Flag0_BitArray & ((UInt64)1 << m_Count))) {
+                            {
+                                m_Flag0_BitArray |= ((UInt64)1 << m_Count);
                                 var r = moveNextStateTrue.Invoke(ref t, x);
-                                if (0 != (FFFF.NotRejecting & r)) {
+                                if (0 != (NextStateAcceptance.Accepting & r)) {
+                                    recorder.Invoke(m_Item_BitArray);
+                                }
+                                if (0 != (NextStateAcceptance.NotRejecting & r)) {
                                     m_Item_BitArray |= ((UInt64)1 << m_Count);
                                     unchecked {
                                         ++m_Count;
                                     }
-                                }
-                                if (0 != (FFFF.Accepting & r)) {
-                                    h.Invoke(m_Item_BitArray);
-                                }
-                                continue;
-                            }
-                        }
-                    } else {
-                        if (0 == (m_Flag0_BitArray & ((UInt64)1 << m_Count))) {
-                            m_Flag1_BitArray |= ((UInt64)1 << m_Count);
-                            var x = collection[m_Count];
-                            if (0 != (FFFF.NotRejecting & moveNextStateFalse.Invoke(ref t, x))) {
-                                m_Item_BitArray &= ~((UInt64)1 << m_Count);
-                                unchecked {
-                                    ++m_Count;
+                                    if (m_Capacity > m_Count) {
+                                        x = collection[m_Count];
+                                    } else {
+                                        unchecked {
+                                            --m_Count;
+                                        }
+                                    }
                                 }
                                 continue;
                             }
+                        } else {
+                            if (0 == (m_Flag1_BitArray & ((UInt64)1 << m_Count))) {
+                                m_Flag1_BitArray |= ((UInt64)1 << m_Count);
+                                if (0 != (NextStateAcceptance.NotRejecting & moveNextStateFalse.Invoke(ref t, x))) {
+                                    m_Item_BitArray &= ~((UInt64)1 << m_Count);
+                                    unchecked {
+                                        ++m_Count;
+                                    }
+                                    if (m_Capacity > m_Count) {
+                                        x = collection[m_Count];
+                                    } else {
+                                        unchecked {
+                                            --m_Count;
+                                        }
+                                    }
+                                    continue;
+                                }
+                            }
                         }
-                    }
-                    unchecked {
-                        --m_Count;
+                        L_1:
+                        m_Flag0_BitArray &= ~((UInt64)1 << m_Count);
+                        m_Flag1_BitArray &= ~((UInt64)1 << m_Count);
+                        unchecked {
+                            --m_Count;
+                        }
+                        if (0 <= m_Count) {
+                            var s = (m_Item_BitArray & ((UInt64)1 << m_Count));
+                            x = collection[m_Count];
+                            movePreviousState.Invoke(ref t, x, 0 != s);
+                            continue;
+                        }
+                        break;
                     }
                 }
                 return;
             }
             throw new NotSupportedException();
+        }
+
+        public partial struct P233MoveNextState {
+
+            private readonly long m_TargetSum;
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public P233MoveNextState(long targetSum) {
+                this.m_TargetSum = targetSum;
+            }
+        }
+
+        public partial struct P233MoveNextState : IMoveNextState<int, (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference), TrueT> {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            NextStateAcceptance IMoveNextState<int, (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference), TrueT>.Invoke(ref (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference) state, int item) {
+                var CurrentSum = state.CurrentSum;
+                unchecked {
+                    CurrentSum += item;
+                }
+                var TargetSum = this.m_TargetSum;
+                if (TargetSum == CurrentSum) {
+                    return NextStateAcceptance.Accepting;
+                }
+                var MaxPositiveDifference = state.MaxPositiveDifference;
+                var MaxNegativeDifference = state.MaxNegativeDifference;
+                if (0 <= item) {
+                    MaxPositiveDifference -= item;
+                    if (TargetSum - CurrentSum < MaxNegativeDifference) {
+                        return default;
+                    }
+                    state.MaxPositiveDifference = MaxPositiveDifference;
+                } else {
+                    MaxNegativeDifference -= item;
+                    if (TargetSum - CurrentSum > MaxPositiveDifference) {
+                        return default;
+                    }
+                    state.MaxNegativeDifference = MaxNegativeDifference;
+                }
+                state.CurrentSum = CurrentSum;
+                return NextStateAcceptance.NotRejecting;
+
+            }
+        }
+
+        public partial struct P233MoveNextState : IMoveNextState<int, (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference), FalseT> {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            NextStateAcceptance IMoveNextState<int, (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference), FalseT>.Invoke(ref (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference) state, int item) {
+                var CurrentSum = state.CurrentSum;
+                var TargetSum = this.m_TargetSum;
+                var MaxPositiveDifference = state.MaxPositiveDifference;
+                var MaxNegativeDifference = state.MaxNegativeDifference;
+                if (0 <= item) {
+                    MaxPositiveDifference -= item;
+                    if (TargetSum - CurrentSum > MaxPositiveDifference) {
+                        return default;
+                    }
+                    state.MaxPositiveDifference = MaxPositiveDifference;
+                } else {
+                    MaxNegativeDifference -= item;
+                    if (TargetSum - CurrentSum < MaxNegativeDifference) {
+                        return default;
+                    }
+                    state.MaxNegativeDifference = MaxNegativeDifference;
+                }
+                return NextStateAcceptance.NotRejecting;
+            }
+        }
+
+        public partial struct P233MovePreviousState : IMovePreviousState<int, (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference)> {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public void Invoke(ref (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference) state, int item, bool move) {
+                var CurrentSum = state.CurrentSum;
+                var MaxPositiveDifference = state.MaxPositiveDifference;
+                var MaxNegativeDifference = state.MaxNegativeDifference;
+                if (move) {
+                    unchecked {
+                        CurrentSum -= item;
+                    }
+                    state.CurrentSum = CurrentSum;
+                }
+                if (0 <= item) {
+                    MaxPositiveDifference += item;
+                    state.MaxPositiveDifference = MaxPositiveDifference;
+                } else {
+                    MaxNegativeDifference += item;
+                    state.MaxNegativeDifference = MaxNegativeDifference;
+                }
+            }
+        }
+
+        public partial struct P233StateExInitializer<TList>
+            : IInitializeStateEx<int, TList, long, (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference)>
+            where TList : IList<int> {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public (long CurrentSum, long MaxPositiveDifference, long MaxNegativeDifference) Invoke(TList collection, long state) {
+                var p = (long)0;
+                var n = (long)0;
+                for (var i = collection.Count; i > 0;) {
+                    var x = collection[--i];
+                    if (0 <= x) {
+                        checked {
+                            p += x;
+                        }
+                    } else {
+                        checked {
+                            n += x;
+                        }
+                    }
+                }
+                return (0, p, n);
+            }
+        }
+
+        public partial struct UInt64Recorder : IO.IAction<UInt64> {
+
+            internal Collections.Generic.RefReturnSupported.List<UInt64> content;
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public UInt64Recorder(int v) {
+                this.content = new Collections.Generic.RefReturnSupported.List<UInt64>(v);
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public void Invoke(UInt64 arg) {
+                this.content.Add(arg);
+            }
+        }
+
+        public static Collections.Generic.RefReturnSupported.List<UInt64> SolveP233(int[] collection, long target) {
+            var mover = new P233MoveNextState(target);
+            var recorder = new UInt64Recorder(0);
+            SolveManyBranchAndBound<int, int[], long, (long, long, long), P233StateExInitializer<int[]>, UInt64Recorder, P233MoveNextState, P233MoveNextState, P233MovePreviousState>(collection, 0, DefaultConstructor.Invoke<P233StateExInitializer<int[]>>(), ref recorder, mover, mover, DefaultConstructor.Invoke<P233MovePreviousState>());
+            return recorder.content;
         }
 
         public partial struct FStack : IFoldingStack<bool, (BitArrayUnchecked Solution, long CurrentSum, int Count, bool LastMove, long MaxNegativeDifference, long MaxPositiveDifference)> {
@@ -335,7 +508,7 @@ namespace UltimateOrb.Core.Tests {
             }
 
             public FStack(int[] collection) {
-                ArrayModule<int>.Sort(collection, default(Comparer), 0, collection.Length, ArrayModule.Null);
+                ArrayModule.Sort(collection, default(Comparer), 0, collection.Length, ArrayModule.Null);
                 var count = unchecked((uint)collection.Length);
                 var t = Array.BinarySearch(collection, 0);
                 if (0 > t) {
@@ -1417,6 +1590,27 @@ namespace UltimateOrb.Core.Tests {
         }
 
         private static int Main(string[] args) {
+            {
+                var st = new Stopwatch();
+                var c = new int[] { -3, -2, -1, -1, 0, 1, 2, 2, 3 };
+                st.Start();
+                var s = AAAf.SolveP233(c, 7);
+                st.Stop();
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(st.Elapsed);
+                Console.Out.WriteLine(s.Count);
+                Console.Out.WriteLine("...");
+                c = Enumerable.Range(1, 26).ToArray();
+                st.Restart();
+                s = AAAf.SolveP233(c, 200);
+                st.Stop();
+                Console.Out.WriteLine("...");
+                Console.Out.WriteLine(st.Elapsed);
+                Console.Out.WriteLine(s.Count);
+                Console.Out.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 var c = new int[] { -3, -2, -1, -1, 0, 1, 2, 2, 3 };
                 var s = AAAf.dsafsf(c, 7);

@@ -10,7 +10,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
     using UltimateOrb;
 
     using System.Collections;
-    using Internal.System;
+    using static Internal.System.ArrayModule;
     using Internal.System.Collections.Generic;
     using static List_ThrowHelper;
 
@@ -1130,7 +1130,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
             var buffer = this.buffer;
             var count = this.count;
-            return new List<TResult>(ArrayModule<T>.Select<TResult, TSelector>(buffer, count, selector), count);
+            return new List<TResult>(ArrayModule.Select<T, TResult, TSelector>(buffer, count, selector), count);
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
