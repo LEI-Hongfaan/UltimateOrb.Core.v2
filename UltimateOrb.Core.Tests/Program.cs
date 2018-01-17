@@ -289,7 +289,7 @@ namespace UltimateOrb.Core.Tests {
                                 m_Flag0_BitArray |= ((UInt64)1 << m_Count);
                                 var r = moveNextStateTrue.Invoke(ref t, x);
                                 if (0 != (NextStateAcceptance.Accepting & r)) {
-                                    recorder.Invoke(m_Item_BitArray);
+                                    recorder.Invoke(m_Item_BitArray | ((UInt64)1 << m_Count));
                                 }
                                 if (0 != (NextStateAcceptance.NotRejecting & r)) {
                                     m_Item_BitArray |= ((UInt64)1 << m_Count);
@@ -1589,7 +1589,147 @@ namespace UltimateOrb.Core.Tests {
             return r0 == r1;
         }
 
+        private static bool aa2aa(int[] a) {
+            var c = a.Length;
+            Debug.Assert(c % 2 == 0);
+            for (var i = 0; i < c / 2; i++) {
+                if (a[i] != 2 * i) {
+                    return false;
+                }
+            }
+            for (var i = 0; i < c / 2; i++) {
+                if (a[c / 2 + i] != 1 + 2 * i) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private static bool aa2aa(int[] a, int start, int count) {
+            var c = count;
+            Debug.Assert(c % 2 == 0);
+            for (var i = 0; i < c / 2; i++) {
+                if (a[start + i] != 2 * i) {
+                    return false;
+                }
+            }
+            for (var i = 0; i < c / 2; i++) {
+                if (a[start + c / 2 + i] != 1 + 2 * i) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private static int Main(string[] args) {
+            {
+                var a = "(x,[x])";
+                var s0 = new List<string> { };
+                var s1 = new List<string> { "x", };
+                var s2 = new List<string> { a, };
+                var s = new List<List<string>> { s0, s1, s2, };
+                do {
+                    var sn = s[s.Count - 1];
+                    s.Add(sn.SelectMany((x) => x.Select((ch, i) => (ch, i)).Where((p) => 'x' == p.ch).Select((p) => x.Substring(0, p.i) + a + x.Substring(1 + p.i))).Concat(sn.SelectMany((x) => x.Select((ch, i) => (ch, i)).Where((p) => ']' == p.ch).Select((p) => x.Substring(0, p.i) + ",x" + x.Substring(p.i)))).Distinct().ToList());
+                } while (10 > s.Count);
+                foreach (var item in s) {
+                    Console.Out.WriteLine(item.Count);
+                }
+                Console.ReadKey(true);
+                return 0;
+
+            }
+            {
+                var cc = 200000000;
+                var s = 7;
+                var c = Enumerable.Range(10000, s);
+                c = c.Concat(Enumerable.Range(0, cc));
+                c = c.Concat(Enumerable.Range(20000, 11));
+                var d = c.ToArray();
+
+                ArrayModule.InterleaveInPlace(d, s, cc);
+                Console.Out.WriteLine(aa2aa(d, s, cc));
+                Console.ReadKey(true);
+                return 0;
+            }
+            /*{
+                {
+                    var c = Enumerable.Range(0, 0).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 2).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 4).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 2).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 4).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 6).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 8).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 10).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 12).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 26).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 28).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 30).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 80).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 82).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                {
+                    var c = Enumerable.Range(0, 84).ToArray();
+                    ArrayModule.InterleavePartialInternal(c, 0, c.Length);
+                    Console.Out.WriteLine($@"{c.Length,-4}: {aa2aa(c),-8}");
+                }
+                Console.ReadKey(true);
+                return 0;
+            }*/
             {
                 var st = new Stopwatch();
                 var c = new int[] { -3, -2, -1, -1, 0, 1, 2, 2, 3 };

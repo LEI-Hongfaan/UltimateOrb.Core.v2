@@ -67,6 +67,13 @@
         bool TryPeekPopPushLast(T item, out T result);
     }
 
+    public partial interface IDeque_A2<T> : IDeque_A1<T> {
+
+        void PopLastPushFirst(T item);
+
+        void PopFirstPushLast(T item);
+    }
+
     public partial interface IDeque_B1<T> : IDeque<T> {
 
         bool IsFinite {

@@ -290,5 +290,94 @@ namespace UltimateOrb {
                 }
             }
         }
+
+        // TODO: Move to a suitable space.
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static Int32 ConvertEvenToZeroAndOddToMinusOne(Int32 value) {
+            return (value << (32 - 1)) >> (32 - 1);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static Int64 ConvertEvenToZeroAndOddToMinusOne(Int64 value) {
+            return (value << (64 - 1)) >> (64 - 1);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static UInt32 ConvertEvenToZeroAndOddToMinusOne(UInt32 value) {
+            return unchecked((UInt32)ConvertEvenToZeroAndOddToMinusOne((Int32)value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static UInt64 ConvertEvenToZeroAndOddToMinusOne(UInt64 value) {
+            return unchecked((UInt64)ConvertEvenToZeroAndOddToMinusOne((Int64)value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        internal static void InterleaveInPlacePartialInternal<T>(T[] array, int start, int count) {
+            Contract.Requires(null != array && CheckSegment(array, start, count));
+            Contract.Requires(0 == (1 & count));
+            for (var i = 1; count > i;) {
+                var j = i;
+                var item = array[unchecked(start + j)];
+                do {
+                    unchecked {
+                        j += ConvertEvenToZeroAndOddToMinusOne(j) & count;
+                    }
+                    j >>= 1;
+                    {
+                        var t = item;
+                        item = array[unchecked(start + j)];
+                        array[unchecked(start + j)] = t;
+                    }
+                } while (i != j);
+                unchecked {
+                    i *= 3;
+                }
+            }
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void InterleaveInPlace<T>(T[] array, IntT start, IntT count) {
+            if (null != array) {
+                if (CheckSegment(array, start, count)) {
+                    if (0 == (1 & count)) {
+                        var res = count;
+                        var i = (IntT)0;
+                        for (; res > 0;) {
+                            var c = (IntT)0;
+                            {
+                                var j = (UIntT)1;
+                                for (; res.ToUnsignedUnchecked() > j;) {
+                                    c = unchecked((IntT)j);
+                                    if (j <= unchecked((UIntT)(IntT.MaxValue / 3))) {
+                                        unchecked {
+                                            j *= 3;
+                                        }
+                                        continue;
+                                    }
+                                    break;
+                                }
+                            }
+                            unchecked {
+                                ++c;
+                            }
+                            unchecked {
+                                res -= c;
+                            }
+                            InterleaveInPlacePartialInternal(array, unchecked(start + i), c);
+                            RotateLeftInPlace(array, unchecked(start + (i >> 1)),  (i + c) >> 1, i >> 1);
+                            unchecked {
+                                i += c;
+                            }
+                        }
+                        return;
+                    }
+                }
+                // TODO: Perf
+                throw new ArgumentException();
+            }
+            ThrowHelper.ThrowArgumentNullException_array();
+            throw null;
+        }
     }
 }
