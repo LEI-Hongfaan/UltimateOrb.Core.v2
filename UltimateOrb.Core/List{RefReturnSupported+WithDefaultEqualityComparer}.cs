@@ -49,6 +49,12 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             get => TReadOnlyList<T>.get_Item(this.value, index);
         }
 
+        ref readonly T IReadOnlyList<T, List<T>.Enumerator>.this[int index] {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref TReadOnlyList<T, List<T>.Enumerator>.get_Item(this.value, index);
+        }
+
         public int Count {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

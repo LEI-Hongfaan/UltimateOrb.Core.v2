@@ -1620,7 +1620,36 @@ namespace UltimateOrb.Core.Tests {
             return true;
         }
 
+        private partial struct fff : IO.IFunc<int, int, int>, IComparer<int> {
+
+            public int Compare(int x, int y) {
+                return this.Invoke(x, y);
+            }
+
+            public int Invoke(int arg1, int arg2) {
+                if (arg1 < arg2) {
+                    return -1;
+                }
+                if (arg1 > arg2) {
+                    return 1;
+                }
+                return 0;
+            }
+        }
+
         private static int Main(string[] args) {
+            {
+                ref var tree = ref BinaryTreeModule.Create(3);
+                BinaryTreeModule.AddSorted(ref tree, 4, DefaultConstructor.Invoke<fff>());
+                BinaryTreeModule.AddSorted(ref tree, 0, DefaultConstructor.Invoke<fff>());
+                BinaryTreeModule.AddSorted(ref tree, 2, DefaultConstructor.Invoke<fff>());
+                BinaryTreeModule.AddSorted(ref tree, -5, DefaultConstructor.Invoke<fff>());
+                BinaryTreeModule.AddSorted(ref tree, 3, DefaultConstructor.Invoke<fff>());
+                BinaryTreeModule.AddSorted(ref tree, 2, DefaultConstructor.Invoke<fff>());
+                Console.WriteLine(tree.ToString<int>());
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 var a = "(x,[x])";
                 var s0 = new List<string> { };

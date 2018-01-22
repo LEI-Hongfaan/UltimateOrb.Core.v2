@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UltimateOrb.Core {
+namespace UltimateOrb {
 
     public partial interface IRandomNumberGenerator {
 

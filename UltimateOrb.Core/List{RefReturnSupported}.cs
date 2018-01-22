@@ -29,7 +29,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
         [ContractPublicPropertyNameAttribute("Count")]
         private int count;
-        
+
         /// <summary>
         ///     <para>
         ///         Initializes a new instance of the <see cref="List{T}"/> type that is empty and has sufficient capacity to accommodate the specified number of elements.
@@ -227,6 +227,17 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                 var @this = this;
                 @this.CheckIndex(index);
                 return @this.buffer[index];
+            }
+        }
+
+        ref readonly T IReadOnlyList<T, Enumerator>.this[int index] {
+
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get {
+                var @this = this;
+                @this.CheckIndex(index);
+                return ref @this.buffer[index];
             }
         }
 

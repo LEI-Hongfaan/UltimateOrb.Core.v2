@@ -276,6 +276,17 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             }
         }
 
+        ref readonly T IReadOnlyList<T, Enumerator>.this[int index] {
+
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get {
+                Contract.Requires(null != this.buffer);
+                this.CheckIndex(index);
+                return ref this.buffer[index];
+            }
+        }
+
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private void CheckIndex(int index) {

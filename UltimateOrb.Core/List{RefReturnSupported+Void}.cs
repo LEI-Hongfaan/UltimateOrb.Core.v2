@@ -67,11 +67,14 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             get => @void;
         }
 
+        ref readonly Void IReadOnlyList<Void, Enumerator>.this[int index] {
+
+            get => ref @void;
+        }
+
         public ref Void this[int index] {
 
-            get {
-                return ref @void1;
-            }
+            get => ref @void1;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
