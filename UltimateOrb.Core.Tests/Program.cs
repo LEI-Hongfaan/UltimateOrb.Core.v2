@@ -1191,8 +1191,8 @@ namespace UltimateOrb.Core.Tests {
             }
 
             public IEnumerator<int> GetEnumerator() {
-                var b = this._.data.buffer;
-                var c = this._.data.count0;
+                var b = this._.data.m_buffer;
+                var c = this._.data.m_count;
                 for (; c > 0;) {
                     yield return b[--c].Item1;
                 }
@@ -1637,7 +1637,114 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+
         private static int Main(string[] args) {
+            {
+                var rrr = GetRandom();
+                var a = new Collections.Generic.RefReturnSupported.List<int>(0);
+                var b = new Collections.Generic.RefReturnSupported.List<long>(0);
+                var g = new Graph<ulong, double>(0);
+                for (var i = 0; 6 > i; ++i) {
+                    a.Add(g.AddNode((ulong)rrr.Next()));
+                }
+                for (var i = 0; 12 > i; ++i) {
+                    var s = rrr.Next(a.Count);
+                    var t = rrr.Next(a.Count);
+                    b.Add(g.AddLink(s, t, rrr.NextDouble()));
+                }
+                var enc = System.Text.Encoding.UTF8;
+                var xws = new System.Xml.XmlWriterSettings {
+                    Async = false,
+                    CheckCharacters = true,
+                    CloseOutput = false,
+                    ConformanceLevel = System.Xml.ConformanceLevel.Document,
+                    DoNotEscapeUriAttributes = false,
+                    Encoding = enc,
+                    NamespaceHandling = System.Xml.NamespaceHandling.OmitDuplicates,
+                    NewLineHandling = System.Xml.NewLineHandling.Entitize,
+                    NewLineOnAttributes = false,
+                    OmitXmlDeclaration = false,
+                    WriteEndDocumentOnClose = true
+                };
+
+                var sb = new System.IO.MemoryStream();
+                var xw = System.Xml.XmlWriter.Create(sb, xws);
+                xw.WriteStartElement("DirectedGraph", "http://schemas.microsoft.com/vs/2009/dgml");
+                xw.WriteStartElement("Nodes");
+                foreach (var item in a) {
+                    xw.WriteStartElement("Node");
+                    xw.WriteAttributeString("Id", $@"N{item}");
+                    xw.WriteAttributeString("Label", $@"{item}: {g.GetNodeValue(item)}");
+                    xw.WriteEndElement();
+                }
+                xw.WriteEndElement();
+                xw.WriteStartElement("Links");
+                foreach (var item in b) {
+                    xw.WriteStartElement("Link");
+                    xw.WriteAttributeString("Source", $@"N{g.GetSourceNode(item)}");
+                    xw.WriteAttributeString("Target", $@"N{g.GetTargetNode(item)}");
+                    xw.WriteAttributeString("Label", $@"{g.GetLinkIdSourceNodeLocal(item)}: {g.GetLinkValue(item)}");
+                    xw.WriteEndElement();
+                }
+                xw.WriteEndElement();
+                xw.WriteEndElement();
+                xw.Close();
+                sb.Seek(0, System.IO.SeekOrigin.Begin);
+                var fef = new System.IO.StreamReader(sb, enc);
+                var sdfsas = fef.ReadToEnd();
+
+                System.IO.File.WriteAllText("ttt233.dgml", sdfsas, enc);
+
+                Console.WriteLine(sdfsas);
+                Console.ReadKey(true);
+                return 0;
+
+
+
+            }
+            {
+                var rrr = GetRandom();
+                var a = new Collections.Generic.RefReturnSupported.List<long>(0);
+                var b = new Collections.Generic.RefReturnSupported.List<long>(0);
+                var g = new Graph<ulong, double>(0);
+                for (var i = 0; 12 > i; ++i) {
+                    a.Add(g.AddNode((ulong)rrr.Next()));
+                }
+                for (var i = 0; 133 > i; ++i) {
+                    var s = rrr.Next(a.Count);
+                    var t = rrr.Next(a.Count);
+                    b.Add(g.AddLink(s, t, rrr.NextDouble()));
+                }
+                Console.ReadKey(true);
+                return 0;
+            }
+            if (false) {
+                var adsfa = new long[] { 1, -3, 4, 5, 7, 9, -2, };
+                var asdfa = adsfa;
+                foreach (var item in asdfa) {
+                    Console.WriteLine(item);
+                }
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var adsfa = new long[] { 1, -3, 4, 5, 7, 9, -2, };
+                var asdfa = adsfa.ToReadOnly();
+                for (var i = 0; asdfa.Length > i; ++i) {
+                    Console.WriteLine(asdfa[i]);
+                }
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var adsfa = new long[] { 1, -3, 4, 5, 7, 9, -2, };
+                var asdfa = adsfa.ToReadOnly();
+                foreach (var item in asdfa) {
+                    Console.WriteLine(item);
+                }
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 ref var tree = ref BinaryTreeModule.Create(3);
                 BinaryTreeModule.AddSorted(ref tree, 4, DefaultConstructor.Invoke<fff>());

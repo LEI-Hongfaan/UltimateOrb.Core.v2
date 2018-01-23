@@ -30,7 +30,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
     using Generic = UltimateOrb.Collections.Generic;
 
     public partial interface IReadOnlyCollection<T, out TEnumerator>
-        : Generic.IReadOnlyCollection<T, TEnumerator>, IEnumerable<T, TEnumerator>
-        where TEnumerator : IEnumerator<T> {
+        : Generic.IReadOnlyCollection<T, TEnumerator>, IReadOnlyEnumerable<T, TEnumerator>
+        where TEnumerator : IReadOnlyEnumerator<T> {
     }
 }

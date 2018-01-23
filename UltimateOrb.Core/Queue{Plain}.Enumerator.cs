@@ -19,10 +19,10 @@ namespace UltimateOrb.Plain.ValueTypes {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public Enumerator(Queue<T> collection) {
-                this.buffer = collection.buffer;
-                var s = collection.offset;
+                this.buffer = collection.m_buffer;
+                var s = collection.m_offset;
                 this.offset = s;
-                this.count = collection.count0;
+                this.count = collection.m_count;
                 this.index = unchecked(s - 1);
             }
 

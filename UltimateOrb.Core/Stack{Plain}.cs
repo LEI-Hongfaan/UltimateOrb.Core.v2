@@ -18,9 +18,9 @@ namespace UltimateOrb.Plain.ValueTypes {
     /// </remarks>
     public partial struct Stack<T> : IEnumerable<T, Stack<T>.Enumerator>, IStack_2_A1_B1_1<T>, IStackEx<T>, IInitializable, IInitializable<int> {
 
-        public T[] buffer;
+        public T[] m_buffer;
 
-        public int count0;
+        public int m_count;
 
         /// <summary>
         ///     <para>Sets the total number of elements the internal data structure can hold without resizing.</para>
@@ -37,20 +37,20 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void SetCapacity(int capacity) {
-            ref var buffer = ref this.buffer;
+            ref var buffer = ref this.m_buffer;
             if (0 <= capacity) {
                 if (capacity > 0) {
-                    Array.Resize(ref this.buffer, capacity);
+                    Array.Resize(ref this.m_buffer, capacity);
                 } else {
-                    this.buffer = Array_Empty<T>.Value;
+                    this.m_buffer = Array_Empty<T>.Value;
                 }
-                if (capacity < count0) {
-                    this.count0 = capacity;
+                if (capacity < m_count) {
+                    this.m_count = capacity;
                 }
                 return;
             }
-            this.buffer = null;
-            this.count0 = 0;
+            this.m_buffer = null;
+            this.m_count = 0;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void IncreaseCapacity() {
-            Array.Resize(ref this.buffer, checked((int)(22 + 1.6180339887498948482045868343656 * this.count0)));
+            Array.Resize(ref this.m_buffer, checked((int)(22 + 1.6180339887498948482045868343656 * this.m_count)));
         }
 
         /// <summary>
@@ -80,16 +80,16 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Stack(int capacity) {
-            this.buffer = capacity > 0 ? Array_Empty<T>.Value : new T[capacity];
-            this.count0 = 0;
+            this.m_buffer = capacity > 0 ? Array_Empty<T>.Value : new T[capacity];
+            this.m_count = 0;
             return;
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Stack(T[] buffer, int count) {
-            this.buffer = buffer;
-            this.count0 = count;
+            this.m_buffer = buffer;
+            this.m_count = count;
         }
 
         /// <summary>
@@ -138,17 +138,17 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Push(T item) {
             var @this = this;
-            var c = checked(@this.count0 + 1);
-            if (null == @this.buffer || c > buffer.Length) {
+            var c = checked(@this.m_count + 1);
+            if (null == @this.m_buffer || c > @this.m_buffer.Length) {
                 @this.IncreaseCapacity();
-                @this.buffer[unchecked(c - 1)] = item;
-                this.buffer = @this.buffer;
-                this.count0 = c;
+                @this.m_buffer[unchecked(c - 1)] = item;
+                this.m_buffer = @this.m_buffer;
+                this.m_count = c;
                 return;
             }
             {
-                @this.buffer[unchecked(c - 1)] = item;
-                this.count0 = c;
+                @this.m_buffer[unchecked(c - 1)] = item;
+                this.m_count = c;
                 return;
             }
         }
@@ -172,13 +172,13 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T Push() {
             var @this = this;
-            var c = checked(@this.count0 + 1);
-            if (null == @this.buffer || c > @this.buffer.Length) {
+            var c = checked(@this.m_count + 1);
+            if (null == @this.m_buffer || c > @this.m_buffer.Length) {
                 @this.IncreaseCapacity();
-                this.buffer = @this.buffer;
+                this.m_buffer = @this.m_buffer;
             }
-            this.count0 = c;
-            return ref @this.buffer[@this.count0];
+            this.m_count = c;
+            return ref @this.m_buffer[@this.m_count];
         }
 
         /// <summary>
@@ -193,13 +193,13 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T Pop() {
-            var a = this.count0;
+            var a = this.m_count;
             if (0 < a) {
                 unchecked {
                     --a;
                 }
-                this.count0 = a;
-                return this.buffer[a];
+                this.m_count = a;
+                return this.m_buffer[a];
             }
             // TODO
             throw new InvalidOperationException();
@@ -214,9 +214,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T Peek() {
-            var a = unchecked(this.count0 - 1);
+            var a = unchecked(this.m_count - 1);
             if (0 <= a) {
-                return ref this.buffer[a];
+                return ref this.m_buffer[a];
             }
             // TODO
             throw new InvalidOperationException();
@@ -225,9 +225,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         T Collections.Generic.IStack<T>.Peek() {
-            var a = unchecked(this.count0 - 1);
+            var a = unchecked(this.m_count - 1);
             if (0 <= a) {
-                return this.buffer[a];
+                return this.m_buffer[a];
             }
             // TODO
             throw new InvalidOperationException();
@@ -236,29 +236,29 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPush(T item) {
-            var c = checked(this.count0 + 1);
-            var buffer = this.buffer;
+            var c = checked(this.m_count + 1);
+            var buffer = this.m_buffer;
             if (null == buffer || c > buffer.Length) {
                 try {
                     this.IncreaseCapacity();
                 } catch (Exception) {
                     return false;
                 }
-                this.buffer[unchecked(c - 1)] = item;
-                this.count0 = c;
+                this.m_buffer[unchecked(c - 1)] = item;
+                this.m_count = c;
                 return true;
             }
             buffer[unchecked(c - 1)] = item;
-            this.count0 = c;
+            this.m_count = c;
             return true;
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPeek(out T item) {
-            var a = unchecked(this.count0 - 1);
+            var a = unchecked(this.m_count - 1);
             if (0 <= a) {
-                item = this.buffer[a];
+                item = this.m_buffer[a];
                 return true;
             }
             Miscellaneous.IgnoreOutParameter(out item);
@@ -268,13 +268,13 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPop(out T item) {
-            var a = this.count0;
+            var a = this.m_count;
             if (a > 0) {
                 unchecked {
                     --a;
                 }
-                this.count0 = a;
-                item = this.buffer[a];
+                this.m_count = a;
+                item = this.m_buffer[a];
                 return true;
             }
             Miscellaneous.IgnoreOutParameter(out item);
@@ -295,7 +295,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                return checked((int)this.count0);
+                return checked((int)this.m_count);
             }
         }
 
@@ -310,7 +310,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                return this.count0;
+                return this.m_count;
             }
         }
 
@@ -318,7 +318,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => 0 == this.count0;
+            get => 0 == this.m_count;
         }
 
         public bool IsFinite {
@@ -343,10 +343,10 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Stack<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
-            var c = this.count0;
-            var b = this.buffer;
+            var c = this.m_count;
+            var b = this.m_buffer;
             var a = new TResult[c];
-            for (var i = 0; c > i && buffer.Length > i; ++i) {
+            for (var i = 0; c > i && m_buffer.Length > i; ++i) {
                 a[i] = selector.Invoke(b[i]);
             }
             return new Stack<TResult>(a, c);
@@ -361,9 +361,9 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public TResult[] ToArray<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
-            var a = this.buffer;
+            var a = this.m_buffer;
             if (null != a) {
-                var c = this.count0;
+                var c = this.m_count;
                 var r = new TResult[c];
                 {
                     var i = c;
@@ -383,12 +383,12 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         void Collections.Generic.IStack_A1<T>.Pop() {
-            var a = this.count0;
+            var a = this.m_count;
             if (0 < a) {
                 unchecked {
                     --a;
                 }
-                this.count0 = a;
+                this.m_count = a;
                 return;
             }
             // TODO
@@ -404,9 +404,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void PopPush(T item) {
-            var a = unchecked(this.count0 - 1);
+            var a = unchecked(this.m_count - 1);
             if (0 <= a) {
-                this.buffer[a] = item;
+                this.m_buffer[a] = item;
             }
             // TODO
             throw new InvalidOperationException();
@@ -415,9 +415,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T PeekPopPush(T item) {
-            var a = unchecked(this.count0 - 1);
+            var a = unchecked(this.m_count - 1);
             if (0 <= a) {
-                var b = this.buffer;
+                var b = this.m_buffer;
                 var result = b[a];
                 b[a] = item;
                 return result;
@@ -429,12 +429,12 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPop() {
-            var a = this.count0;
+            var a = this.m_count;
             if (0 < a) {
                 unchecked {
                     --a;
                 }
-                this.count0 = a;
+                this.m_count = a;
                 return true;
             }
             return false;
@@ -443,13 +443,13 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPeekPop(out T result) {
-            var a = this.count0;
+            var a = this.m_count;
             if (0 < a) {
                 unchecked {
                     --a;
                 }
-                this.count0 = a;
-                result = this.buffer[a];
+                this.m_count = a;
+                result = this.m_buffer[a];
                 return true;
             }
             Miscellaneous.IgnoreOutParameter(out result);
@@ -459,9 +459,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPopPush(T item) {
-            var a = unchecked(this.count0 - 1);
+            var a = unchecked(this.m_count - 1);
             if (0 <= a) {
-                this.buffer[a] = item;
+                this.m_buffer[a] = item;
                 return true;
             }
             return false;
@@ -470,9 +470,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool TryPeekPopPush(T item, out T result) {
-            var a = unchecked(this.count0 - 1);
+            var a = unchecked(this.m_count - 1);
             if (0 <= a) {
-                var b = this.buffer;
+                var b = this.m_buffer;
                 var result0 = b[a];
                 b[a] = item;
                 result = result0;
@@ -508,8 +508,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             var buffer = (T[])null;
             buffer = GetBuffer(capacity);
             if (null != buffer) {
-                this.buffer = buffer;
-                this.count0 = 0;
+                this.m_buffer = buffer;
+                this.m_count = 0;
                 return true;
             }
             return false;

@@ -1232,7 +1232,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         ///     </para>
         /// </remarks>
         [SerializableAttribute()]
-        public partial struct Enumerator : IEnumerator<T> {
+        public partial struct Enumerator : IEnumerator<T>, IReadOnlyEnumerator<T> {
 
             private List<T> list;
 
@@ -1334,6 +1334,73 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             ///     </para>
             /// </remarks>
             ref T IEnumerator<T>.Current {
+
+                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get {
+                    return ref this.list.buffer[this.index];
+                }
+            }
+
+
+            /// <summary>
+            ///     <para>Gets or sets the element at the current position of the enumerator.</para>
+            /// </summary>
+            /// <value>
+            ///     <para>The element in the <see cref="List{T}"/> at the current position of the enumerator.</para>
+            /// </value>
+            /// <exception cref="InvalidOperationException">
+            ///     <para>
+            ///         The requested operation is invalid.
+            ///     </para>
+            /// </exception>
+            /// <exception cref="NotSupportedException">
+            ///     <para>
+            ///         The current position of the enumerator went beyond the bound that the internal data structure of <see cref="Enumerator"/> can support.
+            ///     </para>
+            /// </exception>
+            /// <exception cref="IndexOutOfRangeException">
+            ///     <para>
+            ///         (<c>ExceptionTypeRelaxed</c> build only.)
+            ///         The requested operation is invalid. 
+            ///     </para>
+            /// </exception>
+            /// <exception cref="NullReferenceException">
+            ///     <para>
+            ///         (<c>ExceptionTypeRelaxed</c> build only.)
+            ///         The requested operation is invalid.
+            ///     </para>
+            /// </exception>
+            /// <exception cref="OverflowException">
+            ///     <para>
+            ///         (<c>ExceptionTypeRelaxed</c> build only.)
+            ///         The current position of the enumerator went beyond the bound that the internal data structure of <see cref="Enumerator"/> can support.
+            ///         -or- The requested operation is invalid.
+            ///     </para>
+            /// </exception>
+            /// <remarks>
+            ///     <para>
+            ///         The value of this property is actually a reference (managed pointer) to the element at the current position of the enumerator.
+            ///         The reference remains valid as long as the element stays in the collection and the internal data structure of the collection does not resize.
+            ///         See <see cref="List{T}.Capacity"/> for more information.
+            ///     </para>
+            ///     <para>
+            ///         <see cref="Current"/> is undefined under any of the following conditions:
+            ///         <list type="bullet">
+            ///             <item>
+            ///                 The enumerator is positioned before the first element in the collection, immediately after the enumerator is created.
+            ///                 <see cref="MoveNext"/> must be called to advance the enumerator to the first element of the collection before reading the value of <see cref="Current"/>.
+            ///             </item>
+            ///             <item>
+            ///                 The last call to <see cref="MoveNext"/> returned <c lang="cs">false</c>, which indicates the end of the collection.
+            ///             </item>
+            ///         </list>
+            ///     </para>
+            ///     <para>
+            ///         <see cref="Current"/> returns the same object until <see cref="MoveNext"/> is called. <see cref="MoveNext"/> sets <see cref="Current"/> to the next element.
+            ///     </para>
+            /// </remarks>
+            ref readonly T IReadOnlyEnumerator<T>.Current {
 
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

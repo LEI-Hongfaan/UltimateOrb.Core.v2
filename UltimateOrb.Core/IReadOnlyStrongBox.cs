@@ -6,7 +6,7 @@ namespace UltimateOrb.Collections.Generic {
 
     public partial interface IReadOnlyStrongBox<T> {
 
-        new T Value {
+        T Value {
 
             get;
         }

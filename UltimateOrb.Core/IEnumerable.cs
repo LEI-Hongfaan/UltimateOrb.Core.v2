@@ -23,3 +23,15 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         new TEnumerator GetEnumerator();
     }
 }
+
+namespace UltimateOrb.Collections.Generic.RefReturnSupported {
+    using UltimateOrb;
+    using Generic = UltimateOrb.Collections.Generic;
+
+    public partial interface IReadOnlyEnumerable<out T, out TEnumerator>
+        : Generic.IEnumerable<T, TEnumerator>
+        where TEnumerator : IReadOnlyEnumerator<T> {
+
+        new TEnumerator GetEnumerator();
+    }
+}

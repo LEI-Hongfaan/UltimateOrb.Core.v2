@@ -14,29 +14,29 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public const NodeId RootIndex = 0;
 
-        public Stack<Node> data;
+        public Stack<Node> m_data;
 
         public Tree(Stack<Node> data) {
-            this.data = data;
+            this.m_data = data;
         }
 
         public ref Node this[NodeId id] {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                return ref this.data.buffer[id];
+                return ref this.m_data.m_buffer[id];
             }
         }
 
         [MethodImplAttribute(default(MethodImplOptions))]
         public void IncreaseCapacity() {
-            Array.Resize(ref data.buffer, checked((NodeCount)(22 + 2.6180339887498948482045868343656 * data.count0)));
+            Array.Resize(ref m_data.m_buffer, checked((NodeCount)(22 + 2.6180339887498948482045868343656 * m_data.m_count)));
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Tree(T root, NodeCount capacity) {
-            this.data = new Stack<Node>(capacity);
-            ref var r = ref this.data.Push();
+            this.m_data = new Stack<Node>(capacity);
+            ref var r = ref this.m_data.Push();
             r.Value = root;
         }
 
@@ -63,13 +63,13 @@ namespace UltimateOrb.Plain.ValueTypes {
         public Tree<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             var @this = this;
             @this.Collect();
-            return new Tree<TResult>(@this.data.Select<Tree<TResult>.Node, NodeSelector1<TResult, TSelector>>(new NodeSelector1<TResult, TSelector>(selector)));
+            return new Tree<TResult>(@this.m_data.Select<Tree<TResult>.Node, NodeSelector1<TResult, TSelector>>(new NodeSelector1<TResult, TSelector>(selector)));
         }
 
         public Tree<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() {
             var @this = this;
             @this.Collect();
-            return null == default(TSelector) ? @this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>()) : new Tree<TResult>(@this.data.Select<Tree<TResult>.Node, NodeSelector0<TResult, TSelector>>(default));
+            return null == default(TSelector) ? @this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>()) : new Tree<TResult>(@this.m_data.Select<Tree<TResult>.Node, NodeSelector0<TResult, TSelector>>(default));
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -79,56 +79,56 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId CreateNewNode(T value) {
-            var a = data.count0 + 1;
-            if (null == data.buffer || a > data.buffer.Length) {
+            var a = m_data.m_count + 1;
+            if (null == m_data.m_buffer || a > m_data.m_buffer.Length) {
                 IncreaseCapacity();
             }
-            data.buffer[a - 1].Value = value;
-            data.count0 = a;
+            m_data.m_buffer[a - 1].Value = value;
+            m_data.m_count = a;
             return a - 1;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref Node CreateNewNodeAsNodeRef(T value) {
-            var a = checked(data.count0 + 1);
-            if (null == data.buffer || a > data.buffer.Length) {
+            var a = checked(m_data.m_count + 1);
+            if (null == m_data.m_buffer || a > m_data.m_buffer.Length) {
                 IncreaseCapacity();
             }
-            ref var node = ref data.buffer[unchecked(a - 1)];
+            ref var node = ref m_data.m_buffer[unchecked(a - 1)];
             node.Value = value;
-            data.count0 = a;
+            m_data.m_count = a;
             return ref node;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void NodeSetNextSiblingValue(NodeId node, NodeId nextSibling) {
-            data.buffer[node].nextSibling = nextSibling;
+            m_data.m_buffer[node].nextSibling = nextSibling;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void NodeSetNextSiblingValueVolatile(NodeId node, NodeId nextSibling) {
-            System.Threading.Volatile.Write(ref data.buffer[node].nextSibling, nextSibling);
+            System.Threading.Volatile.Write(ref m_data.m_buffer[node].nextSibling, nextSibling);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId NodeGetNextSiblingValue(NodeId node) {
-            return data.buffer[node].nextSibling;
+            return m_data.m_buffer[node].nextSibling;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref NodeId NodeGetNextSiblingValueRef(NodeId node) {
-            return ref data.buffer[node].nextSibling;
+            return ref m_data.m_buffer[node].nextSibling;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId NodeGetNextSiblingValueVolatile(NodeId node) {
-            return System.Threading.Volatile.Read(ref data.buffer[node].nextSibling);
+            return System.Threading.Volatile.Read(ref m_data.m_buffer[node].nextSibling);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId AddFirst(NodeId node, T value) {
             var result = CreateNewNode(value);
-            var buffer = data.buffer;
+            var buffer = m_data.m_buffer;
             ref var nc = ref buffer[node].firstChild;
             if (NilIndex != nc) {
                 buffer[result].nextSibling = nc;
@@ -142,7 +142,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public NodeId AddAfter(NodeId node, T value) {
             if (NilIndex != node && RootIndex != node) {
                 var result = CreateNewNode(value);
-                var buffer = data.buffer;
+                var buffer = m_data.m_buffer;
                 ref var ns = ref buffer[node].nextSibling;
                 if (NilIndex != ns) {
                     buffer[result].nextSibling = ns;
@@ -155,27 +155,27 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void NodeSetFirstChildValue(NodeId node, NodeId firstChild) {
-            data.buffer[node].firstChild = firstChild;
+            m_data.m_buffer[node].firstChild = firstChild;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void NodeSetFirstChildValueVolatile(NodeId node, NodeId firstChild) {
-            System.Threading.Volatile.Write(ref data.buffer[node].firstChild, firstChild);
+            System.Threading.Volatile.Write(ref m_data.m_buffer[node].firstChild, firstChild);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId NodeGetFirstChildValue(NodeId node) {
-            return data.buffer[node].firstChild;
+            return m_data.m_buffer[node].firstChild;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref NodeId NodeGetFirstChildValueRef(NodeId node) {
-            return ref data.buffer[node].firstChild;
+            return ref m_data.m_buffer[node].firstChild;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public NodeId NodeGetFirstChildValueVolatile(NodeId node) {
-            return System.Threading.Volatile.Read(ref data.buffer[node].firstChild);
+            return System.Threading.Volatile.Read(ref m_data.m_buffer[node].firstChild);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -193,7 +193,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public NodeNavigator GetNodeNavigator() {
-            return new NodeNavigator(this.data.buffer);
+            return new NodeNavigator(this.m_data.m_buffer);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -250,7 +250,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                                     p = t.parent;
                                     // TODO
                                     unchecked {
-                                        --s.count0;
+                                        --s.m_count;
                                     }
                                 }
                             } else {
@@ -320,8 +320,8 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public PreorderNodeInfoEnumerator(Tree<T> tree) {
-                this.data = tree.data.buffer;
-                var count = tree.data.count0;
+                this.data = tree.m_data.m_buffer;
+                var count = tree.m_data.m_count;
                 this.count = count;
                 this.id = count;
                 this.ancestors = Stack<NodeId>.Create();
@@ -356,14 +356,14 @@ namespace UltimateOrb.Plain.ValueTypes {
                             this.id = nx;
                             return true;
                         }
-                        for (var ancestors = this.ancestors; ancestors.count0 > 0;) {
+                        for (var ancestors = this.ancestors; ancestors.m_count > 0;) {
                             if (NilIndex != (id = data[ancestors.Pop()].nextSibling)) {
-                                this.ancestors.count0 = ancestors.count0;
+                                this.ancestors.m_count = ancestors.m_count;
                                 this.id = id;
                                 return true;
                             }
                         }
-                        this.ancestors.count0 = 0;
+                        this.ancestors.m_count = 0;
                         return false;
                     }
                     this.ancestors.Push(id);
@@ -376,7 +376,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {
-                this.ancestors.count0 = 0;
+                this.ancestors.m_count = 0;
                 this.id = RootPreviousIndex;
             }
 
@@ -402,21 +402,21 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(default(MethodImplOptions))]
         public void Collect() {
             var n = RootIndex;
-            if (data.buffer[n].firstChild == NilIndex) {
+            if (m_data.m_buffer[n].firstChild == NilIndex) {
                 return;
             }
             Stack<NodeId> s = Stack<NodeId>.Create();
-            s.Push(data.buffer[n].nextSibling);
+            s.Push(m_data.m_buffer[n].nextSibling);
             var a = 2;
-            for (NodeId ni = data.buffer[n].firstChild; ; ++a) {
+            for (NodeId ni = m_data.m_buffer[n].firstChild; ; ++a) {
                 n = ni;
-                data.buffer[n].forwarding = ~RootIndex;
-                ni = data.buffer[n].firstChild;
+                m_data.m_buffer[n].forwarding = ~RootIndex;
+                ni = m_data.m_buffer[n].firstChild;
                 if (ni != NilIndex) {
-                    s.Push(data.buffer[n].nextSibling);
+                    s.Push(m_data.m_buffer[n].nextSibling);
                     continue;
                 }
-                ni = data.buffer[n].nextSibling;
+                ni = m_data.m_buffer[n].nextSibling;
                 if (ni != NilIndex) {
                     continue;
                 }
@@ -433,43 +433,43 @@ namespace UltimateOrb.Plain.ValueTypes {
             L_CompactS:;
             for (NodeId i = RootIndex + 1, j = a - 1, k = i; j > 0; --j, ++k) {
                 L_2:;
-                if (data.buffer.Length <= i) {
+                if (m_data.m_buffer.Length <= i) {
                     break;
                 }
                 n = ++i;
-                if (data.buffer[n].forwarding == RootIndex) {
+                if (m_data.m_buffer[n].forwarding == RootIndex) {
                     goto L_2;
                 }
-                data.buffer[n].forwarding = k;
+                m_data.m_buffer[n].forwarding = k;
             }
             // L_CompactM:;
             var m = RootIndex;
-            data.buffer[m].firstChild = data.buffer[data.buffer[m].firstChild].forwarding;
+            m_data.m_buffer[m].firstChild = m_data.m_buffer[m_data.m_buffer[m].firstChild].forwarding;
             for (NodeId i = RootIndex + 1, j = a - 1, k = i; j > 0; --j, ++k) {
                 L_3:;
-                if (data.buffer.Length <= i) {
+                if (m_data.m_buffer.Length <= i) {
                     break;
                 }
                 n = ++i;
-                if (data.buffer[n].forwarding == RootIndex) {
+                if (m_data.m_buffer[n].forwarding == RootIndex) {
                     goto L_3;
                 }
                 if (i == k) {
                     continue;
                 }
                 m = k;
-                data.buffer[m].firstChild = data.buffer[data.buffer[n].firstChild].forwarding;
-                data.buffer[m].nextSibling = data.buffer[data.buffer[n].nextSibling].forwarding;
-                data.buffer[m].Value = data.buffer[n].Value;
+                m_data.m_buffer[m].firstChild = m_data.m_buffer[m_data.m_buffer[n].firstChild].forwarding;
+                m_data.m_buffer[m].nextSibling = m_data.m_buffer[m_data.m_buffer[n].nextSibling].forwarding;
+                m_data.m_buffer[m].Value = m_data.m_buffer[n].Value;
             }
-            for (NodeId i = RootIndex + 1, j = a - 1; data.buffer.Length <= i && j > 0;) {
+            for (NodeId i = RootIndex + 1, j = a - 1; m_data.m_buffer.Length <= i && j > 0;) {
                 n = ++i;
-                if (data.buffer[n].forwarding != RootIndex) {
-                    data.buffer[n].forwarding = RootIndex;
+                if (m_data.m_buffer[n].forwarding != RootIndex) {
+                    m_data.m_buffer[n].forwarding = RootIndex;
                     --j;
                 }
             }
-            data.count0 = a;
+            m_data.m_count = a;
         }
     }
 }

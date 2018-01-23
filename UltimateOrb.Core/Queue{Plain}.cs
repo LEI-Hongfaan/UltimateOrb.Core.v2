@@ -10,38 +10,38 @@ namespace UltimateOrb.Plain.ValueTypes {
 
     public partial struct Queue<T> : IEnumerable<T, Queue<T>.Enumerator>, IDeque_2_A1_B1_1<T> {
 
-        public T[] buffer;
+        public T[] m_buffer;
 
-        public int count0;
+        public int m_count;
 
-        public int offset;
+        public int m_offset;
 
-        public int current;
+        public int m_current;
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue(T[] buffer, int count, int offset, int current) {
-            this.buffer = buffer;
-            this.count0 = count;
-            this.offset = offset;
-            this.current = current;
+            this.m_buffer = buffer;
+            this.m_count = count;
+            this.m_offset = offset;
+            this.m_current = current;
         }
 
         private int capacity {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.buffer.Length;
+            get => this.m_buffer.Length;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue(int capacity) {
             if (0 <= capacity) {
-                this.buffer = (capacity > 0 ? Array_Empty<T>.Value : new T[capacity]);
-                this.count0 = 0;
-                this.offset = 0;
-                this.current = -1;
+                this.m_buffer = (capacity > 0 ? Array_Empty<T>.Value : new T[capacity]);
+                this.m_count = 0;
+                this.m_offset = 0;
+                this.m_current = -1;
                 return;
             }
             // TODO
@@ -52,38 +52,38 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Push(T item) {
             var @this = this;
-            if (null != @this.buffer) {
-                var c = @this.count0;
+            if (null != @this.m_buffer) {
+                var c = @this.m_count;
                 checked {
                     ++c;
                 }
                 if (c <= @this.capacity) {
-                    var d = @this.current;
+                    var d = @this.m_current;
                     unchecked {
                         ++d;
                     }
                     if (@this.capacity == d) {
                         d = 0;
                     }
-                    @this.buffer[d] = item;
-                    this.current = d;
-                    this.count0 = c;
+                    @this.m_buffer[d] = item;
+                    this.m_current = d;
+                    this.m_count = c;
                     return;
                 }
                 {
                     @this.EnsureCapacity(c);
-                    var d = @this.current;
+                    var d = @this.m_current;
                     unchecked {
                         ++d;
                     }
                     if (@this.capacity == d) {
                         d = 0;
                     }
-                    @this.buffer[d] = item;
-                    this.buffer = @this.buffer;
-                    this.offset = @this.offset;
-                    this.current = d;
-                    this.count0 = c;
+                    @this.m_buffer[d] = item;
+                    this.m_buffer = @this.m_buffer;
+                    this.m_offset = @this.m_offset;
+                    this.m_current = d;
+                    this.m_count = c;
                     return;
                 }
             }
@@ -93,23 +93,23 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T Pop() {
-            var b = this.buffer;
+            var b = this.m_buffer;
             if (null != b) {
-                var c = this.count0;
+                var c = this.m_count;
                 if (c > 0) {
-                    var d = this.current;
+                    var d = this.m_current;
                     ref var result = ref b[d];
                     unchecked {
                         --c;
                     }
-                    this.count0 = c;
+                    this.m_count = c;
                     if (0 == d) {
                         d = b.Length;
                     }
                     unchecked {
                         --d;
                     }
-                    this.current = d;
+                    this.m_current = d;
                     return result;
                 }
                 throw new InvalidOperationException();
@@ -120,22 +120,22 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void RemoveLast() {
-            var b = this.buffer;
+            var b = this.m_buffer;
             if (null != b) {
-                var c = this.count0;
+                var c = this.m_count;
                 if (c > 0) {
-                    var d = this.current;
+                    var d = this.m_current;
                     unchecked {
                         --c;
                     }
-                    this.count0 = c;
+                    this.m_count = c;
                     if (0 == d) {
                         d = b.Length;
                     }
                     unchecked {
                         --d;
                     }
-                    this.current = d;
+                    this.m_current = d;
                 }
             }
             throw (NullReferenceException)null;
@@ -150,10 +150,10 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T PeekLast() {
-            var b = this.buffer;
+            var b = this.m_buffer;
             if (null != b) {
-                if (this.count0 > 0) {
-                    return ref b[this.current];
+                if (this.m_count > 0) {
+                    return ref b[this.m_current];
                 }
                 throw new InvalidOperationException();
             }
@@ -171,7 +171,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public bool IsEmpty {
 
-            get => this.count0 > 0;
+            get => this.m_count > 0;
         }
 
         public T First {
@@ -190,10 +190,10 @@ namespace UltimateOrb.Plain.ValueTypes {
         public long LongCount => throw new NotImplementedException();
 
         public ref T PeekFirst() {
-            var b = this.buffer;
+            var b = this.m_buffer;
             if (null != b) {
-                if (this.count0 > 0) {
-                    return ref b[this.offset];
+                if (this.m_count > 0) {
+                    return ref b[this.m_offset];
                 }
                 throw new InvalidOperationException();
             }
@@ -205,22 +205,22 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public void RemoveFirst() {
-            var b = this.buffer;
+            var b = this.m_buffer;
             if (null != b) {
-                var c = this.count0;
+                var c = this.m_count;
                 if (c > 0) {
-                    var d = this.offset;
+                    var d = this.m_offset;
                     unchecked {
                         --c;
                     }
-                    this.count0 = c;
+                    this.m_count = c;
                     unchecked {
                         ++d;
                     }
                     if (b.Length == d) {
                         d = 0;
                     }
-                    this.offset = d;
+                    this.m_offset = d;
                 }
             }
             throw (NullReferenceException)null;
@@ -235,23 +235,23 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T Dequeue() {
-            var b = this.buffer;
+            var b = this.m_buffer;
             if (null != b) {
-                var c = this.count0;
+                var c = this.m_count;
                 if (c > 0) {
-                    var d = this.offset;
+                    var d = this.m_offset;
                     ref var result = ref b[d];
                     unchecked {
                         --c;
                     }
-                    this.count0 = c;
+                    this.m_count = c;
                     unchecked {
                         ++d;
                     }
                     if (b.Length == d) {
                         d = 0;
                     }
-                    this.offset = d;
+                    this.m_offset = d;
                     return result;
                 }
             }
@@ -268,38 +268,38 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Unshift(T item) {
             var @this = this;
-            if (null != @this.buffer) {
-                var c = @this.count0;
+            if (null != @this.m_buffer) {
+                var c = @this.m_count;
                 checked {
                     ++c;
                 }
                 if (c <= @this.capacity) {
-                    var d = @this.offset;
+                    var d = @this.m_offset;
                     if (0 == d) {
                         d = @this.capacity;
                     }
                     unchecked {
                         --d;
                     }
-                    @this.buffer[d] = item;
-                    this.offset = d;
-                    this.count0 = c;
+                    @this.m_buffer[d] = item;
+                    this.m_offset = d;
+                    this.m_count = c;
                     return;
                 }
                 {
                     @this.EnsureCapacity(c);
-                    var d = @this.offset;
+                    var d = @this.m_offset;
                     if (0 == d) {
                         d = @this.capacity;
                     }
                     unchecked {
                         --d;
                     }
-                    @this.buffer[d] = item;
-                    this.buffer = @this.buffer;
-                    this.current = @this.current;
-                    this.offset = d;
-                    this.count0 = c;
+                    @this.m_buffer[d] = item;
+                    this.m_buffer = @this.m_buffer;
+                    this.m_current = @this.m_current;
+                    this.m_offset = d;
+                    this.m_count = c;
                     return;
                 }
             }
@@ -309,10 +309,10 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue<T> Select() {
-            var buffer = this.buffer;
-            var count = this.count0;
-            var offset = this.offset;
-            var current = this.current;
+            var buffer = this.m_buffer;
+            var count = this.m_count;
+            var offset = this.m_offset;
+            var current = this.m_current;
             if (null != buffer) {
                 if (count > 0) {
                     var new_buffer = new T[count];
@@ -333,10 +333,10 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Queue<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
-            var buffer = this.buffer;
-            var count = this.count0;
-            var offset = this.offset;
-            var current = this.current;
+            var buffer = this.m_buffer;
+            var count = this.m_count;
+            var offset = this.m_offset;
+            var current = this.m_current;
             if (null != buffer) {
                 if (count > 0) {
                     var new_buffer = new TResult[count];
@@ -367,10 +367,10 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T[] ToArray() {
-            var buffer = this.buffer;
-            var count = this.count0;
-            var offset = this.offset;
-            var current = this.current;
+            var buffer = this.m_buffer;
+            var count = this.m_count;
+            var offset = this.m_offset;
+            var current = this.m_current;
             if (null != buffer) {
                 if (count > 0) {
                     var result = new T[count];
@@ -391,10 +391,10 @@ namespace UltimateOrb.Plain.ValueTypes {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public TResult[] ToArray<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
-            var buffer = this.buffer;
-            var count = this.count0;
-            var offset = this.offset;
-            var current = this.current;
+            var buffer = this.m_buffer;
+            var count = this.m_count;
+            var offset = this.m_offset;
+            var current = this.m_current;
             if (null != buffer) {
                 if (count > 0) {
                     var result = new TResult[count];
@@ -424,7 +424,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         public void EnsureCapacity(int min) {
-            var buffer = this.buffer;
+            var buffer = this.m_buffer;
             var buffer_Length = buffer.Length;
             if (min > buffer_Length) {
                 var new_capacity = buffer_Length == 0 ? List.default_capacity : unchecked(buffer_Length * 2);
@@ -435,10 +435,10 @@ namespace UltimateOrb.Plain.ValueTypes {
                     new_capacity = min;
                 }
                 var d = new T[new_capacity];
-                var c = this.count0;
+                var c = this.m_count;
                 if (c > 0) {
-                    var s = this.offset;
-                    var t = this.current;
+                    var s = this.m_offset;
+                    var t = this.m_current;
                     if (t < s) {
                         var a = unchecked(1 + t);
                         var b = unchecked(c - a);
@@ -447,12 +447,12 @@ namespace UltimateOrb.Plain.ValueTypes {
                     } else {
                         Array.Copy(buffer, s, d, 0, c);
                     }
-                    this.current = unchecked(c - 1);
+                    this.m_current = unchecked(c - 1);
                 } else {
-                    this.current = unchecked(new_capacity - 1);
+                    this.m_current = unchecked(new_capacity - 1);
                 }
-                this.offset = 0;
-                this.buffer = d;
+                this.m_offset = 0;
+                this.m_buffer = d;
             }
         }
 
@@ -460,7 +460,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Enumerator GetEnumerator() {
             var @this = this;
-            if (null != @this.buffer) { // null check
+            if (null != @this.m_buffer) { // null check
                 return new Enumerator(@this);
             }
             {

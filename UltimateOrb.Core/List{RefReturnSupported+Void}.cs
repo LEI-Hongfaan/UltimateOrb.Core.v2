@@ -216,7 +216,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         }
 
         [SerializableAttribute()]
-        public partial struct Enumerator : IEnumerator<Void> {
+        public partial struct Enumerator : IEnumerator<Void>, IReadOnlyEnumerator<Void> {
 
             private List list;
 
@@ -252,6 +252,15 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 get {
                     return default(Void);
+                }
+            }
+
+            ref readonly Void IReadOnlyEnumerator<Void>.Current {
+
+                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get {
+                    return ref @void;
                 }
             }
 

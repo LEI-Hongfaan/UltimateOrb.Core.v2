@@ -17,8 +17,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public Enumerator(Stack<T> collection) {
-                this.buffer = collection.buffer;
-                var count = collection.count0;
+                this.buffer = collection.m_buffer;
+                var count = collection.m_count;
                 this.count = count;
                 this.index = count;
             }

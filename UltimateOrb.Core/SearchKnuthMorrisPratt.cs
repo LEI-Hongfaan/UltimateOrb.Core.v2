@@ -163,7 +163,7 @@ namespace UltimateOrb {
             }
         }
 
-        public static IntT IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer, TAllocator>(TListSource source, IntT source_start, IntT source_count, TListPattern pattern, IntT pattern_start, IntT pattern_count, TEqualityComparer equalityComparer, TAllocator allocator)
+        public static IntT IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer, TAllocator>(this TListSource source, IntT source_start, IntT source_count, TListPattern pattern, IntT pattern_start, IntT pattern_count, TEqualityComparer equalityComparer, TAllocator allocator)
             where TListSource : IReadOnlyList<T>
             where TListPattern : IReadOnlyList<T>
             where TEqualityComparer : IO.IFunc<T, T, bool>
@@ -179,7 +179,7 @@ namespace UltimateOrb {
             }
         }
 
-        public static IntT IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer, TAllocator>(TListSource source, TListPattern pattern, TEqualityComparer equalityComparer, TAllocator allocator)
+        public static IntT IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer, TAllocator>(this TListSource source, TListPattern pattern, TEqualityComparer equalityComparer, TAllocator allocator)
             where TListSource : IReadOnlyList<T>
             where TListPattern : IReadOnlyList<T>
             where TEqualityComparer : IO.IFunc<T, T, bool>
@@ -192,7 +192,7 @@ namespace UltimateOrb {
             throw new ArgumentNullException();
         }
 
-        public static IntT IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer>(TListSource source, TListPattern pattern, TEqualityComparer equalityComparer)
+        public static IntT IndexOf_A_KnuthMorrisPratt<T, TListSource, TListPattern, TEqualityComparer>(this TListSource source, TListPattern pattern, TEqualityComparer equalityComparer)
             where TListSource : IReadOnlyList<T>
             where TListPattern : IReadOnlyList<T>
             where TEqualityComparer : IO.IFunc<T, T, bool> {

@@ -7,7 +7,7 @@ namespace UltimateOrb.Collections.Generic {
 
     public partial interface IStrongBox<T> {
 
-        new T Value {
+        T Value {
 
             get;
 

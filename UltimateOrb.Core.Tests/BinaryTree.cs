@@ -1,9 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace UltimateOrb.Core.Tests {
+    using IntT = Int32;
+    using UIntT = UInt32;
 
     public static partial class BinaryTreeModule {
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static BinaryTree<TResult>.Tree Select<TSource, TResult>(this BinaryTree<TSource>.Tree source, Func<TSource, IntT, TResult> selector) {
+            if (null != source) {
+                ref var node = ref source.Value.root;
+                ref var result_node = ref Create(selector.Invoke(node.value, -1)).root;
+                if (null != node.left_child) {
+                    Select(ref node.left_child.Value, selector, 0, ref result_node);
+                }
+                if (null != node.right_child) {
+                    Select(ref node.left_child.Value, selector, 1, ref result_node);
+                }
+                return result_node.tree;
+            }
+            // TODO
+            throw new ArgumentNullException();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void Select<TSource, TResult>(ref this BinaryTree<TSource>.NodeStruct source, Func<TSource, IntT, TResult> selector, IntT index, ref BinaryTree<TResult>.NodeStruct parent) {
+            var result = new BinaryTree<TResult>.Node(selector.Invoke(source.value, index), parent.tree, null, null);
+            if (0 == index) {
+                parent.left_child = result;
+            } else if (1 == index) {
+                parent.right_child = result;
+            }
+            if (null != source.left_child) {
+                Select(ref source.left_child.Value, selector, 0, ref result.Value);
+            }
+            if (null != source.right_child) {
+                Select(ref source.right_child.Value, selector, 1, ref result.Value);
+            }
+        }
+        
+
+
+
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static string ToString<T>(this BinaryTree<T>.Tree tree) {

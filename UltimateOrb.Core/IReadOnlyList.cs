@@ -26,7 +26,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
     public partial interface IReadOnlyList<T, out TEnumerator>
         : Generic.IReadOnlyList<T, TEnumerator>, IReadOnlyCollection<T, TEnumerator>
-        where TEnumerator : IEnumerator<T> {
+        where TEnumerator : IReadOnlyEnumerator<T> {
 
         new ref readonly T this[int index] {
 
@@ -42,7 +42,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
     using global::System.Runtime.CompilerServices;
 
     public static partial class TReadOnlyList<T, TEnumerator>
-        where TEnumerator : IEnumerator<T> {
+        where TEnumerator : IReadOnlyEnumerator<T> {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable IDE1006 // Naming Styles

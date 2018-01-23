@@ -1224,7 +1224,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         }
 
         [SerializableAttribute()]
-        public partial struct Enumerator : IEnumerator<T> {
+        public partial struct Enumerator : IEnumerator<T>, IReadOnlyEnumerator<T> {
 
             private List<T> list;
 
@@ -1264,6 +1264,15 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             }
 
             ref T IEnumerator<T>.Current {
+
+                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get {
+                    return ref this.list.buffer[this.index];
+                }
+            }
+
+            ref readonly T IReadOnlyEnumerator<T>.Current {
 
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
