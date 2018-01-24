@@ -20,8 +20,8 @@ namespace UltimateOrb.Core.Tests {
 
     public static partial class AAAf {
 
-        public static BclStringAsIReadOnlyList AsIReadOnlyList(this string str) {
-            return new BclStringAsIReadOnlyList(str);
+        public static BclStringAsReadOnlyList AsIReadOnlyList(this string str) {
+            return new BclStringAsReadOnlyList(str);
         }
 
         public partial interface IAsEnumerable<out T, TEnumerable, out TEnumerator>
@@ -1583,7 +1583,7 @@ namespace UltimateOrb.Core.Tests {
             var a1 = a.AsIReadOnlyList();
             var b1 = b.AsIReadOnlyList();
             try {
-                r1 = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, BclStringAsIReadOnlyList, BclStringAsIReadOnlyList, Asadf>(a1, b1, DefaultConstructor.Invoke<Asadf>());
+                r1 = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, BclStringAsReadOnlyList, BclStringAsReadOnlyList, Asadf>(a1, b1, DefaultConstructor.Invoke<Asadf>());
             } catch (Exception) {
             }
             return r0 == r1;
@@ -1638,6 +1638,90 @@ namespace UltimateOrb.Core.Tests {
         }
 
 
+        public partial struct VoidValuedSelector<T> : IO.IFunc<T, Void> {
+
+            public Void Invoke(T arg) {
+                return default;
+            }
+        }
+
+        public partial struct DefaultValuedSelector<T, TResult> : IO.IFunc<T, TResult> {
+
+            public TResult Invoke(T arg) {
+                return default;
+            }
+        }
+
+        public partial struct DefaultConstructedValuedSelector<T, TResult>
+            : IO.IFunc<T, TResult>
+            where TResult : new() {
+
+            public TResult Invoke(T arg) {
+                return DefaultConstructor.Invoke<TResult>();
+            }
+        }
+
+        public partial struct affasdfasdf : ITuple<int, int, int, int, Graph<affasdfasdf, Void>.NodeNextNodeIdEnumerator, int> {
+
+            int item1;
+
+            int item2;
+
+            int item3;
+
+            int item4;
+
+            Graph<affasdfasdf, Void>.NodeNextNodeIdEnumerator item5;
+
+            int item6;
+
+            public int Item1 {
+
+                get => this.item1;
+
+                set => this.item1 = value;
+            }
+            public int Item2 {
+
+                get => this.item2;
+
+                set => this.item2 = value;
+            }
+
+            public int Item3 {
+
+                get => this.item3;
+
+                set => this.item3 = value;
+            }
+
+            public int Item4 {
+
+                get => this.item4;
+
+                set => this.item4 = value;
+            }
+
+            public Graph<affasdfasdf, Void>.NodeNextNodeIdEnumerator Item5 {
+
+                get => this.item5;
+
+                set => this.item5 = value;
+            }
+
+            public int Item6 {
+
+                get => this.item6;
+
+                set => this.item6 = value;
+            }
+
+            public int Length {
+
+                get => 6;
+            }
+        }
+        
         private static int Main(string[] args) {
             {
                 var rrr = GetRandom();
@@ -1695,6 +1779,12 @@ namespace UltimateOrb.Core.Tests {
 
                 System.IO.File.WriteAllText("ttt233.dgml", sdfsas, enc);
 
+                /*
+                var g1 = g.Select<affasdfasdf, Void, DefaultValuedSelector<ulong, affasdfasdf>, VoidValuedSelector<double>>(DefaultConstructor.Invoke<DefaultValuedSelector<ulong, affasdfasdf>>(), DefaultConstructor.Invoke<VoidValuedSelector<double>>());
+
+                GraphModule.aaaa(ref g1);
+                */
+                // affasdfasdf e = default;
                 Console.WriteLine(sdfsas);
                 Console.ReadKey(true);
                 return 0;

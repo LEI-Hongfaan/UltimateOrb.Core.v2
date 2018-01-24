@@ -9,6 +9,7 @@ namespace UltimateOrb.Core.Tests {
     using LinkIdSourceNodeLocal = Int32;
 
     using LinkId = Int64;
+    using System.Collections;
 
     public interface ITupleBase {
 
@@ -83,6 +84,79 @@ namespace UltimateOrb.Core.Tests {
         }
     }
 
+    public interface ITuple<T1, T2, T3, T4, T5> : ITupleBase {
+
+        ref T1 Item1 {
+
+            get;
+        }
+
+        ref T2 Item2 {
+
+            get;
+        }
+
+        ref T3 Item3 {
+
+            get;
+        }
+
+        ref T4 Item4 {
+
+            get;
+        }
+
+        ref T5 Item5 {
+
+            get;
+        }
+    }
+
+    public interface ITuple<T1, T2, T3, T4, T5, T6> : ITupleBase {
+
+        T1 Item1 {
+
+            get;
+
+            set;
+        }
+
+        T2 Item2 {
+
+            get;
+
+            set;
+        }
+
+        T3 Item3 {
+
+            get;
+
+            set;
+        }
+
+        T4 Item4 {
+
+            get;
+
+            set;
+        }
+
+        T5 Item5 {
+
+            get;
+
+            set;
+        }
+
+        T6 Item6 {
+
+            get;
+
+            set;
+        }
+    }
+
     public interface IReadOnlyTupleBase : ITupleBase {
     }
 
@@ -112,56 +186,317 @@ namespace UltimateOrb.Core.Tests {
 
     public static partial class GraphModule {
 
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static bool StackMainContains<TNodeValue, TLinkValue>(in (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            return 0 != (1 & node.NodeValue.Item6);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void StackMainSetContains<TNodeValue, TLinkValue>(ref (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            node.NodeValue.Item6 |= 1;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void StackMainResetContains<TNodeValue, TLinkValue>(ref (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            node.NodeValue.Item6 &= ~(int)1;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static bool StackEvalAState1<TNodeValue, TLinkValue>(in (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            return 0 != (2 & node.NodeValue.Item6);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void StackEvalASetState1<TNodeValue, TLinkValue>(ref (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            node.NodeValue.Item6 |= 2;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void StackEvalAResetState1<TNodeValue, TLinkValue>(ref (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            node.NodeValue.Item6 &= ~(int)2;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static bool IsVisited<TNodeValue, TLinkValue>(in (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            return node.NodeValue.Item1 > 0;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static NodeId GetDfnValue<TNodeValue, TLinkValue>(ref this (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            return node.NodeValue.Item1;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static NodeId GetLLkValue<TNodeValue, TLinkValue>(ref this (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            return node.NodeValue.Item2;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void SetDfnValue<TNodeValue, TLinkValue>(ref this (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node, NodeId value)
+           where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            node.NodeValue.Item1 = value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void SetLLkValue<TNodeValue, TLinkValue>(ref this (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) node, NodeId value)
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
+            node.NodeValue.Item2 = value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void aaaa<TNodeValue, TLinkValue>(ref this Graph<TNodeValue, TLinkValue> @this)
-            where TNodeValue : ITuple<NodeId, NodeId, NodeId, int> {
-            throw new NotImplementedException();
+            where TNodeValue : ITuple<NodeId, NodeId, NodeId, NodeId, Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator, int> {
             var g = @this;
             var c = g.Data.m_count;
-            var j = 0;
+            var j0 = 0; // count of stack 0 (main)
+            var j1 = 0; // count of stack 1 (eval a)
             var d = 0;
-            for (var i = 0; c > i; ++i) {
-
-                var k = i;
-                L_a:
-                ref var n = ref g.Data.m_buffer[k];
-                ++d;
-                n.NodeValue.Item1 = d;
-                n.NodeValue.Item2 = d;
-
-                n.NodeValue.Item4 = 1;
-                g.Data.m_buffer[j++].NodeValue.Item3 = k;
-
-
-                var ld = n.LinkData;
-                var ii = 0;
-                for (; ld.m_count > ii; ++ii) {
-                    var t = ld.m_buffer[ii].Target;
-                    if (g.Data.m_buffer[t].NodeValue.Item1 > 0) {
-                        if (g.Data.m_buffer[t].NodeValue.Item4 > 0) {
-                            n.NodeValue.Item2 = Math.Min(n.NodeValue.Item2, g.Data.m_buffer[t].NodeValue.Item1);
+            {
+                var en0 = g.GetNodeIdEnumerator();
+                for (; en0.MoveNext();) {
+                    var i0 = en0.Current;
+                    ref var n0 = ref g.GetNodeInternalData(i0);
+                    if (IsVisited(n0)) {
+                        continue;
+                    }
+                    var i1 = i0;
+                    L_1:
+                    {
+                        ref var n1 = ref g.GetNodeInternalData(i1);
+                        Graph<TNodeValue, TLinkValue>.NodeNextNodeIdEnumerator en2;
+                        if (StackEvalAState1(g.Data.m_buffer[j1])) {
+                            en2 = g.Data.m_buffer[j1].NodeValue.Item5;
+                            goto L_5;
                         }
-                    } else {
-                        k = t;
-                        goto L_a;
+                        ++d; // d > 0;
+                        SetDfnValue(ref n1,d); // dfn value
+                        SetLLkValue(ref n1,d); // llk value
+                        g.Data.m_buffer[j0++].NodeValue.Item3 = i1; // stack 0 push NodeId of current node n1
+                        StackMainSetContains(ref n1);
+                        en2 = g.GetNodeNextNodeIdEnumerator(i1);
+                        L_4:
+                        if (!en2.MoveNext()) {
+                            goto L_3;
+                        }
+                        L_5:
+                        var i2 = en2.Current;
+                        ref var n2 = ref g.GetNodeInternalData(i2);
+                        if (StackEvalAState1(g.Data.m_buffer[j1])) {
+                            SetLLkValue(ref n1, Math.Min(GetLLkValue(ref n1), GetLLkValue(ref n2)));
+                        }
+                        if (IsVisited(n2)) {
+                            if (StackMainContains(n2)) {
+                                SetLLkValue(ref n1, Math.Min(GetLLkValue(ref n1), GetDfnValue(ref n2)));
+                            }
+                        } else {
+                            g.Data.m_buffer[j1].NodeValue.Item4 = i1;
+                            g.Data.m_buffer[j1].NodeValue.Item5 = en2;
+                            StackEvalASetState1(ref g.Data.m_buffer[j1]);
+                            {
+                                ++j1;
+                            }
+                            i1 = i2;
+                            goto L_1;
+                        }
+                        goto L_4;
+                        L_3:
+                        en2.Dispose();
+                        if (GetDfnValue(ref n1) == GetLLkValue(ref n1)) { // dfn value == llk value
+                            for (; ; ) {
+                                {
+                                    --j0; // pop NodeId from stack 0
+                                }
+                                // operating the stack 0 popped Node object
+                                StackMainResetContains(ref n1);
+                                var h = g.Data.m_buffer[j0].NodeValue.Item3; // h <- NodeId of the Node
+                                if (i1 == h) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    {
+                        --j1; // pop NodeId from stack 1
+                    }
+                    if (0 <= j1) {
+                        i1 = g.Data.m_buffer[j1].NodeValue.Item4;
+                        goto L_1;
                     }
                 }
-
-                if (n.NodeValue.Item1 == n.NodeValue.Item1) {
-                    /*
-                    do {
-                        g.Data.m_buffer[--j].NodeValue.Item4 = 1;
-
-                    } while (k!= );
-                    */
-                }
+                en0.Dispose();
             }
-
         }
     }
 
     public partial struct Graph<TNodeValue, TLinkValue> {
 
-        public Plain.ValueTypes.Stack<(Plain.ValueTypes.Stack<(TLinkValue LinkValue, int Target)> LinkData, TNodeValue NodeValue)> Data;
+        public partial struct NodeIdEnumerator : System.Collections.Generic.IEnumerator<NodeId> {
+
+            public NodeId m_current;
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public NodeIdEnumerator(NodeId current) {
+                this.m_current = current;
+            }
+
+            public NodeId Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => this.m_current;
+            }
+
+            object IEnumerator.Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => this.m_current;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public void Dispose() {
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public bool MoveNext() {
+                var i = this.m_current;
+                unchecked {
+                    --i;
+                }
+                if (0 <= i) {
+                    this.m_current = i;
+                    return true;
+                }
+                this.m_current = -1;
+                return false;
+            }
+
+            public void Reset() {
+                throw new NotSupportedException();
+            }
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public NodeIdEnumerator GetNodeIdEnumerator() {
+            return new NodeIdEnumerator(checked((NodeId)this.Data.Count));
+        }
+
+        // TODO: API Rev
+        public partial struct SourceNodeLocalLinkIdEnumerator : System.Collections.Generic.IEnumerator<LinkIdSourceNodeLocal> {
+
+            public LinkIdSourceNodeLocal m_current;
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public SourceNodeLocalLinkIdEnumerator(LinkIdSourceNodeLocal current) {
+                this.m_current = current;
+            }
+
+            public LinkIdSourceNodeLocal Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => this.m_current;
+            }
+
+            object IEnumerator.Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => this.m_current;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public void Dispose() {
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public bool MoveNext() {
+                var i = this.m_current;
+                unchecked {
+                    --i;
+                }
+                if (0 <= i) {
+                    this.m_current = i;
+                    return true;
+                }
+                this.m_current = -1;
+                return false;
+            }
+
+            public void Reset() {
+                throw new NotSupportedException();
+            }
+        }
+
+        public partial struct NodeNextNodeIdEnumerator : Collections.Generic.RefReturnSupported.IEnumerator<NodeId>, Collections.Generic.RefReturnSupported.IReadOnlyEnumerator<NodeId> {
+
+            public readonly (TLinkValue LinkValue, NodeId Target)[] m_buffer;
+            public LinkIdSourceNodeLocal m_current;
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public NodeNextNodeIdEnumerator((TLinkValue LinkValue, NodeId Target)[] buffer, LinkIdSourceNodeLocal current) {
+                this.m_buffer = buffer;
+                this.m_current = current;
+            }
+
+            public ref NodeId Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => ref this.m_buffer[this.m_current].Target;
+            }
+
+            NodeId System.Collections.Generic.IEnumerator<NodeId>.Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => this.m_buffer[this.m_current].Target;
+            }
+
+            ref readonly NodeId Collections.Generic.RefReturnSupported.IReadOnlyEnumerator<NodeId>.Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => ref this.m_buffer[this.m_current].Target;
+            }
+
+            object IEnumerator.Current {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => this.m_buffer[this.m_current].Target;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public void Dispose() {
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public bool MoveNext() {
+                var i = this.m_current;
+                unchecked {
+                    --i;
+                }
+                if (0 <= i) {
+                    this.m_current = i;
+                    return true;
+                }
+                this.m_current = -1;
+                return false;
+            }
+
+            public void Reset() {
+                throw new NotSupportedException();
+            }
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public NodeNextNodeIdEnumerator GetNodeNextNodeIdEnumerator(NodeId node) {
+            return new NodeNextNodeIdEnumerator(this.Data.m_buffer[node].LinkData.m_buffer, this.Data.m_buffer[node].LinkData.m_count);
+        }
+
+        public Plain.ValueTypes.Stack<(Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue)> Data;
 
         public partial struct DataSelector<TNodeValueResult, TLinkValueResult, TNodeValueSelector, TLinkValueSelector>
             : IO.IFunc<(Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue), (Plain.ValueTypes.Stack<(TLinkValueResult LinkValue, NodeId Target)> LinkData, TNodeValueResult NodeValue)>
@@ -205,6 +540,11 @@ namespace UltimateOrb.Core.Tests {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public Graph(Plain.ValueTypes.Stack<(Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue)> data) {
             this.Data = data;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public ref (Plain.ValueTypes.Stack<(TLinkValue LinkValue, NodeId Target)> LinkData, TNodeValue NodeValue) GetNodeInternalData(NodeId node) {
+            return ref this.Data.m_buffer[node];
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

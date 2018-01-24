@@ -1,41 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 
 namespace UltimateOrb.Collections.Generic {
     using UltimateOrb;
-    
-    public partial struct BclListAsIList<T>
+
+    [SerializableAttribute()]
+    public partial struct BclListAsList<T>
         : IList<T, System.Collections.Generic.List<T>.Enumerator>, IReadOnlyList<T, System.Collections.Generic.List<T>.Enumerator> {
 
-        private readonly System.Collections.Generic.List<T> value;
+        private readonly System.Collections.Generic.List<T> m_value;
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public BclListAsIList(System.Collections.Generic.List<T> value) {
-            this.value = value;
+        public BclListAsList(System.Collections.Generic.List<T> value) {
+            this.m_value = value;
         }
 
         public T this[int index] {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.value[index];
+            get => this.m_value[index];
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            set => this.value[index] = value;
+            set => this.m_value[index] = value;
         }
 
         public int Count {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.value.Count;
+            get => this.m_value.Count;
         }
 
         public long LongCount {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.value.Count;
+            get => this.m_value.Count;
         }
 
         private static partial class Private {
@@ -52,22 +55,22 @@ namespace UltimateOrb.Collections.Generic {
         public bool IsReadOnly {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => Private.TCollection.get_IsReadOnly(this.value);
+            get => Private.TCollection.get_IsReadOnly(this.m_value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Add(T item) {
-            this.value.Add(item);
+            this.m_value.Add(item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Clear() {
-            this.value.Clear();
+            this.m_value.Clear();
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool Contains(T item) {
-            return this.value.Contains(item);
+            return this.m_value.Contains(item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -77,32 +80,32 @@ namespace UltimateOrb.Collections.Generic {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void CopyTo(T[] array, int arrayIndex) {
-            this.value.CopyTo(array, arrayIndex);
+            this.m_value.CopyTo(array, arrayIndex);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-            return this.value.GetEnumerator();
+            return this.m_value.GetEnumerator();
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         IEnumerator<T> IEnumerable<T>.GetEnumerator() {
-            return this.value.GetEnumerator();
+            return this.m_value.GetEnumerator();
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public System.Collections.Generic.List<T>.Enumerator GetEnumerator() {
-            return this.value.GetEnumerator();
+            return this.m_value.GetEnumerator();
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public int IndexOf(T item) {
-            return this.value.IndexOf(item);
+            return this.m_value.IndexOf(item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public int IndexOf<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
-            return this.value.FindIndex(new EqualityPredicate<T, TEqualityComparer>(comparer, item).Invoke);
+            return this.m_value.FindIndex(new EqualityPredicate<T, TEqualityComparer>(comparer, item).Invoke);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -112,19 +115,19 @@ namespace UltimateOrb.Collections.Generic {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Insert(int index, T item) {
-            this.value.Insert(index, item);
+            this.m_value.Insert(index, item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool Remove(T item) {
-            return this.value.Remove(item);
+            return this.m_value.Remove(item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public bool Remove<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
             var index = this.IndexOf(comparer, item);
             if (0 <= index) {
-                this.value.RemoveAt(index);
+                this.m_value.RemoveAt(index);
                 return true;
             }
             return false;
@@ -137,17 +140,19 @@ namespace UltimateOrb.Collections.Generic {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void RemoveAt(int index) {
-            this.value.RemoveAt(index);
+            this.m_value.RemoveAt(index);
         }
     }
 
     [DiscardableAttribute()]
     public static partial class BclListModule {
 
+        [TargetedPatchingOptOutAttribute("")]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static BclListAsIList<T> AsIList<T>(this System.Collections.Generic.List<T> @this) {
-            return new BclListAsIList<T>(@this);
+        [PureAttribute()]
+        public static BclListAsList<T> AsList<T>(this System.Collections.Generic.List<T> @this) {
+            return new BclListAsList<T>(@this);
         }
     }
 }
