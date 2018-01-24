@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace UltimateOrb.Core.Tests {
+namespace UltimateOrb {
 
-    public partial struct StringRawEqualityComparer : SequenceSearchModule.ISequenceEqualityComparerWithRollingHash<char, StringRawEqualityComparer.HashCodeBuilder> {
+    public partial struct StringOrdinalEqualityComparer : SequenceSearchModule.ISequenceEqualityComparerWithRollingHash<char, StringOrdinalEqualityComparer.HashCodeBuilder> {
 
         public HashCodeBuilder CreateHashCodeBuilder<TList>(TList source, int start, int count) where TList : IReadOnlyList<char> {
             return HashCodeBuilder.Create(source, start, count);

@@ -1637,14 +1637,6 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
-
-        public partial struct VoidValuedSelector<T> : IO.IFunc<T, Void> {
-
-            public Void Invoke(T arg) {
-                return default;
-            }
-        }
-
         public partial struct DefaultValuedSelector<T, TResult> : IO.IFunc<T, TResult> {
 
             public TResult Invoke(T arg) {
@@ -1721,8 +1713,95 @@ namespace UltimateOrb.Core.Tests {
                 get => 6;
             }
         }
-        
+
+
+        public static partial class MultiplyChecked {
+
+            public readonly partial struct Functor<T> : IO.IFunc<T, T, T> {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                public T Invoke(T arg1, T arg2) {
+                    return Typed<T>.Value(arg1, arg2);
+                }
+            }
+
+            public static partial class Typed<T> {
+
+                private static readonly Func<T, T, T> m_value = GetValue();
+
+                public static Func<T, T, T> Value {
+
+                    [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                    get => m_value;
+                }
+
+                private static Func<T, T, T> GetValue() {
+                    var a = typeof(T).TypeHandle;
+                    var b = typeof(int).TypeHandle;
+                    var result = (Func<T, T, T>)null;
+                    if (a.Equals(b)) {
+                        result = (Func<int, int, int>)((x, y) => checked(x * y)) as Func<T, T, T>;
+                    }
+                    if (null != result) {
+                        return result;
+                    }
+                    throw new NotSupportedException();
+                    switch (Type.GetTypeCode(typeof(T))) {
+                    case TypeCode.Boolean:
+                        break;
+                    case TypeCode.Byte:
+                        break;
+                    case TypeCode.Char:
+                        break;
+                    case TypeCode.DateTime:
+                        break;
+                    case TypeCode.DBNull:
+                        break;
+                    case TypeCode.Decimal:
+                        break;
+                    case TypeCode.Double:
+                        break;
+                    case TypeCode.Empty:
+                        break;
+                    case TypeCode.Int16:
+                        break;
+                    case TypeCode.Int32:
+                        break;
+                    case TypeCode.Int64:
+                        break;
+                    case TypeCode.Object:
+                        break;
+                    case TypeCode.SByte:
+                        break;
+                    case TypeCode.Single:
+                        break;
+                    case TypeCode.String:
+                        break;
+                    case TypeCode.UInt16:
+                        break;
+                    case TypeCode.UInt32:
+                        break;
+                    case TypeCode.UInt64:
+                        break;
+                    default:
+                        break;
+                    }
+
+                }
+            }
+        }
+
         private static int Main(string[] args) {
+            {
+                MultiplyChecked.Functor<int> a;
+                var d = IO.TFunc<int, int, int>.Invoke(a, 7, 11);
+                var c = MultiplyChecked.Typed<int>.Value(7, 11);
+                Console.WriteLine(d);
+                Console.WriteLine(c);
+                Console.ReadKey(true);
+                return 0;
+
+            }
             {
                 var rrr = GetRandom();
                 var a = new Collections.Generic.RefReturnSupported.List<int>(0);
@@ -2033,8 +2112,8 @@ namespace UltimateOrb.Core.Tests {
             {
                 var source = "abc abab bbda bd bb🌍a  ba badba dbad db a dcadb bad bab adb b🌍cdab d bda　🌍 dsf 地球人好壞 b da b b🌍a a".ToCharArray();
                 var pattern = " b b🌍a".ToCharArray();
-                Console.Out.WriteLine(DefaultConstructor.Invoke<StringRawEqualityComparer>().GetHashCode(pattern, 0, pattern.Length));
-                var hash = DefaultConstructor.Invoke<StringRawEqualityComparer>().CreateHashCodeBuilder(pattern, 0, pattern.Length);
+                Console.Out.WriteLine(DefaultConstructor.Invoke<StringOrdinalEqualityComparer>().GetHashCode(pattern, 0, pattern.Length));
+                var hash = DefaultConstructor.Invoke<StringOrdinalEqualityComparer>().CreateHashCodeBuilder(pattern, 0, pattern.Length);
 
                 Console.Out.WriteLine(hash.GetCurrentHashCode());
                 hash.Shift(' ', ' ');
@@ -2044,7 +2123,7 @@ namespace UltimateOrb.Core.Tests {
                 hash.Shift('a', 'a');
                 Console.Out.WriteLine(hash.GetCurrentHashCode());
 
-                var c = SequenceSearchModule.IndexOf_A_RabinKarp<char, char[], char[], StringRawEqualityComparer.HashCodeBuilder, StringRawEqualityComparer>(source, pattern, DefaultConstructor.Invoke<StringRawEqualityComparer>());
+                var c = SequenceSearchModule.IndexOf_A_RabinKarp<char, char[], char[], StringOrdinalEqualityComparer.HashCodeBuilder, StringOrdinalEqualityComparer>(source, pattern, DefaultConstructor.Invoke<StringOrdinalEqualityComparer>());
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(c);
                 Console.Out.WriteLine(new string(source.Skip(c).Take(pattern.Length).ToArray()));

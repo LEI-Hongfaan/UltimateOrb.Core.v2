@@ -30,7 +30,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             return $@"{{Count = {this.Count}}}";
         }
 
-        public struct PostorderNodeEnumerable : IEnumerable<Node, PostorderNodeEnumerator> {
+        public readonly struct PostorderNodeEnumerable : IEnumerable<Node, PostorderNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -51,7 +51,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public struct PreorderReversedNodeEnumerable : IEnumerable<Node, PreorderReversedNodeEnumerator> {
+        public readonly struct PreorderReversedNodeEnumerable : IEnumerable<Node, PreorderReversedNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -72,7 +72,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public struct PreorderNodeEnumerable : IEnumerable<Node, PreorderNodeEnumerator> {
+        public readonly struct PreorderNodeEnumerable : IEnumerable<Node, PreorderNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -93,7 +93,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public struct BreadthFirstNodeEnumerable : IEnumerable<Node, BreadthFirstNodeEnumerator> {
+        public readonly struct BreadthFirstNodeEnumerable : IEnumerable<Node, BreadthFirstNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -114,7 +114,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public struct PostorderEnumerable : IEnumerable<T, PostorderEnumerator> {
+        public readonly struct PostorderEnumerable : IEnumerable<T, PostorderEnumerator> {
+
             internal readonly LinkedTree<T> tree;
 
             internal PostorderEnumerable(LinkedTree<T> tree) {
@@ -134,7 +135,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public struct PreorderReversedEnumerable : IEnumerable<T, PreorderReversedEnumerator> {
+        public readonly struct PreorderReversedEnumerable : IEnumerable<T, PreorderReversedEnumerator> {
+
             internal readonly LinkedTree<T> tree;
 
             internal PreorderReversedEnumerable(LinkedTree<T> tree) {
@@ -155,7 +157,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
         }
 
 
-        public struct PreorderNodeModifiableEnumerable : IEnumerable<Node, PreorderNodeModifiableEnumerator> {
+        public readonly struct PreorderNodeModifiableEnumerable : IEnumerable<Node, PreorderNodeModifiableEnumerator> {
+
             internal readonly LinkedTree<T> tree;
 
             internal PreorderNodeModifiableEnumerable(LinkedTree<T> tree) {
@@ -175,7 +178,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public struct PreorderEnumerable : IEnumerable<T, PreorderEnumerator> {
+        public readonly struct PreorderEnumerable : IEnumerable<T, PreorderEnumerator> {
+
             internal readonly LinkedTree<T> tree;
 
             internal PreorderEnumerable(LinkedTree<T> tree) {
@@ -195,8 +199,9 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public struct DepthFirstEnumerable : IEnumerable<T> {
-            internal LinkedTree<T> tree;
+        public readonly struct DepthFirstEnumerable : IEnumerable<T> {
+
+            internal readonly LinkedTree<T> tree;
 
             internal DepthFirstEnumerable(LinkedTree<T> tree) {
                 this.tree = tree;
@@ -233,7 +238,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public struct BreadthFirstEnumerable : IEnumerable<T, BreadthFirstEnumerator> {
+        public readonly struct BreadthFirstEnumerable : IEnumerable<T, BreadthFirstEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -255,6 +260,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
         }
 
         public struct PostorderNodeEnumerator : IEnumerator<Node> {
+
             internal Node node;
 
             public PostorderNodeEnumerator(LinkedTree<T> tree) {
@@ -1939,7 +1945,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 return new ChildrenEnumerator(this);
             }
 
-            public struct ChildrenEnumerable : IEnumerable<Node, ChildrenEnumerator> {
+            public readonly struct ChildrenEnumerable : IEnumerable<Node, ChildrenEnumerator> {
+
                 internal readonly Node node;
 
                 public ChildrenEnumerable(Node parent) {

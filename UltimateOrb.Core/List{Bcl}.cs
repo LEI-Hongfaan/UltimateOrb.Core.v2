@@ -9,7 +9,7 @@ namespace UltimateOrb.Collections.Generic {
     using UltimateOrb;
 
     [SerializableAttribute()]
-    public partial struct BclListAsList<T>
+    public readonly partial struct BclListAsList<T>
         : IList<T, System.Collections.Generic.List<T>.Enumerator>, IReadOnlyList<T, System.Collections.Generic.List<T>.Enumerator> {
 
         private readonly System.Collections.Generic.List<T> m_value;
@@ -151,8 +151,8 @@ namespace UltimateOrb.Collections.Generic {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static BclListAsList<T> AsList<T>(this System.Collections.Generic.List<T> @this) {
-            return new BclListAsList<T>(@this);
+        public static BclListAsList<T> AsList<T>(this System.Collections.Generic.List<T> value) {
+            return new BclListAsList<T>(value);
         }
     }
 }

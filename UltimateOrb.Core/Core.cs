@@ -31,7 +31,7 @@ namespace UltimateOrb {
         }
     }
 
-    public partial struct DefaultConstructor<T>
+    public readonly partial struct DefaultConstructor<T>
         : IO.IFunc<T>
         where T : new() {
 

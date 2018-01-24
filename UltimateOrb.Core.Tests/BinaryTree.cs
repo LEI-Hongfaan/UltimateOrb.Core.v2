@@ -40,10 +40,6 @@ namespace UltimateOrb.Core.Tests {
                 Select(ref source.right_child.Value, selector, 1, ref result.Value);
             }
         }
-        
-
-
-
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static string ToString<T>(this BinaryTree<T>.Tree tree) {

@@ -6,7 +6,7 @@ namespace UltimateOrb.Core.Tests {
 
     using NodeId = Int32;
 
-    using LinkIdSourceNodeLocal = Int32;
+    using SourceNodeLocalLinkId = Int32;
 
     using LinkId = Int64;
     using System.Collections;
@@ -389,16 +389,16 @@ namespace UltimateOrb.Core.Tests {
         }
 
         // TODO: API Rev
-        public partial struct SourceNodeLocalLinkIdEnumerator : System.Collections.Generic.IEnumerator<LinkIdSourceNodeLocal> {
+        public partial struct SourceNodeLocalLinkIdEnumerator : System.Collections.Generic.IEnumerator<SourceNodeLocalLinkId> {
 
-            public LinkIdSourceNodeLocal m_current;
+            public SourceNodeLocalLinkId m_current;
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public SourceNodeLocalLinkIdEnumerator(LinkIdSourceNodeLocal current) {
+            public SourceNodeLocalLinkIdEnumerator(SourceNodeLocalLinkId current) {
                 this.m_current = current;
             }
 
-            public LinkIdSourceNodeLocal Current {
+            public SourceNodeLocalLinkId Current {
 
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 get => this.m_current;
@@ -436,10 +436,10 @@ namespace UltimateOrb.Core.Tests {
         public partial struct NodeNextNodeIdEnumerator : Collections.Generic.RefReturnSupported.IEnumerator<NodeId>, Collections.Generic.RefReturnSupported.IReadOnlyEnumerator<NodeId> {
 
             public readonly (TLinkValue LinkValue, NodeId Target)[] m_buffer;
-            public LinkIdSourceNodeLocal m_current;
+            public SourceNodeLocalLinkId m_current;
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public NodeNextNodeIdEnumerator((TLinkValue LinkValue, NodeId Target)[] buffer, LinkIdSourceNodeLocal current) {
+            public NodeNextNodeIdEnumerator((TLinkValue LinkValue, NodeId Target)[] buffer, SourceNodeLocalLinkId current) {
                 this.m_buffer = buffer;
                 this.m_current = current;
             }
@@ -604,12 +604,12 @@ namespace UltimateOrb.Core.Tests {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public LinkId GetLinkIdFromSourceNodeLocal(NodeId source, LinkIdSourceNodeLocal linkLocal) {
+        public LinkId GetLinkIdFromSourceNodeLocal(NodeId source, SourceNodeLocalLinkId linkLocal) {
             return Combine(linkLocal, source);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public LinkIdSourceNodeLocal GetLinkIdSourceNodeLocal(LinkId link) {
+        public SourceNodeLocalLinkId GetLinkIdSourceNodeLocal(LinkId link) {
             return GetFirst(link);
         }
 
