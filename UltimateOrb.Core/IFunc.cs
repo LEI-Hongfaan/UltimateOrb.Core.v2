@@ -23,11 +23,11 @@ namespace UltimateOrb {
         // bool Invoke(T obj);
     }
 
-    public partial struct FuncAsIFunc<TResult> : IFunc<TResult> {
+    public partial struct BclFuncAsFunc<TResult> : IFunc<TResult> {
 
         private readonly Func<TResult> value;
 
-        internal FuncAsIFunc(Func<TResult> value) {
+        internal BclFuncAsFunc(Func<TResult> value) {
             this.value = value;
         }
 
@@ -42,11 +42,11 @@ namespace UltimateOrb {
         */
     }
 
-    public partial struct FuncAsIFunc<T, TResult> : IFunc<T, TResult> {
+    public partial struct BclFuncAsFunc<T, TResult> : IFunc<T, TResult> {
 
         private readonly Func<T, TResult> value;
 
-        internal FuncAsIFunc(Func<T, TResult> value) {
+        internal BclFuncAsFunc(Func<T, TResult> value) {
             this.value = value;
         }
 
@@ -61,11 +61,11 @@ namespace UltimateOrb {
         */
     }
 
-    public partial struct FuncAsIFunc<T1, T2, TResult> : IFunc<T1, T2, TResult> {
+    public partial struct BclFuncAsFunc<T1, T2, TResult> : IFunc<T1, T2, TResult> {
 
         private readonly Func<T1, T2, TResult> value;
 
-        internal FuncAsIFunc(Func<T1, T2, TResult> value) {
+        internal BclFuncAsFunc(Func<T1, T2, TResult> value) {
             this.value = value;
         }
 
@@ -101,24 +101,24 @@ namespace UltimateOrb {
 
     public static partial class DelegateConverter {
 
-        public static FuncAsIFunc<TResult> AsIFunc<TResult>(this Func<TResult> value) {
-            return new FuncAsIFunc<TResult>(value);
+        public static BclFuncAsFunc<TResult> AsIFunc<TResult>(this Func<TResult> value) {
+            return new BclFuncAsFunc<TResult>(value);
         }
 
         public static Func<TResult> AsFunc<TResult, TFunc>(this TFunc value) where TFunc : IFunc<TResult> {
             return value.Invoke;
         }
 
-        public static FuncAsIFunc<T, TResult> AsIFunc<T, TResult>(this Func<T, TResult> value) {
-            return new FuncAsIFunc<T, TResult>(value);
+        public static BclFuncAsFunc<T, TResult> AsIFunc<T, TResult>(this Func<T, TResult> value) {
+            return new BclFuncAsFunc<T, TResult>(value);
         }
 
         public static Func<T, TResult> AsFunc<T, TResult, TFunc>(this TFunc value) where TFunc : IFunc<T, TResult> {
             return value.Invoke;
         }
 
-        public static FuncAsIFunc<T1, T2, TResult> AsIFunc<T1, T2, TResult>(this Func<T1, T2, TResult> value) {
-            return new FuncAsIFunc<T1, T2, TResult>(value);
+        public static BclFuncAsFunc<T1, T2, TResult> AsIFunc<T1, T2, TResult>(this Func<T1, T2, TResult> value) {
+            return new BclFuncAsFunc<T1, T2, TResult>(value);
         }
 
         public static Func<T1, T2, TResult> AsFunc<T1, T2, TResult, TFunc>(this TFunc value) where TFunc : IFunc<T1, T2, TResult> {

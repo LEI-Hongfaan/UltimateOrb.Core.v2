@@ -1,76 +1,78 @@
-﻿using UltimateOrb.Plain.ValueTypes.NoThrow;
+﻿using System;
+using UltimateOrb.Plain.ValueTypes.NoThrow;
 
 namespace UltimateOrb.Collections.Generic.RefReturnSupported.NoThrow.ReferenceTypes {
 
     public partial interface IStackEx<T> : Plain.ValueTypes.IStackEx<T> {
     }
 
+    [SerializableAttribute()]
     public partial class Stack<T> : IStackEx<T> {
 
-        private Plain.ValueTypes.NoThrow.Stack<T> value;
+        private Plain.ValueTypes.NoThrow.Stack<T> m_value;
 
         public Stack() {
-            this.value = new Plain.ValueTypes.NoThrow.Stack<T>(4); // default capacity
+            this.m_value = new Plain.ValueTypes.NoThrow.Stack<T>(4); // default capacity
         }
 
         public Stack(int capacity) {
-            this.value = new Plain.ValueTypes.NoThrow.Stack<T>(capacity);
+            this.m_value = new Plain.ValueTypes.NoThrow.Stack<T>(capacity);
         }
 
         public int Count {
 
-            get => this.value.Count;
+            get => this.m_value.Count;
         }
 
         public long LongCount {
 
-            get => this.value.LongCount;
+            get => this.m_value.LongCount;
         }
 
         public bool IsEmpty {
 
-            get => this.value.IsEmpty;
+            get => this.m_value.IsEmpty;
         }
 
         public void IncreaseCapacity() {
-            this.value.IncreaseCapacity();
+            this.m_value.IncreaseCapacity();
         }
 
         public ref T Peek() {
-            return ref this.value.Peek();
+            return ref this.m_value.Peek();
         }
 
         T Generic.IStack<T>.Peek() {
             // TODO: use constraned call?
-            return this.value.Peek();
+            return this.m_value.Peek();
         }
 
         public T Pop() {
-            return this.value.Pop();
+            return this.m_value.Pop();
         }
 
         public ref T Push() {
-            return ref this.value.Push();
+            return ref this.m_value.Push();
         }
 
         public void Push(T value) {
-            this.value.Push(value);
+            this.m_value.Push(value);
         }
 
         public void SetCapacity(int capacity) {
-            this.value.SetCapacity(capacity);
+            this.m_value.SetCapacity(capacity);
         }
 
         public bool TryPeek(out T value) {
-            return this.value.TryPeek(out value);
+            return this.m_value.TryPeek(out value);
         }
 
         public bool TryPop(out T value) {
-            return this.value.TryPop(out value);
+            return this.m_value.TryPop(out value);
         }
 
         public bool TryPush(T value) {
-            return this.value.TryPush(value);
+            return this.m_value.TryPush(value);
         }
     }
 }
