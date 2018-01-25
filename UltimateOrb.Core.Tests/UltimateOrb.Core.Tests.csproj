@@ -17,7 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FsCheck.Xunit" Version="3.0.0-alpha2" />
+    <PackageReference Include="FsCheck.Xunit" Version="3.0.0-alpha3" />
+    <PackageReference Include="UltimateOrb.Int128" Version="1.0.7" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.console" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />

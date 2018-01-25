@@ -9,6 +9,7 @@ namespace UltimateOrb.Core.Tests {
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
+    using UltimateOrb.Mathematics.Functional;
     using UltimateOrb.Plain.ValueTypes;
 
     public static class AAA {
@@ -1715,89 +1716,57 @@ namespace UltimateOrb.Core.Tests {
         }
 
 
-        public static partial class MultiplyChecked {
 
-            public readonly partial struct Functor<T> : IO.IFunc<T, T, T> {
 
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                public T Invoke(T arg1, T arg2) {
-                    return Typed<T>.Value(arg1, arg2);
-                }
+
+        public static partial class IsInt32Module {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static bool IsInt32<T>() {
+                return Typed<T>.m_value;
             }
 
-            public static partial class Typed<T> {
+            private static partial class Typed<T> {
 
-                private static readonly Func<T, T, T> m_value = GetValue();
+                public static readonly bool m_value = GetValue();
 
-                public static Func<T, T, T> Value {
-
-                    [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                    get => m_value;
-                }
-
-                private static Func<T, T, T> GetValue() {
-                    var a = typeof(T).TypeHandle;
-                    var b = typeof(int).TypeHandle;
-                    var result = (Func<T, T, T>)null;
-                    if (a.Equals(b)) {
-                        result = (Func<int, int, int>)((x, y) => checked(x * y)) as Func<T, T, T>;
-                    }
-                    if (null != result) {
-                        return result;
-                    }
-                    throw new NotSupportedException();
-                    switch (Type.GetTypeCode(typeof(T))) {
-                    case TypeCode.Boolean:
-                        break;
-                    case TypeCode.Byte:
-                        break;
-                    case TypeCode.Char:
-                        break;
-                    case TypeCode.DateTime:
-                        break;
-                    case TypeCode.DBNull:
-                        break;
-                    case TypeCode.Decimal:
-                        break;
-                    case TypeCode.Double:
-                        break;
-                    case TypeCode.Empty:
-                        break;
-                    case TypeCode.Int16:
-                        break;
-                    case TypeCode.Int32:
-                        break;
-                    case TypeCode.Int64:
-                        break;
-                    case TypeCode.Object:
-                        break;
-                    case TypeCode.SByte:
-                        break;
-                    case TypeCode.Single:
-                        break;
-                    case TypeCode.String:
-                        break;
-                    case TypeCode.UInt16:
-                        break;
-                    case TypeCode.UInt32:
-                        break;
-                    case TypeCode.UInt64:
-                        break;
-                    default:
-                        break;
-                    }
-
+                private static bool GetValue() {
+                    return typeof(Int32) == typeof(T);
                 }
             }
         }
 
         private static int Main(string[] args) {
             {
-                MultiplyChecked.Functor<int> a;
-                var d = IO.TFunc<int, int, int>.Invoke(a, 7, 11);
-                var c = MultiplyChecked.Typed<int>.Value(7, 11);
-                Console.WriteLine(d);
-                Console.WriteLine(c);
+                MultiplyChecked.Functor<Int128> mul;
+                var e = mul.Invoke(7, 110);
+                Console.WriteLine(e);
+                MultiplyChecked.Register<string>((x, y) => $@"checked({x} * {y})");
+                {
+                    MultiplyChecked.Functor<string> pol;
+                    var f = pol.Invoke("7", "110");
+                    Console.WriteLine(f);
+                }
+                try {
+                    MultiplyChecked.Register<int>((x, y) => 2 * x + y);
+                } catch (Exception ex) {
+                    Console.WriteLine(ex.ToString()); ;
+                }
+                {
+                    MultiplyChecked.Functor<int> pol;
+                    var f = pol.Invoke(7, 110);
+                    Console.WriteLine(f);
+                }
+                {
+                    var f = Operators.Checked.Multiply((UInt128)Int64.MaxValue, 11033333333333333333);
+                    Console.WriteLine(f);
+                    Console.WriteLine(f.ToString());
+                }
+                // var d = IO.TFunc<int, int, int>.Invoke(a, 7, 11);
+                // Console.WriteLine(typeof(Int32).IsPrimitive);
+                // var c = MultiplyChecked.Typed<int>.Value(7, 11);
+                // Console.WriteLine(d);
+                // Console.WriteLine(c);
                 Console.ReadKey(true);
                 return 0;
 

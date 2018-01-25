@@ -12,12 +12,12 @@ namespace UltimateOrb.Core.Tests {
         public static BinaryTree<TResult>.Tree Select<TSource, TResult>(this BinaryTree<TSource>.Tree source, Func<TSource, IntT, TResult> selector) {
             if (null != source) {
                 ref var node = ref source.Value.root;
-                ref var result_node = ref Create(selector.Invoke(node.value, -1)).root;
+                ref var result_node = ref Create(selector.Invoke(node.value, 2)).root;
                 if (null != node.left_child) {
                     Select(ref node.left_child.Value, selector, 0, ref result_node);
                 }
                 if (null != node.right_child) {
-                    Select(ref node.left_child.Value, selector, 1, ref result_node);
+                    Select(ref node.right_child.Value, selector, 1, ref result_node);
                 }
                 return result_node.tree;
             }
@@ -26,8 +26,23 @@ namespace UltimateOrb.Core.Tests {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static ref BinaryTree<TResult>.TreeStruct Select<TSource, TResult>(in this BinaryTree<TSource>.TreeStruct source, Func<TSource, IntT, TResult> selector) {
+            ref readonly var node = ref source.root;
+            var result_tree = CreateReferenceTyped(selector.Invoke(node.value, 2));
+            ref var result = ref result_tree.Value;
+            ref var result_node = ref result.root;
+            if (null != node.left_child) {
+                Select(ref node.left_child.Value, selector, 0, ref result_node);
+            }
+            if (null != node.right_child) {
+                Select(ref node.right_child.Value, selector, 1, ref result_node);
+            }
+            return ref result;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private static void Select<TSource, TResult>(ref this BinaryTree<TSource>.NodeStruct source, Func<TSource, IntT, TResult> selector, IntT index, ref BinaryTree<TResult>.NodeStruct parent) {
-            var result = new BinaryTree<TResult>.Node(selector.Invoke(source.value, index), parent.tree, null, null);
+            var result = new BinaryTree<TResult>.Node(selector.Invoke(source.value, index), parent.tree);
             if (0 == index) {
                 parent.left_child = result;
             } else if (1 == index) {
@@ -101,6 +116,12 @@ namespace UltimateOrb.Core.Tests {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static BinaryTree<T>.Tree CreateReferenceTyped<T>(in T root_item) {
+            var t = new BinaryTree<T>.Tree(root_item);
+            return t;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ref BinaryTree<T>.NodeStruct AddSorted<T, TComparer>(ref this BinaryTree<T>.TreeStruct @this, in T item, in TComparer comparer) where TComparer : IComparer<T> {
             return ref AddSorted(ref @this.root, item, comparer);
         }
@@ -119,7 +140,7 @@ namespace UltimateOrb.Core.Tests {
                 if (null != child) {
                     node = child;
                 } else {
-                    var b = new BinaryTree<T>.Node(item, @this.tree, null, null);
+                    var b = new BinaryTree<T>.Node(item, @this.tree);
                     @this.left_child = b;
                     return ref b.Value;
                 }
@@ -128,7 +149,7 @@ namespace UltimateOrb.Core.Tests {
                 if (null != child) {
                     node = child;
                 } else {
-                    var b = new BinaryTree<T>.Node(item, @this.tree, null, null);
+                    var b = new BinaryTree<T>.Node(item, @this.tree);
                     @this.right_child = b;
                     return ref b.Value;
                 }
@@ -147,7 +168,7 @@ namespace UltimateOrb.Core.Tests {
                         continue;
                     }
                     {
-                        var b = new BinaryTree<T>.Node(item, node.Value.tree, null, null);
+                        var b = new BinaryTree<T>.Node(item, node.Value.tree);
                         node.Value.left_child = b;
                         return ref b.Value;
                     }
@@ -158,7 +179,7 @@ namespace UltimateOrb.Core.Tests {
                         continue;
                     }
                     {
-                        var b = new BinaryTree<T>.Node(item, node.Value.tree, null, null);
+                        var b = new BinaryTree<T>.Node(item, node.Value.tree);
                         node.Value.right_child = b;
                         return ref b.Value;
                     }
@@ -177,13 +198,18 @@ namespace UltimateOrb.Core.Tests {
             internal TreeStruct(T value, Tree tree, Node right_child, Node left_child) {
                 this.root = new NodeStruct(value, tree, right_child, left_child);
             }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            internal TreeStruct(T value, Tree tree) {
+                this.root = new NodeStruct(value, tree);
+            }
         }
 
         public partial class Tree : StrongBoxBase<TreeStruct> {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public Tree(T value) {
-                this.Value = new TreeStruct(value, this, null, null);
+                this.Value = new TreeStruct(value, this);
             }
 
             internal protected new ref TreeStruct Value {
@@ -197,6 +223,10 @@ namespace UltimateOrb.Core.Tests {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             internal protected Node(T value, Tree tree, Node right_child, Node left_child) : base(new NodeStruct(value, tree, right_child, left_child)) {
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            internal protected Node(T value, Tree tree) : base(new NodeStruct(value, tree)) {
             }
 
             internal protected new ref NodeStruct Value {
@@ -222,6 +252,14 @@ namespace UltimateOrb.Core.Tests {
                 this.tree = tree;
                 this.right_child = right_child;
                 this.left_child = left_child;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            internal NodeStruct(T item, Tree tree) {
+                this.value = item;
+                this.tree = tree;
+                this.right_child = null;
+                this.left_child = null;
             }
         }
     }

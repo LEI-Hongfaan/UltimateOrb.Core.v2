@@ -44,6 +44,11 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T Invoke() {
+            return InvokeImpl();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static T InvokeImpl() {
             var t = default(T);
             return IsNullableValueType<T>.Value ? t : (null == t ? Constructor.Invoke() : t);
         }
