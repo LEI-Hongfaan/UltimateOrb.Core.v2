@@ -1,0 +1,154 @@
+﻿using System;
+<#
+var Ti = 32;
+var Di = checked(Ti * 2);
+var Si = checked((Ti + 1) / 2);
+
+var T = 64;
+var LS = new string[] { "U", "U", "", "" };
+var HS = new string[] { "U", "", "U", "" };
+var CS = new string[] { "false", "false", "false", "true" };
+
+for (var i = 0; i < LS.Length; ++i) {
+	var L = LS[i];
+	var H = HS[i];
+	var C = CS[i];
+#>
+
+namespace UltimateOrb.Mathematics {
+	using UInt = UInt<#= Ti #>;
+	using ULong = UInt<#= Di #>;
+	using Int = Int<#= Ti #>;
+	using Long = Int<#= Di #>;
+
+	using Math = Internal.System.Math;
+
+	using IntT = Int<#= T #>;
+	using UIntT = UInt<#= T #>;
+	
+	using LIntT = <#= L #>Int<#= T #>;
+	using HIntT = <#= H #>Int<#= T #>;
+
+	public static partial class DoubleArithmetic {
+
+		[System.CLSCompliantAttribute(<#= C #>)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static LIntT IncreaseUnchecked(LIntT value_lo, HIntT value_hi, out HIntT result_hi) {
+			var result_lo_ = value_lo;
+			unchecked {
+				++result_lo_;
+			}
+			var result_hi_ = unchecked((HIntT)value_hi);
+			result_hi_ = (~(LIntT)0 == value_lo ? unchecked(++result_hi_) : result_hi_);
+			result_hi = unchecked((HIntT)result_hi_);
+			return result_lo_;
+		}
+
+		[System.CLSCompliantAttribute(<#= C #>)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static LIntT IncreaseSigned(LIntT value_lo, HIntT value_hi, out HIntT result_hi) {
+			var result_lo_ = value_lo;
+			unchecked {
+				++result_lo_;
+			}
+			var result_hi_ = unchecked((IntT)value_hi);
+			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			result_hi = unchecked((HIntT)result_hi_);
+			return result_lo_;
+		}
+
+		[System.CLSCompliantAttribute(<#= C #>)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static LIntT IncreaseUnsigned(LIntT value_lo, HIntT value_hi, out HIntT result_hi) {
+			var result_lo_ = value_lo;
+			unchecked {
+				++result_lo_;
+			}
+			var result_hi_ = unchecked((UIntT)value_hi);
+			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			result_hi = unchecked((HIntT)result_hi_);
+			return result_lo_;
+		}
+
+		[System.CLSCompliantAttribute(<#= C #>)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static LIntT DecreaseUnchecked(LIntT value_lo, HIntT value_hi, out HIntT result_hi) {
+			var result_lo_ = value_lo;
+			unchecked {
+				--result_lo_;
+			}
+			var result_hi_ = unchecked((HIntT)value_hi);
+			result_hi_ = ((LIntT)0 == value_lo ? unchecked(--result_hi_) : result_hi_);
+			result_hi = unchecked((HIntT)result_hi_);
+			return result_lo_;
+		}
+
+		[System.CLSCompliantAttribute(<#= C #>)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static LIntT DecreaseSigned(LIntT value_lo, HIntT value_hi, out HIntT result_hi) {
+			var result_lo_ = value_lo;
+			unchecked {
+				--result_lo_;
+			}
+			var result_hi_ = unchecked((IntT)value_hi);
+			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			result_hi = unchecked((HIntT)result_hi_);
+			return result_lo_;
+		}
+
+		[System.CLSCompliantAttribute(<#= C #>)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static LIntT DecreaseUnsigned(LIntT value_lo, HIntT value_hi, out HIntT result_hi) {
+			var result_lo_ = value_lo;
+			unchecked {
+				--result_lo_;
+			}
+			var result_hi_ = unchecked((UIntT)value_hi);
+			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			result_hi = unchecked((HIntT)result_hi_);
+			return result_lo_;
+		}
+	}
+}
+<#
+}
+#>
+
+namespace UltimateOrb.Mathematics {
+	using UInt = UInt<#= Ti #>;
+	using ULong = UInt<#= Di #>;
+	using Int = Int<#= Ti #>;
+	using Long = Int<#= Di #>;
+
+	using Math = Internal.System.Math;
+
+	using IntT = Int<#= T #>;
+	using UIntT = UInt<#= T #>;
+
+	public static partial class DoubleArithmetic {
+
+		[System.CLSCompliantAttribute(false)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static UIntT Increase(UIntT value_lo, UIntT value_hi, out UIntT result_hi) {
+			return IncreaseUnsigned(value_lo, value_hi, out result_hi);
+		}
+
+		[System.CLSCompliantAttribute(false)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static UIntT Increase(UIntT value_lo, IntT value_hi, out IntT result_hi) {
+			return IncreaseSigned(value_lo, value_hi, out result_hi);
+		}
+
+		[System.CLSCompliantAttribute(false)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static UIntT Decrease(UIntT value_lo, UIntT value_hi, out UIntT result_hi) {
+			return DecreaseUnsigned(value_lo, value_hi, out result_hi);
+		}
+
+		[System.CLSCompliantAttribute(false)]
+		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		public static UIntT Decrease(UIntT value_lo, IntT value_hi, out IntT result_hi) {
+			return DecreaseSigned(value_lo, value_hi, out result_hi);
+		}
+	}
+}

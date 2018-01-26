@@ -7,6 +7,7 @@ using System.Threading;
 
 namespace UltimateOrb.Core.Tests {
     using System.Diagnostics;
+    using System.Reflection.Emit;
     using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
     using UltimateOrb.Mathematics.Functional;
@@ -1736,7 +1737,22 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+        private readonly partial struct P {
+
+            private readonly UInt128 x;
+
+            private readonly UInt128 y;
+
+
+        }
+
         private static int Main(string[] args) {
+            {
+                var sdafa = false;
+                Console.WriteLine(Utilities.SizeOfModule.BitSizeOf<Int128>());
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 MultiplyChecked.Functor<Int128> mul;
                 var e = mul.Invoke(7, 110);

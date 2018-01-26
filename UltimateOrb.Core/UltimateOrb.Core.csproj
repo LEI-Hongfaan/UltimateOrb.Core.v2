@@ -16,9 +16,10 @@ This package does not include the test suite. See Project Site for more informat
     <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
     <AssemblyVersion>1</AssemblyVersion>
     <FileVersion>1</FileVersion>
-    <Version>1.3.0.3</Version>
+    <Version>1.4.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -34,6 +35,22 @@ This package does not include the test suite. See Project Site for more informat
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="DoubleArithmetic{Compare}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DoubleArithmetic{Compare}.cs</LastGenOutput>
+    </None>
+    <None Update="DoubleArithmetic{Core}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DoubleArithmetic{Core}.cs</LastGenOutput>
+    </None>
+    <None Update="DoubleArithmetic{Increase,Decrease}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DoubleArithmetic{Increase,Decrease}.cs</LastGenOutput>
+    </None>
+    <None Update="DoubleArithmetic{Shift}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DoubleArithmetic{Shift}.cs</LastGenOutput>
+    </None>
     <None Update="IInitializable.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>IInitializable.cs</LastGenOutput>
@@ -53,6 +70,26 @@ This package does not include the test suite. See Project Site for more informat
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="DoubleArithmetic{Compare}.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DoubleArithmetic{Compare}.tt</DependentUpon>
+    </Compile>
+    <Compile Update="DoubleArithmetic{Core}.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DoubleArithmetic{Core}.tt</DependentUpon>
+    </Compile>
+    <Compile Update="DoubleArithmetic{Increase,Decrease}.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DoubleArithmetic{Increase,Decrease}.tt</DependentUpon>
+    </Compile>
+    <Compile Update="DoubleArithmetic{Shift}.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DoubleArithmetic{Shift}.tt</DependentUpon>
+    </Compile>
     <Compile Update="IInitializable.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -69,5 +106,9 @@ This package does not include the test suite. See Project Site for more informat
       <DependentUpon>IO.Core.tt</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd /d &quot;$(SolutionDir)\$(ProjectName).BuildTools\BuildTools&quot;&#xD;&#xA;echo Invoking build tools to modify the output assembly...&#xD;&#xA;dotnet &quot;$(TargetName).BuildTools.dll&quot; &quot;$(TargetPath)&quot;&#xD;&#xA;cd /d &quot;$(ProjectDir)&quot;&#xD;&#xA;echo To sign the assembly, rebuild with 'Sign the assembly', then use the command:&#xD;&#xA;echo     sn -Ra &quot;$(TargetPath)&quot; &quot;$(ProjectDir)test.snk&quot;&#xD;&#xA;echo To verify the assembly, use the command:&#xD;&#xA;echo     peverify &quot;$(TargetPath)&quot;&#xD;&#xA;echo If PEVerify can not resolve the dependent assemblies ([HRESULT 0x80070002]), edit '*.dll.config' files and copy them to the same directory as the output assembly.&#xD;&#xA;" />
+  </Target>
 
 </Project>

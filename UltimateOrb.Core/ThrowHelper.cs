@@ -10,14 +10,14 @@ namespace UltimateOrb.Utilities {
     public static partial class ThrowHelper {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static void Ignore<T>(this T value) {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static T Nop<T>(this T value) {
@@ -25,7 +25,7 @@ namespace UltimateOrb.Utilities {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static T2 Comma<T1, T2>(this T1 first, T2 second) {
@@ -33,7 +33,7 @@ namespace UltimateOrb.Utilities {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnNull<T>(this T value) {
             if (null == value) {
@@ -42,14 +42,14 @@ namespace UltimateOrb.Utilities {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnNegative(this int value) {
             checked((uint)value).Ignore();
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnNegative(this long value) {
             checked((ulong)value).Ignore();
@@ -57,7 +57,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnNegative(this uint value) {
             checked((uint)value).Ignore();
@@ -65,7 +65,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnNegative(this ulong value) {
             checked((ulong)value).Ignore();
@@ -73,7 +73,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnLessThan(this uint first, uint second) {
             checked(first - second).Ignore();
@@ -81,7 +81,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnLessThan(this ulong first, ulong second) {
             checked(first - second).Ignore();
@@ -89,14 +89,14 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnLessThan(this int first, uint second) {
             checked((uint)first - second).Ignore();
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnNotEqual(this int first, int second) {
             checked(-unchecked((uint)(first - second))).Ignore();
@@ -104,14 +104,14 @@ namespace UltimateOrb.Utilities {
 
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         public static void Throw<TException>() where TException: Exception, new() {
             throw new TException();
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute(null)]
+        [TargetedPatchingOptOutAttribute("")]
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         public static T Throw<TException, T>() where TException : Exception, new() {
             throw new TException();
