@@ -11,7 +11,7 @@ namespace UltimateOrb.Utilities {
     public static partial class SignConverter {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static int ToSignedChecked(this int value) {
@@ -20,7 +20,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static uint ToUnsignedChecked(this int value) {
@@ -28,7 +28,7 @@ namespace UltimateOrb.Utilities {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static long ToSignedChecked(this long value) {
@@ -37,7 +37,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static ulong ToUnsignedChecked(this long value) {
@@ -46,7 +46,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static int ToSignedChecked(this uint value) {
@@ -55,7 +55,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static uint ToUnsignedChecked(this uint value) {
@@ -64,7 +64,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static long ToSignedChecked(this ulong value) {
@@ -73,7 +73,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static ulong ToUnsignedChecked(this ulong value) {
@@ -81,7 +81,7 @@ namespace UltimateOrb.Utilities {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static int ToSignedUnchecked(this int value) {
@@ -90,7 +90,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static uint ToUnsignedUnchecked(this int value) {
@@ -98,7 +98,7 @@ namespace UltimateOrb.Utilities {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static long ToSignedUnchecked(this long value) {
@@ -107,7 +107,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static ulong ToUnsignedUnchecked(this long value) {
@@ -116,7 +116,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static int ToSignedUnchecked(this uint value) {
@@ -125,7 +125,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static uint ToUnsignedUnchecked(this uint value) {
@@ -134,7 +134,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static long ToSignedUnchecked(this ulong value) {
@@ -143,7 +143,7 @@ namespace UltimateOrb.Utilities {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static ulong ToUnsignedUnchecked(this ulong value) {

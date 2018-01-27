@@ -21,7 +21,7 @@ namespace UltimateOrb.Mathematics.Exact {
         private readonly Int64 bits;
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         internal Rational64(UInt64 bits) {
@@ -30,7 +30,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 FromFraction(UInt32 numerator, Int32 denominator) {
@@ -63,7 +63,7 @@ namespace UltimateOrb.Mathematics.Exact {
 #if DEBUG
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public Rational64(UInt32 numerator, Int32 denominator) {
@@ -75,7 +75,7 @@ namespace UltimateOrb.Mathematics.Exact {
         public static Rational64 Zero {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get {
@@ -87,7 +87,7 @@ namespace UltimateOrb.Mathematics.Exact {
         public Int64 Denominator {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get {
@@ -106,7 +106,7 @@ namespace UltimateOrb.Mathematics.Exact {
         public Int64 Numerator {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get {
@@ -120,7 +120,7 @@ namespace UltimateOrb.Mathematics.Exact {
         public int Sign {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get {
@@ -138,7 +138,7 @@ namespace UltimateOrb.Mathematics.Exact {
         public Int64 SignedDenominator {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get {
@@ -159,7 +159,7 @@ namespace UltimateOrb.Mathematics.Exact {
         public Int64 SignedNumerator {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get {
@@ -173,7 +173,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 Inverse(Rational64 value) {
@@ -204,7 +204,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 Negate(Rational64 value) {
@@ -218,7 +218,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 operator -(Rational64 value) {
@@ -226,7 +226,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static bool operator !=(Rational64 first, Rational64 second) {
@@ -234,7 +234,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 Multiply(Rational64 first, Rational64 second) {
@@ -281,7 +281,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt64 MultiplyAsRational128(Rational64 first, Rational64 second, out UInt64 bits_hi) {
@@ -330,7 +330,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt64 AddAsRational128(Rational64 first, Rational64 second, out UInt64 bits_hi) {
@@ -374,7 +374,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt64 SubtractAsRational128(Rational64 first, Rational64 second, out UInt64 bits_hi) {
@@ -417,7 +417,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 operator /(Rational64 first, Rational64 second) {
@@ -455,7 +455,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 operator *(Rational64 first, Rational64 second) {
@@ -492,7 +492,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 operator +(Rational64 value) {
@@ -500,7 +500,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static bool operator ==(Rational64 first, Rational64 second) {
@@ -508,7 +508,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         internal static UInt32 Reduce(UInt32 p, Int32 q, out Int32 r) {
@@ -532,7 +532,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 FromInt64Bits(Int64 bits) {
@@ -553,7 +553,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Int64 ToInt64Bits(Rational64 value) {
@@ -562,7 +562,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public int GetHashCodeSealed() {
@@ -571,7 +571,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public override int GetHashCode() {
@@ -579,7 +579,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public bool EqualsSealed(Rational64 other) {
@@ -587,14 +587,14 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public bool Equals(Rational64 other) {
             return this.EqualsSealed(other);
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public bool EqualsSealed(object other) {
@@ -605,7 +605,7 @@ namespace UltimateOrb.Mathematics.Exact {
             return base.Equals(other);
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public override bool Equals(object other) {
@@ -614,7 +614,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 ToRational64(UInt32 value) {
@@ -623,7 +623,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static implicit operator Rational64(UInt32 value) {
@@ -631,7 +631,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 ToRational64(Int32 value) {
@@ -643,7 +643,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static implicit operator Rational64(Int32 value) {
@@ -656,7 +656,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 ToRational64(UInt64 value) {
@@ -666,7 +666,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator Rational64(UInt64 value) {
@@ -675,7 +675,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 ToRational64(Int64 value) {
@@ -690,7 +690,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator Rational64(Int64 value) {
@@ -705,7 +705,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Int64 ToInt64Nearest(Rational64 value) {
@@ -736,7 +736,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Int64 ToInt64(Rational64 value) {
@@ -748,7 +748,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator Int64(Rational64 value) {
@@ -757,7 +757,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt64 ToUInt64(Rational64 value) {
@@ -766,7 +766,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator UInt64(Rational64 value) {
@@ -774,7 +774,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Int32 ToInt32(Rational64 value) {
@@ -782,7 +782,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator Int32(Rational64 value) {
@@ -791,7 +791,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt32 ToUInt32(Rational64 value) {
@@ -800,7 +800,7 @@ namespace UltimateOrb.Mathematics.Exact {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator UInt32(Rational64 value) {
@@ -808,7 +808,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Double ToDoubleInexact(Rational64 value) {
@@ -826,7 +826,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator Double(Rational64 value) {
@@ -844,7 +844,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 ToRatioanl64ContinuedFractionBestApproximation(Double value) {
@@ -887,7 +887,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public int CompareTo(Rational64 other) {
@@ -935,7 +935,7 @@ namespace UltimateOrb.Mathematics.Exact {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator Rational64(Double value) {

@@ -28,5 +28,12 @@
   <ItemGroup>
     <ProjectReference Include="..\UltimateOrb.Core\UltimateOrb.Core.csproj" />
   </ItemGroup>
-
+  
+  <Target Name="ChangeAliasesOfAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'UltimateOrb.Mathematics.DoubleArithmetic.Core'">
+        <Aliases>Privates</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
 </Project>

@@ -9,7 +9,7 @@ namespace UltimateOrb.Mathematics {
     public static partial class BinaryNumerals {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static int ComputeParityCheckBit(byte v) {
@@ -18,7 +18,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int ComputeParityCheckBit(sbyte v) {
@@ -27,7 +27,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int ComputeParityCheckBit(UInt32 v) {
@@ -38,7 +38,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int ComputeParityCheckBit(Int32 v) {
@@ -47,7 +47,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int ComputeParityCheckBit(UInt64 v) {
@@ -58,7 +58,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int ComputeParityCheckBit(Int64 v) {
@@ -67,7 +67,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int CountLeadingZeros(UInt64 v) {
@@ -104,7 +104,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int CountLeadingZeros(byte value) {
@@ -131,7 +131,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int CountLeadingZeros(UInt32 v) {
@@ -164,7 +164,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int CountStorageBits(Int64 v) {
@@ -197,7 +197,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int CountStorageBits(Int32 v) {
@@ -226,7 +226,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
 #if DEBUG
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
 #else
@@ -264,7 +264,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int CountTrailingZeros(UInt32 x) {
@@ -298,7 +298,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int CountTrailingZeros(UInt64 x) {
@@ -335,7 +335,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static byte ExtendSigned(int bits, byte value) {
@@ -344,7 +344,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static short ExtendSigned(int bits, short value) {
@@ -353,7 +353,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int ExtendSigned(int bits, int value) {
@@ -362,7 +362,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static long ExtendSigned(int bits, long value) {
@@ -372,7 +372,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int ExtendUnsigned(int bits, int value) {
@@ -382,7 +382,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static long ExtendUnsigned(int bits, long value) {
@@ -392,7 +392,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static bool HasZeroBytes(UInt64 v) {
@@ -401,7 +401,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static bool HasZeroBytes(UInt32 v) {
@@ -409,7 +409,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static bool HasZeroBytes(Int64 v) {
@@ -418,7 +418,7 @@ namespace UltimateOrb.Mathematics {
         
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static bool HasZeroBytes(Int32 v) {
@@ -427,7 +427,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static bool HasZeroBytes_A_Definition(UInt64 v) {
@@ -442,7 +442,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static bool HasZeroBytes_A_Definition(UInt32 v) {
@@ -457,7 +457,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static UInt64 MostSignificantBit(UInt64 x) {
@@ -472,7 +472,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static UInt32 MostSignificantBit(UInt32 x) {
@@ -486,7 +486,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static UInt64 MostSignificantBit_A_Definition(UInt64 x) {
@@ -502,7 +502,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static UInt32 MostSignificantBit_A_Definition(UInt32 x) {
@@ -516,14 +516,14 @@ namespace UltimateOrb.Mathematics {
             return a;
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static long NextPermutation(long v) {
             return unchecked((long)NextPermutation((ulong)v));
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int NextPermutation(int v) {
@@ -531,7 +531,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [System.CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         // ~30.9 Cyc
@@ -547,7 +547,7 @@ namespace UltimateOrb.Mathematics {
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "v-1")]
         [System.CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static uint NextPermutation(uint v) {
@@ -561,7 +561,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [System.CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int PopulationCount(UInt64 x) {
@@ -574,7 +574,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [System.CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         // 8.38 Cyc
@@ -588,7 +588,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [System.CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int PopulationCount_A_Definition(UInt32 x) {
@@ -605,7 +605,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [System.CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static int PopulationCount_A_Definition(UInt64 x) {
@@ -621,7 +621,7 @@ namespace UltimateOrb.Mathematics {
             }
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static byte ReverseBits(byte v) {
@@ -629,7 +629,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [System.CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static uint ReverseBits(uint v) {
@@ -641,7 +641,7 @@ namespace UltimateOrb.Mathematics {
             return r;
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static byte ReverseBits_A_Definition(byte v) {
@@ -654,7 +654,7 @@ namespace UltimateOrb.Mathematics {
         }
 
         [System.CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
         public static uint ReverseBits_A_Definition(uint v) {

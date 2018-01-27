@@ -15,14 +15,14 @@ namespace UltimateOrb {
 
         public string Value {
 
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get => this.m_value;
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public BclStringAsReadOnlyList(string value) {
@@ -31,7 +31,7 @@ namespace UltimateOrb {
 
         public char this[int index] {
 
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
@@ -40,7 +40,7 @@ namespace UltimateOrb {
 
         public long LongCount {
 
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
@@ -49,7 +49,7 @@ namespace UltimateOrb {
 
         public int Count {
 
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
@@ -63,7 +63,7 @@ namespace UltimateOrb {
 
             private int m_index;
 
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public Enumerator(string str) {
@@ -73,7 +73,7 @@ namespace UltimateOrb {
 
             public char Current {
 
-                [TargetedPatchingOptOutAttribute("")]
+                [TargetedPatchingOptOutAttribute(null)]
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 [PureAttribute()]
@@ -82,20 +82,20 @@ namespace UltimateOrb {
 
             object IEnumerator.Current {
 
-                [TargetedPatchingOptOutAttribute("")]
+                [TargetedPatchingOptOutAttribute(null)]
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 get => this.m_string[this.m_index];
             }
 
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             public void Dispose() {
             }
 
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public bool MoveNext() {
@@ -110,7 +110,7 @@ namespace UltimateOrb {
                 return false;
             }
 
-            [TargetedPatchingOptOutAttribute("")]
+            [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {
@@ -118,7 +118,7 @@ namespace UltimateOrb {
             }
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
@@ -126,14 +126,14 @@ namespace UltimateOrb {
             return new Enumerator(this.m_value);
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         IEnumerator<char> IEnumerable<char>.GetEnumerator() {
             return new Enumerator(this.m_value);
         }
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         IEnumerator IEnumerable.GetEnumerator() {

@@ -1655,98 +1655,29 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
-        public partial struct affasdfasdf : ITuple<int, int, int, int, Graph<affasdfasdf, Void>.NodeNextNodeIdEnumerator, int> {
-
-            int item1;
-
-            int item2;
-
-            int item3;
-
-            int item4;
-
-            Graph<affasdfasdf, Void>.NodeNextNodeIdEnumerator item5;
-
-            int item6;
-
-            public int Item1 {
-
-                get => this.item1;
-
-                set => this.item1 = value;
-            }
-            public int Item2 {
-
-                get => this.item2;
-
-                set => this.item2 = value;
-            }
-
-            public int Item3 {
-
-                get => this.item3;
-
-                set => this.item3 = value;
-            }
-
-            public int Item4 {
-
-                get => this.item4;
-
-                set => this.item4 = value;
-            }
-
-            public Graph<affasdfasdf, Void>.NodeNextNodeIdEnumerator Item5 {
-
-                get => this.item5;
-
-                set => this.item5 = value;
-            }
-
-            public int Item6 {
-
-                get => this.item6;
-
-                set => this.item6 = value;
-            }
-
-            public int Length {
-
-                get => 6;
-            }
-        }
-
-
-
-
-
-        public static partial class IsInt32Module {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static bool IsInt32<T>() {
-                return Typed<T>.m_value;
-            }
-
-            private static partial class Typed<T> {
-
-                public static readonly bool m_value = GetValue();
-
-                private static bool GetValue() {
-                    return typeof(Int32) == typeof(T);
-                }
-            }
-        }
-
-        private readonly partial struct P {
-
-            private readonly UInt128 x;
-
-            private readonly UInt128 y;
-
-
-        }
 
         private static int Main(string[] args) {
+            {
+                TestModule.Test_SqrtRem_Stub_0002(0);
+                Console.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                for (long i = UInt32.MinValue; i <= UInt32.MaxValue; ++i) {
+                    var v = unchecked((UInt32)i);
+
+                    var f = Mathematics.Elementary.Math.Sqrt_A_F(v);
+                    var g = Mathematics.Elementary.Math.Sqrt_A_I(v);
+                    if (f != g) {
+                        Console.WriteLine($@"{v,8}: {f,8} != {g,-8}");
+                        Console.WriteLine("!!!");
+                    }
+                }
+                Console.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 var sdafa = false;
                 Console.WriteLine(Utilities.SizeOfModule.BitSizeOf<Int128>());
@@ -1842,7 +1773,6 @@ namespace UltimateOrb.Core.Tests {
                 var sdfsas = fef.ReadToEnd();
 
                 System.IO.File.WriteAllText("ttt233.dgml", sdfsas, enc);
-
                 /*
                 var g1 = g.Select<affasdfasdf, Void, DefaultValuedSelector<ulong, affasdfasdf>, VoidValuedSelector<double>>(DefaultConstructor.Invoke<DefaultValuedSelector<ulong, affasdfasdf>>(), DefaultConstructor.Invoke<VoidValuedSelector<double>>());
 

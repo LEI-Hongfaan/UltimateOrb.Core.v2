@@ -7,7 +7,7 @@ namespace UltimateOrb {
 
     public static partial class BclTypeExtensions {
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]

@@ -147,7 +147,7 @@ namespace UltimateOrb.Collections.Generic {
     [DiscardableAttribute()]
     public static partial class BclListModule {
 
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]

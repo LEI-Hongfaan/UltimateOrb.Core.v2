@@ -10,7 +10,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt64 Sqrt_A_I(UInt64 radicand) {
@@ -32,7 +32,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt32 Sqrt_A_I(UInt32 radicand) {
@@ -54,7 +54,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt64 SqrtRem_A_I(UInt64 radicand, out UInt64 remainder) {
             unchecked {
@@ -76,7 +76,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt32 SqrtRem_A_I(UInt32 radicand, out UInt32 remainder) {
             unchecked {
@@ -98,35 +98,37 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt64 Sqrt_A_F(UInt64 radicand) {
             unchecked {
-                var t = (UInt32)Math.Sqrt(radicand);
-                return 0 == t ? (0 == radicand ? 0 : ~(UInt32)0u) : ((UInt64)t * t > radicand ? --t : t);
+                // truncated
+                var t = (UInt32)System.Math.Sqrt(radicand);
+                return 0 == t ? (0 == radicand ? 0u : ~(UInt32)0u) : ((UInt64)t * t > radicand ? --t : t);
             }
         }
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt32 Sqrt_A_F(UInt32 radicand) {
             unchecked {
-                return (UInt16)(System.Math.Sqrt(0.5 + radicand) - 0.5);
+                // truncated
+                return (UInt16)(System.Math.Sqrt(radicand));
             }
         }
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt64 SqrtRem_A_F(UInt64 radicand, out UInt64 remainder) {
             unchecked {
                 UInt64 s;
-                var t = (UInt32)Math.Sqrt(radicand);
+                var t = (UInt32)System.Math.Sqrt(radicand);
                 if (0 == t) {
                     if (0 == radicand) {
                         remainder = 0;
@@ -149,7 +151,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt32 SqrtRem_A_F(UInt32 radicand, out UInt32 remainder) {
             unchecked {
@@ -161,7 +163,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         // ~34.9 Cyc
@@ -171,7 +173,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt32 Sqrt(UInt32 radicand) {
@@ -180,7 +182,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt64 SqrtRem(UInt64 radicand, out UInt64 remainder) {
             return SqrtRem_A_F(radicand, out remainder);
@@ -188,7 +190,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt32 SqrtRem(UInt32 radicand, out UInt32 remainder) {
             return SqrtRem_A_F(radicand, out remainder);
@@ -196,7 +198,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt64 Pow(UInt64 @base, uint exponent) {
@@ -224,7 +226,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static UInt32 Pow(UInt32 @base, uint exponent) {
@@ -252,7 +254,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static uint Ceiling(uint value, uint divisor) {
@@ -267,7 +269,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static ulong Ceiling(ulong value, ulong divisor) {
@@ -282,7 +284,7 @@ namespace UltimateOrb.Mathematics.Elementary {
 
         [CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static uint DivideCeiling(uint dividend, uint divisor) {
@@ -293,7 +295,7 @@ namespace UltimateOrb.Mathematics.Elementary {
         }
 
         [CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static ulong DivideCeiling(ulong dividend, ulong divisor) {
@@ -303,7 +305,7 @@ namespace UltimateOrb.Mathematics.Elementary {
         }
 
         [CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static uint DivideCeilingNoThrow(uint dividend, uint divisor) {
@@ -317,7 +319,7 @@ namespace UltimateOrb.Mathematics.Elementary {
         }
 
         [CLSCompliantAttribute(false)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static ulong DivideCeilingNoThrow(ulong dividend, ulong divisor) {

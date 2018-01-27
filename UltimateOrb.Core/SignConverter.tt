@@ -31,7 +31,7 @@ for (var i = 0; i < 16; ++i) {
 	}
 #>
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [TargetedPatchingOptOutAttribute("")]
+        [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static <#= result_type_sign #><#= type_base #> To<#= "" == result_type_sign ? "S" : "Uns" #>igned<#= "" == check ? "C" : "Unc" #>hecked(this <#= variable_type_sign #><#= type_base #> value) {
