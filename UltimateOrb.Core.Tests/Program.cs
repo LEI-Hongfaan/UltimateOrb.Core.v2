@@ -7,6 +7,7 @@ using System.Threading;
 
 namespace UltimateOrb.Core.Tests {
     using System.Diagnostics;
+    using System.Reflection;
     using System.Reflection.Emit;
     using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
@@ -1655,32 +1656,202 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+        public static partial class Constant {
+
+            public readonly partial struct Functor<T1, T2> : IO.IFunc<T1, T2, T1> {
+
+                public T1 Invoke(T1 arg1, T2 arg2) {
+                    return arg1;
+                }
+            }
+        }
+
+        public static partial class Select {
+
+            public readonly partial struct Functor<TSelector, TFunctorOfT1, TFunctorOfT2, T1, T2>
+                : IO.IFunc<TSelector, TFunctorOfT1, TFunctorOfT2>
+                where TSelector : IO.IFunc<T1, T2> {
+
+                [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public TFunctorOfT2 Invoke(TSelector arg1, TFunctorOfT1 arg2) {
+                    if (typeof(TFunctorOfT1) == typeof(T1[]) &&
+                        typeof(TFunctorOfT2) == typeof(T2[])) {
+                        return (TFunctorOfT2)(object)Array.ConvertAll((T1[])(object)arg2, (x) => arg1.Invoke(x));
+                    }
+                    throw new NotImplementedException();
+                }
+            }
+        }
+
+        private partial struct asdafsadfa : IO.IFunc<uint, long> {
+
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            public long Invoke(uint arg) {
+                return arg * arg - 3;
+            }
+        }
+
+        private readonly partial struct Product<T> {
+
+            private readonly T product;
+
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            public T GetProduct() {
+                return this.product;
+            }
+        }
+
+        public abstract class KindAsBclType : TypeDelegator {
+
+            protected KindAsBclType(Type delegatingType) : base(delegatingType) {
+            }
+
+            protected KindAsBclType() : base() {
+            }
+        }
+
+        internal abstract class KindUnsafeInstanceAsBclType<T> : TypeDelegator {
+
+            protected KindUnsafeInstanceAsBclType() : base(typeof(T)) {
+            }
+        }
+
+        public abstract partial class KindExpression {
+
+            internal KindExpression() {
+            }
+        }
+
+
+        public abstract partial class NullaryKindExpression {
+
+            internal NullaryKindExpression() : base() {
+            }
+        }
+
+        public sealed partial class ConstraintKindExpression : NullaryKindExpression {
+
+            private readonly byte[] name;
+
+            private readonly object scope;
+
+            private readonly Type impl;
+
+            public ConstraintKindExpression(byte[] name_array, int name_start, int name_count) : base() {
+                ArrayModule.CheckArraySegmentThrowIfFailed(name_array, name_start, name_count);
+                var name = new byte[name_count];
+                Array.Copy(name_array, name, name.Length);
+                this.name = name;
+            }
+
+            public ConstraintKindExpression(Type inhabited) : base() {
+                if (inhabited.IsGenericTypeDefinition) {
+                    throw new InvalidOperationException();
+                }
+                this.impl = inhabited;
+            }
+        }
+
+        public sealed partial class TypeKindExpression : NullaryKindExpression {
+
+            private readonly byte[] name;
+
+            private readonly object scope;
+
+            private readonly Type impl;
+
+            public TypeKindExpression(byte[] name_array, int name_start, int name_count) : base() {
+                ArrayModule.CheckArraySegmentThrowIfFailed(name_array, name_start, name_count);
+                var name = new byte[name_count];
+                Array.Copy(name_array, name, name.Length);
+                this.name = name;
+            }
+
+            public TypeKindExpression(Type inhabited) : base() {
+                if (inhabited.IsGenericTypeDefinition) {
+                    throw new InvalidOperationException();
+                }
+                this.impl = inhabited;
+            }
+        }
+
+        public sealed partial class FunctionKindExpression : KindExpression {
+
+            private readonly byte[] name;
+
+            private readonly object scope;
+
+            private readonly ConstraintKindExpression[] constraints;
+
+            private readonly KindExpression parameter_kind;
+
+            private readonly KindExpression return_kind;
+
+            public FunctionKindExpression(KindExpression parameter_kind, KindExpression return_kind, byte[] name_array, int name_start, int name_count) : this(parameter_kind, return_kind) {
+                if (null != name_array) {
+                    ArrayModule.CheckArraySegmentThrowIfFailed(name_array, name_start, name_count);
+                    var name = new byte[name_count];
+                    Array.Copy(name_array, name, name.Length);
+                    this.name = name;
+                }
+                throw new ArgumentNullException(nameof(name_array));
+            }
+
+            public FunctionKindExpression(KindExpression parameter_kind, KindExpression return_kind) : base() {
+                if (null != parameter_kind && null != return_kind) {
+                    this.parameter_kind = parameter_kind;
+                    this.return_kind = return_kind;
+                }
+                if (null == parameter_kind) {
+                    throw new ArgumentNullException(nameof(parameter_kind));
+                }
+                if (null == return_kind) {
+                    throw new ArgumentNullException(nameof(return_kind));
+                }
+                throw null;
+            }
+
+            public FunctionKindExpression(Type instance) : base() {
+                throw new NotImplementedException();
+                if (instance.IsGenericType) {
+                    if (instance.ContainsGenericParameters) {
+                        instance.GetGenericArguments();
+                    }
+                }
+                if (instance.IsArray) {
+                    // var a  = 
+                }
+            }
+
+
+        }
+
+
+        private static void dsfasdf<T>() {
+            if (false) {
+                var vv = new TypeKindExpression(typeof(Product<>));
+            }
+            {
+                var vv = new TypeKindExpression(typeof(T[]));
+            }
+            {
+                var vv = new TypeKindExpression(typeof(T));
+            }
+            {
+                var vv = new TypeKindExpression(typeof(Product<int>));
+            }
+            {
+                var vv = new TypeKindExpression(typeof(Array));
+            }
+
+        }
 
         private static int Main(string[] args) {
             {
-                TestModule.Test_SqrtRem_Stub_0002(0);
-                Console.WriteLine("...");
-                Console.ReadKey(true);
-                return 0;
-            }
-            {
-                for (long i = UInt32.MinValue; i <= UInt32.MaxValue; ++i) {
-                    var v = unchecked((UInt32)i);
-
-                    var f = Mathematics.Elementary.Math.Sqrt_A_F(v);
-                    var g = Mathematics.Elementary.Math.Sqrt_A_I(v);
-                    if (f != g) {
-                        Console.WriteLine($@"{v,8}: {f,8} != {g,-8}");
-                        Console.WriteLine("!!!");
-                    }
-                }
-                Console.WriteLine("...");
-                Console.ReadKey(true);
-                return 0;
-            }
-            {
-                var sdafa = false;
-                Console.WriteLine(Utilities.SizeOfModule.BitSizeOf<Int128>());
+                dsfasdf<int>();
+                Select.Functor<asdafsadfa, uint[], long[], uint, long> a;
+                var sdfa = a.Invoke(default(asdafsadfa), new uint[] { 3, 4, 5 });
+                Printf(Console.Out, sdfa);
                 Console.ReadKey(true);
                 return 0;
             }
@@ -1716,7 +1887,27 @@ namespace UltimateOrb.Core.Tests {
                 // Console.WriteLine(c);
                 Console.ReadKey(true);
                 return 0;
+            }
+            {
+                for (long i = UInt32.MinValue; i <= UInt32.MaxValue; ++i) {
+                    var v = unchecked((UInt32)i);
 
+                    var f = Mathematics.Elementary.Math.Sqrt_A_F(v);
+                    var g = Mathematics.Elementary.Math.Sqrt_A_I(v);
+                    if (f != g) {
+                        Console.WriteLine($@"{v,8}: {f,8} != {g,-8}");
+                        Console.WriteLine("!!!");
+                    }
+                }
+                Console.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var sdafa = false;
+                Console.WriteLine(Utilities.SizeOfModule.BitSizeOf<Int128>());
+                Console.ReadKey(true);
+                return 0;
             }
             {
                 var rrr = GetRandom();

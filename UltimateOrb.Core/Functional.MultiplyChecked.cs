@@ -33,6 +33,10 @@ namespace UltimateOrb.Mathematics.Functional {
                         return (T)(object)checked((Byte)unchecked((uint)(Byte)(object)arg1 * (uint)(Byte)(object)arg2));
                     } else if (typeof(SByte) == typeof(T)) {
                         return (T)(object)checked((SByte)unchecked((int)(SByte)(object)arg1 * (int)(SByte)(object)arg2));
+                    } else if (typeof(Int128) == typeof(T)) {
+                        return (T)(object)(Int128.Multiply((Int128)(object)arg1, (Int128)(object)arg2));
+                    } else if (typeof(UInt128) == typeof(T)) {
+                        return (T)(object)(UInt128.Multiply((UInt128)(object)arg1, (UInt128)(object)arg2));
                     }
                 }
                 return InvokeImpl1(arg1, arg2);
@@ -60,25 +64,27 @@ namespace UltimateOrb.Mathematics.Functional {
             }
             {
                 var b = false;
-                {
-                    if (null != default(T)) {
-                        if (typeof(Int32) == typeof(T)) {
-                            b = true;
-                        } else if (typeof(Int64) == typeof(T)) {
-                            b = true;
-                        } else if (typeof(UInt32) == typeof(T)) {
-                            b = true;
-                        } else if (typeof(UInt64) == typeof(T)) {
-                            b = true;
-                        } else if (typeof(Int16) == typeof(T)) {
-                            b = true;
-                        } else if (typeof(UInt16) == typeof(T)) {
-                            b = true;
-                        } else if (typeof(Byte) == typeof(T)) {
-                            b = true;
-                        } else if (typeof(SByte) == typeof(T)) {
-                            b = true;
-                        }
+                if (null != default(T)) {
+                    if (typeof(Int32) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(Int64) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(UInt32) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(UInt64) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(Int16) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(UInt16) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(Byte) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(SByte) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(Int128) == typeof(T)) {
+                        b = true;
+                    } else if (typeof(UInt128) == typeof(T)) {
+                        b = true;
                     }
                 }
                 if (b) {

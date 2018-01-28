@@ -371,35 +371,35 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static void CheckArraySegmentThrowIfFailed<T>(T[] array, int offset, int count) {
+        public static void CheckArraySegmentThrowIfFailed<T>(T[] array, int start, int count) {
             if (
                 null == array ||
-                0 > offset ||
+                0 > start ||
                 0 > count ||
-                unchecked(array.Length - offset) < count
+                unchecked(array.Length - start) < count
             ) {
-                ThrowArgumentException_CheckArraySegment<T>(array, offset, count);
+                ThrowArgumentException_CheckArraySegment<T>(array, start, count);
             }
         }
 
         [MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
         [PureAttribute()]
-        internal static void ThrowArgumentException_CheckArraySegment<T>(T[] array, int offset, int count) {
-            new ArraySegment<T>(array, offset, count).Ignore();
+        internal static void ThrowArgumentException_CheckArraySegment<T>(T[] array, int start, int count) {
+            new ArraySegment<T>(array, start, count).Ignore();
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static void CheckArraySegmentBufferThrowIfFailed<T>(int capacity, T[] array, int offset, int count) {
+        public static void CheckArraySegmentBufferThrowIfFailed<T>(int capacity, T[] array, int start, int count) {
             if (
                 null == array ||
                 0 <= capacity && (
-                    0 > offset ||
+                    0 > start ||
                     capacity > count ||
-                    unchecked(array.Length - offset) < count
+                    unchecked(array.Length - start) < count
                 )
             ) {
-                ThrowArgumentException_CheckArraySegmentBuffer(capacity, array, offset, count);
+                ThrowArgumentException_CheckArraySegmentBuffer(capacity, array, start, count);
             }
         }
 

@@ -1189,7 +1189,8 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public int IndexOf<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
             var buffer = this.buffer;
-            for (var i = 0; buffer.Length > i; ++i) {
+            var count = this.count;
+            for (var i = 0; count > i; ++i) {
                 if (comparer.Equals(item, buffer[i])) {
                     return i;
                 }
