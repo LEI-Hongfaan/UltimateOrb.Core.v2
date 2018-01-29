@@ -9,40 +9,14 @@ namespace UltimateOrb {
 
     [SerializableAttribute()]
     [StructLayoutAttribute(LayoutKind.Sequential)]
-    public partial struct Array<T> : IList<T>, Collections.Generic.RefReturnSupported.IList<T, Array<T>.Enumerator> {
+    public partial struct BclArrayAsArray<T> : IList<T>, Collections.Generic.RefReturnSupported.IList<T, Array<T>.Enumerator> {
 
         private readonly T[] m_value;
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private Array(T[] value) {
+        public BclArrayAsArray(T[] value) {
             this.m_value = value;
-        }
-
-        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public Array(int length) {
-            this.m_value = new T[length];
-        }
-
-        [CLSCompliantAttribute(false)]
-        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public Array(uint length) {
-            this.m_value = new T[length];
-        }
-
-        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public Array(long length) {
-            this.m_value = new T[length];
-        }
-
-        [CLSCompliantAttribute(false)]
-        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public Array(ulong length) {
-            this.m_value = new T[length];
         }
 
         public ref T this[int index] {
@@ -114,7 +88,7 @@ namespace UltimateOrb {
             get => true;
         }
 
-        long Collections.Generic.ICollection<T, Enumerator>.LongCount {
+        long Collections.Generic.ICollection<T, Array<T>.Enumerator>.LongCount {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -181,8 +155,8 @@ namespace UltimateOrb {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public Enumerator GetEnumerator() {
-            return new Enumerator(this.m_value);
+        public Array<T>.Enumerator GetEnumerator() {
+            return new Array<T>.Enumerator(this.m_value);
         }
 
         public int IndexOf(T item) {
@@ -220,7 +194,7 @@ namespace UltimateOrb {
             throw new NotSupportedException();
         }
 
-        ref T Collections.Generic.RefReturnSupported.ICollection<T, Enumerator>.Add(T item) {
+        ref T Collections.Generic.RefReturnSupported.ICollection<T, Array<T>.Enumerator>.Add(T item) {
             // TODO
             throw new NotSupportedException();
         }
@@ -228,81 +202,19 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         IEnumerator<T> IEnumerable<T>.GetEnumerator() {
-            return new Enumerator(this.m_value);
+            return new Array<T>.Enumerator(this.m_value);
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         IEnumerator IEnumerable.GetEnumerator() {
-            return new Enumerator(this.m_value);
+            return new Array<T>.Enumerator(this.m_value);
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        ref T UltimateOrb.Collections.Generic.RefReturnSupported.IList<T, Enumerator>.Insert(int index, T item) {
+        ref T UltimateOrb.Collections.Generic.RefReturnSupported.IList<T, Array<T>.Enumerator>.Insert(int index, T item) {
             throw new NotImplementedException();
-        }
-
-        public partial struct Enumerator : Collections.Generic.RefReturnSupported.IEnumerator<T> {
-
-            private readonly T[] array;
-
-            private int index;
-
-            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public Enumerator(T[] array) {
-                this.array = array;
-                this.index = -1;
-            }
-
-            public ref T Current {
-
-                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => ref this.array[this.index];
-            }
-
-            T System.Collections.Generic.IEnumerator<T>.Current {
-
-                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => this.array[this.index];
-            }
-
-            object IEnumerator.Current {
-
-                [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => this.array[this.index];
-            }
-
-            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public void Dispose() {
-            }
-
-            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public bool MoveNext() {
-                var i = this.index;
-                checked {
-                    ++i;
-                }
-                var count = this.array.Length;
-                if (count > i) {
-                    this.index = i;
-                    return true;
-                }
-                this.index = count;
-                return false;
-            }
-
-            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public void Reset() {
-                this.index = -1;
-            }
         }
     }
 }

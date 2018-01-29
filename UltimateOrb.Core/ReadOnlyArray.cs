@@ -53,6 +53,29 @@ namespace UltimateOrb {
             get => ref this.m_value[index].Value;
         }
 
+        [CLSCompliantAttribute(false)]
+        public ref readonly T this[uint index] {
+
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.m_value[index].Value;
+        }
+
+        public ref readonly T this[long index] {
+
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.m_value[index].Value;
+        }
+
+        [CLSCompliantAttribute(false)]
+        public ref readonly T this[ulong index] {
+
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.m_value[index].Value;
+        }
+
         T System.Collections.Generic.IReadOnlyList<T>.this[int index] {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]

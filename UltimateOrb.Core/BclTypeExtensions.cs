@@ -30,5 +30,14 @@ namespace UltimateOrb {
         public static BclArrayAsReadOnly<T> AsReadOnly<T>(this T[] value) {
             return new BclArrayAsReadOnly<T>(value);
         }
+
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static BclArrayAsArray<T> AsArray<T>(this T[] value) {
+            return new BclArrayAsArray<T>(value);
+        }
     }
 }

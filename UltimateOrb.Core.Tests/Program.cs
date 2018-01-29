@@ -11,6 +11,7 @@ namespace UltimateOrb.Core.Tests {
     using System.Reflection.Emit;
     using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
+    using UltimateOrb.Collections.Generic.ReferenceTypes;
     using UltimateOrb.Mathematics.Functional;
     using UltimateOrb.Plain.ValueTypes;
 
@@ -1718,12 +1719,74 @@ namespace UltimateOrb.Core.Tests {
 
         public abstract partial class KindExpression {
 
+            protected abstract string NameImpl {
+
+                get;
+            }
+
+            public string Name {
+
+                get {
+                    return this.NameImpl;
+                }
+            }
+
+            protected abstract string FullNameImpl {
+
+                get;
+            }
+
+            public string FullName {
+
+                get {
+                    return this.FullNameImpl;
+                }
+            }
+
             internal KindExpression() {
             }
         }
 
+        public abstract partial class KindExpressionImplBase : KindExpression {
 
-        public abstract partial class NullaryKindExpression {
+            protected abstract Collections.Generic.ReferenceTypes.LinkedTree<ScopeSegment>.Node ScopeImpl {
+
+                get;
+            }
+
+            internal KindExpressionImplBase() : base() {
+            }
+
+            protected override string FullNameImpl {
+
+                get {
+                    var n = this.Name;
+                    var s = this.ScopeImpl;
+                    var ss = new Plain.ValueTypes.Stack<Collections.Generic.ReferenceTypes.LinkedTree<ScopeSegment>.Node>(0);
+                    while (null != s) {
+                        ss.Push(s);
+                    }
+                    var sb = new System.Text.StringBuilder();
+                    foreach (var item in ss) {
+                        sb.Append(item.Value.Name);
+                        if (item.Value.IsNamespace) {
+                            sb.Append('.');
+                        } else {
+                            sb.Append('+');
+                        }
+                    }
+                    sb.Append(n);
+                    return sb.ToString();
+                }
+            }
+        }
+
+        public abstract partial class NullaryKindExpression : KindExpressionImplBase {
+
+            protected abstract Type ImplementImpl {
+
+                get;
+            }
 
             internal NullaryKindExpression() : base() {
             }
@@ -1731,55 +1794,112 @@ namespace UltimateOrb.Core.Tests {
 
         public sealed partial class ConstraintKindExpression : NullaryKindExpression {
 
-            private readonly byte[] name;
-
-            private readonly object scope;
-
             private readonly Type impl;
 
-            public ConstraintKindExpression(byte[] name_array, int name_start, int name_count) : base() {
-                ArrayModule.CheckArraySegmentThrowIfFailed(name_array, name_start, name_count);
-                var name = new byte[name_count];
-                Array.Copy(name_array, name, name.Length);
-                this.name = name;
-            }
+            private readonly string name;
 
-            public ConstraintKindExpression(Type inhabited) : base() {
+            private readonly Collections.Generic.ReferenceTypes.LinkedTree<ScopeSegment>.Node scope;
+
+            public ConstraintKindExpression(Type inhabited) {
                 if (inhabited.IsGenericTypeDefinition) {
                     throw new InvalidOperationException();
                 }
-                this.impl = inhabited;
+                var impl = inhabited;
+                this.impl = impl;
+                this.name = impl.Name;
+                // TODO
+                this.scope = null;
+            }
+
+            protected override LinkedTree<ScopeSegment>.Node ScopeImpl {
+
+                get => this.scope;
+            }
+
+            protected override string NameImpl {
+
+                get => this.name;
+            }
+
+            protected override Type ImplementImpl {
+
+                get => this.impl;
             }
         }
 
         public sealed partial class TypeKindExpression : NullaryKindExpression {
 
-            private readonly byte[] name;
-
-            private readonly object scope;
-
             private readonly Type impl;
 
-            public TypeKindExpression(byte[] name_array, int name_start, int name_count) : base() {
-                ArrayModule.CheckArraySegmentThrowIfFailed(name_array, name_start, name_count);
-                var name = new byte[name_count];
-                Array.Copy(name_array, name, name.Length);
-                this.name = name;
-            }
+            private readonly string name;
+
+            private readonly Collections.Generic.ReferenceTypes.LinkedTree<ScopeSegment>.Node scope;
 
             public TypeKindExpression(Type inhabited) : base() {
                 if (inhabited.IsGenericTypeDefinition) {
                     throw new InvalidOperationException();
                 }
-                this.impl = inhabited;
+                var impl = inhabited;
+                this.impl = impl;
+                this.name = impl.Name;
+                // TODO
+                this.scope = null;
+            }
+
+            protected override LinkedTree<ScopeSegment>.Node ScopeImpl {
+
+                get => this.scope;
+            }
+
+            protected override string NameImpl {
+
+                get => this.name;
+            }
+
+            protected override Type ImplementImpl {
+
+                get => this.impl;
             }
         }
 
-        public sealed partial class FunctionKindExpression : KindExpression {
+        public readonly partial struct ScopeSegment {
 
-            private readonly byte[] name;
+            private readonly string name;
 
-            private readonly object scope;
+            private readonly KindExpression kind;
+
+            public bool IsNamespace {
+
+                get {
+                    return null == this.kind;
+                }
+            }
+
+            public string Name {
+
+                get {
+                    return this.name ?? this.kind.Name ?? "";
+                }
+            }
+
+            public ScopeSegment(string name) {
+                if (null == name) {
+                    throw new ArgumentNullException(nameof(name));
+                }
+                this.name = name;
+                this.kind = null;
+            }
+
+            public ScopeSegment(KindExpression entity) {
+                if (null == entity) {
+                    throw new ArgumentNullException(nameof(entity));
+                }
+                this.name = null;
+                this.kind = entity;
+            }
+        }
+
+        public sealed partial class FunctionKindExpression : KindExpressionImplBase {
 
             private readonly ConstraintKindExpression[] constraints;
 
@@ -1787,15 +1907,9 @@ namespace UltimateOrb.Core.Tests {
 
             private readonly KindExpression return_kind;
 
-            public FunctionKindExpression(KindExpression parameter_kind, KindExpression return_kind, byte[] name_array, int name_start, int name_count) : this(parameter_kind, return_kind) {
-                if (null != name_array) {
-                    ArrayModule.CheckArraySegmentThrowIfFailed(name_array, name_start, name_count);
-                    var name = new byte[name_count];
-                    Array.Copy(name_array, name, name.Length);
-                    this.name = name;
-                }
-                throw new ArgumentNullException(nameof(name_array));
-            }
+            protected override LinkedTree<ScopeSegment>.Node ScopeImpl => throw new NotImplementedException();
+
+            protected override string NameImpl => throw new NotImplementedException();
 
             public FunctionKindExpression(KindExpression parameter_kind, KindExpression return_kind) : base() {
                 if (null != parameter_kind && null != return_kind) {
@@ -1812,14 +1926,15 @@ namespace UltimateOrb.Core.Tests {
             }
 
             public FunctionKindExpression(Type instance) : base() {
-                throw new NotImplementedException();
                 if (instance.IsGenericType) {
                     if (instance.ContainsGenericParameters) {
-                        instance.GetGenericArguments();
+                        var a = instance.GetGenericArguments();
+
                     }
                 }
                 if (instance.IsArray) {
-                    // var a  = 
+                    var a = instance.GetElementType();
+
                 }
             }
 
@@ -1843,7 +1958,12 @@ namespace UltimateOrb.Core.Tests {
             {
                 var vv = new TypeKindExpression(typeof(Array));
             }
-
+            {
+                var vv = new FunctionKindExpression(typeof(Graph<T, long>));
+            }
+            {
+                var vv = new FunctionKindExpression(typeof(Graph<,>));
+            }
         }
 
         private static int Main(string[] args) {
