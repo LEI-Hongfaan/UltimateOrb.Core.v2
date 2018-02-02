@@ -22,8 +22,6 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
         private static Void @void1;
 
-        private static readonly Void[] array_empty = new Void[0];
-
         [ContractPublicPropertyNameAttribute("Count")]
         private int count;
 

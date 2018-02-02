@@ -12,6 +12,30 @@ namespace UltimateOrb {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public Void Invoke(T arg) {
+            return InvokeSealed();
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        private static Void InvokeSealed() {
+            return default;
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public Void<TT> Invoke<TT>(T arg) {
+            return InvokeSealed<TT>();
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        private static Void<TT> InvokeSealed<TT>() {
             return default;
         }
 
@@ -20,7 +44,6 @@ namespace UltimateOrb {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public void Initialize() {
-            throw new System.NotImplementedException();
         }
 
         [TargetedPatchingOptOutAttribute(null)]

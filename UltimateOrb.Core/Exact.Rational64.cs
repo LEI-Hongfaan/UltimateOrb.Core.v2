@@ -507,6 +507,16 @@ namespace UltimateOrb.Mathematics.Exact {
             return first.bits == second.bits;
         }
 
+        /*
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static bool operator <=(Rational64 first, Rational64 second) {
+            return first.bits == second.bits;
+        }
+        */
+
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

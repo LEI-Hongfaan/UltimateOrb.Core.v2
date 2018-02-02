@@ -16,7 +16,7 @@ This package does not include the test suite. See Project Site for more informat
     <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
     <AssemblyVersion>1</AssemblyVersion>
     <FileVersion>1</FileVersion>
-    <Version>1.4.0.1</Version>
+    <Version>1.4.0.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RunPostBuildEvent>Always</RunPostBuildEvent>

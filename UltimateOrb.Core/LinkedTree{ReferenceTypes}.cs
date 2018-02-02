@@ -2014,8 +2014,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
     public static class TreeModule {
 
         public static IEnumerator<ITreeNodeTyped<TNode>> GetDescendants<TNode>(this ITreeNodeTyped<TNode> node) where TNode : ITreeNodeTyped<TNode> {
-            Stack<IEnumerator<TNode>> s
-                = new Stack<IEnumerator<TNode>>(5);
+            Plain.ValueTypes.Stack<IEnumerator<TNode>> s
+                = new Plain.ValueTypes.Stack<IEnumerator<TNode>>(5);
             for (IEnumerator<TNode> enumerator = node.GetEnumerator(); ;) {
                 while (enumerator.MoveNext()) {
                     var t = enumerator.Current;
@@ -2033,8 +2033,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
         }
 
         public static IEnumerator<ITreeNode> GetDescendants(this ITreeNode node) {
-            Stack<IEnumerator<ITreeNode>> s
-                = new Stack<IEnumerator<ITreeNode>>(5);
+            Plain.ValueTypes.Stack<IEnumerator<ITreeNode>> s
+                = new Plain.ValueTypes.Stack<IEnumerator<ITreeNode>>(5);
             for (IEnumerator<ITreeNode> enumerator = node.GetEnumerator(); ;) {
                 while (enumerator.MoveNext()) {
                     var t = enumerator.Current;
