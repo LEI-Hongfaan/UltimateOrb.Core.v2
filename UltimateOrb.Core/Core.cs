@@ -11,7 +11,22 @@ namespace UltimateOrb {
 
     [ComVisibleAttribute(true)]
     [SerializableAttribute()]
-    public partial struct Void {
+    public readonly partial struct Void {
+    }
+
+    /// <summary>
+    ///     <para>
+    ///         Provides a type that is different from the specified type.
+    ///     </para>
+    /// </summary>
+    /// <typeparam name="T">
+    ///     <para>
+    ///         The specified type.
+    ///     </para>
+    /// </typeparam>
+    [ComVisibleAttribute(true)]
+    [SerializableAttribute()]
+    public readonly partial struct Void<T> {
     }
 
     [AttributeUsageAttribute(AttributeTargets.Method | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]

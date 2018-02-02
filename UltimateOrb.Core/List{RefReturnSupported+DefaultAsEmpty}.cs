@@ -31,7 +31,9 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         private int count;
 
         /// <summary>
-        ///     <para>Initializes a new instance of the <see cref="List{T}"/> type that is empty and has the specified initial capacity.</para>
+        ///     <para>
+        ///         Initializes a new instance of the <see cref="List{T}"/> type that is empty and has the specified initial capacity.
+        ///     </para>
         /// </summary>
         /// <param name="capacity">
         ///     <para>The number of elements that the new list can initially store.</para>
@@ -244,8 +246,9 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 Contract.Requires(null != this.buffer);
-                this.CheckIndex(index);
-                return ref this.buffer[index];
+                var @this = this;
+                @this.CheckIndex(index);
+                return ref @this.buffer[index];
             }
         }
 
@@ -254,15 +257,17 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                this.CheckIndex(index);
-                return this.buffer[index];
+                var @this = this;
+                @this.CheckIndex(index);
+                return @this.buffer[index];
             }
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             set {
-                this.CheckIndex(index);
-                this.buffer[index] = value;
+                var @this = this;
+                @this.CheckIndex(index);
+                @this.buffer[index] = value;
             }
         }
 
@@ -271,8 +276,9 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                this.CheckIndex(index);
-                return this.buffer[index];
+                var @this = this;
+                @this.CheckIndex(index);
+                return @this.buffer[index];
             }
         }
 
@@ -282,8 +288,9 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 Contract.Requires(null != this.buffer);
-                this.CheckIndex(index);
-                return ref this.buffer[index];
+                var @this = this;
+                @this.CheckIndex(index);
+                return ref @this.buffer[index];
             }
         }
 
@@ -377,10 +384,10 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Clear() {
             var count = this.count;
-            this.count = 0;
             if (count > 0) {
                 var buffer = this.buffer;
                 Array.Clear(buffer, 0, count); // Good for GC.
+                this.count = 0;
             }
         }
 
@@ -1128,20 +1135,50 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         }
         */
 
-        private bool Initialized {
+        private bool IsInitialized {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                return null != this.buffer;
+                return true;
             }
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public List<T> Select() {
+            Contract.Ensures(!this.IsInitialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.IsInitialized || this.Count == Contract.Result<T[]>().Length);
+            var buffer = this.buffer;
+            var count = this.count;
+            var new_buffer = new T[count];
+            Array.Copy(buffer, 0, new_buffer, 0, count);
+            return new List<T>(new_buffer, count);
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public List<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult>, new() {
+            Contract.Ensures(!this.IsInitialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.IsInitialized || this.Count == Contract.Result<T[]>().Length);
+            var buffer = this.buffer;
+            var count = this.count;
+            return new List<TResult>(ArrayModule.Select<T, TResult, TSelector>(buffer, count, selector), count);
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public List<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() {
+            Contract.Ensures(!this.IsInitialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.IsInitialized || this.Count == Contract.Result<T[]>().Length);
+            return this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>());
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T[] ToArray() {
-            Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
-            Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
+            Contract.Ensures(!this.IsInitialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.IsInitialized || this.Count == Contract.Result<T[]>().Length);
             var buffer = this.buffer;
             var count = this.count;
             var array = new T[count];
@@ -1153,9 +1190,12 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void TrimExcess() {
             var count = this.count;
-            var threshold = (int)(((double)this.buffer.Length) * 0.9); // null check
-            if (count < threshold) {
-                this.Capacity = count;
+            var buffer = this.buffer;
+            if (null != buffer) {
+                var threshold = (int)(((double)buffer.Length) * 0.9); // null check
+                if (count < threshold) {
+                    this.Capacity = count;
+                }
             }
         }
 
@@ -1174,7 +1214,8 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public int IndexOf<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
             var buffer = this.buffer;
-            for (var i = 0; buffer.Length > i; ++i) {
+            var count = this.count;
+            for (var i = 0; count > i; ++i) {
                 if (comparer.Equals(item, buffer[i])) {
                     return i;
                 }
@@ -1183,8 +1224,8 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public int IndexOf<TEqualityComparer>(T item) where TEqualityComparer : struct, IEqualityComparer<T> {
-            return this.IndexOf(default(TEqualityComparer), item);
+        public int IndexOf<TEqualityComparer>(T item) where TEqualityComparer : IEqualityComparer<T>, new() {
+            return this.IndexOf(DefaultConstructor.Invoke<TEqualityComparer>(), item);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -1251,6 +1292,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported.DefaultAsEmpty {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Dispose() {
+                // TODO
                 this.list.count = 0;
                 this.list.buffer = null;
             }

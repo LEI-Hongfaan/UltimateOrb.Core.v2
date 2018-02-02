@@ -23,7 +23,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
     [DebuggerDisplayAttribute("Count = {Count}")]
     [SerializableAttribute()]
     public partial struct List<T>
-            : IList<T, List<T>.Enumerator>, IReadOnlyList<T, List<T>.Enumerator> {
+        : IList<T, List<T>.Enumerator>, IReadOnlyList<T, List<T>.Enumerator> {
 
         private T[] buffer;
 
@@ -49,7 +49,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public List(int capacity) {
             if (0 <= capacity) {
-                this.buffer = (capacity > 0 ? Array_Empty<T>.Value : new T[capacity]);
+                this.buffer = ((0 == capacity) ? Array_Empty<T>.Value : new T[capacity]);
                 this.count = 0;
                 return;
             }
@@ -63,19 +63,52 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             this.count = count;
         }
 
+        /// <summary>
+        ///     <para>Initializes a new instance of the <see cref="List{T}"/> type that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.</para>
+        /// </summary>
+        /// <typeparam name="TCollection">
+        ///     <para>The type of <paramref name="collection"/>.</para>
+        /// </typeparam>
+        /// <typeparam name="TEnumerator">
+        ///     <para>The enumerator type of <paramref name="collection"/>.</para>
+        /// </typeparam>
+        /// <param name="collection">
+        ///     <para>The collection whose elements are copied to the new list.</para>
+        /// </param>
+        /// <exception cref="OutOfMemoryException">
+        ///     <para>There is insufficient memory to satisfy the request.</para>
+        /// </exception>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static List<T> CreateFromCollection<TCollection, TEnumerator>(TCollection collection)
             where TCollection : ICollection<T, TEnumerator>
             where TEnumerator : IEnumerator<T> {
-            var count = collection.Count;
-            if (count > 0) {
-                var buffer = new T[count];
-                collection.CopyTo(buffer, 0);
-                return new List<T>(buffer, count);
+            if (null != collection) {
+                var count = collection.Count;
+                if (count > 0) {
+                    var buffer = new T[count];
+                    collection.CopyTo(buffer, 0);
+                    return new List<T>(buffer, count);
+                }
+                return new List<T>(0);
             }
-            return new List<T>(0);
+            throw ThrowArgumentNullException_collection();
         }
 
+        /// <summary>
+        ///     <para>Initializes a new instance of the <see cref="List{T}"/> type that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.</para>
+        /// </summary>
+        /// <typeparam name="TEnumerable">
+        ///     <para>The type of <paramref name="collection"/>.</para>
+        /// </typeparam>
+        /// <typeparam name="TEnumerator">
+        ///     <para>The enumerator type of <paramref name="collection"/>.</para>
+        /// </typeparam>
+        /// <param name="collection">
+        ///     <para>The collection whose elements are copied to the new list.</para>
+        /// </param>
+        /// <exception cref="OutOfMemoryException">
+        ///     <para>There is insufficient memory to satisfy the request.</para>
+        /// </exception>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static List<T> Create<TEnumerable, TEnumerator>(TEnumerable collection)
             where TEnumerable : IEnumerable<T, TEnumerator>
@@ -89,23 +122,34 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             return @this;
         }
 
+        /// <summary>
+        ///     <para>Initializes a new instance of the <see cref="List{T}"/> type that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.</para>
+        /// </summary>
+        /// <param name="collection">
+        ///     <para>The collection whose elements are copied to the new list.</para>
+        /// </param>
+        /// <exception cref="OutOfMemoryException">
+        ///     <para>There is insufficient memory to satisfy the request.</para>
+        /// </exception>
         public List(IEnumerable<T> collection) {
             if (null != collection) {
                 if (collection is ICollection<T> c) {
-                    int count = c.Count;
-                    if (count == 0) {
-                        this.buffer = Array_Empty<T>.Value;
-                        this.count = 0;
-                        return;
-                    } else {
+                    var count = c.Count;
+                    if (0 != count) {
                         var buffer = new T[count];
                         c.CopyTo(buffer, 0);
                         this.buffer = buffer;
                         this.count = count;
                         return;
                     }
-                } else {
-                    this = new List<T>(Array_Empty<T>.Value, 0);
+                    {
+                        this.buffer = Array_Empty<T>.Value;
+                        this.count = 0;
+                        return;
+                    }
+                }
+                {
+                    this = new List<T>(0);
                     var e = collection.GetEnumerator();
                     while (e.MoveNext()) {
                         this.Add(e.Current);
@@ -119,11 +163,11 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
         public int Capacity {
 
-            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                Contract.Requires(this.Initialized);
-                Contract.EnsuresOnThrow<NullReferenceException>(Contract.OldValue(this.Initialized));
+                Contract.Requires(this.IsInitialized);
+                Contract.EnsuresOnThrow<NullReferenceException>(Contract.OldValue(this.IsInitialized));
                 Contract.Ensures(0 <= Contract.Result<int>());
                 return this.buffer.Length;
             }
@@ -142,8 +186,11 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                                     Array.Copy(buffer, 0, new_buffer, 0, count);
                                 }
                                 this.buffer = new_buffer;
-                            } else {
+                                return;
+                            }
+                            {
                                 this.buffer = Array_Empty<T>.Value;
+                                return;
                             }
                         }
                     }
@@ -318,13 +365,13 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void AddRange(IEnumerable<T> collection) {
-            Contract.Ensures(Count >= Contract.OldValue(Count));
+            Contract.Ensures(Contract.OldValue(Count) <= Count);
             this.InsertRange(count, collection);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ReadOnlyCollection<T> AsReadOnly() {
-            Contract.Ensures(Contract.Result<ReadOnlyCollection<T>>() != null);
+            Contract.Ensures(null != Contract.Result<ReadOnlyCollection<T>>());
             return new ReadOnlyCollection<T>(this);
         }
 
@@ -1113,20 +1160,20 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         }
         */
 
-        private bool Initialized {
+        private bool IsInitialized {
 
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                return null == this.buffer;
+                return null != this.buffer;
             }
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public List<T> Select() {
-            Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
-            Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
+            Contract.Ensures(!this.IsInitialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.IsInitialized || this.Count == Contract.Result<T[]>().Length);
             var buffer = this.buffer;
             var count = this.count;
             var new_buffer = new T[count];
@@ -1137,8 +1184,8 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public List<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult>, new() {
-            Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
-            Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
+            Contract.Ensures(!this.IsInitialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.IsInitialized || this.Count == Contract.Result<T[]>().Length);
             var buffer = this.buffer;
             var count = this.count;
             return new List<TResult>(ArrayModule.Select<T, TResult, TSelector>(buffer, count, selector), count);
@@ -1147,16 +1194,16 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public List<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() {
-            Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
-            Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
+            Contract.Ensures(!this.IsInitialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.IsInitialized || this.Count == Contract.Result<T[]>().Length);
             return this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>());
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public T[] ToArray() {
-            Contract.Ensures(!this.Initialized || null != Contract.Result<T[]>());
-            Contract.Ensures(!this.Initialized || this.Count == Contract.Result<T[]>().Length);
+            Contract.Ensures(!this.IsInitialized || null != Contract.Result<T[]>());
+            Contract.Ensures(!this.IsInitialized || this.Count == Contract.Result<T[]>().Length);
             var buffer = this.buffer;
             var count = this.count;
             var array = new T[count];
@@ -1168,7 +1215,7 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void TrimExcess() {
             var count = this.count;
-            var threshold = (int)(((double)buffer.Length) * 0.9);
+            var threshold = (int)(((double)buffer.Length) * 0.9); // null check
             if (count < threshold) {
                 this.Capacity = count;
             }
@@ -1224,6 +1271,27 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             return new ListWithDefaultEqualityComparer<T, TEqualityComparer>(this);
         }
 
+        /// <summary>
+        ///     <para>Enumerates the elements of a <see cref="List{T}"/>. This type is a value type.</para>
+        /// </summary>
+        /// <remarks>
+        ///     <para>
+        ///         The default value of <see cref="Enumerator"/> presents the empty enumerator.
+        ///      </para>
+        ///     <para>
+        ///         Initially, the enumerator is positioned before the first element in the collection. At this position, <see cref="Current"/> is undefined.
+        ///         Therefore, you must call <see cref="MoveNext"/> to advance the enumerator to the first element of the collection before reading the value of <see cref="Current"/>.
+        ///         <see cref="Current"/> returns the same object until <see cref="MoveNext"/> is called. MoveNext sets <see cref="Current"/> to the next element.
+        ///         If <see cref="MoveNext"/> passes the end of the collection, the enumerator is positioned after the last element in the collection and <see cref="MoveNext"/> returns false.
+        ///         When the enumerator is at this position, subsequent calls to <see cref="MoveNext"/> also return false. If the last call to <see cref="MoveNext"/> returned false, <see cref="Current"/> is undefined.
+        ///     </para>
+        ///     <para>
+        ///         An instance of <see cref="Enumerator"/> remains valid as long as <see cref="Array.Resize{T}(ref T[], int)"/> does not resize an array in-place.
+        ///         If the elements of the collection are modified, the enumerator will provide modified values instead.
+        ///         However the enumerator does not have exclusive access to the collection; therefore, enumerating through a collection is intrinsically not a thread-safe procedure.
+        ///         To allow the collection to be accessed by multiple threads for reading and writing, you must implement your own synchronization.
+        ///     </para>
+        /// </remarks>
         [SerializableAttribute()]
         public partial struct Enumerator : IEnumerator<T>, IReadOnlyEnumerator<T> {
 
@@ -1238,17 +1306,30 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                 this.index = -1;
             }
 
+            /// <summary>
+            ///     <para>Releases all resources used by the <see cref="Enumerator"/>.</para>
+            /// </summary>
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Dispose() {
+                // TODO
             }
 
+            /// <summary>
+            ///     <para>Advances the enumerator to the next element of the <see cref="List{T}"/>.</para>
+            /// </summary>
+            /// <returns>
+            ///     <para>
+            ///         <c lang="cs">true</c> if the enumerator was successfully advanced to the next element;
+            ///         <c lang="cs">false</c> if the enumerator has passed the end of the collection.
+            ///     </para>
+            /// </returns>
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public bool MoveNext() {
-                var list = this.list;
+                var count = this.list.count;
                 var index = this.index;
-                if (list.count > unchecked(++index)) {
+                if (count > unchecked(++index)) {
                     this.index = index;
                     return true;
                 }
@@ -1282,6 +1363,63 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                 }
             }
 
+            /// <summary>
+            ///     <para>Gets the element at the current position of the enumerator.</para>
+            /// </summary>
+            /// <value>
+            ///     <para>The element in the <see cref="List{T}"/> at the current position of the enumerator.</para>
+            /// </value>
+            /// <exception cref="InvalidOperationException">
+            ///     <para>
+            ///         The requested operation is invalid.
+            ///     </para>
+            /// </exception>
+            /// <exception cref="NotSupportedException">
+            ///     <para>
+            ///         The current position of the enumerator went beyond the bound that the internal data structure of <see cref="Enumerator"/> can support.
+            ///     </para>
+            /// </exception>
+            /// <exception cref="OutOfMemoryException">
+            ///     <para>
+            ///         There is insufficient memory to satisfy the request.
+            ///     </para>
+            /// </exception>
+            /// <exception cref="IndexOutOfRangeException">
+            ///     <para>
+            ///         (<c>ExceptionTypeRelaxed</c> build only.)
+            ///         The requested operation is invalid. 
+            ///     </para>
+            /// </exception>
+            /// <exception cref="NullReferenceException">
+            ///     <para>
+            ///         (<c>ExceptionTypeRelaxed</c> build only.)
+            ///         The requested operation is invalid.
+            ///     </para>
+            /// </exception>
+            /// <exception cref="OverflowException">
+            ///     <para>
+            ///         (<c>ExceptionTypeRelaxed</c> build only.)
+            ///         The current position of the enumerator went beyond the bound that the internal data structure of <see cref="Enumerator"/> can support.
+            ///         -or- The requested operation is invalid.
+            ///     </para>
+            /// </exception>
+            /// <remarks>
+            ///     <para>
+            ///         <see cref="Current"/> is undefined under any of the following conditions:
+            ///         <list type="bullet">
+            ///             <item>
+            ///                 The enumerator is positioned before the first element in the collection, immediately after the enumerator is created.
+            ///                 <see cref="MoveNext"/> must be called to advance the enumerator to the first element of the collection before reading the value of <see cref="Current"/>.
+            ///             </item>
+            ///             <item>
+            ///                 The last call to <see cref="MoveNext"/> returned <c lang="cs">false</c>, which indicates the end of the collection.
+            ///             </item>
+            ///         </list>
+            ///     </para>
+            ///     <para>
+            ///         <see cref="Current"/> returns the same object until <see cref="MoveNext"/> is called. <see cref="MoveNext"/> sets <see cref="Current"/> to the next element.
+            ///     </para>
+            /// </remarks>
             object System.Collections.IEnumerator.Current {
 
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -1291,6 +1429,12 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                 }
             }
 
+            /// <summary>
+            ///     <para>Sets the enumerator to its initial position, which is before the first element in the collection.</para>
+            /// </summary>
+            /// <remarks>
+            ///     <para>After calling <see cref="System.Collections.IEnumerator.Reset"/>, you must call <see cref="MoveNext"/> to advance the enumerator to the first element of the collection before reading the value of <see cref="Current"/>.</para>
+            /// </remarks>
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             void System.Collections.IEnumerator.Reset() {

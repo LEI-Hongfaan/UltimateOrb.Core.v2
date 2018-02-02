@@ -12,6 +12,7 @@ namespace UltimateOrb.Core.Tests {
     using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
     using UltimateOrb.Collections.Generic.ReferenceTypes;
+    using UltimateOrb.Mathematics.Exact;
     using UltimateOrb.Mathematics.Functional;
     using UltimateOrb.Plain.ValueTypes;
 
@@ -677,232 +678,7 @@ namespace UltimateOrb.Core.Tests {
 
         private static AsyncLocal<Random> random = new AsyncLocal<Random>();
 
-        [Property(MaxTest = 100000, QuietOnSuccess = true)]
-        public bool Test_Reverse_1(long[] a) {
-            if (null == a) {
-                return true;
-            }
-            var rr = GetRandom();
-            var c = rr.Next(checked(1 + a.Length));
-            var s = rr.Next(checked(1 + a.Length - c));
-            // var t = unchecked(rr.Next() - rr.Next());
-            var r0 = a.Clone() as long[];
-            Array.Reverse<long>(r0, s, c);
-            var r1 = a.Clone() as long[];
-            ArrayModule.Reverse(r1, s, c);
-            return r0.SequenceEqual(r1);
-        }
 
-        [Property(MaxTest = 100000, QuietOnSuccess = true)]
-        public bool Test_Reverse_2(long[] a) {
-            if (null == a) {
-                return true;
-            }
-            var rr = GetRandom();
-            // var c = rr.Next(checked(1 + a.Length));
-            // var s = rr.Next(checked(1 + a.Length - c));
-            // var t = unchecked(rr.Next() - rr.Next());
-            var r0 = a.Clone() as long[];
-            Array.Reverse<long>(r0);
-            var r1 = a.Clone() as long[];
-            ArrayModule.Reverse(r1);
-            return r0.SequenceEqual(r1);
-        }
-
-        public static bool Test_Rotate_Stub_Shift_1(Action<List<(int ProblemSize, int Shift, bool Success)>, int, long[], int> test) {
-            var rr = GetRandom();
-            var rs = new List<(int ProblemSize, int Shift, bool Success)>();
-            for (var aL = 0; 121 > aL; ++aL) {
-                var a = Enumerable.Range(0, aL).Select((x) => 10000 + 107L * x).ToArray();
-                for (var c = 0; c <= aL; ++c) {
-                    for (var s = 0; s <= aL - c; ++s) {
-                        for (var i = -2 - c; i <= 2 + c; ++i) {
-                            test(rs, aL, a, i);
-                        }
-                        for (var i = 3 + c; i > 0; --i) {
-                            var t = unchecked(rr.Next() - rr.Next());
-                            test(rs, aL, a, t);
-                        }
-                    }
-                }
-            }
-            return rs.All((x) => x.Success);
-        }
-
-        public static bool Test_Rotate_Stub_Count_Start_Shift_1(Action<List<(int ProblemSize, int Count, int Start, int Shift, bool Success)>, int, long[], int, int, int> test) {
-            var rr = GetRandom();
-            var rs = new List<(int ProblemSize, int Count, int Start, int Shift, bool Success)>();
-            for (var aL = 0; 85 > aL; ++aL) {
-                var a = Enumerable.Range(0, aL).Select((x) => 10000 + 107L * x).ToArray();
-                for (var c = 0; c <= aL; ++c) {
-                    for (var s = 0; s <= aL - c; ++s) {
-                        for (var i = -2 - c; i <= 2 + c; ++i) {
-                            test(rs, aL, a, c, s, i);
-                        }
-                        for (var i = 3 + c; i > 0; --i) {
-                            var t = unchecked(rr.Next() - rr.Next());
-                            test(rs, aL, a, c, s, t);
-                        }
-                    }
-                }
-            }
-            return rs.All((x) => x.Success);
-        }
-
-        public static bool Test_Rotate_Stub_Start_Mid_EndEx_1(Action<List<(int ProblemSize, int Start, int Mid, int EndEx, bool Success)>, int, long[], int, int, int> test) {
-            var rr = GetRandom();
-            var rs = new List<(int ProblemSize, int Start, int Mid, int EndEx, bool Success)>();
-            for (var aL = 0; 100 > aL; ++aL) {
-                var a = Enumerable.Range(0, aL).Select((x) => 10000 + 107L * x).ToArray();
-                for (var c = 0; c <= aL; ++c) {
-                    for (var s = c; s <= aL; ++s) {
-                        for (var t = s; t <= aL; ++t) {
-                            test(rs, aL, a, c, s, t);
-                        }
-                    }
-                }
-            }
-            return rs.All((x) => x.Success);
-        }
-
-        private static void Test_Rotate_RotateInPlace_RotateLeftInPlace_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateInPlace(r0, s, s + (c == 0 ? 0 : (0 > t ? t % c + c : t % c)), s + c);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace(r1, s, c, t);
-            rs.Add((aL, c, s, t, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateInPlace_RotateLeftInPlace_1() {
-            return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateInPlace_RotateLeftInPlace_1_1);
-        }
-
-        private static void Test_Rotate_RotateInPlace_RotateLeftInPlace_3_1(List<(int ProblemSize, int Shift, bool Success)> rs, int aL, long[] a, int t) {
-            var r0 = a.Clone() as long[];
-            var c = r0.Length;
-            ArrayModule.RotateInPlace(r0, 0, (c == 0 ? 0 : (0 > t ? t % c + c : t % c)), c);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace(r1, t);
-            rs.Add((aL, t, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateInPlace_RotateLeftInPlace_3() {
-            return Test_Rotate_Stub_Shift_1(Test_Rotate_RotateInPlace_RotateLeftInPlace_3_1);
-        }
-
-        private static void Test_Rotate_RotateInPlace_RotateLeftInPlace_2_1(List<(int ProblemSize, int Start, int Mid, int EndEx, bool Success)> rs, int aL, long[] a, int s, int m, int t) {
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateInPlace(r0, s, m, t);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace(r1, s, checked(t - s), checked(m - s));
-            rs.Add((aL, s, t, m, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateInPlace_RotateLeftInPlace_2() {
-            return Test_Rotate_Stub_Start_Mid_EndEx_1(Test_Rotate_RotateInPlace_RotateLeftInPlace_2_1);
-        }
-
-        private static void Test_Rotate_RotateLeftInPlace_AA_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace(r0, s, c, t);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace_A(r1, s, c, t);
-            rs.Add((aL, c, s, t, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateLeftInPlace_AA_1() {
-            return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_AA_1_1);
-        }
-
-        private static void Test_Rotate_RotateLeftInPlace_AA_2_1(List<(int ProblemSize, int Shift, bool Success)> rs, int aL, long[] a, int t) {
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace(r0, t);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace_A(r1, t);
-            rs.Add((aL, t, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateLeftInPlace_AA_2() {
-            return Test_Rotate_Stub_Shift_1(Test_Rotate_RotateLeftInPlace_AA_2_1);
-        }
-
-        private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace_A(r0, s, c, t);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateRightInPlace_A(r1, s, c, checked(-t));
-            rs.Add((aL, c, s, t, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1() {
-            return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_1_1);
-        }
-
-        private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_2_1(List<(int ProblemSize, int Shift, bool Success)> rs, int aL, long[] a, int t) {
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace_A(r0, t);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateRightInPlace_A(r1, checked(-t));
-            rs.Add((aL, t, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_2() {
-            return Test_Rotate_Stub_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_AA_2_1);
-        }
-
-        private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1_1(List<(int ProblemSize, int Count, int Start, int Shift, bool Success)> rs, int aL, long[] a, int c, int s, int t) {
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace(r0, s, c, t);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateRightInPlace(r1, s, c, checked(-t));
-            rs.Add((aL, c, s, t, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1() {
-            return Test_Rotate_Stub_Count_Start_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_1_1);
-        }
-
-        private static void Test_Rotate_RotateLeftInPlace_RotateRightInPlace_2_1(List<(int ProblemSize, int Shift, bool Success)> rs, int aL, long[] a, int t) {
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace(r0, t);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateRightInPlace(r1, checked(-t));
-            rs.Add((aL, t, r0.SequenceEqual(r1)));
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_Rotate_RotateLeftInPlace_RotateRightInPlace_2() {
-            return Test_Rotate_Stub_Shift_1(Test_Rotate_RotateLeftInPlace_RotateRightInPlace_2_1);
-        }
-
-        [Property(MaxTest = 10000, QuietOnSuccess = true, Verbose = true)]
-        public bool Test_Rotate_5(long[] a) {
-            if (null == a) {
-                return true;
-            }
-            var rr = GetRandom();
-            // var c = rr.Next(checked(1 + a.Length));
-            // var s = rr.Next(checked(1 + a.Length - c));
-            var t = unchecked(rr.Next() - rr.Next());
-            var r0 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace(r0, t);
-            var r1 = a.Clone() as long[];
-            ArrayModule.RotateLeftInPlace_A(r1, t);
-            var rrr = r0.SequenceEqual(r1);
-            if (!rrr) {
-                while (!rrr) {
-                }
-            }
-            return rrr;
-        }
 
         [Property(MaxTest = 40000, QuietOnSuccess = true)]
         public bool Test_1() {
@@ -1448,149 +1224,11 @@ namespace UltimateOrb.Core.Tests {
         private static long? dddd1 = default;
 
 
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_IsPermutation_1() {
-            var a = "Banaan🌍nas".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
-            var t = 0UL;
-            var s = new List<(ulong Id, bool Value)>(0);
-            for (var b = a.Clone() as char[]; ;) {
-                var z = ArrayModule.IsPermutation(a.Clone() as char[], b.Clone() as char[], c);
-                s.Add((t++, z));
-                if (ArrayModule.NextPermutation(b, d)) {
-                    continue;
-                }
-                break;
-            }
-            return s.All((x) => x.Value);
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_IsPermutation_2() {
-            var a = "Banaan🌍nas".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
-            var t = 0UL;
-            var s = new List<(ulong Id, bool Value)>(0);
-            for (var b = a.Clone() as char[]; ;) {
-                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
-                s.Add((t++, z));
-                if (ArrayModule.NextPermutation(b, d)) {
-                    continue;
-                }
-                break;
-            }
-            for (var b = a.Clone() as char[]; ;) {
-                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
-                s.Add((t++, z));
-                if (ArrayModule.PreviousPermutation(b, d)) {
-                    continue;
-                }
-                break;
-            }
-            return s.All((x) => x.Value);
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_NextPermutation_3() {
-            var a = "abcdefgh".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
-            var t = 0UL;
-            var s = new List<(ulong Id, bool Value)>(0);
-            for (var b = a.Clone() as char[]; ;) {
-                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
-                s.Add((t++, z));
-                if (ArrayModule.NextPermutation(b, d)) {
-                    continue;
-                }
-                break;
-            }
-            return s.All((x) => x.Value) && s.Count == 40320;
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_NextPermutation_4() {
-            var a = "abcdefgg".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
-            var t = 0UL;
-            var s = new List<(ulong Id, bool Value)>(0);
-            for (var b = a.Clone() as char[]; ;) {
-                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
-                s.Add((t++, z));
-                if (ArrayModule.NextPermutation(b, d)) {
-                    continue;
-                }
-                break;
-            }
-            return s.All((x) => x.Value) && s.Count == 20160;
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_PreviousPermutation_3() {
-            var a = "hgfedcba".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
-            var t = 0UL;
-            var s = new List<(ulong Id, bool Value)>(0);
-            for (var b = a.Clone() as char[]; ;) {
-                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
-                s.Add((t++, z));
-                if (ArrayModule.PreviousPermutation(b, d)) {
-                    continue;
-                }
-                break;
-            }
-            return s.All((x) => x.Value) && s.Count == 40320;
-        }
-
-        [Property(MaxTest = 1, QuietOnSuccess = true)]
-        public bool Test_PreviousPermutation_4() {
-            var a = "ggfedcba".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
-            var t = 0UL;
-            var s = new List<(ulong Id, bool Value)>(0);
-            for (var b = a.Clone() as char[]; ;) {
-                var z = ArrayModule.IsPermutation(a as char[], b as char[], c);
-                s.Add((t++, z));
-                if (ArrayModule.PreviousPermutation(b, d)) {
-                    continue;
-                }
-                break;
-            }
-            return s.All((x) => x.Value) && s.Count == 20160;
-        }
-
+        
         internal static void Printf<T>(System.IO.TextWriter textWriter, T value) {
             var t = new Microsoft.FSharp.Core.PrintfFormat<Microsoft.FSharp.Core.FSharpFunc<T, Microsoft.FSharp.Core.Unit>, System.IO.TextWriter, Microsoft.FSharp.Core.Unit, Microsoft.FSharp.Core.Unit, T>("%A");
             var f = Microsoft.FSharp.Core.PrintfModule.PrintFormatLineToTextWriter(textWriter, t);
             f.Invoke(value);
-        }
-
-        private struct Asadf : IO.IFunc<char, char, bool> {
-
-            public bool Invoke(char arg1, char arg2) {
-                return arg1 == arg2;
-            }
-        }
-
-        [Property(MaxTest = 50000, QuietOnSuccess = true)]
-        public bool Test_SearchKnuthMorrisPratt_1(string a, string b) {
-            if (null == a || null == b) {
-                return true;
-            }
-            var r0 = a.IndexOf(b);
-            var r1 = (int?)null;
-            var a1 = a.AsIReadOnlyList();
-            var b1 = b.AsIReadOnlyList();
-            try {
-                r1 = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, BclStringAsReadOnlyList, BclStringAsReadOnlyList, Asadf>(a1, b1, DefaultConstructor.Invoke<Asadf>());
-            } catch (Exception) {
-            }
-            return r0 == r1;
         }
 
         private static bool aa2aa(int[] a) {
@@ -1717,7 +1355,16 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+        public class KindMismatchException : SystemException {
+        }
+
         public abstract partial class KindExpression {
+
+            public static readonly TypeKindExpression Unknown = TypeKindExpression.Create();
+
+            public static readonly FunctionKindExpression Array = FunctionKindExpression.Create(typeof(Array<>));
+
+            public static readonly FunctionKindExpression BclArray = FunctionKindExpression.Create(typeof(System.Array));
 
             protected abstract string NameImpl {
 
@@ -1748,6 +1395,8 @@ namespace UltimateOrb.Core.Tests {
         }
 
         public abstract partial class KindExpressionImplBase : KindExpression {
+
+            internal static readonly System.Collections.Concurrent.ConcurrentDictionary<Type, KindExpressionImplBase> s_CachedKinds = new System.Collections.Concurrent.ConcurrentDictionary<Type, KindExpressionImplBase>();
 
             protected abstract Collections.Generic.ReferenceTypes.LinkedTree<ScopeSegment>.Node ScopeImpl {
 
@@ -1786,6 +1435,13 @@ namespace UltimateOrb.Core.Tests {
             protected abstract Type ImplementImpl {
 
                 get;
+            }
+
+            public Type Implement {
+
+                get {
+                    return this.ImplementImpl;
+                }
             }
 
             internal NullaryKindExpression() : base() {
@@ -1835,15 +1491,22 @@ namespace UltimateOrb.Core.Tests {
 
             private readonly Collections.Generic.ReferenceTypes.LinkedTree<ScopeSegment>.Node scope;
 
-            public TypeKindExpression(Type inhabited) : base() {
-                if (inhabited.IsGenericTypeDefinition) {
-                    throw new InvalidOperationException();
-                }
+            private TypeKindExpression() : base() {
+                this.name = "*";
+            }
+
+            private TypeKindExpression(Type inhabited) : base() {
+
                 var impl = inhabited;
                 this.impl = impl;
                 this.name = impl.Name;
                 // TODO
                 this.scope = null;
+            }
+
+            private static partial class Any {
+
+                internal static readonly TypeKindExpression Value = new TypeKindExpression();
             }
 
             protected override LinkedTree<ScopeSegment>.Node ScopeImpl {
@@ -1859,6 +1522,25 @@ namespace UltimateOrb.Core.Tests {
             protected override Type ImplementImpl {
 
                 get => this.impl;
+            }
+
+            public static TypeKindExpression Create() {
+                return Any.Value;
+            }
+
+            public static TypeKindExpression Create(Type inhabited) {
+                if (inhabited.IsGenericTypeDefinition) {
+                    throw new InvalidOperationException();
+                }
+                if (inhabited == typeof(Array)) {
+                    throw new InvalidOperationException();
+                }
+                var d = KindExpressionImplBase.s_CachedKinds;
+                var t = d.GetOrAdd(inhabited, (x) => new TypeKindExpression(x)) as TypeKindExpression;
+                if (null == t) {
+                    throw new NotImplementedException();
+                }
+                return t;
             }
         }
 
@@ -1899,7 +1581,23 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+
+        private abstract partial class Kinds {
+
+        }
+
+        public static partial class KindSystem {
+
+
+        }
+
         public sealed partial class FunctionKindExpression : KindExpressionImplBase {
+
+            private readonly Func<KindExpression, KindExpression> impl;
+
+            private readonly string name;
+
+            private readonly Collections.Generic.ReferenceTypes.LinkedTree<ScopeSegment>.Node scope;
 
             private readonly ConstraintKindExpression[] constraints;
 
@@ -1907,68 +1605,269 @@ namespace UltimateOrb.Core.Tests {
 
             private readonly KindExpression return_kind;
 
-            protected override LinkedTree<ScopeSegment>.Node ScopeImpl => throw new NotImplementedException();
+            protected override LinkedTree<ScopeSegment>.Node ScopeImpl {
 
-            protected override string NameImpl => throw new NotImplementedException();
-
-            public FunctionKindExpression(KindExpression parameter_kind, KindExpression return_kind) : base() {
-                if (null != parameter_kind && null != return_kind) {
-                    this.parameter_kind = parameter_kind;
-                    this.return_kind = return_kind;
-                }
-                if (null == parameter_kind) {
-                    throw new ArgumentNullException(nameof(parameter_kind));
-                }
-                if (null == return_kind) {
-                    throw new ArgumentNullException(nameof(return_kind));
-                }
-                throw null;
+                get => this.scope;
             }
 
-            public FunctionKindExpression(Type instance) : base() {
+            protected override string NameImpl {
+
+                get => this.name;
+            }
+
+            internal FunctionKindExpression(Func<KindExpression, KindExpression> impl, string name, Collections.Generic.ReferenceTypes.LinkedTree<ScopeSegment>.Node scope, ConstraintKindExpression[] constraints, KindExpression parameter_kind, KindExpression return_kind) : base() {
+                this.impl = impl;
+                this.name = name;
+                this.scope = scope;
+                this.constraints = constraints;
+                this.parameter_kind = parameter_kind;
+                this.return_kind = return_kind;
+            }
+
+            /*
+            private FunctionKindExpression(Type instance) : base() {
+            }
+            */
+
+            public static FunctionKindExpression Create(Type instance) {
+                var s = (FunctionKindExpression)null;
                 if (instance.IsGenericType) {
                     if (instance.ContainsGenericParameters) {
                         var a = instance.GetGenericArguments();
-
+                        if (1 == a.Length) {
+                            var d = KindExpressionImplBase.s_CachedKinds;
+                            s = d.GetOrAdd(instance, (m) => {
+                                var impl = (Func<KindExpression, KindExpression>)((type) => {
+                                    KindExpression result = null;
+                                    if (null != type) {
+                                        if (type is TypeKindExpression t) {
+                                            if (t == Unknown) {
+                                                result = t;
+                                            } else {
+                                                result = TypeKindExpression.Create(m.MakeGenericType(t.Implement));
+                                            }
+                                            Debug.Assert(result is TypeKindExpression);
+                                            return result;
+                                        }
+                                        throw new KindMismatchException();
+                                    }
+                                    throw new ArgumentNullException("type");
+                                });
+                                var name = m.FullName;
+                                return new FunctionKindExpression(
+                                    impl,
+                                    name,
+                                    // TODO
+                                    null,
+                                    Array_Empty<ConstraintKindExpression>.Value,
+                                    KindExpression.Unknown,
+                                    KindExpression.Unknown
+                                    );
+                            }) as FunctionKindExpression;
+                            if (null == s) {
+                                throw new NotImplementedException();
+                            }
+                        }
+                    }
+                } else if (typeof(Array) == instance) {
+                    var d = KindExpressionImplBase.s_CachedKinds;
+                    s = d.GetOrAdd(instance, (m) => {
+                        var impl = (Func<KindExpression, KindExpression>)((type) => {
+                            KindExpression result = null;
+                            if (null != type) {
+                                if (type is TypeKindExpression t) {
+                                    if (t == Unknown) {
+                                        result = t;
+                                    } else {
+                                        result = TypeKindExpression.Create(t.Implement.MakeArrayType());
+                                    }
+                                    Debug.Assert(result is TypeKindExpression);
+                                    return result;
+                                }
+                                throw new KindMismatchException();
+                            }
+                            throw new ArgumentNullException("type");
+                        });
+                        var name = m.FullName;
+                        return new FunctionKindExpression(
+                            impl,
+                            name,
+                            // TODO
+                            null,
+                            Array_Empty<ConstraintKindExpression>.Value,
+                            KindExpression.Unknown,
+                            KindExpression.Unknown
+                            );
+                    }) as FunctionKindExpression;
+                    if (null == s) {
+                        throw new NotImplementedException();
                     }
                 }
-                if (instance.IsArray) {
-                    var a = instance.GetElementType();
-
+                if (null == s) {
+                    throw new InvalidOperationException();
                 }
+                return s;
             }
 
-
+            public KindExpression Invoke(KindExpression kind) {
+                return this.impl.Invoke(kind);
+            }
         }
 
 
+        private readonly struct adsafsd : IO.IFunc<double, (double Left, double Right)> {
+
+            private readonly double p;
+
+            public adsafsd(double p) {
+                this.p = p;
+            }
+
+            public (double Left, double Right) Invoke(double arg) {
+                var t = p * arg;
+                return (t, arg - t);
+            }
+        }
+
+        public static void GeneratePerfectBinaryTree<T, TSelector>(T[] array, int startExclusive, int order, TSelector selector)
+            where TSelector : IO.IFunc<T, (T Left, T Right)> {
+            var c = Utilities.SignConverter.ToSignedChecked(Mathematics.Elementary.Math.Pow(2, Utilities.SignConverter.ToUnsignedChecked(order)));
+            var j = checked(1 + startExclusive);
+            unchecked {
+                --c;
+            }
+            ArrayModule.CheckArraySegmentThrowIfFailed(array, j, c);
+            var k = unchecked(1 + j);
+            for (; c > 1; c -= 2) {
+                var t = array[j++];
+                (array[k++], array[k++]) = selector.Invoke(t);
+            }
+        }
+
+        public static void GeneratePerfectBinaryTree<T, TLeftSelector, TRightSelector>(T[] array, int startExclusive, int order, TLeftSelector left, TRightSelector right)
+            where TLeftSelector : IO.IFunc<T, Void<T>, T>
+            where TRightSelector : IO.IFunc<Void<T>, T, T> {
+            var c = Utilities.SignConverter.ToSignedChecked(Mathematics.Elementary.Math.Pow(2, Utilities.SignConverter.ToUnsignedChecked(order)));
+            var j = checked(1 + startExclusive);
+            unchecked {
+                --c;
+            }
+            ArrayModule.CheckArraySegmentThrowIfFailed(array, j, c);
+            var k = unchecked(1 + j);
+            for (; c > 1; c -= 2) {
+                var t = array[j++];
+                array[k++] = left.Invoke(t, default);
+                array[k++] = right.Invoke(default, t);
+            }
+        }
+
+        [Property(MaxTest = 200000, QuietOnSuccess = true)]
+        public static bool Test_Rational64_Create_1(uint p, int q) {
+            var d = 0;
+            var r = default(BigRational);
+            var e = 0;
+            var s = default(Rational64);
+            try {
+                r = BigRational.FromFraction(p, q);
+                d = 1;
+            } catch (OverflowException) {
+                d = 2;
+            } catch (DivideByZeroException) {
+                d = 3;
+            } catch (ArgumentException) {
+                d = 4;
+            }
+            try {
+                s = Rational64.FromFraction(p, q);
+                e = 1;
+            } catch (OverflowException) {
+                e = 2;
+            } catch (DivideByZeroException) {
+                e = 3;
+            } catch (ArgumentException) {
+                e = 4;
+            }
+            return d == e && r == s;
+        }
+
         private static void dsfasdf<T>() {
-            if (false) {
-                var vv = new TypeKindExpression(typeof(Product<>));
-            }
-            {
-                var vv = new TypeKindExpression(typeof(T[]));
-            }
-            {
-                var vv = new TypeKindExpression(typeof(T));
-            }
-            {
-                var vv = new TypeKindExpression(typeof(Product<int>));
-            }
-            {
-                var vv = new TypeKindExpression(typeof(Array));
-            }
-            {
-                var vv = new FunctionKindExpression(typeof(Graph<T, long>));
-            }
-            {
-                var vv = new FunctionKindExpression(typeof(Graph<,>));
-            }
         }
 
         private static int Main(string[] args) {
             {
+                var a = new double[4];
+                var p = 0.4;
+                a[1] = 1.0;
+                GeneratePerfectBinaryTree(a, 0, 2, new adsafsd(p));
+                Printf(System.Console.Out, a);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = new double[2];
+                var p = 0.4;
+                a[1] = 1.0;
+                GeneratePerfectBinaryTree(a, 0, 1, new adsafsd(p));
+                Printf(System.Console.Out, a);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = new double[2];
+                var p = 0.4;
+                a[1] = 1.0;
+                GeneratePerfectBinaryTree(a, 0, 1, new adsafsd(p));
+                Printf(System.Console.Out, a);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = new double[0];
+                var p = 0.4;
+                // a[1] = 1.0;
+                GeneratePerfectBinaryTree(a, -1, 0, new adsafsd(p));
+                Printf(System.Console.Out, a);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = new double[1];
+                var p = 0.4;
+                // a[1] = 1.0;
+                GeneratePerfectBinaryTree(a, 0, 0, new adsafsd(p));
+                Printf(System.Console.Out, a);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = new double[8];
+                var p = 0.4;
+                a[1] = 1.0;
+                GeneratePerfectBinaryTree(a, 0, 0, new adsafsd(p));
+                Printf(System.Console.Out, a);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
                 dsfasdf<int>();
+                {
+                    var asdfa = KindExpression.Array.Invoke(TypeKindExpression.Create(typeof(ulong)));
+                    if (asdfa is TypeKindExpression t) {
+                        var dsfa = t.Implement;
+                        Console.WriteLine(dsfa.FullName);
+                    }
+                }
+                {
+                    var asdfa = KindExpression.BclArray.Invoke(TypeKindExpression.Create(typeof(ulong)));
+                    if (asdfa is TypeKindExpression t) {
+                        var dsfa = t.Implement;
+                        Console.WriteLine(dsfa.FullName);
+                    }
+                }
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
                 Select.Functor<asdafsadfa, uint[], long[], uint, long> a;
                 var sdfa = a.Invoke(default(asdafsadfa), new uint[] { 3, 4, 5 });
                 Printf(Console.Out, sdfa);
@@ -2298,16 +2197,16 @@ namespace UltimateOrb.Core.Tests {
             }
             {
                 Console.Out.WriteLine("".IndexOf(""));
-                Console.Out.WriteLine(SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], Asadf>("".ToCharArray(), "".ToCharArray(), DefaultConstructor.Invoke<Asadf>()));
+                Console.Out.WriteLine(SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], TestModule.CharComparer>("".ToCharArray(), "".ToCharArray(), DefaultConstructor.Invoke<TestModule.CharComparer>()));
 
                 var source = "abc abab bbda bd bb🌍a  ba badba dbad db a dcadb bad bab adb b🌍cdab d bda　🌍 dsf 地球人好壞 b da b b🌍a a".ToCharArray();
                 var pattern = " b b🌍a".ToCharArray();
 
-                var c = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], Asadf>(source, pattern, DefaultConstructor.Invoke<Asadf>());
+                var c = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], TestModule.CharComparer>(source, pattern, DefaultConstructor.Invoke<TestModule.CharComparer>());
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(c);
                 Console.Out.WriteLine(new string(source.Skip(c).Take(pattern.Length).ToArray()));
-                c = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], Asadf>(source, pattern, DefaultConstructor.Invoke<Asadf>());
+                c = SequenceSearchModule.IndexOf_A_KnuthMorrisPratt<char, char[], char[], TestModule.CharComparer>(source, pattern, DefaultConstructor.Invoke<TestModule.CharComparer>());
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(c);
                 Console.Out.WriteLine(new string(source.Skip(c).Take(pattern.Length).ToArray()));
@@ -2315,7 +2214,7 @@ namespace UltimateOrb.Core.Tests {
                 return 0;
             }
             {
-                new Program().Test_IsPermutation_2();
+                TestModule.Test_IsPermutation_2();
                 {
                     var a = "Banaan🌍nas".ToCharArray();
                     var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
@@ -2400,7 +2299,7 @@ namespace UltimateOrb.Core.Tests {
             }
             {
                 {
-                    var aaa = new Program().Test_Rotate_RotateInPlace_RotateLeftInPlace_1();
+                    var aaa = TestModule.Test_Rotate_RotateInPlace_RotateLeftInPlace_1();
                 }
 
                 var asdfs = new object().GetHashCode();
@@ -2521,256 +2420,6 @@ namespace UltimateOrb.Core.Tests {
                 var d = DefaultConstructor.Invoke<System.Collections.Generic.List<long>>();
                 Console.Out.WriteLine(d);
                 Console.ReadKey(true);
-            }
-            {
-                var deque1 = new Queue<long>(0);
-                var iid = 1001;
-                deque1.Unshift(iid);
-            }
-            var rr = new Random();
-            var ff = 2345;
-            for (var g = 1000; g > 0; --g) {
-                var deque0 = new LinkedList<long>();
-                var deque1 = new Queue<long>(0);
-                var iid = 1001;
-                for (var i = 0; 300 > i; ++i) {
-                    var m = rr.NextDouble();
-                    if (m < 0.150) {
-                        if (deque0.Count > 0) {
-                            Console.Out.WriteLine("Pop*1");
-                            deque0.RemoveLast();
-                            deque1.Pop();
-                        }
-                        continue;
-                    } else if (m < 0.425) {
-                        {
-                            Console.Out.WriteLine("Push*1");
-                            var d = iid++;
-                            deque0.AddLast(d);
-                            deque1.Push(d);
-                        }
-                    } else if (m < 0.475) {
-                        if (deque0.Count >= ff) {
-                            continue;
-                        }
-                        var n0 = 1 + rr.Next(deque0.Count);
-                        Console.Out.WriteLine("Push*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            var d = iid++;
-                            deque0.AddLast(d);
-                            deque1.Push(d);
-                        }
-                    } else if (m < 0.490) {
-                        if (deque0.Count > 0) {
-                        } else {
-                            continue;
-                        }
-                        var n0 = 1 + rr.Next(deque0.Count);
-                        Console.Out.WriteLine("Pop*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            deque0.RemoveLast();
-                            deque1.Pop();
-                        }
-                    } else if (m < 0.500) {
-                        if (deque0.Count > 0) {
-                        } else {
-                            continue;
-                        }
-                        var n0 = deque0.Count;
-                        Console.Out.WriteLine("Pop*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            deque0.RemoveLast();
-                            deque1.Pop();
-                        }
-                    } else if (m < 0.650) {
-                        if (deque0.Count > 0) {
-                            Console.Out.WriteLine("Shift*1");
-                            deque0.RemoveFirst();
-                            deque1.Shift();
-                        }
-                        continue;
-                    } else if (m < 0.925) {
-                        {
-                            Console.Out.WriteLine("Unshift*1");
-                            var d = iid++;
-                            deque0.AddFirst(d);
-                            deque1.Unshift(d);
-                        }
-                    } else if (m < 0.975) {
-                        if (deque0.Count >= ff) {
-                            continue;
-                        }
-                        var n0 = 1 + rr.Next(deque0.Count);
-                        Console.Out.WriteLine("Unshift*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            var d = iid++;
-                            deque0.AddFirst(d);
-                            deque1.Unshift(d);
-                        }
-                    } else if (m < 0.990) {
-                        if (deque0.Count > 0) {
-                        } else {
-                            continue;
-                        }
-                        var n0 = 1 + rr.Next(deque0.Count);
-                        Console.Out.WriteLine("Shift*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            deque0.RemoveFirst();
-                            deque1.Shift();
-                        }
-                    } else if (m < 1.000) {
-                        if (deque0.Count > 0) {
-                        } else {
-                            continue;
-                        }
-                        var n0 = deque0.Count;
-                        Console.Out.WriteLine("Shift*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            deque0.RemoveFirst();
-                            deque1.Shift();
-                        }
-                    }
-                    {
-                        var s0 = deque0.ToArray();
-                        var s1 = deque1.ToArray();
-                        var ss = s0.SequenceEqual(s1);
-                        if (!ss) {
-                            Xunit.Assert.True(false);
-                        }
-                    }
-                    {
-                        var s1 = deque1.ToArray();
-                        var s1a = deque1.AsEnumerable().ToArray();
-                        var ssa = s1.SequenceEqual(s1a);
-                        if (!ssa) {
-                            Xunit.Assert.True(false);
-                        }
-                    }
-                }
-                Console.Out.WriteLine("...");
-            }
-            {
-                var deque0 = new LinkedList<long>();
-                var deque1 = new Queue<long>(0);
-                var iid = 1001;
-                for (var i = 0; 10000 > i; ++i) {
-                    var m = rr.NextDouble();
-                    if (m < 0.30) {
-                        if (deque0.Count > 0) {
-                            Console.Out.WriteLine("Pop*1");
-                            deque0.RemoveLast();
-                            deque1.Pop();
-                        }
-                        continue;
-                    } else if (m < 0.85) {
-                        {
-                            Console.Out.WriteLine("Push*1");
-                            var d = iid++;
-                            deque0.AddLast(d);
-                            deque1.Push(d);
-                        }
-                    } else if (m < 0.95) {
-                        var n0 = 1 + rr.Next(deque0.Count);
-                        Console.Out.WriteLine("Push*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            var d = iid++;
-                            deque0.AddLast(d);
-                            deque1.Push(d);
-                        }
-                    } else if (m < 0.98) {
-                        if (deque0.Count > 0) {
-                        } else {
-                            continue;
-                        }
-                        var n0 = 1 + rr.Next(deque0.Count);
-                        Console.Out.WriteLine("Pop*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            deque0.RemoveLast();
-                            deque1.Pop();
-                        }
-                    } else if (m <= 1.0) {
-                        if (deque0.Count > 0) {
-                        } else {
-                            continue;
-                        }
-                        var n0 = deque0.Count;
-                        Console.Out.WriteLine("Pop*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            deque0.RemoveLast();
-                            deque1.Pop();
-                        }
-                    }
-                    {
-                        var s0 = deque0.ToArray();
-                        var s1 = deque1.ToArray();
-                        var ss = s0.SequenceEqual(s1);
-                        if (!ss) {
-                            Xunit.Assert.True(false);
-                        }
-                    }
-                }
-            }
-            {
-                var stack1 = new Queue<long>(0);
-                var stack0 = new System.Collections.Generic.Stack<long>(0);
-                var iid = 1001;
-                for (var i = 0; 10000 > i; ++i) {
-                    var m = rr.NextDouble();
-                    if (m < 0.30) {
-                        if (stack0.Count > 0) {
-                            Console.Out.WriteLine("Pop*1");
-                            stack0.Pop();
-                            stack1.Pop();
-                        }
-                        continue;
-                    } else if (m < 0.85) {
-                        {
-                            Console.Out.WriteLine("Push*1");
-                            var d = iid++;
-                            stack0.Push(d);
-                            stack1.Push(d);
-                        }
-                    } else if (m < 0.95) {
-                        var n0 = 1 + rr.Next(stack0.Count);
-                        Console.Out.WriteLine("Push*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            var d = iid++;
-                            stack0.Push(d);
-                            stack1.Push(d);
-                        }
-                    } else if (m < 0.98) {
-                        if (stack0.Count > 0) {
-                        } else {
-                            continue;
-                        }
-                        var n0 = 1 + rr.Next(stack0.Count);
-                        Console.Out.WriteLine("Pop*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            stack0.Pop();
-                            stack1.Pop();
-                        }
-                    } else if (m <= 1.0) {
-                        if (stack0.Count > 0) {
-                        } else {
-                            continue;
-                        }
-                        var n0 = stack0.Count;
-                        Console.Out.WriteLine("Pop*{0}", n0);
-                        for (var n = n0; n > 0; --n) {
-                            stack0.Pop();
-                            stack1.Pop();
-                        }
-                    }
-                    {
-                        var s0 = stack0.ToArray();
-                        Array.Reverse(s0);
-                        var s1 = stack1.ToArray();
-                        var ss = s0.SequenceEqual(s1);
-                        if (!ss) {
-                            Xunit.Assert.True(false);
-                        }
-                    }
-                }
             }
             return 0;
         }
