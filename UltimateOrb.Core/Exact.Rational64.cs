@@ -421,33 +421,43 @@ namespace UltimateOrb.Mathematics.Exact {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 operator /(Rational64 first, Rational64 second) {
-            throw new NotImplementedException();
             var d = unchecked((UInt32)first.bits);
             var c = unchecked((Int32)(first.bits >> 32));
             var f = unchecked((UInt32)second.bits);
             var e = unchecked((Int32)(second.bits >> 32));
-            if (0 == d || 0 == f) {
+            if (0 == f) {
+                unchecked(f / 0).Ignore();
+            }
+            if (0 == d) {
                 return Zero;
             }
-            d = Reduce(d, e, out e);
-            f = Reduce(f, c, out c);
-            var p = checked(d * f);
+            var a = EuclideanAlgorithm.GreatestCommonDivisor(d, f);
+            d /= a;
+            f /= a;
             bool s;
-            if (s = (0 <= c)) {
-                unchecked {
-                    ++c;
-                }
+            if (s = 0 <= c) {
+                ++c;
+            } else {
+                c = -c;
             }
             if (0 <= e) {
-                unchecked {
-                    ++e;
-                }
                 s = !s;
+                ++e;
+            } else {
+                e = -e;
             }
-            var q = unchecked((Int64)c * e);
+            var b = EuclideanAlgorithm.GreatestCommonDivisor(c.ToUnsignedUnchecked(), e.ToUnsignedUnchecked());
+            c = unchecked(c.ToUnsignedUnchecked() / b).ToSignedUnchecked();
+            e = unchecked(e.ToUnsignedUnchecked() / b).ToSignedUnchecked();
+            var p = checked(d * e.ToUnsignedUnchecked());
+            var q = unchecked((Int64)c * f);
             if (!s) {
                 unchecked {
                     --q;
+                }
+            } else {
+                unchecked {
+                    q = -q;
                 }
             }
             q = ((Int64)checked((Int32)q) << 32) | (Int64)p;

@@ -1224,7 +1224,7 @@ namespace UltimateOrb.Core.Tests {
         private static long? dddd1 = default;
 
 
-        
+
         internal static void Printf<T>(System.IO.TextWriter textWriter, T value) {
             var t = new Microsoft.FSharp.Core.PrintfFormat<Microsoft.FSharp.Core.FSharpFunc<T, Microsoft.FSharp.Core.Unit>, System.IO.TextWriter, Microsoft.FSharp.Core.Unit, Microsoft.FSharp.Core.Unit, T>("%A");
             var f = Microsoft.FSharp.Core.PrintfModule.PrintFormatLineToTextWriter(textWriter, t);
@@ -1759,6 +1759,35 @@ namespace UltimateOrb.Core.Tests {
                 array[k++] = left.Invoke(t, default);
                 array[k++] = right.Invoke(default, t);
             }
+        }
+
+        [Property(MaxTest = 100000, QuietOnSuccess = true)]
+        public static bool Test_Rational64_BinOp_1(uint p0, int q0, uint p1, int q1) {
+            var d = 0;
+            var r = default(BigRational);
+            var e = 0;
+            var s = default(Rational64);
+            try {
+                r = BigRational.FromFraction(p0, q0) / BigRational.FromFraction(p1, q1);
+                d = 1;
+            } catch (OverflowException) {
+                d = 2;
+            } catch (DivideByZeroException) {
+                d = 3;
+            } catch (ArgumentException) {
+                d = 4;
+            }
+            try {
+                s = Rational64.FromFraction(p0, q0) / Rational64.FromFraction(p1, q1);
+                e = 1;
+            } catch (OverflowException) {
+                e = 2;
+            } catch (DivideByZeroException) {
+                e = 3;
+            } catch (ArgumentException) {
+                e = 4;
+            }
+            return d == e && r == s;
         }
 
         [Property(MaxTest = 200000, QuietOnSuccess = true)]
