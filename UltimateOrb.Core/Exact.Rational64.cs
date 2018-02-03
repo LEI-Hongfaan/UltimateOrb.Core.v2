@@ -267,6 +267,16 @@ namespace UltimateOrb.Mathematics.Exact {
                     first_numerator /= d;
                     second_denominator = (Int32)((UInt32)second_denominator / d);
                 }
+                /*
+                var q = (Int64)((UInt64)(UInt32)first_denominator * (UInt32)second_denominator);
+                if (s) {
+                    q = -q;
+                } else {
+                    --q;
+                }
+                checked((Int32)q).Ignore();
+                return new Rational64(checked(first_numerator * second_numerator) | (UInt64)q << 32);
+                */
                 var p = (UInt64)first_numerator * second_numerator;
                 var q = (Int64)((UInt64)(UInt32)first_denominator * (UInt32)second_denominator);
                 p = checked((UInt32)p);
@@ -349,11 +359,21 @@ namespace UltimateOrb.Mathematics.Exact {
                 var r = first_denominator * second_numerator;
                 var q = first_denominator * second_denominator;
                 if (CheckedNoThrow.Add(p, r, out p)) {
+                    /*
+                    if (0 == p) {
+                        bits_hi = 0;
+                        return 0;
+                    }
+                    */
                     if (0 > r) {
                         p = -p;
                         q = -q;
                     }
                 } else {
+                    if (0 == p) {
+                        bits_hi = 0;
+                        return 0;
+                    }
                     if (0 > p) {
                         p = -p;
                         q = -q;
@@ -507,6 +527,24 @@ namespace UltimateOrb.Mathematics.Exact {
         [PureAttribute()]
         public static Rational64 operator +(Rational64 value) {
             return value;
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static Rational64 operator +(Rational64 first, Rational64 second) {
+            var lo = Rational64.AddAsRational128(first, second, out var hi);
+            return new Rational64(((Int64)checked((Int32)hi.ToSignedUnchecked())).ToUnsignedUnchecked() << 32 | (UInt64)checked((UInt32)lo));
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static Rational64 operator -(Rational64 first, Rational64 second) {
+            var lo = Rational64.SubtractAsRational128(first, second, out var hi);
+            return new Rational64(((Int64)checked((Int32)hi.ToSignedUnchecked())).ToUnsignedUnchecked() << 32 | (UInt64)checked((UInt32)lo));
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -995,6 +1033,51 @@ namespace UltimateOrb.Mathematics.Exact {
             q1 = unchecked((UInt32)q0);
             d = unchecked((UInt32)Math.Floor(a));
             goto L_0;
+        }
+    }
+}
+
+
+namespace UltimateOrb.Mathematics.Exact {
+
+    public static partial class Rational64Module {
+
+        public static Rational64 GetNextRational64<TRandomNumberGenerator>(this TRandomNumberGenerator random) where TRandomNumberGenerator : IRandomNumberGenerator {
+            for (; ; ) {
+                var a = random.GetNextInt64Bits();
+                var b = a >> 32;
+                if (0 <= b) {
+                    unchecked {
+                        ++b;
+                    }
+                } else {
+                    unchecked {
+                        b = -b;
+                    }
+                }
+                if (1 == EuclideanAlgorithm.GreatestCommonDivisor(unchecked((UInt32)a), unchecked((UInt32)b))) {
+                    return new Rational64(a.ToUnsignedUnchecked());
+                }
+            }
+        }
+
+        public static Rational64 GetNextRational64<TRandomNumberGenerator>(ref this TRandomNumberGenerator random) where TRandomNumberGenerator : struct, IRandomNumberGenerator {
+            for (; ; ) {
+                var a = random.GetNextInt64Bits();
+                var b = a >> 32;
+                if (0 <= b) {
+                    unchecked {
+                        ++b;
+                    }
+                } else {
+                    unchecked {
+                        b = -b;
+                    }
+                }
+                if (1 == EuclideanAlgorithm.GreatestCommonDivisor(unchecked((UInt32)a), unchecked((UInt32)b))) {
+                    return new Rational64(a.ToUnsignedUnchecked());
+                }
+            }
         }
     }
 }

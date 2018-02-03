@@ -166,7 +166,6 @@ namespace UltimateOrb.Core.Tests {
             get => ref this._array[checked(this._index + offset)];
         }
 
-
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static implicit operator PtrSimulated<T>(T[] array) {
             return new PtrSimulated<T>(array, 0);

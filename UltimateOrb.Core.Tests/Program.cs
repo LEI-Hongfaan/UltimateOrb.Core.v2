@@ -1760,9 +1760,125 @@ namespace UltimateOrb.Core.Tests {
                 array[k++] = right.Invoke(default, t);
             }
         }
-
+        
         [Property(MaxTest = 100000, QuietOnSuccess = true)]
         public static bool Test_Rational64_BinOp_1(uint p0, int q0, uint p1, int q1) {
+            var d = 0;
+            var r = default(BigRational);
+            var e = 0;
+            var s = default(Rational64);
+            try {
+                r = BigRational.FromFraction(p0, q0) + BigRational.FromFraction(p1, q1);
+                d = 1;
+            } catch (OverflowException) {
+                d = 2;
+            } catch (DivideByZeroException) {
+                d = 3;
+            } catch (ArgumentException) {
+                d = 4;
+            }
+            try {
+                s = Rational64.FromFraction(p0, q0) + Rational64.FromFraction(p1, q1);
+                e = 1;
+            } catch (OverflowException) {
+                e = 2;
+            } catch (DivideByZeroException) {
+                e = 3;
+            } catch (ArgumentException) {
+                e = 4;
+            }
+            return d == e && r == s;
+        }
+
+        [Property(MaxTest = 100000, QuietOnSuccess = true)]
+        public static bool Test_Rational64_BinOp_2(uint p0, int q0, uint p1, int q1) {
+            var d = 0;
+            var r = default(BigRational);
+            var e = 0;
+            var s = default(Rational64);
+            try {
+                r = BigRational.FromFraction(p0, q0) - BigRational.FromFraction(p1, q1);
+                d = 1;
+            } catch (OverflowException) {
+                d = 2;
+            } catch (DivideByZeroException) {
+                d = 3;
+            } catch (ArgumentException) {
+                d = 4;
+            }
+            try {
+                s = Rational64.FromFraction(p0, q0) - Rational64.FromFraction(p1, q1);
+                e = 1;
+            } catch (OverflowException) {
+                e = 2;
+            } catch (DivideByZeroException) {
+                e = 3;
+            } catch (ArgumentException) {
+                e = 4;
+            }
+            return d == e && r == s;
+        }
+
+        [Property(MaxTest = 100000, QuietOnSuccess = true)]
+        public static bool Test_Rational64_BinOp_3(uint p0, int q0, uint p1, int q1) {
+            var d = 0;
+            var r = default(BigRational);
+            var e = 0;
+            var s = default(Rational64);
+            try {
+                r = BigRational.FromFraction(p0, q0) * BigRational.FromFraction(p1, q1);
+                d = 1;
+            } catch (OverflowException) {
+                d = 2;
+            } catch (DivideByZeroException) {
+                d = 3;
+            } catch (ArgumentException) {
+                d = 4;
+            }
+            try {
+                s = Rational64.FromFraction(p0, q0) * Rational64.FromFraction(p1, q1);
+                e = 1;
+            } catch (OverflowException) {
+                e = 2;
+            } catch (DivideByZeroException) {
+                e = 3;
+            } catch (ArgumentException) {
+                e = 4;
+            }
+            return d == e && r == s;
+        }
+
+        [Property(MaxTest = 100000, QuietOnSuccess = true)]
+        public static bool Test_Rational64_BinOp_3_1(uint p0, int q0, uint p1, int q1) {
+            var d = 0;
+            var r = default(BigRational);
+            var e = 0;
+            var s = default(Rational64);
+            try {
+                r = BigRational.FromFraction(p0, q0) * BigRational.FromFraction(p1, q1);
+                d = 1;
+            } catch (OverflowException) {
+                d = 2;
+            } catch (DivideByZeroException) {
+                d = 3;
+            } catch (ArgumentException) {
+                d = 4;
+            }
+            try {
+                s = Rational64.Multiply(Rational64.FromFraction(p0, q0), Rational64.FromFraction(p1, q1));
+                e = 1;
+            } catch (OverflowException) {
+                e = 2;
+            } catch (DivideByZeroException) {
+                e = 3;
+            } catch (ArgumentException) {
+                e = 4;
+            }
+            return d == e && r == s;
+        }
+
+        [Property(MaxTest = 100000, QuietOnSuccess = true)]
+        public static bool Test_Rational64_BinOp_4(uint p0, int q0, uint p1, int q1) {
             var d = 0;
             var r = default(BigRational);
             var e = 0;
@@ -1823,6 +1939,18 @@ namespace UltimateOrb.Core.Tests {
         }
 
         private static int Main(string[] args) {
+            {
+                var sssafd = Test_Rational64_BinOp_1(1, 1, 1, -1);
+                Printf(System.Console.Out, sssafd);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var sssafd = Test_Rational64_BinOp_4(3, -54, 6, -7);
+                Printf(System.Console.Out, sssafd);
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 var a = new double[4];
                 var p = 0.4;

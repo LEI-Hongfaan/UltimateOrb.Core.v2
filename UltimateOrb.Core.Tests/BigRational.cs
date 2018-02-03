@@ -35,7 +35,7 @@ namespace UltimateOrb {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static implicit operator BigRational(Rational64 value) {
-            return default == value ? default : new BigRational(value.Denominator, value.SignedNumerator);
+            return default(Rational64) == value ? default : new BigRational(value.Denominator, value.SignedNumerator);
         }
 
         private static readonly BigInteger s_Rational64MaxDenominator = unchecked((UInt32)Int32.MinValue);
@@ -112,6 +112,12 @@ namespace UltimateOrb {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static BigRational operator +(BigRational first, BigRational second) {
+            if (first.m_SignedNumerator.IsZero) {
+                return second;
+            }
+            if (second.m_SignedNumerator.IsZero) {
+                return first;
+            }
             var d = first.m_Denominator * second.m_Denominator;
             var n = first.m_SignedNumerator * second.m_Denominator + first.m_Denominator * second.m_SignedNumerator;
             if (n.IsZero) {
@@ -126,6 +132,12 @@ namespace UltimateOrb {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static BigRational operator -(BigRational first, BigRational second) {
+            if (first.m_SignedNumerator.IsZero) {
+                return -second;
+            }
+            if (second.m_SignedNumerator.IsZero) {
+                return first;
+            }
             var d = first.m_Denominator * second.m_Denominator;
             var n = first.m_SignedNumerator * second.m_Denominator - first.m_Denominator * second.m_SignedNumerator;
             if (n.IsZero) {

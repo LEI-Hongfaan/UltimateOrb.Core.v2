@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace UltimateOrb.Mathematics.NumberTheory {
-    using Utilities = BinaryNumerals;
+    using Utilities = EuclideanAlgorithm;
     using Math = Internal.System.Math;
 
     public static partial class EuclideanAlgorithm {
@@ -216,6 +216,36 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 return (ulong)value;
                 // return 0 <= value ? (ulong)value : (ulong)(-value);
             }
+        }
+
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        internal static int CountTrailingZeros(UInt32 value) {
+            System.Diagnostics.Contracts.Contract.Requires(0 != value);
+            var c = 0;
+            for (var i = value; 0 == i % 2; i >>= 1) {
+                unchecked {
+                    ++c;
+                }
+            }
+            return c;
+        }
+
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        internal static int CountTrailingZeros(UInt64 value) {
+            System.Diagnostics.Contracts.Contract.Requires(0 != value);
+            var c = 0;
+            for (var i = value; 0 == i % 2; i >>= 1) {
+                unchecked {
+                    ++c;
+                }
+            }
+            return c;
         }
 
         [System.CLSCompliantAttribute(false)]
