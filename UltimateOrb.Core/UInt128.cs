@@ -1804,6 +1804,7 @@ namespace UltimateOrb {
 
         public static partial class Converter {
 
+            [System.CLSCompliantAttribute(false)]
             [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
             [System.Runtime.TargetedPatchingOptOutAttribute(null)]
             [System.Diagnostics.Contracts.PureAttribute()]
@@ -1846,6 +1847,7 @@ namespace UltimateOrb {
                 return Zero;
             }
 
+            [System.CLSCompliantAttribute(false)]
             [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
             [System.Runtime.TargetedPatchingOptOutAttribute(null)]
             [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

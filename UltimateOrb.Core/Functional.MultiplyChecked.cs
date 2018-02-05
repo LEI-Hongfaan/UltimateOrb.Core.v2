@@ -207,3 +207,14 @@ namespace UltimateOrb {
         }
     }
 }
+
+namespace UltimateOrb {
+    using UltimateOrb.Mathematics.Functional;
+
+    public static partial class MultiplyChecked<T> {
+
+        public static readonly MultiplyChecked.Functor<T> Uncurried = default;
+
+        public static readonly Curry<T, T, T, MultiplyChecked.Functor<T>>.C0.C1 Value = default;
+    }
+}

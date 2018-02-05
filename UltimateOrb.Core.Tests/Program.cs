@@ -12,6 +12,7 @@ namespace UltimateOrb.Core.Tests {
     using System.Runtime.CompilerServices;
     using UltimateOrb.Collections.Generic;
     using UltimateOrb.Collections.Generic.ReferenceTypes;
+    using UltimateOrb.IO;
     using UltimateOrb.Mathematics.Exact;
     using UltimateOrb.Mathematics.Functional;
     using UltimateOrb.Plain.ValueTypes;
@@ -330,7 +331,6 @@ namespace UltimateOrb.Core.Tests {
                                 }
                             }
                         }
-                        L_1:
                         m_Flag0_BitArray &= ~((UInt64)1 << m_Count);
                         m_Flag1_BitArray &= ~((UInt64)1 << m_Count);
                         unchecked {
@@ -669,6 +669,62 @@ namespace UltimateOrb.Core.Tests {
         }
     }
 
+    public static partial class Aadfadfdsf {
+
+        public static TFoldA1Impl<T, TBinOp, TBinOpA1, TEnumerable, TEnumerator> Fold<T, TBinOp, TBinOpA1, TEnumerable, TEnumerator>(TBinOp binOp)
+            where TBinOp : IO.IFunc<T, TBinOpA1>
+            where TBinOpA1 : IO.IFunc<T, T>
+            where TEnumerable : IEnumerable<T, TEnumerator>
+            where TEnumerator : IEnumerator<T> {
+            return new TFoldA1Impl<T, TBinOp, TBinOpA1, TEnumerable, TEnumerator>(binOp);
+        }
+
+        public readonly partial struct TFoldA1Impl<T, TBinOp, TBinOpA1, TEnumerable, TEnumerator>
+            : IO.IFunc<T, TFoldA2Impl<T, TBinOp, TBinOpA1, TEnumerable, TEnumerator>>
+            where TBinOp : IO.IFunc<T, TBinOpA1>
+            where TBinOpA1 : IO.IFunc<T, T>
+            where TEnumerable : IEnumerable<T, TEnumerator>
+            where TEnumerator : IEnumerator<T> {
+
+            private readonly TBinOp binOp;
+
+            public TFoldA1Impl(TBinOp binOp) {
+                this.binOp = binOp;
+            }
+
+            public TFoldA2Impl<T, TBinOp, TBinOpA1, TEnumerable, TEnumerator> Invoke(T arg) {
+                return new TFoldA2Impl<T, TBinOp, TBinOpA1, TEnumerable, TEnumerator>(this.binOp, arg);
+            }
+        }
+
+        public readonly partial struct TFoldA2Impl<T, TBinOp, TBinOpA1, TEnumerable, TEnumerator>
+            : IO.IFunc<TEnumerable, T>
+            where TBinOp : IO.IFunc<T, TBinOpA1>
+            where TBinOpA1 : IO.IFunc<T, T>
+            where TEnumerable : IEnumerable<T, TEnumerator>
+            where TEnumerator : IEnumerator<T> {
+
+            private readonly TBinOp binOp;
+
+            private readonly T arg;
+
+            public TFoldA2Impl(TBinOp binOp, T arg) {
+                this.binOp = binOp;
+                this.arg = arg;
+            }
+
+            public T Invoke(TEnumerable arg) {
+                var result = this.arg;
+                var binOp = this.binOp;
+                var i = arg.GetEnumerator();
+                for (; i.MoveNext();) {
+                    result = binOp.Invoke(result).Invoke(i.Current);
+                }
+                i.Dispose();
+                return result;
+            }
+        }
+    }
 
     public partial class Program {
 
@@ -1760,7 +1816,7 @@ namespace UltimateOrb.Core.Tests {
                 array[k++] = right.Invoke(default, t);
             }
         }
-        
+
         [Property(MaxTest = 100000, QuietOnSuccess = true)]
         public static bool Test_Rational64_BinOp_1(uint p0, int q0, uint p1, int q1) {
             var d = 0;
@@ -1939,6 +1995,54 @@ namespace UltimateOrb.Core.Tests {
         }
 
         private static int Main(string[] args) {
+            {
+                var adfs = new Int128[] { -2, 3, 4, -5, -6, }.AsArray();
+                var c = Enumerable.FoldLeft<
+                    Int128,
+                    Int128,
+                    Curry<Int128, Int128, Int128, MultiplyChecked.Functor<Int128>>.C0.C1,
+                    Curry<Int128, Int128, Int128, MultiplyChecked.Functor<Int128>>.C0.C1.C2,
+                    BclArrayAsArray<Int128>,
+                    Array<Int128>.Enumerator
+                >.Value.Invoke(default).Invoke(100).Invoke(adfs);
+                Printf(System.Console.Out, c);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var arg = new int[] { -2, 3, 4, -5, -6, }.AsArray();
+                var result = 100;
+                var i = arg.GetEnumerator();
+                for (; i.MoveNext();) {
+                    result = result * i.Current;
+                }
+                i.Dispose();
+                var c = result;
+                Printf(System.Console.Out, c);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var adfs = new int[] { -2, 3, 4, -5, -6, }.AsArray();
+                var c = Enumerable.FoldLeft<
+                    int,
+                    int,
+                    Curry<int, int, int, MultiplyChecked.Functor<int>>.C0.C1,
+                    Curry<int, int, int, MultiplyChecked.Functor<int>>.C0.C1.C2,
+                    BclArrayAsArray<int>,
+                    Array<int>.Enumerator
+                >.Value.Invoke(default).Invoke(100).Invoke(adfs);
+                Printf(System.Console.Out, c);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var arg = new int[] { -2, 3, 4, -5, -6, }.AsArray();
+                var c = arg.Aggregate(100, (x, y) => checked(x * y));
+                Printf(System.Console.Out, c);
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 var sssafd = Test_Rational64_BinOp_1(1, 1, 1, -1);
                 Printf(System.Console.Out, sssafd);
@@ -2228,9 +2332,9 @@ namespace UltimateOrb.Core.Tests {
             {
                 var cc = 200000000;
                 var s = 7;
-                var c = Enumerable.Range(10000, s);
-                c = c.Concat(Enumerable.Range(0, cc));
-                c = c.Concat(Enumerable.Range(20000, 11));
+                var c = System.Linq.Enumerable.Range(10000, s);
+                c = c.Concat(System.Linq.Enumerable.Range(0, cc));
+                c = c.Concat(System.Linq.Enumerable.Range(20000, 11));
                 var d = c.ToArray();
 
                 ArrayModule.InterleaveInPlace(d, s, cc);
@@ -2327,7 +2431,7 @@ namespace UltimateOrb.Core.Tests {
                 Console.Out.WriteLine(st.Elapsed);
                 Console.Out.WriteLine(s.Count);
                 Console.Out.WriteLine("...");
-                c = Enumerable.Range(1, 26).ToArray();
+                c = System.Linq.Enumerable.Range(1, 26).ToArray();
                 st.Restart();
                 s = AAAf.SolveP233(c, 200);
                 st.Stop();
@@ -2344,7 +2448,7 @@ namespace UltimateOrb.Core.Tests {
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(s.Count);
                 Console.Out.WriteLine("...");
-                c = Enumerable.Range(1, 26).ToArray();
+                c = System.Linq.Enumerable.Range(1, 26).ToArray();
                 s = AAAf.dsafsf(c, 200);
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(s.Count);
@@ -2414,7 +2518,7 @@ namespace UltimateOrb.Core.Tests {
             }
             {
                 var b = new int[] { 1, 2, 2, 3, 4, };
-                var a = Enumerable.Range(0, b.Length).ToArray();
+                var a = System.Linq.Enumerable.Range(0, b.Length).ToArray();
                 var dd = 0L;
                 do {
                     var c = b.Clone() as int[];
@@ -2430,7 +2534,7 @@ namespace UltimateOrb.Core.Tests {
 
             {
                 var b = new int[] { 1, 2, 2, 3, 4, };
-                var a = Enumerable.Range(0, b.Length).ToArray();
+                var a = System.Linq.Enumerable.Range(0, b.Length).ToArray();
                 var dd = 0L;
                 do {
                     var c = a.Select(x => b[x]).ToArray();
