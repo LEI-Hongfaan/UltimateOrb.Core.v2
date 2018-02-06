@@ -1994,7 +1994,242 @@ namespace UltimateOrb.Core.Tests {
         private static void dsfasdf<T>() {
         }
 
+        public static AsyncLocal<object> asyncId = new AsyncLocal<object>();
+
+        public partial struct Lazy<T> {
+
+            private object m_info;
+
+            private T m_value;
+
+            public T Value {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get {
+                    // TODO: Perf
+                    var info = this.m_info;
+                    if (null == info) {
+                        return this.m_value;
+                    }
+                    var id = asyncId.Value;
+                    if (null == id) {
+                        id = new object();
+                        asyncId.Value = id;
+                    }
+                    for (var wait = 0u; ;) {
+                        if (info is Func<T> f) {
+                            if (info == Interlocked.CompareExchange(ref this.m_info, id, info)) {
+                                try {
+                                    var value = f.Invoke();
+                                    this.m_value = value;
+                                    info = null;
+                                    return value;
+                                } finally {
+                                    this.m_info = info;
+                                }
+                            }
+                        }
+                        ++wait;
+                        if (wait < 5) {
+                            Thread.SpinWait(unchecked((int)wait * 1000));
+                        } else {
+                            if (0 == wait % 64) {
+                                Thread.Sleep(1);
+                            } else if (0 == wait % 8) {
+                                Thread.Sleep(0);
+                            } else {
+                                Thread.Yield();
+                            }
+                        }
+                        info = this.m_info;
+                        if (null == info) {
+                            return this.m_value;
+                        }
+                    }
+                }
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public Lazy(T value) {
+                this.m_info = null;
+                this.m_value = value;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public Lazy(Func<T> factory) {
+                this.m_info = factory;
+                this.m_value = default;
+            }
+        }
+
+        public partial struct NonstrictList<T> {
+
+            private Lazy<T> head;
+
+            private UltimateOrb.StrongBox<Lazy<NonstrictList<T>>> tail;
+
+            public bool IsNil {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => null == this.tail;
+            }
+
+            public bool IsCons {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get => null != this.tail;
+            }
+
+            public (Lazy<T> Head, Lazy<NonstrictList<T>> Tail) Cons {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                get {
+                    return (this.head, this.tail.Value);
+                }
+            }
+
+            /*
+            private static NonstrictList<T> GetValue(UltimateOrb.StrongBox<NonstrictList<T>> boxed) {
+                return boxed.Value;
+            }
+
+            public NonstrictList(Lazy<T> const_value) {
+                var boxed = new UltimateOrb.StrongBox<NonstrictList<T>>();
+                boxed.Value.head = const_value;
+                boxed.Value.tail = new UltimateOrb.StrongBox<Lazy<NonstrictList<T>>>(new Lazy<NonstrictList<T>>(() => {
+                    Console.Out.WriteLine("^!^");
+                    return GetValue(boxed);
+                }));
+                this = boxed.Value;
+            }
+
+            public NonstrictList(T const_value) : this(new Lazy<T>(const_value)) {                
+            }
+
+            private static Lazy<NonstrictList<T>> GetValue(UltimateOrb.StrongBox<Lazy<NonstrictList<T>>> boxed) {
+                return boxed.Value;
+            }
+            */
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static Lazy<NonstrictList<T>> CreateConstantList(Lazy<T> const_value) {
+                var boxed = new UltimateOrb.StrongBox<Lazy<NonstrictList<T>>>();
+                NonstrictList<T> list;
+                list.head = const_value;
+                list.tail = boxed;
+                var lazy = new Lazy<NonstrictList<T>>(list);
+                boxed.Value = lazy;
+                return lazy;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static Lazy<NonstrictList<T>> CreateConstantList(T const_value) {
+                return CreateConstantList(new Lazy<T>(const_value));
+            }
+
+            /*
+            private static NonstrictList<T> GetNextValue<TFunc>(UltimateOrb.StrongBox<Lazy<NonstrictList<T>>> boxed, Lazy<TFunc> f)
+                where TFunc : IO.IFunc<Lazy<T>, Lazy<T>> {
+                var b = new UltimateOrb.StrongBox<Lazy<NonstrictList<T>>>();
+                NonstrictList<T> list;
+                list.head = f.Value.Invoke(boxed.Value.Value.head);
+                list.tail = b;
+                b.Value = new Lazy<NonstrictList<T>>(() => GetNextValue(b, f));
+                return list;
+            }
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static Lazy<NonstrictList<T>> CreateNestList<TFunc>(Lazy<T> initial_value, Lazy<TFunc> f)
+                where TFunc : IO.IFunc<Lazy<T>, Lazy<T>> {
+                var boxed = new UltimateOrb.StrongBox<Lazy<NonstrictList<T>>>();
+                NonstrictList<T> list;
+                list.head = initial_value;
+                list.tail = boxed;
+                var lazy = new Lazy<NonstrictList<T>>(list);
+                boxed.Value = new Lazy<NonstrictList<T>>(() => GetNextValue(boxed, f));
+                return lazy;
+            }
+            */
+        }
+
+        private partial struct adffffas : IO.IFunc<Lazy<int>, Lazy<int>> {
+
+            public Lazy<int> Invoke(Lazy<int> arg) {
+                return new Lazy<int>(arg.Value + 3);
+            }
+        }
+
         private static int Main(string[] args) {
+            {
+                /*
+                var afgadfsa = NonstrictList<int>.CreateNestList<adffffas>(new Lazy<int>(44), default);
+                for (var i = 0; 100 > i; ++i) {
+                    var (Head, Tail) = afgadfsa.Value.Cons;
+                    Printf(System.Console.Out, Head.Value);
+                    afgadfsa = Tail;
+                }
+                Console.ReadKey(true);
+                return 0;
+                */
+            }
+            {
+                /*
+                var afgadfsa = new NonstrictList<int>(44);
+                for (var i = 0; 100000000 > i; ++i) {
+                    var (Head, Tail) = afgadfsa.Cons;
+                    Printf(System.Console.Out, Head.Value);
+                    afgadfsa = Tail.Value;
+                }
+                Console.ReadKey(true);
+                return 0;
+                */
+            }
+            {
+                var afgadfsa = NonstrictList<int>.CreateConstantList(44);
+                for (var i = 0; 100000000 > i; ++i) {
+                    var (Head, Tail) = afgadfsa.Value.Cons;
+                    Printf(System.Console.Out, Head.Value);
+                    afgadfsa = Tail;
+                }
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+
+                UInt64 signal = 0;
+                var thread_list = new Thread[64];
+                var result_list = new int[thread_list.Length];
+                var lazy_boxed = new UltimateOrb.StrongBox<Lazy<int>>(new Lazy<int>(() => Thread.CurrentThread.ManagedThreadId));
+                for (var i = 0; thread_list.Length > i; ++i) {
+                    thread_list[i] = new Thread((arg) => {
+                        var ii = (int)arg;
+                        for (; ; ) {
+                            if (0 != (((UInt64)1 << i) & signal)) {
+                                ref var af = ref (lazy_boxed as UltimateOrb.Collections.Generic.RefReturnSupported.IStrongBox<Lazy<int>>).Value;
+                                result_list[ii] = af.Value;
+                                break;
+                            }
+                            Thread.SpinWait(1);
+                        }
+                    }, 1 * 1024 * 1024);
+                }
+                for (var i = 0; thread_list.Length > i; ++i) {
+                    thread_list[i].Priority = ThreadPriority.BelowNormal;
+                }
+                Thread.CurrentThread.Priority = ThreadPriority.Highest;
+                Printf(System.Console.Out, "...");
+                for (var i = 0; thread_list.Length > i; ++i) {
+                    thread_list[i].Start(i);
+                }
+                Printf(System.Console.Out, result_list);
+                signal = ~(UInt64)0;
+                for (var i = 0; thread_list.Length > i; ++i) {
+                    thread_list[i].Join();
+                }
+                Printf(System.Console.Out, result_list);
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 var adfs = new Int128[] { -2, 3, 4, -5, -6, }.AsArray();
                 var c = Enumerable.FoldLeft<
