@@ -5,6 +5,14 @@ using UltimateOrb.Collections.Generic;
 
 namespace UltimateOrb {
 
+    public static partial class Lazy {
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Lazy<T> ToLazy<T>(this T value) {
+            return new Lazy<T>(value);
+        }
+    }
+
     public partial class Lazy<T> : ILazy<T> {
 
         internal object m_info;
@@ -34,7 +42,7 @@ namespace UltimateOrb {
                                 {
                                     var t = Console.Out;
                                     lock (t) {
-                                        t.Write("^!^:");
+                                        t.Write("^!^  ");
                                         t.WriteLine(typeof(T).Name);
                                     }
                                 }
@@ -85,16 +93,19 @@ namespace UltimateOrb {
 
         public bool IsEvaluated {
 
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => null == this.m_info;
         }
 
         public ref readonly T Cache {
 
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.m_value;
         }
 
         public Func<T> ValueCreator {
 
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
                 if (this.m_info is Func<T> f) {
                     if (null != f) {
@@ -106,7 +117,7 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        internal Lazy(T value) {
+        public Lazy(T value) {
             this.m_value = value;
         }
 

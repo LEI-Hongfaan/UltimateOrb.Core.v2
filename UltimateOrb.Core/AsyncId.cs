@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 
 namespace UltimateOrb {
+
     public static partial class AsyncId {
 
         private static readonly AsyncLocal<object> s_Value = new AsyncLocal<object>();
