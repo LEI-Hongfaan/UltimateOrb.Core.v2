@@ -1991,111 +1991,7 @@ namespace UltimateOrb.Core.Tests {
             return d == e && r == s;
         }
 
-        private static void dsfasdf<T>() {
-        }
-
-        public static AsyncLocal<object> asyncId = new AsyncLocal<object>();
-
-        public partial class Lazy<T> : Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T> {
-
-            internal object m_info;
-
-            internal T m_value;
-
-            T IReadOnlyStrongBox<T>.Value {
-
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => this.GetValue();
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            private T GetValue() {
-                // TODO: Perf
-                var info = this.m_info;
-                if (null == info) {
-                    return this.m_value;
-                }
-                var id = asyncId.Value;
-                if (null == id) {
-                    id = new object();
-                    asyncId.Value = id;
-                }
-                for (var wait = 0u; ;) {
-                    if (info is Func<T> f) {
-                        if (info == Interlocked.CompareExchange(ref this.m_info, id, info)) {
-                            try {
-                                var value = f.Invoke();
-#if DEBUG
-                                {
-                                    var t = Console.Out;
-                                    lock (t) {
-                                        t.Write("^!^:");
-                                        t.WriteLine(typeof(T).Name);
-                                    }
-                                }
-#endif
-                                this.m_value = value;
-                                info = null;
-                                return value;
-                            } finally {
-                                this.m_info = info;
-                            }
-                        }
-                    }
-                    ++wait;
-                    if (wait < 5) {
-                        Thread.SpinWait(unchecked((int)wait * 1000));
-                    } else {
-                        if (0 == wait % 64) {
-                            Thread.Sleep(1);
-                        } else if (0 == wait % 8) {
-                            Thread.Sleep(0);
-                        } else {
-                            Thread.Yield();
-                        }
-                    }
-                    info = this.m_info;
-                    if (null == info) {
-                        return this.m_value;
-                    }
-                }
-            }
-
-            public ref readonly T Value {
-
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get {
-                    this.GetValue();
-                    return ref this.m_value;
-                }
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            internal Lazy(T value) {
-                // this.m_info = null;
-                this.m_value = value;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public Lazy() {
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public Lazy(Func<T> factory) {
-                this.m_info = factory;
-                // this.m_value = default;
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static implicit operator Lazy<T>(T value) {
-                return new Lazy<T>(value);
-            }
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            public static explicit operator T(Lazy<T> value) {
-                return value.Value;
-            }
-        }
+        
 
         public readonly partial struct NonstrictList<T> {
 
@@ -2109,6 +2005,38 @@ namespace UltimateOrb.Core.Tests {
                 var b = new NonstrictList<T>(a, const_value);
                 a.m_value = b;
                 return a;
+            }
+
+            public static readonly Lazy<NonstrictList<T>> Nil = default(NonstrictList<T>);
+
+            public static readonly Lazy<ConsT.C0> Cons = ConsT.Value;
+
+            public static partial class ConsT {
+
+                public static readonly C0 Value = default;
+
+                public readonly partial struct C0 : IFunc<Lazy<T>, ConsT.C0.C1> {
+
+                    [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                    public C1 Invoke(Lazy<T> arg) {
+                        return new C1(arg);
+                    }
+
+                    public readonly partial struct C1 : IFunc<Lazy<NonstrictList<T>>, Lazy<NonstrictList<T>>> {
+
+                        private readonly Lazy<T> arg;
+
+                        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                        public C1(Lazy<T> arg) {
+                            this.arg = arg;
+                        }
+
+                        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                        public Lazy<NonstrictList<T>> Invoke(Lazy<NonstrictList<T>> arg) {
+                            return new Lazy<NonstrictList<T>>(new NonstrictList<T>(arg, this.arg));
+                        }
+                    }
+                }
             }
 
             public static readonly Lazy<HeadT> Head_ = new Lazy<HeadT>();
@@ -2243,7 +2171,14 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
-        private static partial class NonstrictFunction<T, TResult, TFunc>
+        private partial struct Test_AddOne : IO.IFunc<int, int> {
+
+            public int Invoke(int arg) {
+                return checked(1 + arg);
+            }
+        }
+
+        private static partial class ToNonstrict<T, TResult, TFunc>
             where TFunc : IO.IFunc<T, TResult> {
 
             public static readonly C0 Value = default;
@@ -2257,7 +2192,7 @@ namespace UltimateOrb.Core.Tests {
                     return new C1(arg);
                 }
 
-                public readonly partial struct C1 : IO.IFunc<Lazy<T>, Lazy<TResult>> {
+                public readonly partial struct C1 : IO.IFunc<ILazy<T>, Lazy<TResult>> {
 
                     private readonly TFunc arg;
 
@@ -2267,10 +2202,10 @@ namespace UltimateOrb.Core.Tests {
                     }
 
                     [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                    public Lazy<TResult> Invoke(Lazy<T> arg) {
+                    public Lazy<TResult> Invoke(ILazy<T> arg) {
                         var f = this.arg;
-                        if (null == arg.m_info) {
-                            return new Lazy<TResult>(f.Invoke(arg.m_value));
+                        if (arg.IsEvaluated) {
+                            return new Lazy<TResult>(f.Invoke(arg.Cache));
                         }
                         return new Lazy<TResult>(() => f.Invoke(arg.Value));
                     }
@@ -2278,11 +2213,55 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+        public static partial class Traits {
+
+            public static partial class BclArray {
+
+                public static Type Invoke(Type arg) {
+                    return arg.MakeArrayType();
+                }
+
+                public static Type CoInvoke(Type arg) {
+                    if (arg.IsArray) {
+                        return arg.GetElementType();
+                    }
+                    throw new ArgumentOutOfRangeException(nameof(arg));
+                }
+            }
+            
+        }
+
+
         private static int Main(string[] args) {
             {
                 try {
-                    var t = NonstrictFunction<int, int, Test_MulTwo>.Value.Invoke(default);
-                    var adfsa = NonstrictList<int>.CreateNestList<NonstrictFunction<int, int, Test_MulTwo>.C0.C1>(t, 42);
+                    Console.Out.WriteLine("...");
+                    var t = ToNonstrict<int, int, Test_AddOne>.Value.Invoke(default);
+                    var adfsa = NonstrictList<int>.CreateNestList<ToNonstrict<int, int, Test_AddOne>.C0.C1>(t, 42);
+                    for (var i = 0; 20000000 > i; ++i) {
+                        var Head = NonstrictList<int>.Head_.Value.Invoke(adfsa);
+                        if (0 == i % 5000) {
+                            var ignored = Head.Value;
+                        }
+                        adfsa = NonstrictList<int>.Tail_.Value.Invoke(adfsa);
+                    }
+                    Console.Out.WriteLine("...");
+                    Printf(System.Console.Out, NonstrictList<int>.Head_.Value.Invoke(adfsa).Value);
+                } catch (Exception) {
+                    var w = Console.Out;
+                    lock (w) {
+                        w.Write("!!!");
+                        w.WriteLine();
+                    }
+                }
+                Console.WriteLine("...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                try {
+                    var t = ToNonstrict<int, int, Test_MulTwo>.Value.Invoke(default);
+                    var adfsa = NonstrictList<int>.CreateNestList<ToNonstrict<int, int, Test_MulTwo>.C0.C1>(t, 42);
                     for (var i = 0; 500 > i; ++i) {
                         var Head = NonstrictList<int>.Head_.Value.Invoke(adfsa);
                         Printf(System.Console.Out, Head.Value);
@@ -2534,7 +2513,6 @@ namespace UltimateOrb.Core.Tests {
                 return 0;
             }
             {
-                dsfasdf<int>();
                 {
                     var asdfa = KindExpression.Array.Invoke(TypeKindExpression.Create(typeof(ulong)));
                     if (asdfa is TypeKindExpression t) {
