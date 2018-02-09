@@ -252,8 +252,8 @@ namespace UltimateOrb.Core.Tests {
         [Property(MaxTest = 1, QuietOnSuccess = true)]
         public static bool Test_IsPermutation_1() {
             var a = "Banaan🌍nas".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsFunc();
             var t = 0UL;
             var s = new List<(ulong Id, bool Value)>(0);
             for (var b = a.Clone() as char[]; ;) {
@@ -270,8 +270,8 @@ namespace UltimateOrb.Core.Tests {
         [Property(MaxTest = 1, QuietOnSuccess = true)]
         public static bool Test_IsPermutation_2() {
             var a = "Banaan🌍nas".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsFunc();
             var t = 0UL;
             var s = new List<(ulong Id, bool Value)>(0);
             for (var b = a.Clone() as char[]; ;) {
@@ -296,8 +296,8 @@ namespace UltimateOrb.Core.Tests {
         [Property(MaxTest = 1, QuietOnSuccess = true)]
         public static bool Test_NextPermutation_3() {
             var a = "abcdefgh".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsFunc();
             var t = 0UL;
             var s = new List<(ulong Id, bool Value)>(0);
             for (var b = a.Clone() as char[]; ;) {
@@ -314,8 +314,8 @@ namespace UltimateOrb.Core.Tests {
         [Property(MaxTest = 1, QuietOnSuccess = true)]
         public static bool Test_NextPermutation_4() {
             var a = "abcdefgg".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsFunc();
             var t = 0UL;
             var s = new List<(ulong Id, bool Value)>(0);
             for (var b = a.Clone() as char[]; ;) {
@@ -332,8 +332,8 @@ namespace UltimateOrb.Core.Tests {
         [Property(MaxTest = 1, QuietOnSuccess = true)]
         public static bool Test_PreviousPermutation_3() {
             var a = "hgfedcba".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsFunc();
             var t = 0UL;
             var s = new List<(ulong Id, bool Value)>(0);
             for (var b = a.Clone() as char[]; ;) {
@@ -350,8 +350,8 @@ namespace UltimateOrb.Core.Tests {
         [Property(MaxTest = 1, QuietOnSuccess = true)]
         public static bool Test_PreviousPermutation_4() {
             var a = "ggfedcba".ToCharArray();
-            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+            var c = ((Func<char, char, bool>)((x, y) => x == y)).AsFunc();
+            var d = ((Func<char, char, bool>)((x, y) => x < y)).AsFunc();
             var t = 0UL;
             var s = new List<(ulong Id, bool Value)>(0);
             for (var b = a.Clone() as char[]; ;) {

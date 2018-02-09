@@ -2,7 +2,7 @@
 using UltimateOrb.Collections.Generic.RefReturnSupported;
 
 namespace UltimateOrb {
-
+    
     public partial interface ILazy<T> : IReadOnlyStrongBox<T> {
 
         bool IsEvaluated {

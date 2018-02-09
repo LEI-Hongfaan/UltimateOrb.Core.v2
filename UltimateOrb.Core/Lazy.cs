@@ -7,6 +7,11 @@ namespace UltimateOrb {
 
     public static partial class Lazy {
 
+        public static readonly UndefinedT Undefined = default;
+
+        public readonly partial struct UndefinedT {
+        }
+
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static Lazy<T> ToLazy<T>(this T value) {
             return new Lazy<T>(value);
@@ -130,6 +135,13 @@ namespace UltimateOrb {
             this.m_info = factory;
         }
 
+        public static readonly Lazy<T> Undefined = Lazy.Undefined;
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Lazy<T>(Lazy.UndefinedT value) {
+            return new Lazy<T>(() => throw null);
+        }
+
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Lazy<T>(T value) {
             return new Lazy<T>(value);
@@ -138,6 +150,21 @@ namespace UltimateOrb {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static explicit operator T(Lazy<T> value) {
             return value.Value;
+        }
+
+        public override string ToString() {
+            T v = default;
+            bool s = false;
+            try {
+                v = this.GetValue();
+                s = true;
+            } catch (Exception ex) {
+                return $@"(exception {{{ex.ToString()}}})";
+            }
+            if (s) {
+                return $@"({v.ToString()})";
+            }
+            return $@"(undefined)";
         }
     }
 }

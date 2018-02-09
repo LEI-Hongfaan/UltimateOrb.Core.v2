@@ -7,6 +7,7 @@ using System.Threading;
 
 namespace UltimateOrb.Core.Tests {
     using System.Diagnostics;
+    using System.Linq.Expressions;
     using System.Reflection;
     using System.Reflection.Emit;
     using System.Runtime.CompilerServices;
@@ -2036,59 +2037,209 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
-        private static partial class ToNonstrict<T, TResult, TFunc>
-            where TFunc : IO.IFunc<T, TResult> {
+        public static partial class Traits {
 
-            public static readonly C0 Value = default;
-
-            public static readonly Lazy<C0> Value_ = Value;
-
-            public readonly partial struct C0 : IO.IFunc<TFunc, C0.C1> {
-
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                public C1 Invoke(TFunc arg) {
-                    return new C1(arg);
-                }
-
-                public readonly partial struct C1 : IO.IFunc<ILazy<T>, Lazy<TResult>> {
-
-                    private readonly TFunc arg;
-
-                    [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                    public C1(TFunc arg) {
-                        this.arg = arg;
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            public static Type RemoveAnyLazyWrapper(Type arg) {
+                var t = arg;
+                for (; ; ) {
+                    var s = t.GetGenericTypeDefinition();
+                    if (typeof(Lazy<>) == s) {
+                        t = t.GetGenericArguments()[0];
                     }
-
-                    [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                    public Lazy<TResult> Invoke(ILazy<T> arg) {
-                        var f = this.arg;
-                        if (arg.IsEvaluated) {
-                            return new Lazy<TResult>(f.Invoke(arg.Cache));
-                        }
-                        return new Lazy<TResult>(() => f.Invoke(arg.Value));
-                    }
+                    return t;
                 }
             }
-        }
-
-        public static partial class Traits {
 
             public static partial class BclArray {
 
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 public static Type Invoke(Type arg) {
-                    return arg.MakeArrayType();
+                    var t = RemoveAnyLazyWrapper(arg);
+                    return t.MakeArrayType();
                 }
 
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 public static Type CoInvoke(Type arg) {
-                    if (arg.IsArray) {
-                        return arg.GetElementType();
+                    var t = RemoveAnyLazyWrapper(arg);
+                    if (t.IsArray) {
+                        return t.GetElementType();
+                    }
+                    throw new ArgumentOutOfRangeException(nameof(arg));
+                }
+            }
+
+            public static partial class Maybe {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                public static Type Invoke(Type arg) {
+                    var t = RemoveAnyLazyWrapper(arg);
+                    return typeof(Maybe<>).MakeGenericType(new[] { t, });
+                }
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                public static Type CoInvoke(Type arg) {
+                    var t = RemoveAnyLazyWrapper(arg);
+                    if (typeof(Maybe<>) == t.GetGenericTypeDefinition()) {
+                        return t.GetGenericArguments()[0];
                     }
                     throw new ArgumentOutOfRangeException(nameof(arg));
                 }
             }
         }
 
+        internal partial class LambdaBodyRewriter : ExpressionVisitor {
+
+            private readonly IDictionary<ParameterExpression, ParameterExpression> parameter_map;
+
+            public LambdaBodyRewriter(IDictionary<ParameterExpression, ParameterExpression> map) {
+                this.parameter_map = map;
+            }
+
+            protected override Expression VisitParameter(ParameterExpression node) {
+                if (parameter_map.TryGetValue(node, out var node_new)) {
+                    var t = node.Type;
+                    return Expression.PropertyOrField(Expression.Convert(node_new, typeof(Collections.Generic.IReadOnlyStrongBox<>).MakeGenericType(t)), "Value");
+                }
+                return base.VisitParameter(node);
+            }
+        }
+
+        public static LambdaExpression ToNonstrict_A_G<TDelegate>(Expression<TDelegate> lambda) {
+            var d = lambda.Parameters.Select((x) => {
+                var t = x.Type;
+                return KeyValuePair.Create(x, Expression.Parameter(typeof(ILazy<>).MakeGenericType(t), x.Name));
+            }).ToArray();
+            var map = new Dictionary<ParameterExpression, ParameterExpression>(d);
+            var adsf = new LambdaBodyRewriter(map);
+            var body_new = adsf.Visit(lambda.Body);
+            var parameters_new = d.Select((x) => x.Value);
+            {
+                var t = body_new.Type;
+                var t_lazy = typeof(Lazy<>).MakeGenericType(t);
+                var ctor = t_lazy.GetConstructor(new[] { typeof(Func<>).MakeGenericType(t) });
+                body_new = Expression.New(ctor, Expression.Lambda(body_new));
+            }
+            var result = Expression.Lambda(body_new, parameters_new);
+            return result;
+        }
+
+        private static partial class CachedReflectionResults<T0> {
+
+            public static readonly ConstructorInfo Ctor =
+                typeof(Lazy<T0>).GetConstructor(new[] { typeof(Func<T0>), });
+
+            public static readonly Type TypeOfLazyInterface = typeof(ILazy<T0>);
+
+            public static readonly Type TypeOfReadOnlyStrongBoxInterface = typeof(Collections.Generic.IReadOnlyStrongBox<T0>);
+
+            public static readonly MethodInfo ValueProp = TypeOfReadOnlyStrongBoxInterface.GetProperty("Value", typeof(T0)).GetMethod;
+
+            private static partial class C1<T1> {
+
+                private static partial class C2<T2> {
+
+                }
+            }
+        }
+
+        public static Expression<Func<ILazy<TResult>>> ToNonstrict<TResult>(Expression<Func<TResult>> lambda) {
+            var body_new = lambda.Body;
+            var parameters_new = Array_Empty<ParameterExpression>.Value;
+            {
+                body_new = Expression.Convert(Expression.New(CachedReflectionResults<TResult>.Ctor, Expression.Lambda(body_new)), CachedReflectionResults<TResult>.TypeOfLazyInterface);
+            }
+            var result = Expression.Lambda(body_new, parameters_new);
+            return result as Expression<Func<ILazy<TResult>>>;
+        }
+
+        internal partial class LambdaBodyRewriter<T> : ExpressionVisitor {
+
+            private readonly KeyValuePair<ParameterExpression, ParameterExpression> parameter_map;
+
+            public LambdaBodyRewriter(KeyValuePair<ParameterExpression, ParameterExpression> map) {
+                this.parameter_map = map;
+            }
+
+            protected override Expression VisitParameter(ParameterExpression node) {
+                if (this.parameter_map.Key == node) {
+                    return Expression.Property(Expression.ConvertChecked(this.parameter_map.Value, CachedReflectionResults<T>.TypeOfReadOnlyStrongBoxInterface), CachedReflectionResults<T>.ValueProp);
+                }
+                return base.VisitParameter(node);
+            }
+        }
+
+        public static Expression<Func<ILazy<T>, ILazy<TResult>>> ToNonstrict<T, TResult>(Expression<Func<T, TResult>> lambda) {
+            var p = lambda.Parameters[0];
+            var p_new = Expression.Parameter(CachedReflectionResults<T>.TypeOfLazyInterface, p.Name);
+            var rewriter = new LambdaBodyRewriter<T>(KeyValuePair.Create(p, p_new));
+            var body_new = rewriter.Visit(lambda.Body);
+            var parameters_new = new[] { p_new, };
+            {
+                body_new = Expression.Convert(Expression.New(CachedReflectionResults<TResult>.Ctor, Expression.Lambda(body_new)), CachedReflectionResults<TResult>.TypeOfLazyInterface);
+            }
+            var result = Expression.Lambda(body_new, parameters_new);
+            return result as Expression<Func<ILazy<T>, ILazy<TResult>>>;
+        }
+
         private static int Main(string[] args) {
+            {
+                var aaa = 333;
+                var sdf = ToNonstrict<int, string>((x) => (aaa + x).ToString()).Compile();
+                Console.Out.WriteLine(sdf.Invoke(666.ToLazy()));
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var aaa = 333;
+                var a = (System.Linq.Expressions.Expression<Func<int, int, int>>)((x, y) => (aaa + x + y));
+                Console.Out.WriteLine(a.ToString());
+                var b = ToNonstrict_A_G(a);
+                var d = ToNonstrict_A_G<Func<int, int, int>>((x, y) => (aaa + x + y));
+                Console.Out.WriteLine(b.ToString());
+                var dsfaf = (Func<ILazy<int>, ILazy<int>, ILazy<int>>)(b as LambdaExpression).Compile();
+                var asdf = dsfaf.Invoke(333.ToLazy(), Lazy<int>.Undefined);
+                Console.Out.WriteLine(asdf.ToString());
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = Maybe.Just(4.ToLazy());
+                var r = from x in a
+                        select x * 3;
+                Printf(System.Console.Out, r.Value);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                try {
+                    var a = Maybe.Just(new Lazy<int>(() => throw null));
+                    var d = 3;
+                    var r = from x in a
+                            select d + 3;
+                    System.Console.Out.WriteLine("...");
+                    Printf(System.Console.Out, r.Value);
+                } catch (Exception) {
+                    System.Console.Out.WriteLine("!!!");
+                }
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = Maybe.Just(4.ToLazy());
+                var r = from x in a
+                        where 0 != x % 2
+                        select x * 3;
+                Printf(System.Console.Out, r.Value);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var t = Traits.Maybe.CoInvoke(typeof(Maybe<>));
+                Console.Out.WriteLine(t.Name);
+                Console.ReadKey(true);
+                return 0;
+            }
             {
                 Printf(System.Console.Out, -1);
                 Console.WriteLine("...");
@@ -2736,8 +2887,8 @@ namespace UltimateOrb.Core.Tests {
                 TestModule.Test_IsPermutation_2();
                 {
                     var a = "Banaan🌍nas".ToCharArray();
-                    var c = ((Func<char, char, bool>)((x, y) => x == y)).AsIFunc();
-                    var d = ((Func<char, char, bool>)((x, y) => x < y)).AsIFunc();
+                    var c = ((Func<char, char, bool>)((x, y) => x == y)).AsFunc();
+                    var d = ((Func<char, char, bool>)((x, y) => x < y)).AsFunc();
                     var t = 0UL;
                     var s = new System.Collections.Generic.List<(ulong Id, bool Value)>(0);
                     for (var b = a.Clone() as char[]; ;) {
@@ -2783,7 +2934,7 @@ namespace UltimateOrb.Core.Tests {
                     ArrayModule.Reorder(c, a.Clone() as int[]);
                     ++dd;
                     Printf(System.Console.Out, c);
-                } while (ArrayModule.NextPermutation(a, ((Func<int, int, bool>)((x, y) => x < y)).AsIFunc()));
+                } while (ArrayModule.NextPermutation(a, ((Func<int, int, bool>)((x, y) => x < y)).AsFunc()));
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(dd);
                 Console.ReadKey(true);
@@ -2798,7 +2949,7 @@ namespace UltimateOrb.Core.Tests {
                     var c = a.Select(x => b[x]).ToArray();
                     ++dd;
                     Printf(System.Console.Out, c);
-                } while (ArrayModule.NextPermutation(a, ((Func<int, int, bool>)((x, y) => x < y)).AsIFunc()));
+                } while (ArrayModule.NextPermutation(a, ((Func<int, int, bool>)((x, y) => x < y)).AsFunc()));
                 Console.Out.WriteLine("...");
                 Console.Out.WriteLine(dd);
                 Console.ReadKey(true);
@@ -2810,7 +2961,7 @@ namespace UltimateOrb.Core.Tests {
                 var b = a.Clone() as int[];
                 do {
                     Printf(System.Console.Out, b);
-                } while (ArrayModule.NextPermutation(b, ((Func<int, int, bool>)((x, y) => x < y)).AsIFunc()));
+                } while (ArrayModule.NextPermutation(b, ((Func<int, int, bool>)((x, y) => x < y)).AsFunc()));
 
                 Console.Out.WriteLine("...");
                 Console.ReadKey(true);
