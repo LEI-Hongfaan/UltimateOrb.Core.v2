@@ -9,6 +9,8 @@ namespace UltimateOrb {
 
         public static readonly UndefinedT Undefined = default;
 
+        internal static readonly NullReferenceException ExceptionUndefined = new NullReferenceException();
+
         public readonly partial struct UndefinedT {
         }
 
@@ -18,17 +20,11 @@ namespace UltimateOrb {
         }
     }
 
-    public partial class Lazy<T> : ILazy<T> {
+    public partial class Lazy<T> : ILazy<T>, RefReturnSupported.ILazy<T> {
 
         internal object m_info;
 
         internal T m_value;
-
-        T IReadOnlyStrongBox<T>.Value {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.GetValue();
-        }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private T GetValue() {
@@ -96,6 +92,12 @@ namespace UltimateOrb {
             }
         }
 
+        T IReadOnlyStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.GetValue();
+        }
+
         public bool IsEvaluated {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -106,6 +108,12 @@ namespace UltimateOrb {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.m_value;
+        }
+
+        T ILazy<T>.Cache {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.m_value;
         }
 
         public Func<T> ValueCreator {
@@ -139,7 +147,7 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Lazy<T>(Lazy.UndefinedT value) {
-            return new Lazy<T>(() => throw null);
+            return new Lazy<T>(() => throw Lazy.ExceptionUndefined);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -159,12 +167,33 @@ namespace UltimateOrb {
                 v = this.GetValue();
                 s = true;
             } catch (Exception ex) {
-                return $@"(exception {{{ex.ToString()}}})";
+                if (Lazy.ExceptionUndefined == ex) {
+                    return $@"<undefined>";
+                }
+                return $@"<exception {{{ex.ToString()}}}>";
             }
             if (s) {
                 return $@"({v.ToString()})";
             }
-            return $@"(undefined)";
+            return $@"<undefined {{Unknown}}>";
+        }
+    }
+}
+
+namespace UltimateOrb.Linq {
+
+    public static partial class StrictLazy {
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static ILazy<TResult> Select<TSource, TResult>(this ILazy<TSource> source, Func<TSource, TResult> selector) {
+            return source.IsEvaluated ? new Lazy<TResult>(selector.Invoke(source.Cache)) : new Lazy<TResult>(() => selector.Invoke(source.Value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static ILazy<TResult> SelectMany<TSource, TCollection, TResult>(this ILazy<TSource> source, Func<TSource, ILazy<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector) {
+            ILazy<TCollection> collection;
+            TSource source_value;
+            return source.IsEvaluated ? ((collection = collectionSelector.Invoke(source_value = source.Cache)).IsEvaluated ? new Lazy<TResult>(resultSelector.Invoke(source_value, collection.Cache)) : new Lazy<TResult>(() => resultSelector.Invoke(source_value, collection.Value))) : new Lazy<TResult>(() => resultSelector.Invoke(source_value = source.Value, collectionSelector.Invoke(source_value).Value));
         }
     }
 }

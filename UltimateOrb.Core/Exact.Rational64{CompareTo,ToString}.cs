@@ -24,7 +24,7 @@ namespace UltimateOrb.Mathematics.Exact {
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         private static int CompareTo__ThrowArgumentException() {
             const string msg = @"Object must be of type Rational64.";
-            throw new ArgumentException(msg, "other");
+            throw new ArgumentException(msg, @"other");
         }
 
         public override string ToString() {

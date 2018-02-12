@@ -57,12 +57,12 @@ namespace UltimateOrb {
 namespace UltimateOrb {
     using System.Linq.Expressions;
 
-    public static partial class IsNullableValueType<T> {
+    public static partial class IsBclNullableValueType<T> {
 
         public static readonly bool Value = GetValue();
 
         private static bool GetValue() {
-            return null != Nullable.GetUnderlyingType(typeof(T));
+            return null != System.Nullable.GetUnderlyingType(typeof(T));
         }
     }
 
@@ -85,7 +85,7 @@ namespace UltimateOrb {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private static T InvokeImpl() {
             var t = default(T);
-            return IsNullableValueType<T>.Value ? t : (null == t ? Constructor.Invoke() : t);
+            return IsBclNullableValueType<T>.Value ? t : (null == t ? Constructor.Invoke() : t);
         }
     }
 

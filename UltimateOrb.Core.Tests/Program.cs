@@ -1997,16 +1997,7 @@ namespace UltimateOrb.Core.Tests {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public ILazy<int> Invoke(ILazy<int> arg) {
-                if (arg.IsEvaluated) {
-                    var s = arg.Cache;
-                    var t = InvokeImpl(s);
-                    return new Lazy<int>(t);
-                }
-                return new Lazy<int>(() => {
-                    var s = arg.Value;
-                    var t = InvokeImpl(s);
-                    return t;
-                });
+                return arg.IsEvaluated ? new Lazy<int>(InvokeImpl(arg.Cache)) : new Lazy<int>(() => InvokeImpl(arg.Value));
             }
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -2124,71 +2115,144 @@ namespace UltimateOrb.Core.Tests {
             return result;
         }
 
-        private static partial class CachedReflectionResults<T0> {
-
-            public static readonly ConstructorInfo Ctor =
-                typeof(Lazy<T0>).GetConstructor(new[] { typeof(Func<T0>), });
-
-            public static readonly Type TypeOfLazyInterface = typeof(ILazy<T0>);
-
-            public static readonly Type TypeOfReadOnlyStrongBoxInterface = typeof(Collections.Generic.IReadOnlyStrongBox<T0>);
-
-            public static readonly MethodInfo ValueProp = TypeOfReadOnlyStrongBoxInterface.GetProperty("Value", typeof(T0)).GetMethod;
-
-            private static partial class C1<T1> {
-
-                private static partial class C2<T2> {
-
-                }
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void asdf<T>(T value) {
+            if (value is IAction v) {
+                Console.WriteLine(v);
             }
-        }
-
-        public static Expression<Func<ILazy<TResult>>> ToNonstrict<TResult>(Expression<Func<TResult>> lambda) {
-            var body_new = lambda.Body;
-            var parameters_new = Array_Empty<ParameterExpression>.Value;
-            {
-                body_new = Expression.Convert(Expression.New(CachedReflectionResults<TResult>.Ctor, Expression.Lambda(body_new)), CachedReflectionResults<TResult>.TypeOfLazyInterface);
-            }
-            var result = Expression.Lambda(body_new, parameters_new);
-            return result as Expression<Func<ILazy<TResult>>>;
-        }
-
-        internal partial class LambdaBodyRewriter<T> : ExpressionVisitor {
-
-            private readonly KeyValuePair<ParameterExpression, ParameterExpression> parameter_map;
-
-            public LambdaBodyRewriter(KeyValuePair<ParameterExpression, ParameterExpression> map) {
-                this.parameter_map = map;
-            }
-
-            protected override Expression VisitParameter(ParameterExpression node) {
-                if (this.parameter_map.Key == node) {
-                    return Expression.Property(Expression.ConvertChecked(this.parameter_map.Value, CachedReflectionResults<T>.TypeOfReadOnlyStrongBoxInterface), CachedReflectionResults<T>.ValueProp);
-                }
-                return base.VisitParameter(node);
-            }
-        }
-
-        public static Expression<Func<ILazy<T>, ILazy<TResult>>> ToNonstrict<T, TResult>(Expression<Func<T, TResult>> lambda) {
-            var p = lambda.Parameters[0];
-            var p_new = Expression.Parameter(CachedReflectionResults<T>.TypeOfLazyInterface, p.Name);
-            var rewriter = new LambdaBodyRewriter<T>(KeyValuePair.Create(p, p_new));
-            var body_new = rewriter.Visit(lambda.Body);
-            var parameters_new = new[] { p_new, };
-            {
-                body_new = Expression.Convert(Expression.New(CachedReflectionResults<TResult>.Ctor, Expression.Lambda(body_new)), CachedReflectionResults<TResult>.TypeOfLazyInterface);
-            }
-            var result = Expression.Lambda(body_new, parameters_new);
-            return result as Expression<Func<ILazy<T>, ILazy<TResult>>>;
         }
 
         private static int Main(string[] args) {
             {
+                var a = (int?)3;
+                var b = (int?)0;
+                var c = (int?)70;
+                var sdfa =
+                    from x in a
+                    from y in b
+                    from z in (int?)(x + y)
+                    from w in c
+                    where 0 != y
+                    select (z / y).ToString();
+                Console.WriteLine(sdfa.ToString());
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var g = new Nullable_A<int>(8);
+                Console.WriteLine(g.HasValue);
+            }
+            {
+                var d = 3;
+                asdf(d);
+                Console.WriteLine(d is IAction);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var g = new Nullable_A<int>(8);
+                Console.WriteLine(g.HasValue);
+
+                var f = new Nullable_A<Nullable_A<int?>>(null);
+                Console.WriteLine(f.HasValue);
+                var e = new Nullable_A<Nullable_A<int?>>(3);
+                Console.WriteLine(e.HasValue);
+                var a = new Nullable_A<int?>(3);
+                Console.WriteLine(a.HasValue);
+                var b = new Nullable_A<int?>(null);
+                Console.WriteLine(b.HasValue);
+                var c = new Nullable_A<object>(null);
+                Console.WriteLine(c.HasValue);
+                var d = new Nullable_A<object>(new object());
+                Console.WriteLine(d.HasValue);
+                Console.ReadKey(true);
+                return 0;
+                /*
+                
+                */
+            }
+            {
+                /*
+                var a = (int?)3;
+                var b = (int?)0;
+                var sdfa =
+                    from x in a
+                    from y in b
+                    where y != 0
+                    select 3 / y;
+                Console.ReadKey(true);
+                return 0;
+                */
+            }
+            {
+                var a = new[] { 3, };
+                var b = new[] { 0, };
+                var sdfa =
+                    from x in a
+                    from y in b
+                    where y != 0
+                    select 3 / y;
+                Printf(Console.Out, sdfa.ToArray());
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var rrr = new Random();
+                for (var i = 0; 10 > i; ++i) {
+                    var b = rrr.Next(1L << 1);
+                    Console.Out.WriteLine(b.ToString());
+                }
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                /*
+                System.Console.Out.WriteLine("Test(s) started...");
+                for (var i = 0; 100 > i; ++i) {
+                    try {
+                        var a = Lazy<int>.Undefined;
+                        var d = 4;
+                        var r = from x in a
+                                // from y in (4 + Utilities.ThrowHelper.Throw<NullReferenceException, int>()).ToLazy()
+                                from z in 9.ToLazy()
+                                select (d * 100).ToString();
+                        Printf(System.Console.Out, r);
+                    } catch (Exception ex) {
+                        System.Console.Out.WriteLine("Oops!!!");
+                        System.Console.Out.WriteLine(ex.ToString());
+                    }
+                }
+                System.Console.Out.WriteLine("Done.");
+                Console.ReadKey(true);
+                return 0;
+                */
+            }
+            {
+                try {
+                    var a = Maybe.Just(Lazy<int>.Undefined);
+                    var b = Maybe.Just(4.ToLazy());
+                    var d = 4;
+                    var r = from x in a
+                            from y in b
+                            where d == 3
+                            select (Func<string>)(() => (x * 100 + 3).ToString());
+                    System.Console.Out.WriteLine("Test(s) started...");
+                    Printf(System.Console.Out, r);
+                } catch (Exception) {
+                    System.Console.Out.WriteLine("Oops!!!");
+                }
+                System.Console.Out.WriteLine("Done.");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                /*
                 var aaa = 333;
-                var sdf = ToNonstrict<int, string>((x) => (aaa + x).ToString()).Compile();
+                var sdf = ToNonstrict.FromUncurried<int, string>((x) => (aaa + x).ToString()).Compile();
                 Console.Out.WriteLine(sdf.Invoke(666.ToLazy()));
                 Console.ReadKey(true);
                 return 0;
+                */
             }
             {
                 var aaa = 333;

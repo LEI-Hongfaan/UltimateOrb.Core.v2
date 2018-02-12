@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
@@ -92,7 +93,7 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static T NullConditionalGetValueOrDefault<T>(this T[] value, int index) {
+        public static T GetValueOrDefaultNullConditional<T>(this T[] value, int index) {
             if (null != value) {
                 return value.GetValueOrDefault(index);
             }
@@ -103,7 +104,7 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static T NullConditionalGetValueOrDefault<T>(this T[] value, uint index) {
+        public static T GetValueOrDefaultNullConditional<T>(this T[] value, uint index) {
             if (null != value) {
                 return value.GetValueOrDefault(index);
             }
@@ -114,7 +115,7 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static T NullConditionalGetValueOrDefault<T>(this T[] value, long index) {
+        public static T GetValueOrDefaultNullConditional<T>(this T[] value, long index) {
             if (null != value) {
                 return value.GetValueOrDefault(index);
             }
@@ -125,9 +126,28 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static T NullConditionalGetValueOrDefault<T>(this T[] value, ulong index) {
+        public static T GetValueOrDefaultNullConditional<T>(this T[] value, ulong index) {
             if (null != value) {
                 return value.GetValueOrDefault(index);
+            }
+            return default;
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static BclRandomAsRandomNumberGenerator AsRandomNumberGenerator(this Random value) {
+            return new BclRandomAsRandomNumberGenerator(value);
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static Nullable_A<T> ToNullable<T>(this T? value) where T : struct {
+            if (value.HasValue) {
+                return new Nullable_A<T>(value.GetValueOrDefault());
             }
             return default;
         }

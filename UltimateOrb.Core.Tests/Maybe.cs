@@ -13,7 +13,7 @@ namespace UltimateOrb.Nonstrict {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static Lazy<Maybe<T>> Just<T>(ILazy<T> value) => Maybe<T>.JustT.Value.Invoke(value);
-
+        
         public readonly partial struct NothingT {
         }
 
@@ -24,9 +24,28 @@ namespace UltimateOrb.Nonstrict {
         */
 
         public static Lazy<Maybe<TResult>> Select<TSource, TResult>(this ILazy<Maybe<TSource>> source, Func<ILazy<TSource>, ILazy<TResult>> selector) {
-            throw new NotImplementedException();
+            if (null != source) {
+                if (source.IsEvaluated) {
+                    var source_value = source.Cache;
+                    if (source_value.IsJust) {
+                        var source_value_Value = source_value.Value;
+                        return new Maybe<TResult>(selector.Invoke(source_value_Value));
+                    }
+                    return Maybe<TResult>.Nothing;
+                }
+                return new Lazy<Maybe<TResult>>(() => {
+                    var source_value = source.Value;
+                    if (source_value.IsJust) {
+                        var source_value_Value = source_value.Value;
+                        return new Maybe<TResult>(selector.Invoke(source_value_Value));
+                    }
+                    return default;
+                });
+            }
+            return null;
         }
 
+        /*
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static Maybe<TResult> Select<TSource, TResult>(this Maybe<TSource> source, Func<TSource, TResult> selector) {
             if (source.IsJust) {
@@ -38,7 +57,96 @@ namespace UltimateOrb.Nonstrict {
             }
             return default;
         }
+        */
 
+        public static Lazy<Maybe<TResult>> Select<TSource, TResult>(this ILazy<Maybe<TSource>> source, Expression<Func<TSource, TResult>> selector) {
+            throw new NotImplementedException();
+            /*
+            if (null != source) {
+                var f = ToNonstrict.FromUncurried(selector).Compile();
+                return source.Select(f);
+            }
+            return null;
+            */
+        }
+
+        public static ILazy<Maybe<TSource>> Where<TSource>(this ILazy<Maybe<TSource>> source, Func<ILazy<TSource>, ILazy<bool>> predicate) {
+            if (null != source) {
+                if (source.IsEvaluated) {
+                    var source_value = source.Cache;
+                    if (source_value.IsJust) {
+                        var source_value_Value = source_value.Value;
+                        var s = predicate.Invoke(source_value_Value);
+                        if (s.IsEvaluated) {
+                            if (s.Cache) {
+                                return source;
+                            }
+                            return Maybe<TSource>.Nothing;
+                        }
+                        return new Lazy<Maybe<TSource>>(() => s.Value ? new Maybe<TSource>(source_value_Value) : default);
+                    }
+                    return Maybe<TSource>.Nothing;
+                }
+                return new Lazy<Maybe<TSource>>(() => {
+                    var source_value = source.Value;
+                    if (source_value.IsJust) {
+                        var source_value_Value = source_value.Value;
+                        var s = predicate.Invoke(source_value_Value);
+                        return s.Value ? new Maybe<TSource>(source_value_Value) : default;
+                    }
+                    return default;
+                });
+            }
+            return null;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static ILazy<Maybe<TSource>> Where<TSource>(this ILazy<Maybe<TSource>> source, Expression<Func<TSource, bool>> predicate) {
+            throw new NotImplementedException();
+            /*
+            if (null != source) {
+                var f = ToNonstrict.FromUncurried(predicate).Compile();
+                return source.Where(f);
+            }
+            return null;
+            */
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static ILazy<Maybe<TResult>> SelectMany<TSource, TCollection, TResult>(this ILazy<Maybe<TSource>> source, Expression<Func<TSource, ILazy<Maybe<TCollection>>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector) {
+            if (null != source) {
+                if (source.IsEvaluated) {
+                    var source_value = source.Cache;
+                    if (source_value.IsJust) {
+                        var source_value_Value = source_value.Value;
+                        if (source_value_Value.IsEvaluated) {
+                            var source_value_Value_value = source_value_Value.Cache;
+                            var cS = collectionSelector.Compile();
+                            var collection = cS.Invoke(source_value_Value_value);
+                            if (collection.IsEvaluated) {
+                                var collection_value = collection.Value;
+                                if (collection_value.IsJust) {
+                                    var collection_value_Value = collection_value.Value;
+                                    if (collection_value_Value.IsEvaluated) {
+                                        var collection_value_Value_value = collection_value_Value.Cache;
+                                        var selector = resultSelector.Compile();
+                                        return new Lazy<Maybe<TResult>>(new Maybe<TResult>(new Lazy<TResult>(selector.Invoke(source_value_Value_value, collection_value_Value_value))));
+                                    }
+                                    //
+                                }
+                                return Maybe<TResult>.Nothing;
+                            }
+                        }
+                        //
+                    }
+                    return Maybe<TResult>.Nothing;
+                }
+                //
+            }
+            return null;
+        }
+        
+        /*
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static Lazy<Maybe<TResult>> Select<TSource, TResult>(this ILazy<Maybe<TSource>> source, Func<TSource, TResult> selector) {
             if (null != source) {
@@ -67,7 +175,8 @@ namespace UltimateOrb.Nonstrict {
             }
             return null;
         }
-
+        */
+        /*
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static Maybe<TSource> Where<TSource>(this Maybe<TSource> source, Func<TSource, bool> predicate) {
             if (source.IsJust) {
@@ -109,6 +218,7 @@ namespace UltimateOrb.Nonstrict {
             }
             return null;
         }
+        */
     }
 
     public readonly partial struct Maybe<T> {
@@ -170,7 +280,7 @@ namespace UltimateOrb.Nonstrict {
 
         public override string ToString() {
             if (this.IsJust) {
-                return $@"{nameof(Just)}({this.Value.ToString()})";
+                return $@"{nameof(Just)} {this.Value.ToString()}";
             }
             return nameof(Nothing);
         }

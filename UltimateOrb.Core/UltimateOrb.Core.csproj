@@ -35,6 +35,10 @@ This package does not include the test suite. See Project Site for more informat
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Nonstrict.ToNonstrictCachedResults.cs~RF651267b7.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="DoubleArithmetic{Compare}.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DoubleArithmetic{Compare}.cs</LastGenOutput>
