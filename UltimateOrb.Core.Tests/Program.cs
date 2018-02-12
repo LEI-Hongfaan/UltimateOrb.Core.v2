@@ -2124,17 +2124,42 @@ namespace UltimateOrb.Core.Tests {
 
         private static int Main(string[] args) {
             {
-                var a = (int?)3;
+                var a = (Wrapper<int>)3;
                 var b = (int?)0;
-                var c = (int?)70;
+                var c = (int?)7;
+                var c1 = (Wrapper<string>)null;
+                var dfa = new[] { 3, -3, 0, 4, 6, 7, };
                 var sdfa =
                     from x in a
+                    group x by x + 7 into g
+                    orderby g.Key
+                    from p in dfa
+                    from y in b
+                    from z in (g.Value + y).ToNullable()
+                    from s in c1.ToNullable()
+                    where 0 != p
+                    from w in c
+                    select ((100 * w + z) / p).ToString();
+                Printf(Console.Out, sdfa.ToArray());
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var a = (int?)3;
+                var b = (int?)0;
+                var c = (int?)7;
+                var c1 = (string)@"u";
+                var dfa = new[] { 3, -3, 0, 4, 6, 7, };
+                var sdfa =
+                    from x in a
+                    from p in dfa
                     from y in b
                     from z in (int?)(x + y)
+                    from s in c1.ToNullable()
+                    where 0 != p
                     from w in c
-                    where 0 != y
-                    select (z / y).ToString();
-                Console.WriteLine(sdfa.ToString());
+                    select ((100 * w + z) / p).ToString();
+                Printf(Console.Out, sdfa.ToArray());
                 Console.ReadKey(true);
                 return 0;
             }

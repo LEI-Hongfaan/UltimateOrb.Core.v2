@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
@@ -26,7 +28,7 @@ namespace UltimateOrb {
         internal static void ThrowInvalidOperationException() {
             throw new InvalidOperationException();
         }
-
+        
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static Nullable_A<TResult> Select<TSource, TResult>(this Nullable_A<TSource> source, Func<TSource, TResult> selector) {
@@ -55,9 +57,101 @@ namespace UltimateOrb {
 
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IEnumerable<TSource> source, Func<TSource, TCollection?> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+           where TCollection : struct {
+            if (null != collectionSelector) {
+                if (null != resultSelector) {
+                    foreach (var item in source) {
+                        var collection = collectionSelector.Invoke(item);
+                        if (collection.HasValue) {
+                            yield return resultSelector.Invoke(item, collection.GetValueOrDefault());
+                        }
+                    }
+                    yield break;
+                }
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+            throw new ArgumentNullException(nameof(collectionSelector));
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IEnumerable<TSource> source, Func<TSource, Nullable_A<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector) {
+            if (null != collectionSelector) {
+                if (null != resultSelector) {
+                    foreach (var item in source) {
+                        var collection = collectionSelector.Invoke(item);
+                        if (collection.HasValue) {
+                            yield return resultSelector.Invoke(item, collection.GetValueOrDefault());
+                        }
+                    }
+                    yield break;
+                }
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+            throw new ArgumentNullException(nameof(collectionSelector));
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this TSource? source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+            where TSource : struct {
+            if (null != collectionSelector) {
+                if (null != resultSelector) {
+                    if (source.HasValue) {
+                        var source_Value = source.GetValueOrDefault();
+                        var collection = collectionSelector.Invoke(source_Value);
+                        return collection.Select((item) => resultSelector.Invoke(source_Value, item));
+                    }
+                    return Array_Empty<TResult>.Value;
+                }
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+            throw new ArgumentNullException(nameof(collectionSelector));
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this Nullable_A<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector) {
+            if (null != collectionSelector) {
+                if (null != resultSelector) {
+                    if (source.HasValue) {
+                        var source_Value = source.GetValueOrDefault();
+                        var collection = collectionSelector.Invoke(source_Value);
+                        return collection.Select((item) => resultSelector.Invoke(source_Value, item));
+                    }
+                    return Array_Empty<TResult>.Value;
+                }
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+            throw new ArgumentNullException(nameof(collectionSelector));
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static Nullable_A<TResult> SelectMany<TSource, TCollection, TResult>(this TSource? source, Func<TSource, TCollection?> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
             where TSource : struct
             where TCollection : struct {
+            if (null != collectionSelector) {
+                if (null != resultSelector) {
+                    if (source.HasValue) {
+                        var source_Value = source.GetValueOrDefault();
+                        var collection = collectionSelector.Invoke(source_Value);
+                        if (collection.HasValue) {
+                            return new Nullable_A<TResult>(resultSelector.Invoke(source_Value, collection.GetValueOrDefault()));
+                        }
+                    }
+                    return default;
+                }
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+            throw new ArgumentNullException(nameof(collectionSelector));
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Nullable_A<TResult> SelectMany<TSource, TCollection, TResult>(this TSource? source, Func<TSource, Nullable_A<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+           where TSource : struct {
             if (null != collectionSelector) {
                 if (null != resultSelector) {
                     if (source.HasValue) {
@@ -93,7 +187,26 @@ namespace UltimateOrb {
             }
             throw new ArgumentNullException(nameof(collectionSelector));
         }
-        
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Nullable_A<TResult> SelectMany<TSource, TCollection, TResult>(this Nullable_A<TSource> source, Func<TSource, Nullable_A<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector) {
+            if (null != collectionSelector) {
+                if (null != resultSelector) {
+                    if (source.HasValue) {
+                        var source_Value = source.GetValueOrDefault();
+                        var collection = collectionSelector.Invoke(source_Value);
+                        if (collection.HasValue) {
+                            return new Nullable_A<TResult>(resultSelector.Invoke(source_Value, collection.GetValueOrDefault()));
+                        }
+                    }
+                    return default;
+                }
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+            throw new ArgumentNullException(nameof(collectionSelector));
+        }
+
         /// <summary>
         ///     <para>
         ///         Filters a nullable value based on a predicate.
@@ -147,6 +260,35 @@ namespace UltimateOrb {
             }
             throw new ArgumentNullException(nameof(predicate));
         }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Nullable_A<TResult> Join<TOuter, TInner, TKey, TResult>(this Nullable_A<TOuter> outer, Nullable_A<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer) {
+            throw new NotImplementedException();
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Nullable_A<TResult> Join<TOuter, TInner, TKey, TResult>(this Nullable_A<TOuter> outer, TInner? inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
+            where TInner : struct {
+            throw new NotImplementedException();
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Nullable_A<TResult> Join<TOuter, TInner, TKey, TResult>(this TOuter? outer, Nullable_A<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer) 
+            where TOuter : struct {
+            throw new NotImplementedException();
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Nullable_A<TResult> Join<TOuter, TInner, TKey, TResult>(this TOuter? outer, TInner? inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
+            where TOuter : struct
+            where TInner : struct {
+            throw new NotImplementedException();
+        }
+        
     }
 
     public readonly partial struct Nullable_A<T> : INullable<T> {
@@ -170,6 +312,15 @@ namespace UltimateOrb {
                 return;
             }
             this.hasValue = false;
+        }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        internal Nullable_A(T value, bool hasValue) {
+            this.value = value;
+            this.hasValue = hasValue;
         }
 
         public bool HasValue {

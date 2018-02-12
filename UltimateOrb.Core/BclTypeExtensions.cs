@@ -151,5 +151,13 @@ namespace UltimateOrb {
             }
             return default;
         }
+
+        [TargetedPatchingOptOutAttribute(null)]
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static Nullable_A<T> ToNullable<T>(this T value) {
+            return new Nullable_A<T>(value);
+        }
     }
 }
