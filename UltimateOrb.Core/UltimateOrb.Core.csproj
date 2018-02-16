@@ -16,7 +16,7 @@ This package does not include the test suite. See Project Site for more informat
     <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
     <AssemblyVersion>1</AssemblyVersion>
     <FileVersion>1</FileVersion>
-    <Version>1.4.0.5</Version>
+    <Version>1.4.0.6</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
@@ -67,6 +67,10 @@ This package does not include the test suite. See Project Site for more informat
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>IO.Core.cs</LastGenOutput>
     </None>
+    <None Update="Wrapper{Module}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Wrapper{Module}.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -108,6 +112,11 @@ This package does not include the test suite. See Project Site for more informat
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>IO.Core.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Wrapper{Module}.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Wrapper{Module}.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

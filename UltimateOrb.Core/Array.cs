@@ -243,6 +243,11 @@ namespace UltimateOrb {
             throw new NotImplementedException();
         }
 
+        public static partial class Empty {
+
+            public static readonly Array<T> Value = new Array<T>(Array_Empty<T>.Value);
+        }
+
         public partial struct Enumerator : Collections.Generic.RefReturnSupported.IEnumerator<T> {
 
             private readonly T[] array;

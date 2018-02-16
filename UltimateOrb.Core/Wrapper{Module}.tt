@@ -1,0 +1,462 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+<#
+var wrappers = new [] { "Wrapper", "ReadOnlyWrapper" };
+var wrapperGTs = new [] { "", ", TWrapper" };
+#>
+<#
+var methods = new [] { "Average", "Min", "Max", "Sum",  };
+var compareOnly = new System.Collections.Generic.List<string> { "Min", "Max", };
+var numTypes = new [] { "int", "uint", "byte", "sbyte", "short", "ushort", "long", "ulong", "float", "double", "decimal", "Int128", "UInt128", };
+var ints = new System.Collections.Generic.List<string> { "int", "uint", "byte", "sbyte", "short", "ushort", "long", "ulong", "Int128", "UInt128", };
+var unsigheds = new System.Collections.Generic.List<string> { "uint", "byte", "ushort", "ulong", "UInt128", };
+#>
+
+namespace UltimateOrb {
+
+    public static partial class wrapperModule {
+	    
+        public readonly partial struct Grouping<TKey, TElement> {
+
+            public readonly TKey Key;
+
+            public readonly TElement Value;
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            internal Grouping(TKey key, TElement value) {
+                this.Key = key;
+                this.Value = value;
+            }
+        }
+<#
+		foreach (var wrapper in wrappers) {
+			foreach (var wGT in wrapperGTs) {
+#>
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource Aggregate<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TSource, TSource> func) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TAccumulate Aggregate<TSource<#= wGT #>, TAccumulate>(this <#= wrapper #><TSource<#= wGT #>> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func) {
+            return func.Invoke(seed, source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TResult Aggregate<TSource<#= wGT #>, TAccumulate, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func, Func<TAccumulate, TResult> resultSelector) {
+            return resultSelector.Invoke(func.Invoke(seed, source.Value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool All<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            return predicate.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool Any<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return true;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool Any<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            return predicate.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static System.Collections.Generic.IEnumerable<TSource> AsEnumerable<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            yield return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, TSource value) {
+            return source.Value.Equals(value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, TSource value, IEqualityComparer<TSource> comparer) {
+            return comparer.Equals(source.Value, value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return 1;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            return predicate.Invoke(source.Value) ? 1 : 0;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> DefaultIfEmpty<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> DefaultIfEmpty<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, TSource defaultValue) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> Distinct<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> Distinct<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, IEqualityComparer<TSource> comparer) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource ElementAt<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, int index) {
+            if (0 == index) {
+                return source.Value;
+            }
+            throw new ArgumentOutOfRangeException(nameof(index));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource ElementAtOrDefault<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, int index) {
+            if (0 == index) {
+                return source.Value;
+            }
+            return default;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource First<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource First<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            var value = source.Value;
+            if (predicate.Invoke(value)) {
+                return value;
+            }
+            throw new InvalidOperationException();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource FirstOrDefault<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource FirstOrDefault<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            var value = source.Value;
+            if (predicate.Invoke(value)) {
+                return value;
+            }
+            return default;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> GroupBy<TSource<#= wGT #>, TKey, TElement, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<TKey, <#= wrapper #><TElement<#= wGT #>>, TResult> resultSelector, IEqualityComparer<TKey> comparer) {
+            var value = source.Value;
+            var key = keySelector.Invoke(value);
+            var element = elementSelector.Invoke(value);
+            var result = resultSelector.Invoke(key, new <#= wrapper #><TElement<#= wGT #>>(element));
+            return new <#= wrapper #><TResult<#= wGT #>>(result);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> GroupBy<TSource<#= wGT #>, TKey, TElement, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<TKey, <#= wrapper #><TElement<#= wGT #>>, TResult> resultSelector) {
+            var value = source.Value;
+            var key = keySelector.Invoke(value);
+            var element = elementSelector.Invoke(value);
+            var result = resultSelector.Invoke(key, new <#= wrapper #><TElement<#= wGT #>>(element));
+            return new <#= wrapper #><TResult<#= wGT #>>(result);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> GroupBy<TSource<#= wGT #>, TKey, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, Func<TKey, <#= wrapper #><TSource<#= wGT #>>, TResult> resultSelector, IEqualityComparer<TKey> comparer) {
+            var value = source.Value;
+            var key = keySelector.Invoke(value);
+            var result = resultSelector.Invoke(key, source);
+            return new <#= wrapper #><TResult<#= wGT #>>(result);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> GroupBy<TSource<#= wGT #>, TKey, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, Func<TKey, <#= wrapper #><TSource<#= wGT #>>, TResult> resultSelector) {
+            var value = source.Value;
+            var key = keySelector.Invoke(value);
+            var result = resultSelector.Invoke(key, source);
+            return new <#= wrapper #><TResult<#= wGT #>>(result);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><Grouping<TKey, TSource>> GroupBy<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer) {
+            var value = source.Value;
+            return new Grouping<TKey, TSource>(keySelector.Invoke(value), value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><Grouping<TKey, TElement>> GroupBy<TSource<#= wGT #>, TKey, TElement>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) {
+            var value = source.Value;
+            return new Grouping<TKey, TElement>(keySelector.Invoke(value), elementSelector.Invoke(value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><Grouping<TKey, TSource>> GroupBy<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector) {
+            var value = source.Value;
+            return new Grouping<TKey, TSource>(keySelector.Invoke(value), value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><Grouping<TKey, TElement>> GroupBy<TSource<#= wGT #>, TKey, TElement>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer) {
+            var value = source.Value;
+            return new Grouping<TKey, TElement>(keySelector.Invoke(value), elementSelector.Invoke(value));
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource Last<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource Last<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            var value = source.Value;
+            if (predicate.Invoke(value)) {
+                return value;
+            }
+            throw new InvalidOperationException();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource LastOrDefault<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource LastOrDefault<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            var value = source.Value;
+            if (predicate.Invoke(value)) {
+                return value;
+            }
+            return default;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static long LongCount<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return 1;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static long LongCount<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            return predicate.Invoke(source.Value) ? 1 : 0;
+        }
+		
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> OrderBy<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> OrderBy<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> OrderByDescending<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> OrderByDescending<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> Reverse<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> Select<TSource<#= wGT #>, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TResult> selector) {
+            return new <#= wrapper #><TResult<#= wGT #>>(selector.Invoke(source.Value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> Select<TSource<#= wGT #>, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, int, TResult> selector) {
+            return new <#= wrapper #><TResult<#= wGT #>>(selector.Invoke(source.Value, 0));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> SelectMany<TSource<#= wGT #>, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, <#= wrapper #><TResult<#= wGT #>>> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> SelectMany<TSource<#= wGT #>, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, int, <#= wrapper #><TResult<#= wGT #>>> selector) {
+            return selector.Invoke(source.Value, 0);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> SelectMany<TSource<#= wGT #>, TCollection, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, <#= wrapper #><TCollection<#= wGT #>>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector) {
+            var value = source.Value;
+            return new <#= wrapper #><TResult<#= wGT #>>(resultSelector.Invoke(value, collectionSelector.Invoke(value).Value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<TResult> SelectMany<TSource<#= wGT #>, TCollection, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector) {
+            var value = source.Value;
+            return collectionSelector.Invoke(value).Select((collection_value) => resultSelector.Invoke(value, collection_value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> SelectMany<TSource<#= wGT #>, TCollection, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, int, <#= wrapper #><TCollection<#= wGT #>>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector) {
+            var value = source.Value;
+            return new <#= wrapper #><TResult<#= wGT #>>(resultSelector.Invoke(value, collectionSelector.Invoke(value, 0).Value));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool SequenceEqual<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> first, <#= wrapper #><TSource<#= wGT #>> second, IEqualityComparer<TSource> comparer) {
+            return comparer.Equals(first.Value, second.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static bool SequenceEqual<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> first, <#= wrapper #><TSource<#= wGT #>> second) {
+            return EqualityComparer<TSource>.Default.Equals(first.Value, second.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource Single<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource Single<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            var value = source.Value;
+            if (predicate.Invoke(value)) {
+                return value;
+            }
+            throw new InvalidOperationException();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource SingleOrDefault<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource SingleOrDefault<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, bool> predicate) {
+            var value = source.Value;
+            if (predicate.Invoke(value)) {
+                return value;
+            }
+            return default;
+        }
+<#
+		foreach (var method in methods) {
+			foreach(var numType in numTypes) {
+#>
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= numType #>? <#= method #><TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, <#= numType #>?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= numType #> <#= method #><TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, <#= numType #>> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= numType #>? <#= method #><#= "" == wGT ? "" : $@"<{wGT.Substring(2)}>" #>(this <#= wrapper #><<#= numType #>?<#= wGT #>> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= numType #> <#= method #><#= "" == wGT ? "" : $@"<{wGT.Substring(2)}>" #>(this <#= wrapper #><<#= numType #><#= wGT #>> source) {
+            return source.Value;
+        }
+<#
+			}
+#>		
+<#
+			if (compareOnly.Contains(method)) {
+#>
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+		public static TResult <#= method #><TSource<#= wGT #>, TResult>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TResult> selector) {
+            return selector.Invoke(source.Value);
+        }
+<#
+			}
+#>
+<#
+		}
+#>
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> ThenBy<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> ThenBy<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> ThenByDescending<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TSource<#= wGT #>> ThenByDescending<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) {
+            return source;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static TSource[] ToArray<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return new[] { source.Value, };
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TSource> ToDictionary<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector) {
+            var value = source.Value;
+            return new Dictionary<TKey, TSource> { { keySelector.Invoke(value), value }, };
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TSource> ToDictionary<TSource<#= wGT #>, TKey>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer) {
+            var dictionary = new Dictionary<TKey, TSource>(comparer);
+            var value = source.Value;
+            dictionary.Add(keySelector.Invoke(value), value);
+            return dictionary;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TSource<#= wGT #>, TKey, TElement>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) {
+            var value = source.Value;
+            return new Dictionary<TKey, TElement> { { keySelector.Invoke(value), elementSelector.Invoke(value) }, };
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TSource<#= wGT #>, TKey, TElement>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer) {
+            var dictionary = new Dictionary<TKey, TElement>(comparer);
+            var value = source.Value;
+            dictionary.Add(keySelector.Invoke(value), elementSelector.Invoke(value));
+            return dictionary;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static List<TSource> ToList<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return new List<TSource>(1) { source.Value, };
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= wrapper #><TResult<#= wGT #>> Zip<TFirst<#= wGT #>, TSecond, TResult>(this <#= wrapper #><TFirst<#= wGT #>> first, <#= wrapper #><TSecond<#= wGT #>> second, Func<TFirst, TSecond, TResult> resultSelector) {
+            return new <#= wrapper #><TResult<#= wGT #>>(resultSelector.Invoke(first.Value, second.Value));
+        }
+<#
+			}
+		}
+#>
+    }
+}
