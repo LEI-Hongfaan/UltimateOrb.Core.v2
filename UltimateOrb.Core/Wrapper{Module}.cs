@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace UltimateOrb {
 
-    public static partial class wrapperModule {
+    public static partial class WrapperModule {
 	    
         public readonly partial struct Grouping<TKey, TElement> {
 
@@ -51,8 +51,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static System.Collections.Generic.IEnumerable<TSource> AsEnumerable<TSource>(this Wrapper<TSource> source) {
-            yield return source.Value;
+        public static SingletonEnumerable<T> ToEnumerable<TSource>(this Wrapper<TSource> source) {
+            return new SingletonEnumerable<T>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -1444,8 +1444,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static List<TSource> ToList<TSource>(this Wrapper<TSource> source) {
-            return new List<TSource>(1) { source.Value, };
+        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource>(this Wrapper<TSource> source) {
+            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -1484,8 +1484,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static System.Collections.Generic.IEnumerable<TSource> AsEnumerable<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source) {
-            yield return source.Value;
+        public static SingletonEnumerable<T> ToEnumerable<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source) {
+            return new SingletonEnumerable<T>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -2877,8 +2877,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static List<TSource> ToList<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source) {
-            return new List<TSource>(1) { source.Value, };
+        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source) {
+            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -2917,8 +2917,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static System.Collections.Generic.IEnumerable<TSource> AsEnumerable<TSource>(this ReadOnlyWrapper<TSource> source) {
-            yield return source.Value;
+        public static SingletonEnumerable<T> ToEnumerable<TSource>(this ReadOnlyWrapper<TSource> source) {
+            return new SingletonEnumerable<T>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -4310,8 +4310,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static List<TSource> ToList<TSource>(this ReadOnlyWrapper<TSource> source) {
-            return new List<TSource>(1) { source.Value, };
+        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource>(this ReadOnlyWrapper<TSource> source) {
+            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -4350,8 +4350,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static System.Collections.Generic.IEnumerable<TSource> AsEnumerable<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source) {
-            yield return source.Value;
+        public static SingletonEnumerable<T> ToEnumerable<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source) {
+            return new SingletonEnumerable<T>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -5743,8 +5743,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static List<TSource> ToList<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source) {
-            return new List<TSource>(1) { source.Value, };
+        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source) {
+            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
