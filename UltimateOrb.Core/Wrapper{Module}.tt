@@ -66,8 +66,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static SingletonEnumerable<T> ToEnumerable<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
-            return new SingletonEnumerable<T>(source.Value);
+        public static SingletonEnumerable<TSource> ToEnumerable<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return new SingletonEnumerable<TSource>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

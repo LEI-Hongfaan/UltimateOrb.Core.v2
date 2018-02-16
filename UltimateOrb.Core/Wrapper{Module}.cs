@@ -51,8 +51,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static SingletonEnumerable<T> ToEnumerable<TSource>(this Wrapper<TSource> source) {
-            return new SingletonEnumerable<T>(source.Value);
+        public static SingletonEnumerable<TSource> ToEnumerable<TSource>(this Wrapper<TSource> source) {
+            return new SingletonEnumerable<TSource>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -1484,8 +1484,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static SingletonEnumerable<T> ToEnumerable<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source) {
-            return new SingletonEnumerable<T>(source.Value);
+        public static SingletonEnumerable<TSource> ToEnumerable<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source) {
+            return new SingletonEnumerable<TSource>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -2917,8 +2917,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static SingletonEnumerable<T> ToEnumerable<TSource>(this ReadOnlyWrapper<TSource> source) {
-            return new SingletonEnumerable<T>(source.Value);
+        public static SingletonEnumerable<TSource> ToEnumerable<TSource>(this ReadOnlyWrapper<TSource> source) {
+            return new SingletonEnumerable<TSource>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -4350,8 +4350,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static SingletonEnumerable<T> ToEnumerable<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source) {
-            return new SingletonEnumerable<T>(source.Value);
+        public static SingletonEnumerable<TSource> ToEnumerable<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source) {
+            return new SingletonEnumerable<TSource>(source.Value);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
