@@ -2124,6 +2124,43 @@ namespace UltimateOrb.Core.Tests {
 
         private static int Main(string[] args) {
             {
+                {
+                    var sdfa = UltimateOrb.Ex0002.mempty.T0<Wrapper<double, UltimateOrb.Ex0002.Product>>.Typed<double>.Value;
+                    Printf(Console.Out, sdfa);
+                }
+                {
+                    var sdfa = UltimateOrb.Ex0002.mempty.Typed<int[][]>.Value;
+                    Printf(Console.Out, sdfa);
+                }
+                {
+                    var sdfa = UltimateOrb.Ex0002.mempty.Typed<Array<double[]>>.Value;
+                    Printf(Console.Out, sdfa);
+                }
+                {
+                    var sdfa = UltimateOrb.Ex0002.mempty.Typed<Wrapper<bool, UltimateOrb.Ex0002.Any>>.Value;
+                    Printf(Console.Out, sdfa.Value);
+                }
+                {
+                    var sdfa = UltimateOrb.Ex0002.mempty.Typed<Wrapper<bool, UltimateOrb.Ex0002.All>>.Value;
+                    Printf(Console.Out, sdfa.Value);
+                }
+                {
+                    var sdfa = UltimateOrb.Ex0002.mempty.Typed<Wrapper<double, UltimateOrb.Ex0002.Product>>.Value;
+                    Printf(Console.Out, sdfa.Value);
+                }
+                {
+                    var sdfa = UltimateOrb.Ex0002.mempty.T0<UltimateOrb.Ex0002.mempty.a>.Typed<Wrapper<double, UltimateOrb.Ex0002.Product>>.Value;
+                    Printf(Console.Out, sdfa.Value);
+                }
+                {
+                    var sdfa = UltimateOrb.Ex0002.mempty.T0<Wrapper<double, UltimateOrb.Ex0002.Product>>.Typed<Wrapper<double, UltimateOrb.Ex0002.Product>>.Value;
+                    Printf(Console.Out, sdfa.Value);
+                }
+               
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
                 var a = (Wrapper<int>)3;
                 var b = (int?)0;
                 var c = (int?)7;

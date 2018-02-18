@@ -117,6 +117,17 @@ namespace UltimateOrb.Ex0002 {
         TKind GetKind<TKind>()
             where TKind : MetaTags.Kinds.IKind;
     }
+    public readonly partial struct All {
+    }
+
+    public readonly partial struct Any {
+    }
+
+    public readonly partial struct Sum {
+    }
+
+    public readonly partial struct Product {
+    }
 
     public readonly partial struct Monoid : IKindable {
 
@@ -142,60 +153,91 @@ namespace UltimateOrb.Ex0002 {
 
         private static void AddWellKnownInstances() {
             AddWellKnownInstances__mempty();
-
+            // ...
         }
 
         private static void AddWellKnownInstances__mempty() {
-
             // T[]
-            mempty.T0<int[]>.D0.Candidate = Array_Empty<int>.Value;
-            mempty.T0<uint[]>.D0.Candidate = Array_Empty<uint>.Value;
-            mempty.T0<long[]>.D0.Candidate = Array_Empty<long>.Value;
-            mempty.T0<ulong[]>.D0.Candidate = Array_Empty<ulong>.Value;
-            mempty.T0<byte[]>.D0.Candidate = Array_Empty<byte>.Value;
-            mempty.T0<sbyte[]>.D0.Candidate = Array_Empty<sbyte>.Value;
-            mempty.T0<double[]>.D0.Candidate = Array_Empty<double>.Value;
-            mempty.T0<float[]>.D0.Candidate = Array_Empty<float>.Value;
-            mempty.T0<short[]>.D0.Candidate = Array_Empty<short>.Value;
-            mempty.T0<ushort[]>.D0.Candidate = Array_Empty<ushort>.Value;
-            mempty.T0<char[]>.D0.Candidate = Array_Empty<char>.Value;
-            mempty.T0<string[]>.D0.Candidate = Array_Empty<string>.Value;
-            mempty.T0<object[]>.D0.Candidate = Array_Empty<object>.Value;
-
-            // Array<T>
-            mempty.T0<Array<int>>.D0.Candidate = Array<int>.Empty.Value;
-            mempty.T0<Array<uint>>.D0.Candidate = Array<uint>.Empty.Value;
-            mempty.T0<Array<long>>.D0.Candidate = Array<long>.Empty.Value;
-            mempty.T0<Array<ulong>>.D0.Candidate = Array<ulong>.Empty.Value;
-            mempty.T0<Array<byte>>.D0.Candidate = Array<byte>.Empty.Value;
-            mempty.T0<Array<sbyte>>.D0.Candidate = Array<sbyte>.Empty.Value;
-            mempty.T0<Array<double>>.D0.Candidate = Array<double>.Empty.Value;
-            mempty.T0<Array<float>>.D0.Candidate = Array<float>.Empty.Value;
-            mempty.T0<Array<short>>.D0.Candidate = Array<short>.Empty.Value;
-            mempty.T0<Array<ushort>>.D0.Candidate = Array<ushort>.Empty.Value;
-            mempty.T0<Array<char>>.D0.Candidate = Array<char>.Empty.Value;
-
-
-            mempty.T0<string[]>.D0.Candidate = Array_Empty<string>.Value;
-            mempty.T0<object[]>.D0.Candidate = Array_Empty<object>.Value;
-
-            mempty.T0<int[][]>.D0.Candidate = Array_Empty<int[]>.Value;
-            mempty.T0<uint[][]>.D0.Candidate = Array_Empty<uint[]>.Value;
-            mempty.T0<long[][]>.D0.Candidate = Array_Empty<long[]>.Value;
-            mempty.T0<ulong[][]>.D0.Candidate = Array_Empty<ulong[]>.Value;
-
-            mempty.T0<byte[][]>.D0.Candidate = Array_Empty<byte[]>.Value;
-            mempty.T0<sbyte[][]>.D0.Candidate = Array_Empty<sbyte[]>.Value;
-            mempty.T0<double[][]>.D0.Candidate = Array_Empty<double[]>.Value;
-            mempty.T0<float[][]>.D0.Candidate = Array_Empty<float[]>.Value;
-
-            mempty.T0<short[][]>.D0.Candidate = Array_Empty<short[]>.Value;
-            mempty.T0<ushort[][]>.D0.Candidate = Array_Empty<ushort[]>.Value;
-            mempty.T0<char[][]>.D0.Candidate = Array_Empty<char[]>.Value;
-
-            mempty.T0<string[][]>.D0.Candidate = Array_Empty<string[]>.Value;
-            mempty.T0<object[][]>.D0.Candidate = Array_Empty<object[]>.Value;
-
+            D<mempty.T0<mempty.a>>.Candidate = (System.Func<Type, ReadOnlyWrapper<object>?>)(t => {
+                // []
+                if (t.IsArray) {
+                    return typeof(Array_Empty<>).MakeGenericType(t.GetElementType()).GetField(nameof(Array_Empty<Void>.Value)).GetValue(null);
+                }
+                // ReadOnlyArray<>
+                if (typeof(ReadOnlyArray<>) == t.GetGenericTypeDefinition()) {
+                    return typeof(ReadOnlyArray<>).GetNestedType(nameof(ReadOnlyArray<Void>.Empty)).MakeGenericType(t.GetGenericArguments()).GetField(nameof(Array_Empty<Void>.Value)).GetValue(null);
+                }
+                // Array<>
+                if (typeof(Array<>) == t.GetGenericTypeDefinition()) {
+                    return typeof(Array<>).GetNestedType(nameof(ReadOnlyArray<Void>.Empty)).MakeGenericType(t.GetGenericArguments()).GetField(nameof(Array_Empty<Void>.Value)).GetValue(null);
+                }
+                return default;
+            });
+            // ()
+            D<mempty.T0<Void>>.Candidate = DefaultConstructor.Invoke<Void>();
+            D<mempty.T0<System.ValueTuple>>.Candidate = System.ValueTuple.Create();
+            // bool
+            D<mempty.T0<ReadOnlyWrapper<bool, All>>>.Candidate = true;
+            D<mempty.T0<Wrapper<bool, All>>>.Candidate = true;
+            D<mempty.T0<ReadOnlyWrapper<bool, Any>>>.Candidate = false;
+            D<mempty.T0<Wrapper<bool, Any>>>.Candidate = false;
+            // Sum
+            D<mempty.T0<ReadOnlyWrapper<int, Sum>>>.Candidate = (int)0;
+            D<mempty.T0<Wrapper<int, Sum>>>.Candidate = (int)0;
+            D<mempty.T0<ReadOnlyWrapper<uint, Sum>>>.Candidate = (uint)0;
+            D<mempty.T0<Wrapper<uint, Sum>>>.Candidate = (uint)0;
+            D<mempty.T0<ReadOnlyWrapper<long, Sum>>>.Candidate = (long)0;
+            D<mempty.T0<Wrapper<long, Sum>>>.Candidate = (long)0;
+            D<mempty.T0<ReadOnlyWrapper<ulong, Sum>>>.Candidate = (ulong)0;
+            D<mempty.T0<Wrapper<ulong, Sum>>>.Candidate = (ulong)0;
+            D<mempty.T0<ReadOnlyWrapper<short, Sum>>>.Candidate = (short)0;
+            D<mempty.T0<Wrapper<short, Sum>>>.Candidate = (short)0;
+            D<mempty.T0<ReadOnlyWrapper<ushort, Sum>>>.Candidate = (ushort)0;
+            D<mempty.T0<Wrapper<ushort, Sum>>>.Candidate = (ushort)0;
+            D<mempty.T0<ReadOnlyWrapper<byte, Sum>>>.Candidate = (byte)0;
+            D<mempty.T0<Wrapper<byte, Sum>>>.Candidate = (byte)0;
+            D<mempty.T0<ReadOnlyWrapper<sbyte, Sum>>>.Candidate = (sbyte)0;
+            D<mempty.T0<Wrapper<sbyte, Sum>>>.Candidate = (sbyte)0;
+            D<mempty.T0<ReadOnlyWrapper<double, Sum>>>.Candidate = (double)0;
+            D<mempty.T0<Wrapper<double, Sum>>>.Candidate = (double)0;
+            D<mempty.T0<ReadOnlyWrapper<float, Sum>>>.Candidate = (float)0;
+            D<mempty.T0<Wrapper<float, Sum>>>.Candidate = (float)0;
+            D<mempty.T0<ReadOnlyWrapper<decimal, Sum>>>.Candidate = (decimal)0;
+            D<mempty.T0<Wrapper<decimal, Sum>>>.Candidate = (decimal)0;
+            D<mempty.T0<ReadOnlyWrapper<Int128, Sum>>>.Candidate = (Int128)0;
+            D<mempty.T0<Wrapper<Int128, Sum>>>.Candidate = (Int128)0;
+            D<mempty.T0<ReadOnlyWrapper<UInt128, Sum>>>.Candidate = (UInt128)0;
+            D<mempty.T0<Wrapper<UInt128, Sum>>>.Candidate = (UInt128)0;
+            D<mempty.T0<ReadOnlyWrapper<Mathematics.Exact.Rational64, Sum>>>.Candidate = (Mathematics.Exact.Rational64)0;
+            // Product
+            D<mempty.T0<ReadOnlyWrapper<int, Product>>>.Candidate = (int)1;
+            D<mempty.T0<Wrapper<int, Product>>>.Candidate = (int)1;
+            D<mempty.T0<ReadOnlyWrapper<uint, Product>>>.Candidate = (uint)1;
+            D<mempty.T0<Wrapper<uint, Product>>>.Candidate = (uint)1;
+            D<mempty.T0<ReadOnlyWrapper<long, Product>>>.Candidate = (long)1;
+            D<mempty.T0<Wrapper<long, Product>>>.Candidate = (long)1;
+            D<mempty.T0<ReadOnlyWrapper<ulong, Product>>>.Candidate = (ulong)1;
+            D<mempty.T0<Wrapper<ulong, Product>>>.Candidate = (ulong)1;
+            D<mempty.T0<ReadOnlyWrapper<short, Product>>>.Candidate = (short)1;
+            D<mempty.T0<Wrapper<short, Product>>>.Candidate = (short)1;
+            D<mempty.T0<ReadOnlyWrapper<ushort, Product>>>.Candidate = (ushort)1;
+            D<mempty.T0<Wrapper<ushort, Product>>>.Candidate = (ushort)1;
+            D<mempty.T0<ReadOnlyWrapper<byte, Product>>>.Candidate = (byte)1;
+            D<mempty.T0<Wrapper<byte, Product>>>.Candidate = (byte)1;
+            D<mempty.T0<ReadOnlyWrapper<sbyte, Product>>>.Candidate = (sbyte)1;
+            D<mempty.T0<Wrapper<sbyte, Product>>>.Candidate = (sbyte)1;
+            D<mempty.T0<ReadOnlyWrapper<double, Product>>>.Candidate = (double)1;
+            D<mempty.T0<Wrapper<double, Product>>>.Candidate = (double)1;
+            D<mempty.T0<ReadOnlyWrapper<float, Product>>>.Candidate = (float)1;
+            D<mempty.T0<Wrapper<float, Product>>>.Candidate = (float)1;
+            D<mempty.T0<ReadOnlyWrapper<decimal, Product>>>.Candidate = (decimal)1;
+            D<mempty.T0<Wrapper<decimal, Product>>>.Candidate = (decimal)1;
+            D<mempty.T0<ReadOnlyWrapper<Int128, Product>>>.Candidate = (Int128)1;
+            D<mempty.T0<Wrapper<Int128, Product>>>.Candidate = (Int128)1;
+            D<mempty.T0<ReadOnlyWrapper<UInt128, Product>>>.Candidate = (UInt128)1;
+            D<mempty.T0<Wrapper<UInt128, Product>>>.Candidate = (UInt128)1;
+            D<mempty.T0<ReadOnlyWrapper<Mathematics.Exact.Rational64, Product>>>.Candidate = (Mathematics.Exact.Rational64)1;
+            // ...
         }
 
         private static readonly bool s_IsInitialized = GetIsInitialized();
@@ -217,7 +259,94 @@ namespace UltimateOrb.Ex0002 {
 
 
 
+    internal readonly partial struct D<TToken> {
+
+        internal static object Candidate {
+
+            set {
+                if (null != value) {
+                    var v = value;
+                    var t = v.GetType();
+                    var property = C.Type.MakeGenericType(typeof(TToken), t).GetProperty(nameof(C<Void>.Candidate), t);
+                    property.SetValue(null, v);
+                }
+            }
+        }
+
+        internal readonly partial struct C {
+
+            /*
+            internal static readonly IDictionary<Type, Void> s_lookuptable_IsImplemeted = (IDictionary<Type, Void>)new System.Collections.Concurrent.ConcurrentDictionary<Type, Void>();
+
+            internal static bool GetIsInstantiated(Type type) {
+                return s_lookuptable_IsImplemeted.ContainsKey(type);
+            }
+            */
+
+            internal static readonly Type Type = typeof(C<>);
+        }
+
+        internal readonly partial struct C<T> {
+
+            private static T s_Candidate;
+
+            private static bool s_IsImplemented;
+
+            private static bool s_IsInitialized;
+
+            public static T Candidate {
+
+                get => s_Candidate;
+
+                set => (s_Candidate = value).Comma(s_IsImplemented = true).Ignore();
+            }
+
+            public static bool IsImplemented {
+
+                get => s_IsImplemented;
+            }
+
+            internal static bool IsInitialized {
+
+                get => s_IsInitialized;
+
+                set => (s_IsInitialized = value).Ignore();
+            }
+        }
+    }
+
     public readonly partial struct mempty {
+
+        public readonly partial struct Typed<T> {
+
+            public static readonly T Value = GetValue<T>();
+        }
+
+        private static T GetValue<T>() {
+            if (!Monoid.IsInitialized) {
+                throw new NotImplementedException();
+            }
+            var t = GetValue0<T>();
+            D<mempty>.C<T>.IsInitialized = true;
+            if (!D<mempty.T0<a>>.C<T>.IsImplemented) {
+                D<mempty.T0<a>>.C<T>.Candidate = t;
+            }
+            // type inferred
+            // mempty.a == T
+            if (!D<mempty.T0<T>>.C<T>.IsImplemented) {
+                D<mempty.T0<T>>.C<T>.Candidate = t;
+            }
+            return t;
+        }
+
+        private static T GetValue0<T>() {
+            if (D<mempty>.C<T>.IsInitialized) {
+                return Typed<T>.Value;
+            } else if (D<mempty>.C<T>.IsImplemented) {
+                return D<mempty>.C<T>.Candidate;
+            }
+            return mempty.T0<a>.Typed<T>.Value;
+        }
 
         public readonly partial struct a : MetaTags.Types.ITypeVariable, MetaTags.Types.IType {
         }
@@ -228,57 +357,79 @@ namespace UltimateOrb.Ex0002 {
 
         public readonly partial struct T0<a> {
 
-            internal readonly partial struct D0 {
-
-                private static a s_Candidate;
-
-                private static bool s_IsImplemented;
-
-                private static bool s_IsInitialized;
-
-                internal static a Candidate {
-
-                    get => s_Candidate;
-
-                    set => (s_Candidate = value).Comma(s_IsImplemented = true).Ignore();
-                }
-            }
-
-            internal readonly partial struct D0<T> {
-
-                private static T s_Candidate;
-
-                private static bool s_IsImplemented;
-
-                private static bool s_IsInitialized;
-
-                internal static T Candidate {
-
-                    get => s_Candidate;
-
-                    set => (s_Candidate = value).Comma(s_IsImplemented = true).Ignore();
-                }
-            }
-
             public readonly partial struct Typed<T> {
 
                 public static readonly T Value = GetValue<T>();
             }
 
-            public static T GetValue<T>() {
-                var t = typeof(a);
-                if (typeof(System.Array) == t) {
-                    return (T)typeof(Array_Empty<>).MakeGenericType(t.GetElementType()).GetProperty(nameof(Array_Empty<int>.Value), t).GetValue(null);
+            private static T GetValue<T>() {
+                if (!Monoid.IsInitialized) {
+                    throw new NotImplementedException();
                 }
-                if (t.IsPrimitive) {
-                    return default;
+                var t = GetValue0<T>();
+                D<mempty.T0<T>>.C<T>.IsInitialized = true;
+                if (typeof(mempty.a) == typeof(a)) {
+                    // type inferred
+                    // mempty.a == T
+                    if (!D<mempty.T0<T>>.C<T>.IsImplemented) {
+                        D<mempty.T0<T>>.C<T>.Candidate = t;
+                    }
                 }
+                if (!D<mempty>.C<T>.IsImplemented) {
+                    D<mempty>.C<T>.Candidate = t;
+                }
+                return t;
+            }
+
+            private static T GetValue0<T>() {
+                if (D<mempty.T0<a>>.C<T>.IsInitialized) {
+                    return Typed<T>.Value;
+                } else if (D<mempty.T0<a>>.C<T>.IsImplemented) {
+                    return D<mempty.T0<a>>.C<T>.Candidate;
+                }
+                if (typeof(mempty.a) == typeof(a)) {                  
+                    if (D<mempty.T0<a>>.C<System.Func<Type, ReadOnlyWrapper<object>?>>.IsImplemented) {
+                        var c = D<mempty.T0<a>>.C<System.Func<Type, ReadOnlyWrapper<object>?>>.Candidate;
+                        var b = c.Invoke(typeof(T));
+                        if (b.HasValue) {
+                            var a = b.GetValueOrDefault();
+                            if (a.Value is T v) {
+                                return v;
+                            }
+                        }
+                    }
+                    // type inferred
+                    // mempty.a == T
+                    return mempty.T0<T>.Typed<T>.Value;
+                }
+                // type inferred
+                // mempty.a == T
+                var t = typeof(T);
+                if (t.IsGenericType) {
+                    if (typeof(ReadOnlyWrapper<,>) == t.GetGenericTypeDefinition()) {
+                        var gtas = t.GetGenericArguments();
+                        var ta = gtas[0];
+                        var tw = gtas[1];
+                        var sdfa = typeof(D<>.C<>).MakeGenericType(typeof(mempty.T0<T>), ta);
+                        var p = sdfa.GetProperty(nameof(D<Void>.C<Void>.IsImplemented));
+                        if ((bool)(p.GetValue(null))) {
+                            return (T)WrapperModule.ToReadOnlyWrapperDynamic(sdfa.GetProperty(nameof(D<Void>.C<Void>.Candidate)).GetValue(null), tw);
+                        }
+                    }
+                    if (typeof(Wrapper<,>) == t.GetGenericTypeDefinition()) {
+                        var gtas = t.GetGenericArguments();
+                        var ta = gtas[0];
+                        var tw = gtas[1];
+                        var sdfa = typeof(D<>.C<>).MakeGenericType(typeof(mempty.T0<T>), ta);
+                        var p = sdfa.GetProperty(nameof(D<Void>.C<Void>.IsImplemented));
+                        if ((bool)(p.GetValue(null))) {
+                            return (T)WrapperModule.ToWrapperDynamic(sdfa.GetProperty(nameof(D<Void>.C<Void>.Candidate)).GetValue(null), tw);
+                        }
+                    }
+                }               
                 throw new NotImplementedException();
             }
         }
-
-
-
     }
 
     namespace MetaTags {

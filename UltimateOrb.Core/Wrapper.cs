@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Runtime;
@@ -112,6 +113,57 @@ namespace UltimateOrb {
 
 namespace UltimateOrb {
 
+    public static partial class WrapperModule {
+
+        public static object ToWrapperDynamic(object value) {
+            if (null == value) {
+                return null;
+            }
+            var t = value.GetType();
+            return typeof(Wrapper<>).MakeGenericType(t).GetConstructor(new[] { t, }).Invoke(new[] { value, });
+        }
+
+        public static object ToWrapperDynamic<TWrapper>(object value) {
+            if (null == value) {
+                return null;
+            }
+            var t = value.GetType();
+            return typeof(Wrapper<,>).MakeGenericType(t, typeof(TWrapper)).GetConstructor(new[] { t, }).Invoke(new[] { value, });
+        }
+
+        public static object ToWrapperDynamic(object value, Type tWrapper) {
+            if (null == value) {
+                return null;
+            }
+            var t = value.GetType();
+            return typeof(Wrapper<,>).MakeGenericType(t, tWrapper).GetConstructor(new[] { t, }).Invoke(new[] { value, });
+        }
+
+        public static object ToReadOnlyWrapperDynamic(object value) {
+            if (null == value) {
+                return null;
+            }
+            var t = value.GetType();
+            return typeof(ReadOnlyWrapper<>).MakeGenericType(t).GetConstructor(new[] { t, }).Invoke(new[] { value, });
+        }
+
+        public static object ToReadOnlyWrapperDynamic<TWrapper>(object value) {
+            if (null == value) {
+                return null;
+            }
+            var t = value.GetType();
+            return typeof(ReadOnlyWrapper<,>).MakeGenericType(t, typeof(TWrapper)).GetConstructor(new[] { t, }).Invoke(new[] { value, });
+        }
+
+        public static object ToReadOnlyWrapperDynamic(object value, Type tWrapper) {
+            if (null == value) {
+                return null;
+            }
+            var t = value.GetType();
+            return typeof(ReadOnlyWrapper<,>).MakeGenericType(t, tWrapper).GetConstructor(new[] { t, }).Invoke(new[] { value, });
+        }
+    }
+
     public partial struct Wrapper<T> : IStrongBox<T>, IReadOnlyStrongBox<T> {
 
         public T Value;
@@ -163,6 +215,14 @@ namespace UltimateOrb {
         public static implicit operator Wrapper<T>(T value) {
             return new Wrapper<T>(value);
         }
+
+        public override string ToString() {
+            var value = this.Value;
+            if (null != value) {
+                return value.ToString();
+            }
+            return @"";
+        }
     }
 
     public readonly partial struct ReadOnlyWrapper<T> : IReadOnlyStrongBox<T> {
@@ -200,6 +260,14 @@ namespace UltimateOrb {
         [PureAttribute()]
         public static implicit operator ReadOnlyWrapper<T>(T value) {
             return new ReadOnlyWrapper<T>(value);
+        }
+
+        public override string ToString() {
+            var value = this.Value;
+            if (null != value) {
+                return value.ToString();
+            }
+            return @"";
         }
     }
 

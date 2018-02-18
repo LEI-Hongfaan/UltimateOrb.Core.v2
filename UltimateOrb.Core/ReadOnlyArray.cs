@@ -128,6 +128,11 @@ namespace UltimateOrb {
             return new Enumerator(this);
         }
 
+        public static partial class Empty {
+
+            public static readonly ReadOnlyArray<T> Value = new ReadOnlyArray<T>(Array_Empty<ReadOnly>.Value);
+        } 
+
         public partial struct Enumerator : Collections.Generic.RefReturnSupported.IReadOnlyEnumerator<T> {
 
             private readonly ReadOnly[] array;
