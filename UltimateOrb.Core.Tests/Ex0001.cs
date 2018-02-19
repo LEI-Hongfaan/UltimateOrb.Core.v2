@@ -21,9 +21,21 @@ namespace UltimateOrb.Ex0002 {
 
     public static partial class AAAfdsafas {
 
+        public partial struct L1 {
+        }
+
+        public static Wrapper<T> Apply<T>(Array<Wrapper<T>> a) {
+            return default;
+        }
+
+
     }
 
     public readonly partial struct Foldable : IKindable {
+
+        public static void CheckRequirementsThenThrowIfFailed() {
+            throw new NotImplementedException();
+        }
 
         public readonly partial struct Invoke<T>
             : MetaTags.Types.IConstraint
@@ -46,7 +58,90 @@ namespace UltimateOrb.Ex0002 {
         }
     }
 
+    public readonly partial struct TypeLevelLambdaSymbols {
+
+        public readonly partial struct _ {
+        }
+
+        public readonly partial struct L0 {
+        }
+
+        public readonly partial struct L1 {
+        }
+
+        public readonly partial struct L2 {
+        }
+    }
+
+    public readonly partial struct id {
+
+        public static object InvokeDynamic(object x) {
+            return x;
+        }
+
+        public static a InvokeDynamic<a>(a x) {
+            return x;
+        }
+    }
+
+
+    public interface IFuncOrValueDynamic {
+
+        object Invoke(object t);
+
+        object GetValue(Type t);
+    }
+
+    public readonly partial struct foldMap {
+
+        public readonly partial struct InvokeDynamicImplA {
+
+            public static IFuncOrValueDynamic Value;
+        }
+
+        public readonly partial struct InvokeDynamicImpl {
+
+            public static readonly IFuncOrValueDynamic Value = GetValue();
+
+            public static IFuncOrValueDynamic GetValue() {
+                throw new NotImplementedException();
+            }
+        }
+    }
+
     public readonly partial struct fold {
+
+        public readonly partial struct InvokeDynamicImplA {
+
+            public static IFuncOrValueDynamic Value;
+        }
+
+        public readonly partial struct InvokeDynamicImpl {
+
+            public static readonly IFuncOrValueDynamic Value = GetValue();
+
+            public static IFuncOrValueDynamic GetValue() {
+                throw new NotImplementedException();
+            }
+        }
+
+        public static object InvokeDynamic(object a) {
+            throw new NotImplementedException();
+        }
+
+
+        public readonly partial struct Typed<T> {
+
+            public static readonly T Value = GetValue<T>();
+        }
+
+        public static T GetValue<T>() {
+            if (typeof(System.Func<Array<Wrapper<int, Product>>, Wrapper<int, Product>>) == typeof(T)) {
+                return (T)(object)(System.Func<Array<Wrapper<int, Product>>, Wrapper<int, Product>>)(x => x.Aggregate(1, (p, q) => checked(p * q.Value), y => new Wrapper<int, Product>(y)));
+            }
+            return ThrowHelper.Throw<NotImplementedException, T>();
+        }
+
 
         public readonly partial struct m : MetaTags.Types.ITypeVariable, MetaTags.Types.IType {
         }
@@ -387,7 +482,7 @@ namespace UltimateOrb.Ex0002 {
                 } else if (D<mempty.T0<a>>.C<T>.IsImplemented) {
                     return D<mempty.T0<a>>.C<T>.Candidate;
                 }
-                if (typeof(mempty.a) == typeof(a)) {                  
+                if (typeof(mempty.a) == typeof(a)) {
                     if (D<mempty.T0<a>>.C<System.Func<Type, ReadOnlyWrapper<object>?>>.IsImplemented) {
                         var c = D<mempty.T0<a>>.C<System.Func<Type, ReadOnlyWrapper<object>?>>.Candidate;
                         var b = c.Invoke(typeof(T));
@@ -426,7 +521,7 @@ namespace UltimateOrb.Ex0002 {
                             return (T)WrapperModule.ToWrapperDynamic(sdfa.GetProperty(nameof(D<Void>.C<Void>.Candidate)).GetValue(null), tw);
                         }
                     }
-                }               
+                }
                 throw new NotImplementedException();
             }
         }

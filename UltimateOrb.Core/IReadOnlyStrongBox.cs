@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace UltimateOrb.Collections.Generic {
-    using UltimateOrb;
+﻿namespace UltimateOrb {
 
     public partial interface IReadOnlyStrongBox<T> {
 

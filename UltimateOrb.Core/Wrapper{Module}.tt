@@ -9,9 +9,9 @@ var wrapperGTs = new [] { "", ", TWrapper" };
 <#
 var methods = new [] { "Average", "Min", "Max", "Sum",  };
 var compareOnly = new System.Collections.Generic.List<string> { "Min", "Max", };
-var numTypes = new [] { "int", "uint", "byte", "sbyte", "short", "ushort", "long", "ulong", "float", "double", "decimal", "Int128", "UInt128", };
+var numTypes = new [] { "int", "uint", "byte", "sbyte", "short", "ushort", "long", "ulong", "float", "double", "decimal", "Int128", "UInt128", "Mathematics.Exact.Rational64" };
 var ints = new System.Collections.Generic.List<string> { "int", "uint", "byte", "sbyte", "short", "ushort", "long", "ulong", "Int128", "UInt128", };
-var unsigheds = new System.Collections.Generic.List<string> { "uint", "byte", "ushort", "ulong", "UInt128", };
+var unsigneds = new System.Collections.Generic.List<string> { "uint", "byte", "ushort", "ulong", "UInt128", };
 #>
 
 namespace UltimateOrb {

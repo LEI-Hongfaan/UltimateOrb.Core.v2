@@ -2090,7 +2090,7 @@ namespace UltimateOrb.Core.Tests {
             protected override Expression VisitParameter(ParameterExpression node) {
                 if (parameter_map.TryGetValue(node, out var node_new)) {
                     var t = node.Type;
-                    return Expression.PropertyOrField(Expression.Convert(node_new, typeof(Collections.Generic.IReadOnlyStrongBox<>).MakeGenericType(t)), "Value");
+                    return Expression.PropertyOrField(Expression.Convert(node_new, typeof(IReadOnlyStrongBox<>).MakeGenericType(t)), "Value");
                 }
                 return base.VisitParameter(node);
             }
@@ -2124,6 +2124,50 @@ namespace UltimateOrb.Core.Tests {
 
         private static int Main(string[] args) {
             {
+
+                var asdfa = new UltimateOrb.Ex0005.BclArray();
+                asdfa._fmap = x => (Func<object, object>)(y => {
+                    return ((object[])y).Select(((Func<object, object>)x)).ToArray();
+                });
+                var asdfsdf = ((Func<object, object>)asdfa._fmap.Invoke((Func<object, object>)(x => Convert.ToDouble(x) * Convert.ToDouble(x) - 3))).Invoke(new object[] { 3, 4, 6.0 });
+                Printf(Console.Out, asdfsdf);
+                Console.ReadKey(true);
+
+                // asdfa.op__UTF8_3C24 = x => y => asdfa._fmap(UltimateOrb.Ex0004.Extensions._const(x))(y);
+                // asdfa.op__UTF8_3C24 = (Func<object, object>)((Func<object, object>)UltimateOrb.Ex0005.Module.op__UTF8_2E(asdfa._fmap))(UltimateOrb.Ex0005.Module._const);
+                var dsfasf = ((Func<object, object>)asdfa.op__UTF8_3C24.Invoke(3)).Invoke(new object[] { 3, 4, 6.0 });
+                Printf(Console.Out, dsfasf);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+
+                var asdfa = new UltimateOrb.Ex0004.BclArray();
+                asdfa._fmap = (x => y => {
+                    return ((object[])y).Select(x).ToArray();
+                });
+                var asdfsdf = asdfa._fmap.Invoke(x => Convert.ToDouble(x) * Convert.ToDouble(x) - 3).Invoke(new object[] { 3, 4, 6.0 });
+                Printf(Console.Out, asdfsdf);
+                Console.ReadKey(true);
+
+                // asdfa.op__UTF8_3C24 = x => y => asdfa._fmap(UltimateOrb.Ex0004.Extensions._const(x))(y);
+                asdfa.op__UTF8_3C24 = y => (Func<object, object>)UltimateOrb.Ex0004.Extensions.op__UTF8_2E(x => asdfa._fmap((Func<object, object>)x))(UltimateOrb.Ex0004.Extensions._const)(y);
+                var dsfasf = asdfa.op__UTF8_3C24.Invoke(3).Invoke(new object[] { 3, 4, 6.0 });
+                Printf(Console.Out, dsfasf);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                {
+                    var saf = new Array<Wrapper<int, UltimateOrb.Ex0002.Product>>(3) {
+                        [0] = 10,
+                        [1] = 20,
+                        [2] = 7,
+                    };
+                    var sdfa = UltimateOrb.Ex0002.fold.Typed<Func<Array<Wrapper<int, UltimateOrb.Ex0002.Product>>, Wrapper<int, UltimateOrb.Ex0002.Product>>>.Value;
+                    var sadfa = sdfa.Invoke(saf);
+                    Printf(Console.Out, sadfa.Value);
+                }
                 {
                     var sdfa = UltimateOrb.Ex0002.mempty.T0<Wrapper<double, UltimateOrb.Ex0002.Product>>.Typed<double>.Value;
                     Printf(Console.Out, sdfa);
@@ -2156,7 +2200,7 @@ namespace UltimateOrb.Core.Tests {
                     var sdfa = UltimateOrb.Ex0002.mempty.T0<Wrapper<double, UltimateOrb.Ex0002.Product>>.Typed<Wrapper<double, UltimateOrb.Ex0002.Product>>.Value;
                     Printf(Console.Out, sdfa.Value);
                 }
-               
+
                 Console.ReadKey(true);
                 return 0;
             }
@@ -2506,7 +2550,7 @@ namespace UltimateOrb.Core.Tests {
                         var ii = (int)arg;
                         for (; ; ) {
                             if (0 != (((UInt64)1 << i) & signal)) {
-                                ref var af = ref (lazy_boxed as UltimateOrb.Collections.Generic.RefReturnSupported.IStrongBox<Lazy<int>>).Value;
+                                ref var af = ref (lazy_boxed as RefReturnSupported.IStrongBox<Lazy<int>>).Value;
                                 result_list[ii] = af.Value;
                                 break;
                             }

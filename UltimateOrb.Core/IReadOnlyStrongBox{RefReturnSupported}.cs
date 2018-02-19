@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace UltimateOrb.Collections.Generic.RefReturnSupported {
-    using UltimateOrb;
+﻿namespace UltimateOrb.RefReturnSupported {
+    using Generic = UltimateOrb;
 
     public partial interface IReadOnlyStrongBox<T> : Generic.IReadOnlyStrongBox<T> {
         

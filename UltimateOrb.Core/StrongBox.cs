@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UltimateOrb.Collections;
 using UltimateOrb.Collections.Generic;
-using UltimateOrb.Collections.Generic.RefReturnSupported;
+using UltimateOrb.RefReturnSupported;
 
 namespace UltimateOrb {
 
-    public partial class StrongBox<T> : Collections.Generic.RefReturnSupported.IStrongBox<T>, Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T> {
+    public partial class StrongBox<T> : RefReturnSupported.IStrongBox<T>, RefReturnSupported.IReadOnlyStrongBox<T> {
 
-        ref T Collections.Generic.RefReturnSupported.IStrongBox<T>.Value {
+        ref T RefReturnSupported.IStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.Value;
         }
 
-        T Collections.Generic.IStrongBox<T>.Value {
+        T IStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.Value;
@@ -24,13 +24,13 @@ namespace UltimateOrb {
             set => this.Value = value;
         }
         
-        ref readonly T Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T>.Value {
+        ref readonly T RefReturnSupported.IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.Value;
         }
 
-        T Collections.Generic.IReadOnlyStrongBox<T>.Value {
+        T IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.Value;
@@ -48,15 +48,15 @@ namespace UltimateOrb {
         public T Value;
     }
 
-    public partial class ReadOnlyStrongBox<T> : Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T> {
+    public partial class ReadOnlyStrongBox<T> : RefReturnSupported.IReadOnlyStrongBox<T> {
 
-        ref readonly T Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T>.Value {
+        ref readonly T RefReturnSupported.IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.Value;
         }
 
-        T Collections.Generic.IReadOnlyStrongBox<T>.Value {
+        T IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.Value;
@@ -74,15 +74,15 @@ namespace UltimateOrb {
         public readonly T Value;
     }
 
-    public partial class StrongBoxBase<T> : Collections.Generic.RefReturnSupported.IStrongBox<T>, Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T> {
+    public partial class StrongBoxBase<T> : RefReturnSupported.IStrongBox<T>, RefReturnSupported.IReadOnlyStrongBox<T> {
 
-        ref T Collections.Generic.RefReturnSupported.IStrongBox<T>.Value {
+        ref T RefReturnSupported.IStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.Value;
         }
 
-        T Collections.Generic.IStrongBox<T>.Value {
+        T IStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.Value;
@@ -91,13 +91,13 @@ namespace UltimateOrb {
             set => this.Value = value;
         }
         
-        ref readonly T Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T>.Value {
+        ref readonly T RefReturnSupported.IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.Value;
         }
 
-        T Collections.Generic.IReadOnlyStrongBox<T>.Value {
+        T IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.Value;
@@ -115,15 +115,15 @@ namespace UltimateOrb {
         protected T Value;
     }
 
-    public partial class ReadOnlyStrongBoxBase<T> : Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T> {
+    public partial class ReadOnlyStrongBoxBase<T> : RefReturnSupported.IReadOnlyStrongBox<T> {
 
-        ref readonly T Collections.Generic.RefReturnSupported.IReadOnlyStrongBox<T>.Value {
+        ref readonly T RefReturnSupported.IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.Value;
         }
 
-        T Collections.Generic.IReadOnlyStrongBox<T>.Value {
+        T IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.Value;

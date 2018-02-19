@@ -595,6 +595,26 @@ namespace UltimateOrb {
         public static UInt128 Average(this Wrapper<UInt128> source) {
             return source.Value;
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Average<TSource>(this Wrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Average<TSource>(this Wrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Average(this Wrapper<Mathematics.Exact.Rational64?> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Average(this Wrapper<Mathematics.Exact.Rational64> source) {
+            return source.Value;
+        }
 		
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -854,6 +874,26 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min(this Wrapper<UInt128> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Min<TSource>(this Wrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Min<TSource>(this Wrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Min(this Wrapper<Mathematics.Exact.Rational64?> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Min(this Wrapper<Mathematics.Exact.Rational64> source) {
             return source.Value;
         }
 		
@@ -1122,6 +1162,26 @@ namespace UltimateOrb {
         public static UInt128 Max(this Wrapper<UInt128> source) {
             return source.Value;
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Max<TSource>(this Wrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Max<TSource>(this Wrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Max(this Wrapper<Mathematics.Exact.Rational64?> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Max(this Wrapper<Mathematics.Exact.Rational64> source) {
+            return source.Value;
+        }
 		
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -1386,6 +1446,26 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum(this Wrapper<UInt128> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Sum<TSource>(this Wrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Sum<TSource>(this Wrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Sum(this Wrapper<Mathematics.Exact.Rational64?> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Sum(this Wrapper<Mathematics.Exact.Rational64> source) {
             return source.Value;
         }
 		
@@ -2028,6 +2108,26 @@ namespace UltimateOrb {
         public static UInt128 Average<TWrapper>(this Wrapper<UInt128, TWrapper> source) {
             return source.Value;
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Average<TWrapper>(this Wrapper<Mathematics.Exact.Rational64?, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Average<TWrapper>(this Wrapper<Mathematics.Exact.Rational64, TWrapper> source) {
+            return source.Value;
+        }
 		
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -2287,6 +2387,26 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min<TWrapper>(this Wrapper<UInt128, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Min<TWrapper>(this Wrapper<Mathematics.Exact.Rational64?, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Min<TWrapper>(this Wrapper<Mathematics.Exact.Rational64, TWrapper> source) {
             return source.Value;
         }
 		
@@ -2555,6 +2675,26 @@ namespace UltimateOrb {
         public static UInt128 Max<TWrapper>(this Wrapper<UInt128, TWrapper> source) {
             return source.Value;
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Max<TWrapper>(this Wrapper<Mathematics.Exact.Rational64?, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Max<TWrapper>(this Wrapper<Mathematics.Exact.Rational64, TWrapper> source) {
+            return source.Value;
+        }
 		
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -2819,6 +2959,26 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum<TWrapper>(this Wrapper<UInt128, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Sum<TWrapper>(this Wrapper<Mathematics.Exact.Rational64?, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Sum<TWrapper>(this Wrapper<Mathematics.Exact.Rational64, TWrapper> source) {
             return source.Value;
         }
 		
@@ -3461,6 +3621,26 @@ namespace UltimateOrb {
         public static UInt128 Average(this ReadOnlyWrapper<UInt128> source) {
             return source.Value;
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Average(this ReadOnlyWrapper<Mathematics.Exact.Rational64?> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Average(this ReadOnlyWrapper<Mathematics.Exact.Rational64> source) {
+            return source.Value;
+        }
 		
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -3720,6 +3900,26 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min(this ReadOnlyWrapper<UInt128> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Min(this ReadOnlyWrapper<Mathematics.Exact.Rational64?> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Min(this ReadOnlyWrapper<Mathematics.Exact.Rational64> source) {
             return source.Value;
         }
 		
@@ -3988,6 +4188,26 @@ namespace UltimateOrb {
         public static UInt128 Max(this ReadOnlyWrapper<UInt128> source) {
             return source.Value;
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Max(this ReadOnlyWrapper<Mathematics.Exact.Rational64?> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Max(this ReadOnlyWrapper<Mathematics.Exact.Rational64> source) {
+            return source.Value;
+        }
 		
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -4252,6 +4472,26 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum(this ReadOnlyWrapper<UInt128> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Sum(this ReadOnlyWrapper<Mathematics.Exact.Rational64?> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Sum(this ReadOnlyWrapper<Mathematics.Exact.Rational64> source) {
             return source.Value;
         }
 		
@@ -4894,6 +5134,26 @@ namespace UltimateOrb {
         public static UInt128 Average<TWrapper>(this ReadOnlyWrapper<UInt128, TWrapper> source) {
             return source.Value;
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Average<TWrapper>(this ReadOnlyWrapper<Mathematics.Exact.Rational64?, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Average<TWrapper>(this ReadOnlyWrapper<Mathematics.Exact.Rational64, TWrapper> source) {
+            return source.Value;
+        }
 		
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -5153,6 +5413,26 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min<TWrapper>(this ReadOnlyWrapper<UInt128, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Min<TWrapper>(this ReadOnlyWrapper<Mathematics.Exact.Rational64?, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Min<TWrapper>(this ReadOnlyWrapper<Mathematics.Exact.Rational64, TWrapper> source) {
             return source.Value;
         }
 		
@@ -5421,6 +5701,26 @@ namespace UltimateOrb {
         public static UInt128 Max<TWrapper>(this ReadOnlyWrapper<UInt128, TWrapper> source) {
             return source.Value;
         }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Max<TWrapper>(this ReadOnlyWrapper<Mathematics.Exact.Rational64?, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Max<TWrapper>(this ReadOnlyWrapper<Mathematics.Exact.Rational64, TWrapper> source) {
+            return source.Value;
+        }
 		
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -5685,6 +5985,26 @@ namespace UltimateOrb {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum<TWrapper>(this ReadOnlyWrapper<UInt128, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64?> selector) {
+            return selector.Invoke(source.Value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, Mathematics.Exact.Rational64> selector) {
+            return selector.Invoke(source.Value);
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64? Sum<TWrapper>(this ReadOnlyWrapper<Mathematics.Exact.Rational64?, TWrapper> source) {
+            return source.Value;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Mathematics.Exact.Rational64 Sum<TWrapper>(this ReadOnlyWrapper<Mathematics.Exact.Rational64, TWrapper> source) {
             return source.Value;
         }
 		

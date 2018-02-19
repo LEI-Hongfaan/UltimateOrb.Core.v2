@@ -493,7 +493,7 @@ namespace UltimateOrb.Nongeneric {
         Associative,
     }
 
-    [AttributeUsageAttribute(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
+    [AttributeUsageAttribute(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
     public sealed partial class OperatorNotationAttribute : Attribute {
 
         public string Symbol {
