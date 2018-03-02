@@ -20,6 +20,16 @@ namespace UltimateOrb.Utilities {
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
+        public static void IgnoreOutParameter<T>(out T value) {
+            var t = Contract.ValueAtReturn(out value);
+            Contract.Ensures(t.Comma(true));
+            Contract.EndContractBlock();
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
         public static T Nop<T>(this T value) {
             return value;
         }

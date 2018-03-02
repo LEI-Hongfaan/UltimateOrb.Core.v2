@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -7,9 +8,254 @@ using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using UltimateOrb.Collections.Generic;
+using UltimateOrb.Nongeneric;
 using UltimateOrb.Utilities;
 
-namespace sffgafgadg {
+namespace UltimateOrb.Ex0007 {
+    using Primtives = UltimateOrb.Ex0007;
+    using TypeTags = UltimateOrb.Ex0002.MetaTags.Types;
+    using KindTags = UltimateOrb.Ex0002.MetaTags.Kinds;
+
+    public readonly partial struct Default<TToken> {
+
+        public object Candidate {
+
+            set {
+                if (null != value) {
+                    data[value.GetType()] = value;
+                }
+            }
+        }
+
+        private static readonly IDictionary<Type, object> data = new ConcurrentDictionary<Type, object>();
+
+        public readonly partial struct Typed<T> {
+
+            public static readonly T Value = (T)GetValue(typeof(T));
+        }
+
+        private static object GetValue(Type type) {
+            var a = type.GetCustomAttributes(typeof(PrimtiveRepresentationAttribute), false);
+            if (a.Length > 0) {
+                var sdaf = a[0];
+
+            }
+            throw new NotImplementedException();
+        }
+    }
+
+    public partial interface ITypeConstructor {
+    }
+
+    public partial interface IDataConstructor {
+    }
+
+    public partial interface IConcrete {
+    }
+
+    public partial interface IArgumentType {
+    }
+
+    public partial interface IClassConstraint {
+    }
+
+    public partial interface ILiteral {
+    }
+
+    [System.AttributeUsage(AttributeTargets.Struct, Inherited = false, AllowMultiple = false)]
+    public sealed class PrimtiveRepresentationAttribute : Attribute {
+
+        private readonly Type type;
+
+        private readonly object value;
+
+        public PrimtiveRepresentationAttribute(Type type) {
+            if (null == type) {
+                throw new ArgumentNullException(nameof(type));
+            }
+            this.type = type;
+            this.value = null;
+        }
+
+        public PrimtiveRepresentationAttribute(object value, Type type = null) {
+            if (null == value) {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (null != type) {
+                if (!type.IsAssignableFrom(value.GetType())) {
+                    throw new ArgumentException();
+                }
+            }
+            this.type = type ?? value.GetType();
+            this.value = value;
+        }
+
+        public Type Type {
+
+            get => this.type;
+        }
+
+        public object Value {
+
+            get => this.value;
+        }
+    }
+
+    namespace Types {
+
+        [PrimtiveRepresentationAttribute(typeof(bool))]
+        public readonly partial struct Bool : IArgumentType, ITypeConstructor, IConcrete {
+        }
+
+        [PrimtiveRepresentationAttribute(false)]
+        public readonly partial struct False : IArgumentType, IDataConstructor, IConcrete {
+        }
+
+        [PrimtiveRepresentationAttribute(true)]
+        public readonly partial struct True : IArgumentType, IDataConstructor, IConcrete {
+        }
+
+        [PrimtiveRepresentationAttribute(typeof(Primtives.Ordering))]
+        public readonly partial struct Ordering : IArgumentType, ITypeConstructor, IConcrete {
+        }
+
+        [PrimtiveRepresentationAttribute(Primtives.Ordering.LT)]
+        public readonly partial struct LT : IArgumentType, IDataConstructor, IConcrete {
+        }
+
+        [PrimtiveRepresentationAttribute(Primtives.Ordering.EQ)]
+        public readonly partial struct EQ : IArgumentType, IDataConstructor, IConcrete {
+        }
+
+        [PrimtiveRepresentationAttribute(Primtives.Ordering.GT)]
+        public readonly partial struct GT : IArgumentType, IDataConstructor, IConcrete {
+        }
+
+        public readonly partial struct List : IArgumentType, ITypeConstructor {
+        }
+
+        public readonly partial struct Nil : IArgumentType, IDataConstructor, IConcrete {
+        }
+
+        public readonly partial struct Cons : IArgumentType, IDataConstructor {
+        }
+
+        public readonly partial struct Num_Literal : ILiteral, IClassConstraint, IDataConstructor, IConcrete {
+        }
+    }
+
+    namespace Base {
+
+        public readonly partial struct Monoid : IClassConstraint, ITypeConstructor {
+        }
+
+        public readonly partial struct mempty : IClassConstraint, IDataConstructor, IConcrete {
+        }
+
+        public readonly partial struct mappend : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct mconcat : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct id {
+
+            public readonly partial struct a : TypeTags.ITypeVariable, TypeTags.IType {
+            }
+
+            public static readonly TypeTags.ForAll<a, TypeTags.Unconstrained, TypeTags.Func<a, a>> Type = default;
+        }
+
+        public readonly partial struct @const {
+        }
+
+        [OperatorNotationAttribute(@".", 9, OperatorAssociativity.Right)]
+        public readonly partial struct compose {
+        }
+
+        [OperatorNotationAttribute(@"$", 0, OperatorAssociativity.Right)]
+        public readonly partial struct apply {
+        }
+    }
+
+    public readonly partial struct Apply<TFunc, TValue> {
+    }
+
+    public readonly partial struct Lambda<TVariable, TValue> {
+    }
+
+    namespace Data.Foldable {
+
+        public readonly partial struct Foldable : IClassConstraint, ITypeConstructor {
+
+            public static readonly Ex0002.MetaTags.MetaAnd<Type> MINIMAL = new Ex0002.MetaTags.MetaAnd<Type>(new[] { new Ex0002.MetaTags.MetaOr<Type>(new[] { typeof(foldMap), typeof(foldr), }), });
+        }
+
+        public readonly partial struct fold : IClassConstraint, IDataConstructor {
+
+            public static readonly Apply<foldMap, Base.id> Definition = default;
+        }
+
+        public readonly partial struct foldMap : IClassConstraint, IDataConstructor {
+
+            public readonly partial struct f {
+            }
+
+            public static readonly Lambda<f, Apply<Apply<foldr, Apply<Apply<Base.compose, Base.mappend>, f>>, Base.mempty>> Definition = default;
+        }
+
+        public readonly partial struct foldr : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct foldr_ : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct foldl : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct foldl_ : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct foldr1 : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct foldl1 : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct toList : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct @null : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct length : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct elem : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct maximum : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct minimum : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct sum : IClassConstraint, IDataConstructor {
+        }
+
+        public readonly partial struct product : IClassConstraint, IDataConstructor {
+        }
+    }
+
+
+
+
+    public enum Ordering {
+        EQ = 0b00,
+        LT = 0b10,
+        GT = 0b11,
+    }
+
 
 }
 
@@ -82,8 +328,39 @@ namespace UltimateOrb.Ex0002 {
         public static a InvokeDynamic<a>(a x) {
             return x;
         }
-    }
 
+        public readonly partial struct a {
+        }
+
+        public readonly partial struct Typed<T> {
+
+            public static readonly T Value = (T)GetValue(typeof(T));
+        }
+
+        private static object GetValue(Type type) {
+            var expr = GetExpression(type);
+            if (null != expr) {
+                return expr.Compile();
+            }
+            throw new NotImplementedException();
+        }
+
+        private static LambdaExpression GetExpression(Type type) {
+            if (type.IsGenericType) {
+                var gtd = type.GetGenericTypeDefinition();
+                if (typeof(System.Func<,>) == gtd) {
+                    var ts = type.GetGenericArguments();
+                    var t = ts[0];
+                    var tResult = ts[1];
+                    if (t == tResult) {
+                        var x = Expression.Variable(t);
+                        return Expression.Lambda(x, x);
+                    }
+                }
+            }
+            return null;
+        }
+    }
 
     public interface IFuncOrValueDynamic {
 
@@ -142,6 +419,22 @@ namespace UltimateOrb.Ex0002 {
             return ThrowHelper.Throw<NotImplementedException, T>();
         }
 
+        public static LambdaExpression GetExpression(Type type) {
+            if (type.IsGenericType) {
+                var gtd = type.GetGenericTypeDefinition();
+                if (typeof(System.Func<,>) == gtd) {
+                    var ts = type.GetGenericArguments();
+                    var t = ts[0];
+                    var tResult = ts[1];
+                    throw new NotImplementedException();
+                    if (t == tResult) {
+                        var x = Expression.Variable(t);
+                        return Expression.Lambda(x, x);
+                    }
+                }
+            }
+            return null;
+        }
 
         public readonly partial struct m : MetaTags.Types.ITypeVariable, MetaTags.Types.IType {
         }
@@ -567,6 +860,11 @@ namespace UltimateOrb.Ex0002 {
                 this.atoms = atoms;
                 this.nonatoms = nonatoms;
             }
+
+            public MetaOr(MetaAnd<T>[] nonatoms) {
+                this.atoms = Array_Empty<T>.Value;
+                this.nonatoms = nonatoms;
+            }
         }
 
         public readonly partial struct MetaAnd<T> {
@@ -594,6 +892,11 @@ namespace UltimateOrb.Ex0002 {
 
             public MetaAnd(T[] atoms, MetaOr<T>[] nonatoms) {
                 this.atoms = atoms;
+                this.nonatoms = nonatoms;
+            }
+
+            public MetaAnd(MetaOr<T>[] nonatoms) {
+                this.atoms = Array_Empty<T>.Value;
                 this.nonatoms = nonatoms;
             }
         }

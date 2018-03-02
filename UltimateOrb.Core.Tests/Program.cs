@@ -16,6 +16,7 @@ namespace UltimateOrb.Core.Tests {
     using UltimateOrb.IO;
     using UltimateOrb.Mathematics.Exact;
     using UltimateOrb.Mathematics.Functional;
+    using UltimateOrb.Mathematics.NumberTheory;
     using UltimateOrb.Nonstrict;
     using UltimateOrb.Plain.ValueTypes;
 
@@ -2122,7 +2123,275 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+        private const ulong prime_table = 0x28208A20A08A28AC;
+
+        private const ulong prime_table_odd = 0b_1000000101101101_0001001010011010_0110010010110100_1100101101101110;
+        
+        private const uint primes_3_5_7 = 3 * 5 * 7;
+
+        private const ulong euler_3_5_7_lo = 0b_0110110000110000_1101101001100101_1010010011001011_0010100100010110;
+
+        private const ulong euler_3_5_7_hi = 0b________________________0110100010_0101001101001100_1001011010011001;
+        
+        private const uint primes_2_3_7 = 2 * 3 * 7;
+
+        private const ulong euler_2_3_7 = 0x00000220A28A2822;
+
+        private const uint primes_5_11 = 5 * 11;
+
+        private const ulong euler_5_11 = 0x007BCEF5BDAF73DE;
+
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        private static bool IsProbablePrimeTrialDivision(uint primes, ulong euler_lo, ulong euler_hi, UInt32 value) {
+            var a = unchecked((int)(value % primes));
+            var euler = 64 <= a ? euler_hi : euler_lo;
+            if (0 == ((euler >> a) & 1)) {
+                return false;
+            }
+            return true;
+        }
+
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        private static bool IsProbablePrimeTrialDivision(uint primes, ulong euler, UInt32 value) {
+            var a = unchecked((int)(value % primes));
+            if (0 == ((euler >> a) & 1)) {
+                return false;
+            }
+            return true;
+        }
+
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        internal static bool IsMillerRabinPseudoprimeInternal(uint a, UInt64 n, UInt64 d, int s) {
+            unchecked {
+                var t = ZZOverNZZModule.Power(n, a, d);
+                if (t == 1) {
+                    return true;
+                }
+                if (t == n - 1u) {
+                    return true;
+                }
+                for (int i = s; i != 0; --i) {
+                    t = ZZOverNZZModule.Square(n, t);
+                    if (t == n - 1) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
+        ///     <para>Checks whether an input number is prime or not.</para>
+        /// </summary>
+        /// <param name="value">
+        ///     <para>The input number.</para>
+        /// </param>
+        /// <returns>
+        ///     <para>
+        ///         <c lang="cs">true</c> if the input number is prime;
+        ///         otherwise, <c lang="cs">false</c>.
+        ///     </para>
+        /// </returns>
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        public static bool IsOddPrimePartial(UInt32 value) {
+            System.Diagnostics.Contracts.Contract.Requires(1 == value % 2);
+            unchecked {
+                if (133u > value) {
+                    if (3u > value) {
+                        return false;
+                    }
+                    return 0 != (1 & (int)(prime_table_odd >> (int)(value >> 1)));
+                }
+                if (!IsProbablePrimeTrialDivision(primes_3_5_7, euler_3_5_7_lo, euler_3_5_7_hi, value)) {
+                    return false;
+                }
+                var d = value >> 1;
+                int s = 1;
+                while (0u == (1u & d)) {
+                    d >>= 1;
+                    ++s;
+                }
+                if (!IsMillerRabinPseudoprimeInternal(2, value, d, s)) {
+                    return false;
+                }
+                if (value < 2047u) {
+                    return true;
+                }
+                if (!IsMillerRabinPseudoprimeInternal(61, value, d, s)) {
+                    return false;
+                }
+                if (value < 916327u) {
+                    return true;
+                }
+                if (!IsMillerRabinPseudoprimeInternal(7, value, d, s)) {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
+        ///     <para>Checks whether an input number is prime or not.</para>
+        /// </summary>
+        /// <param name="value">
+        ///     <para>The input number.</para>
+        /// </param>
+        /// <returns>
+        ///     <para>
+        ///         <c lang="cs">true</c> if the input number is prime;
+        ///         otherwise, <c lang="cs">false</c>.
+        ///     </para>
+        /// </returns>
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        public static bool IsPrime(UInt32 value) {
+            unchecked {
+                if (64u > value) {
+                    if (2u > value) {
+                        return false;
+                    }
+                    return 0 != (1 & (int)(prime_table >> (int)value));
+                }
+                if (!IsProbablePrimeTrialDivision(primes_2_3_7, euler_2_3_7, value)) {
+                    return false;
+                }
+                if (!IsProbablePrimeTrialDivision(primes_5_11, euler_5_11, value)) {
+                    return false;
+                }
+
+                var d = value - 1;
+                var s = UltimateOrb.Mathematics.BinaryNumerals.CountTrailingZeros(d);
+                d >>= s;
+                /*
+                var d = value >> 1;
+                int s = 1;
+                while (0u == (1u & d)) {
+                    d >>= 1;
+                    ++s;
+                }
+                */
+                if (!IsMillerRabinPseudoprimeInternal(2, value, d, s)) {
+                    return false;
+                }
+                if (value < 2047u) {
+                    return true;
+                }
+                if (!IsMillerRabinPseudoprimeInternal(61, value, d, s)) {
+                    return false;
+                }
+                if (value < 916327u) {
+                    return true;
+                }
+                if (!IsMillerRabinPseudoprimeInternal(7, value, d, s)) {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         private static int Main(string[] args) {
+            if (false) {
+                var asdfa = new Stack<int>(0);
+                var sdfa = 0;
+                for (ulong i = 0u; i <= 3 * 5 * 7; i += 1) {
+                    if (0 != unchecked((uint)i) % 3 && 0 != unchecked((uint)i) % 5 && 0 != unchecked((uint)i) % 7) {
+                        asdfa.Push(1);
+                        ++sdfa;
+                    } else {
+                        asdfa.Push(0);
+                    }
+                }
+                while (asdfa.Count > 0) {
+                    var sdf = asdfa.Pop();
+                    Console.Write(0 == sdf ? '0' : '1');
+                }
+                Console.WriteLine();
+                Console.WriteLine(sdfa.ToString());
+                Console.WriteLine(@"...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            if (false) {
+                var asdfa = new Stack<int>(0);
+                for (ulong i = 1u; i <= 130; i += 2) {
+                    if (IsPrimeModule.IsPrime(unchecked((uint)i))) {
+                        asdfa.Push(1);
+                    } else {
+                        asdfa.Push(0);
+                    }
+                }
+                while (asdfa.Count > 0) {
+                    var sdf = asdfa.Pop();
+                    Console.Write(0 == sdf ? '0' : '1');
+                }
+                Console.WriteLine();
+                Console.WriteLine(@"...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                for (ulong i = 1u; i <= 10000000/*uint.MaxValue*/; i += 2) {
+                    if (IsOddPrimePartial(unchecked((uint)i)) != IsPrimeModule.IsPrime(unchecked((uint)i))) {
+                        Console.WriteLine(i);
+                    }
+                }
+                Console.WriteLine(@"...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                for (ulong i = 0u; i <= uint.MaxValue; ++i) {
+                    if (IsPrime(unchecked((uint)i)) != IsPrimeModule.IsPrime(unchecked((uint)i))) {
+                        Console.WriteLine(i);
+                    }
+                }
+                Console.WriteLine(@"...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var sdafas = UltimateOrb.Ex0002.id.Typed<Func<string, string>>.Value;
+                var sdfddsa = sdafas.Invoke("232");
+                Printf(Console.Out, sdfddsa);
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var sadfasdfas = typeof(Func<Func<int, long>, Func<uint, Func<object, Func<ulong, short>, ushort>>>);
+                var sdfsa = TypeArithmetic.GetUncurried(sadfasdfas);
+                Printf(Console.Out, sdfsa.FullName);
+                var sdfddsa = TypeArithmetic.GetCurryingFamily(sadfasdfas);
+                Printf(Console.Out, sdfddsa.Select(x => x.FullName));
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
+                var asdfa = typeof(Func<Func<int, long>, Func<int, string, Func<int, short>>, object>);
+                var sdfas = asdfa.GetGenericTypeDefinition();
+                var sdfas2 = asdfa.GetGenericArguments();
+                var sdfas3 = asdfa.GenericTypeArguments;
+                Console.WriteLine(sdfas.FullName);
+                Console.WriteLine(sdfas2.Length);
+                Console.WriteLine(sdfas3.Length);
+                Console.ReadKey(true);
+                return 0;
+            }
             {
 
                 var asdfa = new UltimateOrb.Ex0005.BclArray();
