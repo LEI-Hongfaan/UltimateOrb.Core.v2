@@ -18,7 +18,7 @@ namespace UltimateOrb.Collections.Generic {
             get;
         }
 
-        new TKeyCollection Values {
+        new TValueCollection Values {
 
             get;
         }

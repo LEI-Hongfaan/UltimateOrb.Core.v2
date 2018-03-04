@@ -6,7 +6,7 @@ namespace UltimateOrb.Collections.Generic {
 
     public partial interface IReadOnlyDictionary<TKey, TValue, TEnumerator, TKeyEnumerator, TKeyCollection, TValueEnumerator, TValueCollection>
         : System.Collections.Generic.IReadOnlyDictionary<TKey, TValue>
-        , IReadOnlyDictionary<KeyValuePair<TKey, TValue>, TEnumerator>
+        , IReadOnlyCollection<KeyValuePair<TKey, TValue>, TEnumerator>
         where TEnumerator : IEnumerator<KeyValuePair<TKey, TValue>>
         where TKeyEnumerator : IEnumerator<TKey>
         where TKeyCollection : IReadOnlyCollection<TKey, TKeyEnumerator>
@@ -18,7 +18,7 @@ namespace UltimateOrb.Collections.Generic {
             get;
         }
 
-        new TKeyCollection Values {
+        new TValueCollection Values {
 
             get;
         }

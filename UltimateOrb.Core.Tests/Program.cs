@@ -2305,7 +2305,38 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
+
+        internal partial struct dasfsdf : IEqualityComparer<Int64> {
+
+            public bool Equals(Int64 x, Int64 y) {
+                return x == y;
+            }
+
+            public int GetHashCode(Int64 obj) {
+                return unchecked((int)obj) ^ unchecked((int)(obj >> 32));
+            }
+        }
+
         private static int Main(string[] args) {
+            {
+                var sdafs = new UltimateOrb.Plain.ValueTypes.Dictionary<long, string, dasfsdf>(0);
+                sdafs.Add(3, $@"A{3}");
+                sdafs.Add(4, $@"A{4}");
+                sdafs.Add(5, $@"A{5}");
+                sdafs.Add(6, $@"A{6}");
+                sdafs.Add(7, $@"A{7}");
+                sdafs.Add(8, $@"A{8}");
+                sdafs.Remove(6);
+                sdafs.Remove(6);
+                sdafs.Remove(7);
+                sdafs.Add(11, $@"A{11}");
+                foreach (var item in sdafs) {
+                    Console.WriteLine(item.ToString());
+                }
+                Console.WriteLine(@"...");
+                Console.ReadKey(true);
+                return 0;
+            }
             if (false) {
                 var asdfa = new Stack<int>(0);
                 var sdfa = 0;

@@ -8,739 +8,65 @@ using System.Runtime.Serialization;
 using System.Security;
 
 namespace UltimateOrb.Plain.ValueTypes {
+    using UltimateOrb.Collections.Generic;
+    using static ThrowHelper_Dictionary;
 
     /// <summary>Represents a collection of keys and values.</summary>
     /// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
     [SerializableAttribute()]
-    [DebuggerDisplayAttribute("Count = {Count}")]
+    [DebuggerDisplayAttribute(@"Count = {LongCount}")]
     [ComVisibleAttribute(false)]
-    public partial struct Dictionary<TKey, TValue, TEqualityComparer> :
-        IDictionary<TKey, TValue>, IDictionary, IReadOnlyDictionary<TKey, TValue>,
+    public partial struct Dictionary<TKey, TValue, TKeyEqualityComparer> :
+        IDictionary<TKey, TValue, Dictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, Dictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
+        IDictionary,
+        IReadOnlyDictionary<TKey, TValue, Dictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, Dictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
         ISerializable, IDeserializationCallback
-        where TEqualityComparer : IEqualityComparer<TKey>, new() {
+        where TKeyEqualityComparer : IEqualityComparer<TKey>, new() {
 
-        private struct Entry {
+        public partial struct Entry {
 
-            public int hashCode;
+            public int m_HashCode;
 
-            public int next;
+            // linked list
+            public int m_Next;
 
-            public int bucket;
+            // linked list
+            public int m_First;
 
-            public int flags;
+            public int m_Flags;
 
-            public TKey key;
+            public TKey m_Key;
 
-            public TValue value;
+            public TValue m_Value;
         }
 
-        /// <summary>Enumerates the elements of a <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-        [SerializableAttribute()]
-        public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>> {
-
-            private Dictionary<TKey, TValue, TEqualityComparer> dictionary;
-
-            private int index;
-
-            private KeyValuePair<TKey, TValue> current;
-
-            /// <summary>Gets the element at the current position of the enumerator.</summary>
-            /// <returns>The element in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> at the current position of the enumerator.</returns>
-            public KeyValuePair<TKey, TValue> Current {
-
-                get {
-                    return this.current;
-                }
-            }
-
-            /// <summary>Gets the element at the current position of the enumerator.</summary>
-            /// <returns>The element in the collection at the current position of the enumerator, as an <see cref="object" />.</returns>
-            /// <exception cref="InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
-
-            object IEnumerator.Current {
-
-                get {
-                    if (this.index == 0 || this.index == this.dictionary.count + 1) {
-                        // ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_EnumOpCantHappen);
-                    }
-                    return current;
-                }
-            }
-
-            internal Enumerator(Dictionary<TKey, TValue, TEqualityComparer> dictionary) {
-                this.dictionary = dictionary;
-                this.index = 0;
-                this.current = default(KeyValuePair<TKey, TValue>);
-            }
-
-            /// <summary>Advances the enumerator to the next element of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-            /// <returns>true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
-            /// <exception cref="InvalidOperationException">The collection was modified after the enumerator was created. </exception>
-            public bool MoveNext() {
-                var entries = this.dictionary.entries;
-                var index = this.index;
-                var count = this.dictionary.count;
-                while ((uint)index < (uint)count) {
-                    ref var entry = ref entries[index];
-                    if (0 <= entry.flags) {
-                        this.current = new KeyValuePair<TKey, TValue>(entry.key, entry.value);
-                        ++index;
-                        this.index = index;
-                        return true;
-                    }
-                    ++index;
-                }
-                this.index = count + 1;
-                this.current = default; // Good for GC.
-                return false;
-            }
-
-            /// <summary>Releases all resources used by the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.Enumerator" />.</summary>
-            public void Dispose() {
-            }
-
-            /// <summary>Sets the enumerator to its initial position, which is before the first element in the collection.</summary>
-            /// <exception cref="InvalidOperationException">The collection was modified after the enumerator was created. </exception>
-            void IEnumerator.Reset() {
-                this.index = 0;
-                this.current = default;
-            }
+        public bool ContainsKey<TEqualityComparer>(TEqualityComparer comparer, TKey item) where TEqualityComparer : IEqualityComparer<TKey> {
+            throw new NotImplementedException();
         }
-
-        /// <summary>Enumerates the elements of a <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-        [SerializableAttribute()]
-        public struct Enumerator_A : IEnumerator<KeyValuePair<TKey, TValue>>, IDictionaryEnumerator {
-
-            private Dictionary<TKey, TValue, TEqualityComparer> dictionary;
-
-            private int index;
-
-            private KeyValuePair<TKey, TValue> current;
-
-            private int getEnumeratorRetType;
-
-            // DictEntry = 1;
-
-            // KeyValuePair = 2;
-
-            /// <summary>Gets the element at the current position of the enumerator.</summary>
-            /// <returns>The element in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> at the current position of the enumerator.</returns>
-
-            public KeyValuePair<TKey, TValue> Current {
-
-                get {
-                    return this.current;
-                }
-            }
-
-            /// <summary>Gets the element at the current position of the enumerator.</summary>
-            /// <returns>The element in the collection at the current position of the enumerator, as an <see cref="object" />.</returns>
-            /// <exception cref="InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
-
-            object IEnumerator.Current {
-
-                get {
-                    if (this.index == 0 || this.index == this.dictionary.count + 1) {
-                        // ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_EnumOpCantHappen);
-                    }
-                    if (this.getEnumeratorRetType == 1) {
-                        return new DictionaryEntry(this.current.Key, this.current.Value);
-                    }
-                    return new KeyValuePair<TKey, TValue>(this.current.Key, this.current.Value);
-                }
-            }
-
-            /// <summary>Gets the element at the current position of the enumerator.</summary>
-            /// <returns>The element in the dictionary at the current position of the enumerator, as a <see cref="DictionaryEntry" />.</returns>
-            /// <exception cref="InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
-
-            DictionaryEntry IDictionaryEnumerator.Entry {
-
-                get {
-                    if (this.index == 0 || this.index == this.dictionary.count + 1) {
-                        // ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_EnumOpCantHappen);
-                    }
-                    return new DictionaryEntry(this.current.Key, this.current.Value);
-                }
-            }
-
-            /// <summary>Gets the key of the element at the current position of the enumerator.</summary>
-            /// <returns>The key of the element in the dictionary at the current position of the enumerator.</returns>
-            /// <exception cref="InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
-
-            object IDictionaryEnumerator.Key {
-
-                get {
-                    if (this.index == 0 || this.index == this.dictionary.count + 1) {
-                        // ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_EnumOpCantHappen);
-                    }
-                    return this.current.Key;
-                }
-            }
-
-            /// <summary>Gets the value of the element at the current position of the enumerator.</summary>
-            /// <returns>The value of the element in the dictionary at the current position of the enumerator.</returns>
-            /// <exception cref="InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
-
-            object IDictionaryEnumerator.Value {
-
-                get {
-                    if (this.index == 0 || this.index == this.dictionary.count + 1) {
-                        // ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_EnumOpCantHappen);
-                    }
-                    return this.current.Value;
-                }
-            }
-
-            internal Enumerator_A(Dictionary<TKey, TValue, TEqualityComparer> dictionary, int getEnumeratorRetType) {
-                this.dictionary = dictionary;
-                this.index = 0;
-                this.getEnumeratorRetType = getEnumeratorRetType;
-                this.current = default;
-            }
-
-            /// <summary>Advances the enumerator to the next element of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-            /// <returns>true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
-            /// <exception cref="InvalidOperationException">The collection was modified after the enumerator was created. </exception>
-
-            public bool MoveNext() {
-                while ((uint)this.index < (uint)this.dictionary.count) {
-                    if (this.dictionary.entries[this.index].flags >= 0) {
-                        this.current = new KeyValuePair<TKey, TValue>(this.dictionary.entries[this.index].key, this.dictionary.entries[this.index].value);
-                        ++this.index;
-                        return true;
-                    }
-                    ++this.index;
-                }
-                this.index = this.dictionary.count + 1;
-                this.current = default;
-                return false;
-            }
-
-            /// <summary>Releases all resources used by the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.Enumerator" />.</summary>
-
-            public void Dispose() {
-            }
-
-            /// <summary>Sets the enumerator to its initial position, which is before the first element in the collection.</summary>
-            /// <exception cref="InvalidOperationException">The collection was modified after the enumerator was created. </exception>
-
-            void IEnumerator.Reset() {
-                this.index = 0;
-                this.current = default;
-            }
-        }
-
-        /// <summary>Represents the collection of keys in a <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />. This class cannot be inherited.</summary>
-        [SerializableAttribute()]
-        // [DebuggerTypeProxyAttribute(typeof(Mscorlib_DictionaryKeyCollectionDebugView<,>))]
-        [DebuggerDisplayAttribute("Count = {Count}")]
-
-        public sealed class KeyCollection : ICollection<TKey>, ICollection, IReadOnlyCollection<TKey> {
-
-            /// <summary>Enumerates the elements of a <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.</summary>
-            [SerializableAttribute()]
-            public struct Enumerator : IEnumerator<TKey>, IDisposable, IEnumerator {
-
-                private Dictionary<TKey, TValue, TEqualityComparer> dictionary;
-
-                private int index;
-
-                private TKey currentKey;
-
-                /// <summary>Gets the element at the current position of the enumerator.</summary>
-                /// <returns>The element in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" /> at the current position of the enumerator.</returns>
-                public TKey Current {
-
-                    get {
-                        return this.currentKey;
-                    }
-                }
-
-                /// <summary>Gets the element at the current position of the enumerator.</summary>
-                /// <returns>The element in the collection at the current position of the enumerator.</returns>
-                /// <exception cref="InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
-                object IEnumerator.Current {
-
-                    get {
-                        if (this.index == 0 || this.index == this.dictionary.count + 1) {
-                            // ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_EnumOpCantHappen);
-                        }
-                        return this.currentKey;
-                    }
-                }
-
-                internal Enumerator(Dictionary<TKey, TValue, TEqualityComparer> dictionary) {
-                    this.dictionary = dictionary;
-                    this.index = 0;
-                    this.currentKey = default;
-                }
-
-                /// <summary>Releases all resources used by the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection.Enumerator" />.</summary>
-
-                public void Dispose() {
-                }
-
-                /// <summary>Advances the enumerator to the next element of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.</summary>
-                /// <returns>true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
-                /// <exception cref="InvalidOperationException">The collection was modified after the enumerator was created. </exception>
-
-                public bool MoveNext() {
-                    while ((uint)this.index < (uint)this.dictionary.count) {
-                        if (this.dictionary.entries[this.index].flags >= 0) {
-                            this.currentKey = this.dictionary.entries[this.index].key;
-                            this.index++;
-                            return true;
-                        }
-                        this.index++;
-                    }
-                    this.index = this.dictionary.count + 1;
-                    this.currentKey = default(TKey);
-                    return false;
-                }
-
-                /// <summary>Sets the enumerator to its initial position, which is before the first element in the collection.</summary>
-                /// <exception cref="InvalidOperationException">The collection was modified after the enumerator was created. </exception>
-
-                void IEnumerator.Reset() {
-                    this.index = 0;
-                    this.currentKey = default;
-                }
-            }
-
-            private Dictionary<TKey, TValue, TEqualityComparer> dictionary;
-
-            /// <summary>Gets the number of elements contained in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.</summary>
-            /// <returns>The number of elements contained in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.
-            /// Retrieving the value of this property is an O(1) operation.</returns>
-
-            public int Count {
-
-                get {
-                    return this.dictionary.Count;
-                }
-            }
-
-
-            bool ICollection<TKey>.IsReadOnly {
-
-                get {
-                    return true;
-                }
-            }
-
-            /// <summary>Gets a value indicating whether access to the <see cref="ICollection" /> is synchronized (thread safe).</summary>
-            /// <returns>true if access to the <see cref="ICollection" /> is synchronized (thread safe); otherwise, false.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />, this property always returns false.</returns>
-
-            bool ICollection.IsSynchronized {
-
-                get {
-                    return false;
-                }
-            }
-
-            /// <summary>Gets an object that can be used to synchronize access to the <see cref="ICollection" />.</summary>
-            /// <returns>An object that can be used to synchronize access to the <see cref="ICollection" />.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />, this property always returns the current instance.</returns>
-
-            object ICollection.SyncRoot {
-
-                get {
-                    return ((ICollection)this.dictionary).SyncRoot;
-                }
-            }
-
-            /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" /> class that reflects the keys in the specified <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-            /// <param name="dictionary">The <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> whose keys are reflected in the new <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.</param>
-            /// <exception cref="ArgumentNullException">
-            ///   <paramref name="dictionary" /> is null.</exception>
-
-            public KeyCollection(Dictionary<TKey, TValue, TEqualityComparer> dictionary) {
-                this.dictionary = dictionary;
-            }
-
-            /// <summary>Returns an enumerator that iterates through the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.</summary>
-            /// <returns>A <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection.Enumerator" /> for the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.</returns>
-
-            public Enumerator GetEnumerator() {
-                return new Enumerator(this.dictionary);
-            }
-
-            /// <summary>Copies the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" /> elements to an existing one-dimensional <see cref="Array" />, starting at the specified array index.</summary>
-            /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />. The <see cref="Array" /> must have zero-based indexing.</param>
-            /// <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">
-            ///   <paramref name="array" /> is null. </exception>
-            /// <exception cref="ArgumentOutOfRangeException">
-            ///   <paramref name="index" /> is less than zero.</exception>
-            /// <exception cref="ArgumentException">The number of elements in the source <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.</exception>
-
-            public void CopyTo(TKey[] array, int index) {
-                if (array == null) {
-                    // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
-                }
-                if (index < 0 || index > array.Length) {
-                    // ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index, ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
-                }
-                if (array.Length - index < this.dictionary.Count) {
-                    // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
-                }
-                int count = this.dictionary.count;
-                Entry[] entries = this.dictionary.entries;
-                for (int i = 0; i < count; i++) {
-                    if (entries[i].flags >= 0) {
-                        array[index++] = entries[i].key;
-                    }
-                }
-            }
-
-
-            void ICollection<TKey>.Add(TKey item) {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_KeyCollectionSet);
-            }
-
-
-            void ICollection<TKey>.Clear() {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_KeyCollectionSet);
-            }
-
-
-            bool ICollection<TKey>.Contains(TKey item) {
-                return this.dictionary.ContainsKey(item);
-            }
-
-
-            bool ICollection<TKey>.Remove(TKey item) {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_KeyCollectionSet);
-                return false;
-            }
-
-
-            IEnumerator<TKey> IEnumerable<TKey>.GetEnumerator() {
-                return (IEnumerator<TKey>)(object)new Enumerator(this.dictionary);
-            }
-
-            /// <summary>Returns an enumerator that iterates through a collection.</summary>
-            /// <returns>An <see cref="IEnumerator" /> that can be used to iterate through the collection.</returns>
-
-            IEnumerator IEnumerable.GetEnumerator() {
-                return (IEnumerator)(object)new Enumerator(this.dictionary);
-            }
-
-            /// <summary>Copies the elements of the <see cref="ICollection" /> to an <see cref="Array" />, starting at a particular <see cref="Array" /> index.</summary>
-            /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="ICollection" />. The <see cref="Array" /> must have zero-based indexing.</param>
-            /// <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">
-            ///   <paramref name="array" /> is null.</exception>
-            /// <exception cref="ArgumentOutOfRangeException">
-            ///   <paramref name="index" /> is less than zero.</exception>
-            /// <exception cref="ArgumentException">
-            ///   <paramref name="array" /> is multidimensional.-or-<paramref name="array" /> does not have zero-based indexing.-or-The number of elements in the source <see cref="ICollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.-or-The type of the source <see cref="ICollection" /> cannot be cast automatically to the type of the destination <paramref name="array" />.</exception>
-
-            void ICollection.CopyTo(Array array, int index) {
-                if (array == null) {
-                    // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
-                }
-                if (array.Rank != 1) {
-                    // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_RankMultiDimNotSupported);
-                }
-                if (array.GetLowerBound(0) != 0) {
-                    // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_NonZeroLowerBound);
-                }
-                if (index < 0 || index > array.Length) {
-                    // ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index, ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
-                }
-                if (array.Length - index < this.dictionary.Count) {
-                    // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
-                }
-                TKey[] array2 = array as TKey[];
-                if (array2 != null) {
-                    this.CopyTo(array2, index);
-                } else {
-                    object[] array3 = array as object[];
-                    if (array3 == null) {
-                        // ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArrayType);
-                    }
-                    int count = this.dictionary.count;
-                    Entry[] entries = this.dictionary.entries;
-                    try {
-                        for (int i = 0; i < count; i++) {
-                            if (entries[i].flags >= 0) {
-                                array3[index++] = entries[i].key;
-                            }
-                        }
-                    } catch (ArrayTypeMismatchException) {
-                        // ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArrayType);
-                    }
-                }
-            }
-        }
-
-        /// <summary>Represents the collection of values in a <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />. This class cannot be inherited. </summary>
-        [SerializableAttribute()]
-        // [DebuggerTypeProxyAttribute(typeof(Mscorlib_DictionaryValueCollectionDebugView<,>))]
-        [DebuggerDisplayAttribute("Count = {Count}")]
-
-        public partial struct ValueCollection : ICollection<TValue>, ICollection, IReadOnlyCollection<TValue> {
-
-            /// <summary>Enumerates the elements of a <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
-            [SerializableAttribute()]
-            public struct Enumerator : IEnumerator<TValue>, IDisposable, IEnumerator {
-
-                private readonly Dictionary<TKey, TValue, TEqualityComparer> dictionary;
-
-                private int index;
-
-                private TValue currentValue;
-
-                /// <summary>Gets the element at the current position of the enumerator.</summary>
-                /// <returns>The element in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> at the current position of the enumerator.</returns>
-
-                public TValue Current {
-
-                    get {
-                        return this.currentValue;
-                    }
-                }
-
-                /// <summary>Gets the element at the current position of the enumerator.</summary>
-                /// <returns>The element in the collection at the current position of the enumerator.</returns>
-                /// <exception cref="InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
-
-                object IEnumerator.Current {
-
-                    get {
-                        if (this.index == 0 || this.index == this.dictionary.count + 1) {
-                            // ThrowHelper.ThrowInvalidOperationException(ExceptionResource.InvalidOperation_EnumOpCantHappen);
-                        }
-                        return this.currentValue;
-                    }
-                }
-
-                internal Enumerator(Dictionary<TKey, TValue, TEqualityComparer> dictionary) {
-                    this.dictionary = dictionary;
-                    this.index = 0;
-                    this.currentValue = default;
-                }
-
-                /// <summary>Releases all resources used by the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection.Enumerator" />.</summary>
-
-                public void Dispose() {
-                }
-
-                /// <summary>Advances the enumerator to the next element of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
-                /// <returns>true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
-                /// <exception cref="InvalidOperationException">The collection was modified after the enumerator was created. </exception>
-
-                public bool MoveNext() {
-                    while ((uint)this.index < (uint)this.dictionary.count) {
-                        if (this.dictionary.entries[this.index].flags >= 0) {
-                            this.currentValue = this.dictionary.entries[this.index].value;
-                            this.index++;
-                            return true;
-                        }
-                        this.index++;
-                    }
-                    this.index = this.dictionary.count + 1;
-                    this.currentValue = default(TValue);
-                    return false;
-                }
-
-                /// <summary>Sets the enumerator to its initial position, which is before the first element in the collection.</summary>
-                /// <exception cref="InvalidOperationException">The collection was modified after the enumerator was created. </exception>
-
-                void IEnumerator.Reset() {
-                    this.index = 0;
-                    this.currentValue = default(TValue);
-                }
-            }
-
-            private Dictionary<TKey, TValue, TEqualityComparer> dictionary;
-
-            /// <summary>Gets the number of elements contained in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
-            /// <returns>The number of elements contained in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</returns>
-
-            public int Count {
-
-                get {
-                    return this.dictionary.Count;
-                }
-            }
-
-
-            bool ICollection<TValue>.IsReadOnly {
-
-                get {
-                    return true;
-                }
-            }
-
-            /// <summary>Gets a value indicating whether access to the <see cref="ICollection" /> is synchronized (thread safe).</summary>
-            /// <returns>true if access to the <see cref="ICollection" /> is synchronized (thread safe); otherwise, false.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />, this property always returns false.</returns>
-
-            bool ICollection.IsSynchronized {
-
-                get {
-                    return false;
-                }
-            }
-
-            /// <summary>Gets an object that can be used to synchronize access to the <see cref="ICollection" />.</summary>
-            /// <returns>An object that can be used to synchronize access to the <see cref="ICollection" />.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />, this property always returns the current instance.</returns>
-
-            object ICollection.SyncRoot {
-
-                get {
-                    return ((ICollection)this.dictionary).SyncRoot;
-                }
-            }
-
-            /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> class that reflects the values in the specified <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-            /// <param name="dictionary">The <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> whose values are reflected in the new <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</param>
-            /// <exception cref="ArgumentNullException">
-            ///   <paramref name="dictionary" /> is null.</exception>
-
-            public ValueCollection(Dictionary<TKey, TValue, TEqualityComparer> dictionary) {
-                this.dictionary = dictionary;
-            }
-
-            /// <summary>Returns an enumerator that iterates through the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
-            /// <returns>A <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection.Enumerator" /> for the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</returns>
-
-            public Enumerator GetEnumerator() {
-                return new Enumerator(this.dictionary);
-            }
-
-            /// <summary>Copies the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> elements to an existing one-dimensional <see cref="Array" />, starting at the specified array index.</summary>
-            /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />. The <see cref="Array" /> must have zero-based indexing.</param>
-            /// <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">
-            ///   <paramref name="array" /> is null.</exception>
-            /// <exception cref="ArgumentOutOfRangeException">
-            ///   <paramref name="index" /> is less than zero.</exception>
-            /// <exception cref="ArgumentException">The number of elements in the source <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.</exception>
-
-            public void CopyTo(TValue[] array, int index) {
-                if (array == null) {
-                    // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
-                }
-                if (index < 0 || index > array.Length) {
-                    // ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index, ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
-                }
-                if (array.Length - index < this.dictionary.Count) {
-                    // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
-                }
-                int count = this.dictionary.count;
-                Entry[] entries = this.dictionary.entries;
-                for (int i = 0; i < count; i++) {
-                    if (entries[i].flags >= 0) {
-                        array[index++] = entries[i].value;
-                    }
-                }
-            }
-
-
-            void ICollection<TValue>.Add(TValue item) {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_ValueCollectionSet);
-            }
-
-
-            bool ICollection<TValue>.Remove(TValue item) {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_ValueCollectionSet);
-                return false;
-            }
-
-
-            void ICollection<TValue>.Clear() {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_ValueCollectionSet);
-            }
-
-
-            bool ICollection<TValue>.Contains(TValue item) {
-                return this.dictionary.ContainsValue(item);
-            }
-
-
-            IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() {
-                return (IEnumerator<TValue>)(object)new Enumerator(this.dictionary);
-            }
-
-            /// <summary>Returns an enumerator that iterates through a collection.</summary>
-            /// <returns>An <see cref="IEnumerator" /> that can be used to iterate through the collection.</returns>
-
-            IEnumerator IEnumerable.GetEnumerator() {
-                return (IEnumerator)(object)new Enumerator(this.dictionary);
-            }
-
-            /// <summary>Copies the elements of the <see cref="ICollection" /> to an <see cref="Array" />, starting at a particular <see cref="Array" /> index.</summary>
-            /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="ICollection" />. The <see cref="Array" /> must have zero-based indexing.</param>
-            /// <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">
-            ///   <paramref name="array" /> is null.</exception>
-            /// <exception cref="ArgumentOutOfRangeException">
-            ///   <paramref name="index" /> is less than zero.</exception>
-            /// <exception cref="ArgumentException">
-            ///   <paramref name="array" /> is multidimensional.-or-<paramref name="array" /> does not have zero-based indexing.-or-The number of elements in the source <see cref="ICollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.-or-The type of the source <see cref="ICollection" /> cannot be cast automatically to the type of the destination <paramref name="array" />.</exception>
-
-            void ICollection.CopyTo(Array array, int index) {
-                if (array == null) {
-                    // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
-                }
-                if (array.Rank != 1) {
-                    // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_RankMultiDimNotSupported);
-                }
-                if (array.GetLowerBound(0) != 0) {
-                    // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_NonZeroLowerBound);
-                }
-                if (index < 0 || index > array.Length) {
-                    // ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index, ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
-                }
-                if (array.Length - index < this.dictionary.Count) {
-                    // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
-                }
-                TValue[] array2 = array as TValue[];
-                if (array2 != null) {
-                    this.CopyTo(array2, index);
-                } else {
-                    object[] array3 = array as object[];
-                    if (array3 == null) {
-                        // ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArrayType);
-                    }
-                    int count = this.dictionary.count;
-                    Entry[] entries = this.dictionary.entries;
-                    try {
-                        for (int i = 0; i < count; i++) {
-                            if (entries[i].flags >= 0) {
-                                array3[index++] = entries[i].value;
-                            }
-                        }
-                    } catch (ArrayTypeMismatchException) {
-                        // ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArrayType);
-                    }
-                }
-            }
-        }
-
-        private Entry[] entries;
-
-        private int count;
-
-        private int freeList;
-
-        private int freeCount;
 
         private const string HashSizeName = "HashSize";
 
         private const string KeyValuePairsName = "KeyValuePairs";
 
-        /// <summary>Gets the <see cref="IEqualityComparer`1" /> that is used to determine equality of keys for the dictionary. </summary>
-        /// <returns>The <see cref="IEqualityComparer`1" /> generic interface implementation that is used to determine equality of keys for the current <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> and to provide hash values for the keys.</returns>
+        private Entry[] m_EntryBuffer;
 
-        public TEqualityComparer Comparer {
+        // linked list
+        private int m_FreeEntryFirst;
+
+        private int m_Flags;
+
+        private int m_EntryCount;
+
+        private int m_FreeEntryCount;
+
+        /// <summary>Gets the <see cref="IEqualityComparer{TKey}" /> that is used to determine equality of keys for the dictionary. </summary>
+        /// <returns>The <see cref="IEqualityComparer{TKey}" /> generic interface implementation that is used to determine equality of keys for the current <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> and to provide hash values for the keys.</returns>
+        public TKeyEqualityComparer Comparer {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                return DefaultConstructor.Invoke<TEqualityComparer>();
+                return DefaultConstructor.Invoke<TKeyEqualityComparer>();
             }
         }
 
@@ -750,7 +76,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get {
-                return unchecked(this.count - this.freeCount);
+                return unchecked(this.m_EntryCount - this.m_FreeEntryCount);
             }
         }
 
@@ -812,13 +138,12 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
         /// <exception cref="KeyNotFoundException">The property is retrieved and <paramref name="key" /> does not exist in the collection.</exception>
-
         public TValue this[TKey key] {
 
             get {
                 ref var entry = ref this.FindEntry(key, out var found);
                 if (found) {
-                    return entry.value;
+                    return entry.m_Value;
                 }
                 // ThrowHelper.ThrowKeyNotFoundException();
                 return default;
@@ -833,9 +158,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly {
 
-            get {
-                return false;
-            }
+            get => false;
         }
 
         /// <summary>Gets a value indicating whether access to the <see cref="ICollection" /> is synchronized (thread safe).</summary>
@@ -854,14 +177,12 @@ namespace UltimateOrb.Plain.ValueTypes {
         object ICollection.SyncRoot {
 
             get {
-                // TODO: ???
-                return this;
+                throw new NotSupportedException();
             }
         }
 
         /// <summary>Gets a value indicating whether the <see cref="IDictionary" /> has a fixed size.</summary>
         /// <returns>true if the <see cref="IDictionary" /> has a fixed size; otherwise, false.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />, this property always returns false.</returns>
-
         bool IDictionary.IsFixedSize {
 
             get {
@@ -898,6 +219,15 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
+        ValueCollection IDictionary<TKey, TValue, Enumerator, KeyCollection.Enumerator, KeyCollection, ValueCollection.Enumerator, ValueCollection>.Values => throw new NotImplementedException();
+
+        public long LongCount {
+
+            get => this.Count;
+        }
+
+        ValueCollection IReadOnlyDictionary<TKey, TValue, Enumerator, KeyCollection.Enumerator, KeyCollection, ValueCollection.Enumerator, ValueCollection>.Values => throw new NotImplementedException();
+
         /// <summary>Gets or sets the value with the specified key.</summary>
         /// <returns>The value associated with the specified key, or null if <paramref name="key" /> is not in the dictionary or <paramref name="key" /> is of a type that is not assignable to the key type <paramref name="TKey" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</returns>
         /// <param name="key">The key of the value to get.</param>
@@ -910,16 +240,13 @@ namespace UltimateOrb.Plain.ValueTypes {
                 if (key is TKey key0) {
                     ref var num = ref this.FindEntry(key0, out var found);
                     if (found) {
-                        return num.value;
+                        return num.m_Value;
                     }
                 }
                 return null;
             }
 
             set {
-                // if (key == null) {
-                //     // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key);
-                // }
                 // ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
                 try {
                     TKey key0 = (TKey)key;
@@ -934,15 +261,15 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the default initial capacity, and uses the specified <see cref="IEqualityComparer`1" />.</summary>
-        /// <param name="comparer">The <see cref="IEqualityComparer`1" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
-        public static Dictionary<TKey, TValue, TEqualityComparer> Create() {
-            return new Dictionary<TKey, TValue, TEqualityComparer>(0);
+        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the default initial capacity, and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
+        /// <param name="comparer">The <see cref="IEqualityComparer{TKey}" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
+        public static Dictionary<TKey, TValue, TKeyEqualityComparer> Create() {
+            return new Dictionary<TKey, TValue, TKeyEqualityComparer>(0);
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the specified initial capacity, and uses the specified <see cref="IEqualityComparer`1" />.</summary>
+        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the specified initial capacity, and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
         /// <param name="minCapacity">The initial number of elements that the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> can contain.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer`1" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{TKey}" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         ///   <paramref name="minCapacity" /> is less than 0.</exception>
         public Dictionary(int minCapacity) {
@@ -952,16 +279,16 @@ namespace UltimateOrb.Plain.ValueTypes {
                     this.Initialize(minCapacity);
                     return;
                 }
-                this.entries = Array_Empty<Entry>.Value;
+                this.m_EntryBuffer = Array_Empty<Entry>.Value;
                 return;
             }
             // ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.capacity);
             this = default;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that contains elements copied from the specified <see cref="IDictionary{TKey,TValue,TEqualityComparer}" /> and uses the specified <see cref="IEqualityComparer`1" />.</summary>
+        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that contains elements copied from the specified <see cref="IDictionary{TKey,TValue,TEqualityComparer}" /> and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
         /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue,TEqualityComparer}" /> whose elements are copied to the new <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer`1" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{TKey}" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="dictionary" /> is null.</exception>
         /// <exception cref="ArgumentException">
@@ -983,7 +310,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             // Create a new object as a key to the SerializationInfo.
             var key_SerializationInfo = new Entry[0];
             this = default;
-            this.entries = key_SerializationInfo;
+            this.m_EntryBuffer = key_SerializationInfo;
             HashHelper.SerializationInfoTable.Add(key_SerializationInfo, info);
         }
 
@@ -1003,41 +330,41 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> keyValuePair) {
             ref var entry = ref this.FindEntry(keyValuePair.Key, out var found);
-            if (found && EqualityComparer<TValue>.Default.Equals(entry.value, keyValuePair.Value)) {
+            if (found && EqualityComparer<TValue>.Default.Equals(entry.m_Value, keyValuePair.Value)) {
                 return true;
             }
             return false;
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> keyValuePair) {
-            var entries = this.entries;
+            var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
-                var comparer = DefaultConstructor.Invoke<TEqualityComparer>();
+                var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
                 var key = keyValuePair.Key;
                 var hashCode = comparer.GetHashCode(key);
                 var index_prev = unchecked((int)((uint)hashCode % (uint)length));
                 var index_tmp = -1;
                 var value = keyValuePair.Value;
                 var valueComparer = EqualityComparer<TValue>.Default;
-                for (var index = entries[index_prev].bucket; 0 <= index;) {
+                for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.hashCode == hashCode && comparer.Equals(entry.key, key) && (null == value ? null == entry.value : valueComparer.Equals(entry.value, value))) {
+                    if (entry.m_HashCode == hashCode && comparer.Equals(entry.m_Key, key) && (null == value ? null == entry.m_Value : valueComparer.Equals(entry.m_Value, value))) {
                         if (index_tmp < 0) {
-                            entries[index_prev].bucket = entry.next;
+                            entries[index_prev].m_First = entry.m_Next;
                         } else {
-                            entries[index_tmp].next = entry.next;
+                            entries[index_tmp].m_Next = entry.m_Next;
                         }
-                        entry.flags |= int.MinValue; // This entry is not used. 
-                        entry.next = this.freeList;
-                        entry.key = default; // Good for GC.
-                        entry.value = default; // Good for GC.
-                        this.freeList = index;
-                        ++this.freeCount;
+                        entry.m_Flags |= int.MinValue; // This entry is not used. 
+                        entry.m_Next = this.m_FreeEntryFirst;
+                        entry.m_Key = default; // Good for GC.
+                        entry.m_Value = default; // Good for GC.
+                        this.m_FreeEntryFirst = index;
+                        ++this.m_FreeEntryCount;
                         return true;
                     }
                     index_tmp = index;
-                    index = entry.next;
+                    index = entry.m_Next;
                 }
                 goto L_NotFound;
             }
@@ -1050,18 +377,18 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         /// <summary>Removes all keys and values from the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
         public void Clear() {
-            var entries = this.entries;
+            var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check
             if (length > 0) {
-                var count = this.count;
+                var count = this.m_EntryCount;
                 if (count > 0) {
                     Array.Clear(entries, 0, count);
                     for (var i = 0; length > i; ++i) {
-                        entries[i].bucket = -1;
+                        entries[i].m_First = -1;
                     }
-                    this.freeList = -1;
-                    this.count = 0;
-                    this.freeCount = 0;
+                    this.m_FreeEntryFirst = -1;
+                    this.m_EntryCount = 0;
+                    this.m_FreeEntryCount = 0;
                 }
                 return;
             }
@@ -1083,20 +410,20 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <returns>true if the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> contains an element with the specified value; otherwise, false.</returns>
         /// <param name="value">The value to locate in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />. The value can be null for reference types.</param>
         public bool ContainsValue(TValue value) {
-            var entries = this.entries;
+            var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check
             if (null != value) {
                 var valueComparer = EqualityComparer<TValue>.Default;
-                for (var i = 0; this.count > i; ++i) {
+                for (var i = 0; this.m_EntryCount > i; ++i) {
                     ref var entry = ref entries[i];
-                    if (entry.flags >= 0 && valueComparer.Equals(entry.value, value)) {
+                    if (entry.m_Flags >= 0 && valueComparer.Equals(entry.m_Value, value)) {
                         return true;
                     }
                 }
             } else {
-                for (var i = 0; this.count > i; ++i) {
+                for (var i = 0; this.m_EntryCount > i; ++i) {
                     ref var entry = ref entries[i];
-                    if (entry.flags >= 0 && entry.value == null) {
+                    if (entry.m_Flags >= 0 && entry.m_Value == null) {
                         return true;
                     }
                 }
@@ -1106,19 +433,19 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         private void CopyTo(KeyValuePair<TKey, TValue>[] array, int index) {
             if (array == null) {
-                // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+                ThrowArgumentNullException_array();
             }
             if (index < 0 || index > array.Length) {
-                // ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index, ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
+                ThrowArgumentOutOfRangeException_index_NeedNonNegNum();
             }
             if (array.Length - index < this.Count) {
-                // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
+                ThrowArgumentException_ArrayPlusOffTooSmall();
             }
-            int num = this.count;
-            Entry[] array2 = this.entries;
+            int num = this.m_EntryCount;
+            Entry[] array2 = this.m_EntryBuffer;
             for (int i = 0; i < num; i++) {
-                if (array2[i].flags >= 0) {
-                    array[index++] = new KeyValuePair<TKey, TValue>(array2[i].key, array2[i].value);
+                if (array2[i].m_Flags >= 0) {
+                    array[index++] = new KeyValuePair<TKey, TValue>(array2[i].m_Key, array2[i].m_Value);
                 }
             }
         }
@@ -1140,7 +467,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         ///   <paramref name="info" /> is null.</exception>
         [SecurityCriticalAttribute()]
         public void GetObjectData(SerializationInfo info, StreamingContext context) {
-            var entries = this.entries;
+            var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check
             if (info == null) {
                 // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.info);
@@ -1161,19 +488,19 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         private ref Entry FindEntry(TKey key, out bool found) {
-            var entries = this.entries;
+            var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
-                var comparer = DefaultConstructor.Invoke<TEqualityComparer>();
+                var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
                 var hashCode = comparer.GetHashCode(key);
                 var index_prev = unchecked((int)((uint)hashCode % (uint)length));
-                for (var index = entries[index_prev].bucket; 0 <= index;) {
+                for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.hashCode == hashCode && comparer.Equals(entry.key, key)) {
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
                         found = true;
                         return ref entry;
                     }
-                    index = entry.next;
+                    index = entry.m_Next;
                 }
                 goto L_NotFound;
             }
@@ -1186,18 +513,18 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         private int FindEntry(TKey key) {
-            var entries = this.entries;
+            var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
-                var comparer = DefaultConstructor.Invoke<TEqualityComparer>();
+                var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
                 var hashCode = comparer.GetHashCode(key);
                 var index_prev = unchecked((int)((uint)hashCode % (uint)length));
-                for (var index = entries[index_prev].bucket; 0 <= index;) {
+                for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.hashCode == hashCode && comparer.Equals(entry.key, key)) {
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
                         return index;
                     }
-                    index = entry.next;
+                    index = entry.m_Next;
                 }
                 goto L_NotFound;
             }
@@ -1212,10 +539,10 @@ namespace UltimateOrb.Plain.ValueTypes {
             Debug.Assert(UltimateOrb.Mathematics.NumberTheory.IsPrimeModule.IsPrime(capacity));
             var entries = new Entry[capacity];
             for (var i = 0; entries.Length > i; ++i) {
-                entries[i].bucket = -1;
+                entries[i].m_First = -1;
             }
-            this.entries = entries;
-            this.freeList = -1;
+            this.m_EntryBuffer = entries;
+            this.m_FreeEntryFirst = -1;
             return entries;
         }
 
@@ -1225,7 +552,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         private void Insert(TKey key, TValue value, bool add) {
-            var entries = this.entries;
+            var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
                 goto L_0;
@@ -1236,31 +563,31 @@ namespace UltimateOrb.Plain.ValueTypes {
             length = 3;
             entries = this.Initialize0(length);
             L_0:
-            var comparer = DefaultConstructor.Invoke<TEqualityComparer>();
+            var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
             var hashCode = comparer.GetHashCode(key);
             var index_prev = unchecked((int)((uint)hashCode % (uint)length));
             var collision_count = 0;
-            for (var index = entries[index_prev].bucket; 0 <= index;) {
+            for (var index = entries[index_prev].m_First; 0 <= index;) {
                 ref var entry = ref entries[index];
-                if (entry.hashCode == hashCode && comparer.Equals(entry.key, key)) {
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
                     if (add) {
                         // ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_AddingDuplicate);
                     }
-                    entry.value = value;
+                    entry.m_Value = value;
                     return;
                 }
                 ++collision_count;
-                index = entry.next;
+                index = entry.m_Next;
             }
             var index_free = 0;
-            if (this.freeCount > 0) {
-                index_free = this.freeList;
-                this.freeList = entries[index_free].next;
+            if (this.m_FreeEntryCount > 0) {
+                index_free = this.m_FreeEntryFirst;
+                this.m_FreeEntryFirst = entries[index_free].m_Next;
                 unchecked {
-                    --this.freeCount;
+                    --this.m_FreeEntryCount;
                 }
             } else {
-                var count = this.count;
+                var count = this.m_EntryCount;
                 if (count == length) {
                     entries = this.Resize();
                     length = entries.Length;
@@ -1268,16 +595,16 @@ namespace UltimateOrb.Plain.ValueTypes {
                 }
                 index_free = count;
                 ++count;
-                this.count = count;
+                this.m_EntryCount = count;
             }
             {
                 ref var entry = ref entries[index_free];
-                ref var entryb = ref entries[index_prev].bucket;
-                entry.hashCode = hashCode;
-                entry.flags &= ~int.MinValue; // This entry is used.
-                entry.next = entryb;
-                entry.key = key;
-                entry.value = value;
+                ref var entryb = ref entries[index_prev].m_First;
+                entry.m_HashCode = hashCode;
+                entry.m_Flags &= ~int.MinValue; // This entry is used.
+                entry.m_Next = entryb;
+                entry.m_Key = key;
+                entry.m_Value = value;
                 entryb = index_free;
             }
             if (collision_count > 100) {
@@ -1290,7 +617,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <exception cref="SerializationException">The <see cref="SerializationInfo" /> object associated with the current <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> instance is invalid.</exception>
         public void OnDeserialization(object sender) {
             var serializationInfo = (SerializationInfo)null;
-            var key_SerializationInfo = this.entries;
+            var key_SerializationInfo = this.m_EntryBuffer;
             var t = HashHelper.SerializationInfoTable;
             t.TryGetValue((object)key_SerializationInfo, out serializationInfo);
             if (serializationInfo != null) {
@@ -1299,9 +626,9 @@ namespace UltimateOrb.Plain.ValueTypes {
                 if (capacity > 0) {
                     entries = new Entry[capacity];
                     for (var i = 0; entries.Length > i; ++i) {
-                        entries[i].bucket = -1;
+                        entries[i].m_First = -1;
                     }
-                    this.freeList = -1;
+                    this.m_FreeEntryFirst = -1;
                     var array = (KeyValuePair<TKey, TValue>[])serializationInfo.GetValue(KeyValuePairsName, typeof(KeyValuePair<TKey, TValue>[]));
                     if (array == null) {
                         // ThrowHelper.ThrowSerializationException(ExceptionResource.Serialization_MissingKeys);
@@ -1314,42 +641,42 @@ namespace UltimateOrb.Plain.ValueTypes {
                     entries = Array_Empty<Entry>.Value;
                 }
                 t.Remove(key_SerializationInfo);
-                this.entries = entries;
+                this.m_EntryBuffer = entries;
             }
         }
 
         private Entry[] Resize() {
-            var capacity_min = 2 * this.count;
+            var capacity_min = 2 * this.m_EntryCount;
             return this.Resize(HashHelper.GetOddPrimeGreaterThanOrEqual(capacity_min), false);
         }
 
         private Entry[] Resize(int newSize, bool forceNewHashCodes) {
             var entries = new Entry[newSize];
             for (var i = 0; entries.Length > i; ++i) {
-                entries[i].bucket = -1;
+                entries[i].m_First = -1;
             }
-            Array.Copy(this.entries, 0, entries, 0, this.count);
+            Array.Copy(this.m_EntryBuffer, 0, entries, 0, this.m_EntryCount);
             if (forceNewHashCodes) {
-                var comparer = DefaultConstructor.Invoke<TEqualityComparer>();
-                for (var i = 0; this.count > i; ++i) {
+                var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
+                for (var i = 0; this.m_EntryCount > i; ++i) {
                     ref var entry = ref entries[i];
-                    var hashCode = entry.hashCode;
-                    if (0 <= entry.flags) {
-                        entry.hashCode = comparer.GetHashCode(entry.key);
+                    var hashCode = entry.m_HashCode;
+                    if (0 <= entry.m_Flags) {
+                        entry.m_HashCode = comparer.GetHashCode(entry.m_Key);
                     }
                 }
             }
-            for (var i = 0; this.count > i; ++i) {
+            for (var i = 0; this.m_EntryCount > i; ++i) {
                 ref var entry = ref entries[i];
-                var hashCode = entry.hashCode;
+                var hashCode = entry.m_HashCode;
                 if (hashCode >= 0) {
                     var index = unchecked((int)((uint)hashCode % (uint)newSize));
-                    ref var entryb = ref entries[index].bucket;
-                    entry.next = entryb;
+                    ref var entryb = ref entries[index].m_First;
+                    entry.m_Next = entryb;
                     entryb = i;
                 }
             }
-            this.entries = entries;
+            this.m_EntryBuffer = entries;
             return entries;
         }
 
@@ -1359,31 +686,31 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
         public bool Remove(TKey key) {
-            var entries = this.entries;
+            var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
-                var comparer = DefaultConstructor.Invoke<TEqualityComparer>();
+                var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
                 var hashCode = comparer.GetHashCode(key);
                 var index_prev = unchecked((int)((uint)hashCode % (uint)length));
                 var index_tmp = -1;
-                for (var index = entries[index_prev].bucket; 0 <= index;) {
+                for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.hashCode == hashCode && comparer.Equals(entry.key, key)) {
+                    if (entry.m_HashCode == hashCode && comparer.Equals(entry.m_Key, key)) {
                         if (index_tmp < 0) {
-                            entries[index_prev].bucket = entry.next;
+                            entries[index_prev].m_First = entry.m_Next;
                         } else {
-                            entries[index_tmp].next = entry.next;
+                            entries[index_tmp].m_Next = entry.m_Next;
                         }
-                        entry.flags |= int.MinValue; // This entry is not used. 
-                        entry.next = this.freeList;
-                        entry.key = default; // Good for GC.
-                        entry.value = default; // Good for GC.
-                        this.freeList = index;
-                        ++this.freeCount;
+                        entry.m_Flags |= int.MinValue; // This entry is not used. 
+                        entry.m_Next = this.m_FreeEntryFirst;
+                        entry.m_Key = default; // Good for GC.
+                        entry.m_Value = default; // Good for GC.
+                        this.m_FreeEntryFirst = index;
+                        ++this.m_FreeEntryCount;
                         return true;
                     }
                     index_tmp = index;
-                    index = entry.next;
+                    index = entry.m_Next;
                 }
                 goto L_NotFound;
             }
@@ -1403,7 +730,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public bool TryGetValue(TKey key, out TValue value) {
             ref var entry = ref this.FindEntry(key, out var found);
             if (found) {
-                value = entry.value;
+                value = entry.m_Value;
                 return true;
             }
             value = default;
@@ -1413,7 +740,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         internal TValue GetValueOrDefault(TKey key) {
             ref var entry = ref this.FindEntry(key, out var found);
             if (found) {
-                return entry.value;
+                return entry.m_Value;
             }
             return default;
         }
@@ -1433,40 +760,40 @@ namespace UltimateOrb.Plain.ValueTypes {
         ///   <paramref name="array" /> is multidimensional.-or-<paramref name="array" /> does not have zero-based indexing.-or-The number of elements in the source <see cref="ICollection`1" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.-or-The type of the source <see cref="ICollection`1" /> cannot be cast automatically to the type of the destination <paramref name="array" />.</exception>
         void ICollection.CopyTo(Array array, int index) {
             if (array == null) {
-                // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+                ThrowArgumentNullException_array();
             }
             if (array.Rank != 1) {
-                // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_RankMultiDimNotSupported);
+                ThrowArgumentException_RankMultiDimNotSupported();
             }
             if (array.GetLowerBound(0) != 0) {
-                // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_NonZeroLowerBound);
+                ThrowArgumentException_NonZeroLowerBound();
             }
             if (index < 0 || index > array.Length) {
-                // ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.index, ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
+                ThrowArgumentOutOfRangeException_index_NeedNonNegNum();
             }
             if (array.Length - index < this.Count) {
-                // ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
+                ThrowArgumentException_ArrayPlusOffTooSmall();
             }
             if (array is KeyValuePair<TKey, TValue>[] array2) {
                 this.CopyTo(array2, index);
             } else if (array is DictionaryEntry[] array3) {
-                var entries = this.entries;
-                var count = this.count;
+                var entries = this.m_EntryBuffer;
+                var count = this.m_EntryCount;
                 for (int i = 0; i < count; i++) {
                     ref var entry = ref entries[i];
-                    if (entry.flags >= 0) {
-                        array3[index++] = new DictionaryEntry(entry.key, entry.value);
+                    if (entry.m_Flags >= 0) {
+                        array3[index++] = new DictionaryEntry(entry.m_Key, entry.m_Value);
                     }
                 }
             } else {
                 if (array is object[] array5) {
                     try {
-                        var count = this.count;
-                        var entries = this.entries;
+                        var count = this.m_EntryCount;
+                        var entries = this.m_EntryBuffer;
                         for (int j = 0; j < count; j++) {
                             ref var entry = ref entries[j];
-                            if (entry.flags >= 0) {
-                                array5[index++] = new KeyValuePair<TKey, TValue>(entry.key, entry.value);
+                            if (entry.m_Flags >= 0) {
+                                array5[index++] = new KeyValuePair<TKey, TValue>(entry.m_Key, entry.m_Value);
                             }
                         }
                     } catch (ArrayTypeMismatchException) {
@@ -1537,9 +864,38 @@ namespace UltimateOrb.Plain.ValueTypes {
                 this.Remove(key0);
             }
         }
+
+        public TValue GetOrAdd<TFunc>(TKey key, TFunc valueFactory) where TFunc : IFunc<TKey, TValue> {
+            throw new NotImplementedException();
+        }
+
+        public TValue AddOrUpdate<TAdd, TUpdate>(TKey key, TAdd addValueFactory, TUpdate updateValueFactory)
+            where TAdd : IFunc<TKey, TValue>
+            where TUpdate : IFunc<TKey, TValue, TValue> {
+            throw new NotImplementedException();
+        }
+
+        public bool TryAdd(TKey key, TValue value) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryRemove(TKey key, out TValue value) {
+            throw new NotImplementedException();
+        }
+
+        public bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue) {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains<TEqualityComparer>(TEqualityComparer comparer, KeyValuePair<TKey, TValue> item) where TEqualityComparer : IEqualityComparer<KeyValuePair<TKey, TValue>> {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove<TEqualityComparer>(TEqualityComparer comparer, KeyValuePair<TKey, TValue> item) where TEqualityComparer : IEqualityComparer<KeyValuePair<TKey, TValue>> {
+            throw new NotImplementedException();
+        }
     }
 }
-
 
 namespace UltimateOrb.Plain.ValueTypes {
     using UltimateOrb.Mathematics.NumberTheory;
