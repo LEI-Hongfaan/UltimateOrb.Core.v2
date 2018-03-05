@@ -1,28 +1,32 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace UltimateOrb.Plain.ValueTypes {
     using static ThrowHelper_Dictionary;
 
     public partial struct Dictionary<TKey, TValue, TKeyEqualityComparer> where TKeyEqualityComparer : IEqualityComparer<TKey>, new() {
+
         public readonly partial struct KeyCollection {
+
             /// <summary>Enumerates the elements of a <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.</summary>
             [SerializableAttribute()]
             public struct Enumerator : IEnumerator<TKey> {
 
-                private readonly Entry[] m_Entries;
+                public readonly Entry[] m_Entries;
 
-                private readonly int m_EntryCount;
+                public readonly int m_EntryCount;
 
-                private int m_Index;
+                public int m_Index;
 
-                private TKey m_Current;
+                public TKey m_Current;
 
                 /// <summary>Gets the element at the current position of the enumerator.</summary>
                 /// <returns>The element in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" /> at the current position of the enumerator.</returns>
                 public TKey Current {
 
+                    [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                     get {
                         return this.m_Current;
                     }
@@ -33,6 +37,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 /// <exception cref="InvalidOperationException">The enumerator is positioned before the first element of the collection or after the last element. </exception>
                 object IEnumerator.Current {
 
+                    [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                     get {
                         var index = this.m_Index;
                         if (index > 0 && index <= this.m_EntryCount) {
@@ -44,20 +49,17 @@ namespace UltimateOrb.Plain.ValueTypes {
                     }
                 }
 
-                internal Enumerator(Dictionary<TKey, TValue, TKeyEqualityComparer> dictionary) {
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                public Enumerator(Dictionary<TKey, TValue, TKeyEqualityComparer> dictionary) {
                     this.m_Entries = dictionary.m_EntryBuffer;
                     this.m_EntryCount = dictionary.m_EntryCount;
                     this.m_Index = 0;
                     this.m_Current = default;
                 }
 
-                /// <summary>Releases all resources used by the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection.Enumerator" />.</summary>
-
-                public void Dispose() {
-                }
-
                 /// <summary>Advances the enumerator to the next element of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />.</summary>
                 /// <returns>true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() {
                     var entries = this.m_Entries;
                     var count = this.m_EntryCount;
@@ -84,7 +86,13 @@ namespace UltimateOrb.Plain.ValueTypes {
                     return false;
                 }
 
+                /// <summary>Releases all resources used by the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.Enumerator" />.</summary>
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                public void Dispose() {
+                }
+
                 /// <summary>Sets the enumerator to its initial position, which is before the first element in the collection.</summary>
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 public void Reset() {
                     this.m_Index = 0;
                     this.m_Current = default;

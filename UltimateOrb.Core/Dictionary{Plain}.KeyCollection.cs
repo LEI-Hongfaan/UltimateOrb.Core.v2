@@ -48,7 +48,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 }
             }
 
-            public long LongCount  {
+            public long LongCount {
 
                 get => this.m_Dictionary.LongCount;
             }

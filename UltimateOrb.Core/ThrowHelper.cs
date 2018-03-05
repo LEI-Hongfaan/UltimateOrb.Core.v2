@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime;
 using System.Runtime.CompilerServices;
@@ -22,8 +23,8 @@ namespace UltimateOrb.Utilities {
         [PureAttribute()]
         public static void IgnoreOutParameter<T>(out T value) {
             var t = Contract.ValueAtReturn(out value);
+            value = t;
             Contract.Ensures(t.Comma(true));
-            Contract.EndContractBlock();
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]

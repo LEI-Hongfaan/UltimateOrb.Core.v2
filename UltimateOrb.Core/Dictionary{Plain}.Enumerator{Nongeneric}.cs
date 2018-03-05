@@ -12,13 +12,13 @@ namespace UltimateOrb.Plain.ValueTypes {
         [SerializableAttribute()]
         public struct Enumerator_A : IEnumerator<KeyValuePair<TKey, TValue>>, IDictionaryEnumerator {
 
-            private readonly Entry[] m_Entries;
+            public readonly Entry[] m_Entries;
 
-            private readonly int m_Count;
+            public readonly int m_Count;
 
-            private int m_Index;
+            public int m_Index;
 
-            private KeyValuePair<TKey, TValue> m_Current;
+            public KeyValuePair<TKey, TValue> m_Current;
 
             /// <summary>Gets the element at the current position of the enumerator.</summary>
             /// <returns>The element in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> at the current position of the enumerator.</returns>
@@ -143,6 +143,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             /// <summary>Sets the enumerator to its initial position, which is before the first element in the collection.</summary>
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             void IEnumerator.Reset() {
+                this.m_Index = 0;
                 this.m_Current = default;
             }
         }

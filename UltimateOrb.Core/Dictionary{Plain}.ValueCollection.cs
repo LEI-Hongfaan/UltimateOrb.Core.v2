@@ -15,24 +15,20 @@ namespace UltimateOrb.Plain.ValueTypes {
         [DebuggerDisplayAttribute(@"Count = {LongCount}")]
         public readonly partial struct ValueCollection : ICollection<TValue, ValueCollection.Enumerator>, ICollection, IReadOnlyCollection<TValue, ValueCollection.Enumerator> {
 
-            private readonly Dictionary<TKey, TValue, TKeyEqualityComparer> dictionary;
+            private readonly Dictionary<TKey, TValue, TKeyEqualityComparer> m_Dictionary;
 
             /// <summary>Gets the number of elements contained in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
             /// <returns>The number of elements contained in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</returns>
 
             public int Count {
 
-                get {
-                    return this.dictionary.Count;
-                }
+                get => this.m_Dictionary.Count;
             }
 
 
             bool ICollection<TValue>.IsReadOnly {
 
-                get {
-                    return true;
-                }
+                get => true;
             }
 
             /// <summary>Gets a value indicating whether access to the <see cref="ICollection" /> is synchronized (thread safe).</summary>
@@ -40,9 +36,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             bool ICollection.IsSynchronized {
 
-                get {
-                    return false;
-                }
+                get => false;
             }
 
             /// <summary>Gets an object that can be used to synchronize access to the <see cref="ICollection" />.</summary>
@@ -51,11 +45,14 @@ namespace UltimateOrb.Plain.ValueTypes {
             object ICollection.SyncRoot {
 
                 get {
-                    return ((ICollection)this.dictionary).SyncRoot;
+                    throw new NotSupportedException();
                 }
             }
 
-            public long LongCount => throw new NotImplementedException();
+            public long LongCount {
+
+                get => this.m_Dictionary.LongCount;
+            }
 
             /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> class that reflects the values in the specified <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
             /// <param name="dictionary">The <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> whose values are reflected in the new <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</param>
@@ -63,14 +60,14 @@ namespace UltimateOrb.Plain.ValueTypes {
             ///   <paramref name="dictionary" /> is null.</exception>
 
             public ValueCollection(Dictionary<TKey, TValue, TKeyEqualityComparer> dictionary) {
-                this.dictionary = dictionary;
+                this.m_Dictionary = dictionary;
             }
 
             /// <summary>Returns an enumerator that iterates through the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
             /// <returns>A <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection.Enumerator" /> for the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</returns>
 
             public Enumerator GetEnumerator() {
-                return new Enumerator(this.dictionary);
+                return new Enumerator(this.m_Dictionary);
             }
 
             /// <summary>Copies the <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> elements to an existing one-dimensional <see cref="Array" />, starting at the specified array index.</summary>
@@ -89,49 +86,45 @@ namespace UltimateOrb.Plain.ValueTypes {
                 if (index < 0 || index > array.Length) {
                     ThrowArgumentOutOfRangeException_index_NeedNonNegNum();
                 }
-                if (array.Length - index < this.dictionary.Count) {
+                if (array.Length - index < this.m_Dictionary.Count) {
                     ThrowArgumentException_ArrayPlusOffTooSmall();
                 }
-                var count = this.dictionary.m_EntryCount;
-                var entries = this.dictionary.m_EntryBuffer;
+                var count = this.m_Dictionary.m_EntryCount;
+                var entries = this.m_Dictionary.m_EntryBuffer;
                 for (var i = 0; count > i; ++i) {
-                    if (0 <= entries[i].m_Flags) {
-                        array[index++] = entries[i].m_Value;
+                    ref var entry = ref entries[i];
+                    if (0 <= entry.m_Flags) {
+                        array[index++] = entry.m_Value;
                     }
                 }
             }
 
-
             void ICollection<TValue>.Add(TValue item) {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_ValueCollectionSet);
+                ThrowNotSupportedException_ValueCollectionSet();
             }
-
-
-            bool ICollection<TValue>.Remove(TValue item) {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_ValueCollectionSet);
-                return default;
-            }
-
 
             void ICollection<TValue>.Clear() {
-                // ThrowHelper.ThrowNotSupportedException(ExceptionResource.NotSupported_ValueCollectionSet);
+                ThrowNotSupportedException_ValueCollectionSet();
             }
 
 
             bool ICollection<TValue>.Contains(TValue item) {
-                return this.dictionary.ContainsValue(item);
+                return this.m_Dictionary.ContainsValue(item);
             }
 
+            bool ICollection<TValue>.Remove(TValue item) {
+                ThrowNotSupportedException_ValueCollectionSet();
+                return default;
+            }
 
             IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() {
-                return (IEnumerator<TValue>)(object)new Enumerator(this.dictionary);
+                return new Enumerator(this.m_Dictionary);
             }
 
             /// <summary>Returns an enumerator that iterates through a collection.</summary>
             /// <returns>An <see cref="IEnumerator" /> that can be used to iterate through the collection.</returns>
-
             IEnumerator IEnumerable.GetEnumerator() {
-                return (IEnumerator)(object)new Enumerator(this.dictionary);
+                return new Enumerator(this.m_Dictionary);
             }
 
             /// <summary>Copies the elements of the <see cref="ICollection" /> to an <see cref="Array" />, starting at a particular <see cref="Array" /> index.</summary>
@@ -143,7 +136,6 @@ namespace UltimateOrb.Plain.ValueTypes {
             ///   <paramref name="index" /> is less than zero.</exception>
             /// <exception cref="ArgumentException">
             ///   <paramref name="array" /> is multidimensional.-or-<paramref name="array" /> does not have zero-based indexing.-or-The number of elements in the source <see cref="ICollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.-or-The type of the source <see cref="ICollection" /> cannot be cast automatically to the type of the destination <paramref name="array" />.</exception>
-
             void ICollection.CopyTo(Array array, int index) {
                 if (array == null) {
                     ThrowArgumentNullException_array();
@@ -157,36 +149,36 @@ namespace UltimateOrb.Plain.ValueTypes {
                 if (index < 0 || index > array.Length) {
                     ThrowArgumentOutOfRangeException_index_NeedNonNegNum();
                 }
-                if (array.Length - index < this.dictionary.Count) {
+                if (array.Length - index < this.m_Dictionary.Count) {
                     ThrowArgumentException_ArrayPlusOffTooSmall();
                 }
-                if (array is TValue[] array2) {
-                    this.CopyTo(array2, index);
+                if (array is TValue[] values) {
+                    this.CopyTo(values, index);
                 } else {
-                    object[] array3 = array as object[];
-                    if (array3 == null) {
-                        // ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArrayType);
-                    }
-                    int count = this.dictionary.m_EntryCount;
-                    Entry[] entries = this.dictionary.m_EntryBuffer;
-                    try {
-                        for (int i = 0; i < count; i++) {
-                            if (entries[i].m_Flags >= 0) {
-                                array3[index++] = entries[i].m_Value;
+                    if (array is object[] objs) {
+                        var count = this.m_Dictionary.m_EntryCount;
+                        var entries = this.m_Dictionary.m_EntryBuffer;
+                        try {
+                            for (var i = 0; count > i; ++i) {
+                                ref var entry = ref entries[i];
+                                if (0 <= entry.m_Flags) {
+                                    objs[index++] = entry.m_Value;
+                                }
                             }
+                        } catch (ArrayTypeMismatchException) {
                         }
-                    } catch (ArrayTypeMismatchException) {
-                        // ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_InvalidArrayType);
                     }
+                    ThrowArgumentException_InvalidArrayType();
                 }
             }
 
             public bool Contains<TEqualityComparer>(TEqualityComparer comparer, TValue item) where TEqualityComparer : IEqualityComparer<TValue> {
-                throw new NotImplementedException();
+                return this.m_Dictionary.ContainsValue(comparer, item);
             }
 
             public bool Remove<TEqualityComparer>(TEqualityComparer comparer, TValue item) where TEqualityComparer : IEqualityComparer<TValue> {
-                throw new NotImplementedException();
+                ThrowNotSupportedException_ValueCollectionSet();
+                return default;
             }
         }
     }

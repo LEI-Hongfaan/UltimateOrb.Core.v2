@@ -14,7 +14,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             public readonly Entry[] m_Entries;
 
-            public readonly int m_Count;
+            public readonly int m_EntryCount;
 
             public int m_Index;
 
@@ -38,19 +38,19 @@ namespace UltimateOrb.Plain.ValueTypes {
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 get {
                     var index = this.m_Index;
-                    if (index > 0 && index <= this.m_Count) {
+                    if (index > 0 && index <= this.m_EntryCount) {
                         goto L_1;
                     }
                     ThrowInvalidOperationException_EnumOpCantHappen();
                     L_1:
-                    return m_Current;
+                    return this.m_Current;
                 }
             }
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public Enumerator(Dictionary<TKey, TValue, TKeyEqualityComparer> dictionary) {
                 this.m_Entries = dictionary.m_EntryBuffer;
-                this.m_Count = dictionary.m_EntryCount;
+                this.m_EntryCount = dictionary.m_EntryCount;
                 this.m_Index = 0;
                 this.m_Current = default;
             }
@@ -60,7 +60,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public bool MoveNext() {
                 var entries = this.m_Entries;
-                var count = this.m_Count;
+                var count = this.m_EntryCount;
                 var index = this.m_Index;
                 while (unchecked((uint)index) < unchecked((uint)count)) {
                     ref var entry = ref entries[index];
@@ -90,9 +90,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
 
             /// <summary>Sets the enumerator to its initial position, which is before the first element in the collection.</summary>
-            
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            void IEnumerator.Reset() {
+            public void Reset() {
                 this.m_Index = 0;
                 this.m_Current = default;
             }

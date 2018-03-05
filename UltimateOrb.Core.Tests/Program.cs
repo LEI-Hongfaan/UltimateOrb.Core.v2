@@ -2319,6 +2319,14 @@ namespace UltimateOrb.Core.Tests {
 
         private static int Main(string[] args) {
             {
+                var asdfas = args;
+                UltimateOrb.Utilities.ThrowHelper.IgnoreOutParameter(out asdfas);
+                Console.WriteLine((null == args).ToString());
+                Console.WriteLine(@"...");
+                Console.ReadKey(true);
+                return 0;
+            }
+            {
                 var sdafs = new UltimateOrb.Plain.ValueTypes.Dictionary<long, string, dasfsdf>(0);
                 sdafs.Add(3, $@"A{3}");
                 sdafs.Add(4, $@"A{4}");

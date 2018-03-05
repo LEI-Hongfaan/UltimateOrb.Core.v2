@@ -14,6 +14,7 @@ namespace UltimateOrb.Plain.ValueTypes {
     /// <summary>Represents a collection of keys and values.</summary>
     /// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
+    /// <typeparam name="TKeyEqualityComparer">Specifies the comparer of keys.</typeparam>
     [SerializableAttribute()]
     [DebuggerDisplayAttribute(@"Count = {LongCount}")]
     [ComVisibleAttribute(false)]
@@ -25,9 +26,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         where TKeyEqualityComparer : IEqualityComparer<TKey>, new() {
 
         public partial struct Entry {
-
+            
             public int m_HashCode;
-
+            
             // linked list
             public int m_Next;
 
@@ -42,6 +43,10 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public bool ContainsKey<TEqualityComparer>(TEqualityComparer comparer, TKey item) where TEqualityComparer : IEqualityComparer<TKey> {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsValue<TEqualityComparer>(TEqualityComparer comparer, TValue item) where TEqualityComparer : IEqualityComparer<TValue> {
             throw new NotImplementedException();
         }
 
@@ -233,7 +238,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <param name="key">The key of the value to get.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
-        /// <exception cref="ArgumentException">A value is being assigned, and <paramref name="key" /> is of a type that is not assignable to the key type <paramref name="TKey" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.-or-A value is being assigned, and <paramref name="value" /> is of a type that is not assignable to the value type <paramref name="TValue" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
+        /// <exception cref="ArgumentException">A value is being assigned, and <paramref name="key" /> is of a type that is not assignable to the key type <typeparamref name="TKey" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.-or-A value is being assigned, and <paramref name="value" /> is of a type that is not assignable to the value type <typeparamref name="TValue" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         object IDictionary.this[object key] {
 
             get {
@@ -262,14 +267,12 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the default initial capacity, and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
-        /// <param name="comparer">The <see cref="IEqualityComparer{TKey}" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
         public static Dictionary<TKey, TValue, TKeyEqualityComparer> Create() {
             return new Dictionary<TKey, TValue, TKeyEqualityComparer>(0);
         }
 
         /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the specified initial capacity, and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
         /// <param name="minCapacity">The initial number of elements that the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> can contain.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{TKey}" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         ///   <paramref name="minCapacity" /> is less than 0.</exception>
         public Dictionary(int minCapacity) {
@@ -286,9 +289,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             this = default;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that contains elements copied from the specified <see cref="IDictionary{TKey,TValue,TEqualityComparer}" /> and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
-        /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue,TEqualityComparer}" /> whose elements are copied to the new <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</param>
-        /// <param name="comparer">The <see cref="IEqualityComparer{TKey}" /> implementation to use when comparing keys, or null to use the default <see cref="EqualityComparer`1" /> for the type of the key.</param>
+        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that contains elements copied from the specified <see cref="IDictionary{TKey,TValue}" /> and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
+        /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}" /> whose elements are copied to the new <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="dictionary" /> is null.</exception>
         /// <exception cref="ArgumentException">
@@ -441,11 +443,12 @@ namespace UltimateOrb.Plain.ValueTypes {
             if (array.Length - index < this.Count) {
                 ThrowArgumentException_ArrayPlusOffTooSmall();
             }
-            int num = this.m_EntryCount;
-            Entry[] array2 = this.m_EntryBuffer;
-            for (int i = 0; i < num; i++) {
-                if (array2[i].m_Flags >= 0) {
-                    array[index++] = new KeyValuePair<TKey, TValue>(array2[i].m_Key, array2[i].m_Value);
+            var count = this.m_EntryCount;
+            var entries = this.m_EntryBuffer;
+            for (var i = 0; count > i; ++i) {
+                ref var entry = ref entries[i];
+                if (0 <= entry.m_Flags) {
+                    array[index++] = new KeyValuePair<TKey, TValue>(entry.m_Key, entry.m_Value);
                 }
             }
         }
@@ -749,15 +752,15 @@ namespace UltimateOrb.Plain.ValueTypes {
             this.CopyTo(array, index);
         }
 
-        /// <summary>Copies the elements of the <see cref="ICollection`1" /> to an array, starting at the specified array index.</summary>
-        /// <param name="array">The one-dimensional array that is the destination of the elements copied from <see cref="ICollection`1" />. The array must have zero-based indexing.</param>
+        /// <summary>Copies the elements of the <see cref="ICollection" /> to an array, starting at the specified array index.</summary>
+        /// <param name="array">The one-dimensional array that is the destination of the elements copied from <see cref="ICollection" />. The array must have zero-based indexing.</param>
         /// <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="array" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         ///   <paramref name="index" /> is less than 0.</exception>
         /// <exception cref="ArgumentException">
-        ///   <paramref name="array" /> is multidimensional.-or-<paramref name="array" /> does not have zero-based indexing.-or-The number of elements in the source <see cref="ICollection`1" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.-or-The type of the source <see cref="ICollection`1" /> cannot be cast automatically to the type of the destination <paramref name="array" />.</exception>
+        ///   <paramref name="array" /> is multidimensional.-or-<paramref name="array" /> does not have zero-based indexing.-or-The number of elements in the source <see cref="ICollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.-or-The type of the source <see cref="ICollection" /> cannot be cast automatically to the type of the destination <paramref name="array" />.</exception>
         void ICollection.CopyTo(Array array, int index) {
             if (array == null) {
                 ThrowArgumentNullException_array();
@@ -817,8 +820,8 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
         /// <exception cref="ArgumentException">
-        ///   <paramref name="key" /> is of a type that is not assignable to the key type <paramref name="TKey" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
-        ///   -or-<paramref name="value" /> is of a type that is not assignable to <paramref name="TValue" />, the type of values in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
+        ///   <paramref name="key" /> is of a type that is not assignable to the key type <typeparamref name="TKey" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
+        ///   -or-<paramref name="value" /> is of a type that is not assignable to <typeparamref name="TValue" />, the type of values in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
         ///   -or-A value with the same key already exists in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         void IDictionary.Add(object key, object value) {
             if (key == null) {
@@ -969,7 +972,6 @@ namespace UltimateOrb.Plain.ValueTypes {
         ///         otherwise, <c lang="cs">false</c>.
         ///     </para>
         /// </returns>
-        [System.CLSCompliantAttribute(false)]
         [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
         [System.Runtime.TargetedPatchingOptOutAttribute(null)]
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

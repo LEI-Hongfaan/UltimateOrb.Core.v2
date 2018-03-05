@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace UltimateOrb.Plain.ValueTypes {
 
     internal static partial class ThrowHelper_Dictionary {
-        
+
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         public static void ThrowInvalidOperationException_EnumOpCantHappen() {
             // TODO:
@@ -30,6 +30,12 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         public static void ThrowNotSupportedException_KeyCollectionSet() {
+            // TODO:
+            throw new NotSupportedException();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowNotSupportedException_ValueCollectionSet() {
             // TODO:
             throw new NotSupportedException();
         }
