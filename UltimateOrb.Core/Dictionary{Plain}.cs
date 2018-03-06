@@ -556,8 +556,10 @@ namespace UltimateOrb.Plain.ValueTypes {
             if (Array_Empty<Entry>.Value != entries) {
                 throw new InvalidOperationException(@"Serialization not completed.");
             }
-            length = 3;
-            entries = this.Initialize0(length);
+            if (add) {
+                length = 3;
+                entries = this.Initialize0(length);
+            }
             L_0:
             var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
             var hashCode = comparer.GetHashCode(key);
@@ -823,10 +825,10 @@ namespace UltimateOrb.Plain.ValueTypes {
                 try {
                     this.Add(key0, (TValue)value);
                 } catch (InvalidCastException) {
-                    // ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(TValue));
+                    ThrowArgumentException_WrongValueType(value, typeof(TValue));
                 }
             } catch (InvalidCastException) {
-                // ThrowHelper.ThrowWrongKeyTypeArgumentException(key, typeof(TKey));
+                ThrowArgumentException_WrongValueType(key, typeof(TKey));
             }
         }
 
@@ -836,12 +838,16 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
         bool IDictionary.Contains(object key) {
+            var k = default(TKey);
             if (key is TKey key0) {
-                return this.ContainsKey(key0);
+                k = key0;
+                goto L_0;
             } else if (null == key && IsBclNullValid<TKey>.Value) {
-                return this.ContainsKey(default);
+                goto L_0;
             }
             return false;
+            L_0:
+            return this.ContainsKey(k);
         }
 
         /// <summary>Returns an <see cref="IDictionaryEnumerator" /> for the <see cref="IDictionary" />.</summary>
@@ -855,25 +861,203 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
         void IDictionary.Remove(object key) {
+            var k = default(TKey);
             if (key is TKey key0) {
-                this.Remove(key0);
+                k = key0;
+                goto L_0;
             } else if (null == key && IsBclNullValid<TKey>.Value) {
-                this.Remove(default);
+                goto L_0;
             }
+            return;
+            L_0:
+            this.Remove(k);
         }
 
         public TValue GetOrAdd<TFunc>(TKey key, TFunc valueFactory) where TFunc : IFunc<TKey, TValue> {
-            throw new NotImplementedException();
+            var entries = this.m_EntryBuffer;
+            var length = entries.Length; // null check;
+            if (length > 0) {
+                goto L_0;
+            }
+            if (Array_Empty<Entry>.Value != entries) {
+                throw new InvalidOperationException(@"Serialization not completed.");
+            }
+            length = 3;
+            entries = this.Initialize0(length);
+            L_0:
+            var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
+            var hashCode = comparer.GetHashCode(key);
+            var index_prev = unchecked((int)((uint)hashCode % (uint)length));
+            var collision_count = 0;
+            for (var index = entries[index_prev].m_First; 0 <= index;) {
+                ref var entry = ref entries[index];
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
+                    return entry.m_Value;
+                }
+                ++collision_count;
+                index = entry.m_Next;
+            }
+            var value = valueFactory.Invoke(key);
+            var index_free = 0;
+            var freeEntryCount = this.m_FreeEntryCount;
+            if (freeEntryCount > 0) {
+                index_free = this.m_FreeEntryFirst;
+                this.m_FreeEntryFirst = entries[index_free].m_Next;
+                unchecked {
+                    --freeEntryCount;
+                }
+                this.m_FreeEntryCount = freeEntryCount;
+            } else {
+                var count = this.m_EntryCount;
+                if (count == length) {
+                    entries = this.Resize();
+                    length = entries.Length;
+                    index_prev = unchecked((int)((uint)hashCode % (uint)length));
+                }
+                index_free = count;
+                ++count;
+                this.m_EntryCount = count;
+            }
+            {
+                ref var entry = ref entries[index_free];
+                ref var entryb = ref entries[index_prev].m_First;
+                entry.m_HashCode = hashCode;
+                entry.m_Flags &= ~int.MinValue; // This entry is used.
+                entry.m_Next = entryb;
+                entry.m_Key = key;
+                entry.m_Value = value;
+                entryb = index_free;
+            }
+            if (collision_count > 100) {
+                this.Resize(HashHelper.GetOddPrimeGreaterThanOrEqual(2 + (int)unchecked((ulong)(1.6180339887498948 * length))), true);
+            }
+            return value;
         }
 
         public TValue AddOrUpdate<TAdd, TUpdate>(TKey key, TAdd addValueFactory, TUpdate updateValueFactory)
             where TAdd : IFunc<TKey, TValue>
             where TUpdate : IFunc<TKey, TValue, TValue> {
-            throw new NotImplementedException();
+            var entries = this.m_EntryBuffer;
+            var length = entries.Length; // null check;
+            if (length > 0) {
+                goto L_0;
+            }
+            if (Array_Empty<Entry>.Value != entries) {
+                throw new InvalidOperationException(@"Serialization not completed.");
+            }
+            length = 3;
+            entries = this.Initialize0(length);
+            L_0:
+            var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
+            var hashCode = comparer.GetHashCode(key);
+            var index_prev = unchecked((int)((uint)hashCode % (uint)length));
+            var collision_count = 0;
+            TValue value;
+            for (var index = entries[index_prev].m_First; 0 <= index;) {
+                ref var entry = ref entries[index];
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
+                    value = updateValueFactory.Invoke(entry.m_Key, entry.m_Value);
+                    entry.m_Value = value;
+                    return value;
+                }
+                ++collision_count;
+                index = entry.m_Next;
+            }
+            value = addValueFactory.Invoke(key);
+            var index_free = 0;
+            var freeEntryCount = this.m_FreeEntryCount;
+            if (freeEntryCount > 0) {
+                index_free = this.m_FreeEntryFirst;
+                this.m_FreeEntryFirst = entries[index_free].m_Next;
+                unchecked {
+                    --freeEntryCount;
+                }
+                this.m_FreeEntryCount = freeEntryCount;
+            } else {
+                var count = this.m_EntryCount;
+                if (count == length) {
+                    entries = this.Resize();
+                    length = entries.Length;
+                    index_prev = unchecked((int)((uint)hashCode % (uint)length));
+                }
+                index_free = count;
+                ++count;
+                this.m_EntryCount = count;
+            }
+            {
+                ref var entry = ref entries[index_free];
+                ref var entryb = ref entries[index_prev].m_First;
+                entry.m_HashCode = hashCode;
+                entry.m_Flags &= ~int.MinValue; // This entry is used.
+                entry.m_Next = entryb;
+                entry.m_Key = key;
+                entry.m_Value = value;
+                entryb = index_free;
+            }
+            if (collision_count > 100) {
+                this.Resize(HashHelper.GetOddPrimeGreaterThanOrEqual(2 + (int)unchecked((ulong)(1.6180339887498948 * length))), true);
+            }
+            return value;
         }
 
         public bool TryAdd(TKey key, TValue value) {
-            throw new NotImplementedException();
+            var entries = this.m_EntryBuffer;
+            var length = entries.Length; // null check;
+            if (length > 0) {
+                goto L_0;
+            }
+            if (Array_Empty<Entry>.Value != entries) {
+                throw new InvalidOperationException(@"Serialization not completed.");
+            }
+            length = 3;
+            entries = this.Initialize0(length);
+            L_0:
+            var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
+            var hashCode = comparer.GetHashCode(key);
+            var index_prev = unchecked((int)((uint)hashCode % (uint)length));
+            var collision_count = 0;
+            for (var index = entries[index_prev].m_First; 0 <= index;) {
+                ref var entry = ref entries[index];
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
+                    return false;
+                }
+                ++collision_count;
+                index = entry.m_Next;
+            }
+            var index_free = 0;
+            var freeEntryCount = this.m_FreeEntryCount;
+            if (freeEntryCount > 0) {
+                index_free = this.m_FreeEntryFirst;
+                this.m_FreeEntryFirst = entries[index_free].m_Next;
+                unchecked {
+                    --freeEntryCount;
+                }
+                this.m_FreeEntryCount = freeEntryCount;
+            } else {
+                var count = this.m_EntryCount;
+                if (count == length) {
+                    entries = this.Resize();
+                    length = entries.Length;
+                    index_prev = unchecked((int)((uint)hashCode % (uint)length));
+                }
+                index_free = count;
+                ++count;
+                this.m_EntryCount = count;
+            }
+            {
+                ref var entry = ref entries[index_free];
+                ref var entryb = ref entries[index_prev].m_First;
+                entry.m_HashCode = hashCode;
+                entry.m_Flags &= ~int.MinValue; // This entry is used.
+                entry.m_Next = entryb;
+                entry.m_Key = key;
+                entry.m_Value = value;
+                entryb = index_free;
+            }
+            if (collision_count > 100) {
+                this.Resize(HashHelper.GetOddPrimeGreaterThanOrEqual(2 + length), true);
+            }
+            return true;
         }
 
         public bool TryRemove(TKey key, out TValue value) {
@@ -916,7 +1100,34 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue) {
-            throw new NotImplementedException();
+            var entries = this.m_EntryBuffer;
+            var length = entries.Length; // null check;
+            if (length > 0) {
+                goto L_0;
+            }
+            if (Array_Empty<Entry>.Value != entries) {
+                throw new InvalidOperationException(@"Serialization not completed.");
+            }
+            L_0:
+            var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
+            var hashCode = comparer.GetHashCode(key);
+            var index_prev = unchecked((int)((uint)hashCode % (uint)length));
+            var collision_count = 0;
+            TValue value;
+            for (var index = entries[index_prev].m_First; 0 <= index;) {
+                ref var entry = ref entries[index];
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
+                    var valueComparer = EqualityComparer<TValue>.Default;
+                    if (valueComparer.Equals(entry.m_Value, comparisonValue)) {
+                        entry.m_Value = newValue;
+                        return true;
+                    }
+                    return false;
+                }
+                ++collision_count;
+                index = entry.m_Next;
+            }
+            return false;
         }
 
         public bool Contains<TEqualityComparer>(TEqualityComparer comparer, KeyValuePair<TKey, TValue> item) where TEqualityComparer : IEqualityComparer<KeyValuePair<TKey, TValue>> {

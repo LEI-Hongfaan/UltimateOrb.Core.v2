@@ -50,6 +50,12 @@ namespace UltimateOrb.Plain.ValueTypes {
             // TODO:
             throw new ArgumentException();
         }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowArgumentException_WrongValueType(object value, Type type) {
+            // TODO:
+            throw new ArgumentException();
+        }
         
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         public static void ThrowNotSupportedException_KeyCollectionSet() {
