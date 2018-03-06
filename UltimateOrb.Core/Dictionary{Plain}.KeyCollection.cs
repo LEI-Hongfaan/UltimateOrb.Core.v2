@@ -43,9 +43,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             /// <returns>An object that can be used to synchronize access to the <see cref="ICollection" />.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" />, this property always returns the current instance.</returns>
             object ICollection.SyncRoot {
 
-                get {
-                    throw new NotSupportedException();
-                }
+                get => null;
             }
 
             public long LongCount {

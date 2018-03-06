@@ -26,9 +26,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         where TKeyEqualityComparer : IEqualityComparer<TKey>, new() {
 
         public partial struct Entry {
-            
+
             public int m_HashCode;
-            
+
             // linked list
             public int m_Next;
 
@@ -87,7 +87,6 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         /// <summary>Gets a collection containing the keys in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
         /// <returns>A <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" /> containing the keys in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</returns>
-
         public KeyCollection Keys {
 
             get {
@@ -140,8 +139,6 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <summary>Gets or sets the value associated with the specified key.</summary>
         /// <returns>The value associated with the specified key. If the specified key is not found, a get operation throws a <see cref="KeyNotFoundException" />, and a set operation creates a new element with the specified key.</returns>
         /// <param name="key">The key of the value to get or set.</param>
-        /// <exception cref="ArgumentNullException">
-        ///   <paramref name="key" /> is null.</exception>
         /// <exception cref="KeyNotFoundException">The property is retrieved and <paramref name="key" /> does not exist in the collection.</exception>
         public TValue this[TKey key] {
 
@@ -150,7 +147,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 if (found) {
                     return entry.m_Value;
                 }
-                // ThrowHelper.ThrowKeyNotFoundException();
+                ThrowKeyNotFoundException();
                 return default;
             }
 
@@ -168,7 +165,6 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         /// <summary>Gets a value indicating whether access to the <see cref="ICollection" /> is synchronized (thread safe).</summary>
         /// <returns>true if access to the <see cref="ICollection" /> is synchronized (thread safe); otherwise, false.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />, this property always returns false.</returns>
-
         bool ICollection.IsSynchronized {
 
             get {
@@ -178,12 +174,9 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         /// <summary>Gets an object that can be used to synchronize access to the <see cref="ICollection" />.</summary>
         /// <returns>An object that can be used to synchronize access to the <see cref="ICollection" />. </returns>
-
         object ICollection.SyncRoot {
 
-            get {
-                throw new NotSupportedException();
-            }
+            get => null;
         }
 
         /// <summary>Gets a value indicating whether the <see cref="IDictionary" /> has a fixed size.</summary>
@@ -298,7 +291,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public Dictionary(IDictionary<TKey, TValue> dictionary)
             : this((dictionary != null) ? dictionary.Count : 0) {
             if (dictionary == null) {
-                // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.dictionary);
+                ThrowArgumentNullException_dictionary();
             }
             foreach (KeyValuePair<TKey, TValue> item in dictionary) {
                 this.Add(item.Key, item.Value);
@@ -473,7 +466,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check
             if (info == null) {
-                // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.info);
+                ThrowArgumentNullException_info();
             }
             if (length > 0) {
                 if (entries != null) {
@@ -574,7 +567,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 ref var entry = ref entries[index];
                 if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
                     if (add) {
-                        // ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_AddingDuplicate);
+                        ThrowArgumentException_AddingDuplicate();
                     }
                     entry.m_Value = value;
                     return;
@@ -634,7 +627,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     this.m_FreeEntryFirst = -1;
                     var array = (KeyValuePair<TKey, TValue>[])serializationInfo.GetValue(KeyValuePairsName, typeof(KeyValuePair<TKey, TValue>[]));
                     if (array == null) {
-                        // ThrowHelper.ThrowSerializationException(ExceptionResource.Serialization_MissingKeys);
+                        ThrowSerializationException_MissingKeys();
                     }
                     for (var i = 0; entries.Length > i; ++i) {
                         ref var entry = ref array[i];
@@ -672,7 +665,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             for (var i = 0; this.m_EntryCount > i; ++i) {
                 ref var entry = ref entries[i];
                 var hashCode = entry.m_HashCode;
-                if (hashCode >= 0) {
+                if (0 <= entry.m_Flags) {
                     var index = unchecked((int)((uint)hashCode % (uint)newSize));
                     ref var entryb = ref entries[index].m_First;
                     entry.m_Next = entryb;
@@ -698,7 +691,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 var index_tmp = -1;
                 for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.m_HashCode == hashCode && comparer.Equals(entry.m_Key, key)) {
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
                         if (index_tmp < 0) {
                             entries[index_prev].m_First = entry.m_Next;
                         } else {
@@ -824,9 +817,6 @@ namespace UltimateOrb.Plain.ValueTypes {
         ///   -or-<paramref name="value" /> is of a type that is not assignable to <typeparamref name="TValue" />, the type of values in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
         ///   -or-A value with the same key already exists in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         void IDictionary.Add(object key, object value) {
-            if (key == null) {
-                // ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key);
-            }
             // ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
             try {
                 var key0 = (TKey)key;
@@ -848,6 +838,8 @@ namespace UltimateOrb.Plain.ValueTypes {
         bool IDictionary.Contains(object key) {
             if (key is TKey key0) {
                 return this.ContainsKey(key0);
+            } else if (null == key && IsBclNullValid<TKey>.Value) {
+                return this.ContainsKey(default);
             }
             return false;
         }
@@ -865,6 +857,8 @@ namespace UltimateOrb.Plain.ValueTypes {
         void IDictionary.Remove(object key) {
             if (key is TKey key0) {
                 this.Remove(key0);
+            } else if (null == key && IsBclNullValid<TKey>.Value) {
+                this.Remove(default);
             }
         }
 
@@ -883,7 +877,42 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public bool TryRemove(TKey key, out TValue value) {
-            throw new NotImplementedException();
+            var entries = this.m_EntryBuffer;
+            var length = entries.Length; // null check;
+            if (length > 0) {
+                var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
+                var hashCode = comparer.GetHashCode(key);
+                var index_prev = unchecked((int)((uint)hashCode % (uint)length));
+                var index_tmp = -1;
+                for (var index = entries[index_prev].m_First; 0 <= index;) {
+                    ref var entry = ref entries[index];
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
+                        this.m_FreeEntryFirst = index;
+                        ++this.m_FreeEntryCount;
+                        if (index_tmp < 0) {
+                            entries[index_prev].m_First = entry.m_Next;
+                        } else {
+                            entries[index_tmp].m_Next = entry.m_Next;
+                        }
+                        entry.m_Flags |= int.MinValue; // This entry is not used. 
+                        entry.m_Next = this.m_FreeEntryFirst;
+                        entry.m_Key = default; // Good for GC.
+                        var value0 = entry.m_Value;
+                        entry.m_Value = default; // Good for GC.
+                        value = value0; // ignore
+                        return true;
+                    }
+                    index_tmp = index;
+                    index = entry.m_Next;
+                }
+                goto L_NotFound;
+            }
+            if (Array_Empty<Entry>.Value != entries) {
+                throw new InvalidOperationException(@"Serialization not completed.");
+            }
+            L_NotFound:
+            value = default; // ignore
+            return false;
         }
 
         public bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue) {

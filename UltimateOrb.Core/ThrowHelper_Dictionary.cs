@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 
 namespace UltimateOrb.Plain.ValueTypes {
 
@@ -17,6 +19,21 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowArgumentNullException_dictionary() {
+            throw new ArgumentNullException(@"dictionary");
+        }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowArgumentNullException_key() {
+            throw new ArgumentNullException(@"key");
+        }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowArgumentNullException_info() {
+            throw new ArgumentNullException(@"info");
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
         public static void ThrowArgumentOutOfRangeException_index_NeedNonNegNum() {
             // TODO:
             throw new ArgumentOutOfRangeException(@"index");
@@ -28,6 +45,12 @@ namespace UltimateOrb.Plain.ValueTypes {
             throw new ArgumentException();
         }
 
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowArgumentException_AddingDuplicate() {
+            // TODO:
+            throw new ArgumentException();
+        }
+        
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
         public static void ThrowNotSupportedException_KeyCollectionSet() {
             // TODO:
@@ -56,6 +79,17 @@ namespace UltimateOrb.Plain.ValueTypes {
         public static void ThrowArgumentException_InvalidArrayType() {
             // TODO:
             throw new ArgumentException();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowSerializationException_MissingKeys() {
+            // TODO:
+            throw new SerializationException();
+        }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowKeyNotFoundException() {
+            throw new KeyNotFoundException();
         }
     }
 }

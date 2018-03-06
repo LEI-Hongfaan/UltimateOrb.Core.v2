@@ -44,9 +44,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             object ICollection.SyncRoot {
 
-                get {
-                    throw new NotSupportedException();
-                }
+                get => null;
             }
 
             public long LongCount {

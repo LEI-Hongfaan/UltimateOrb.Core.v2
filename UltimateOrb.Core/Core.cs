@@ -57,6 +57,15 @@ namespace UltimateOrb {
 namespace UltimateOrb {
     using System.Linq.Expressions;
 
+    public static partial class IsBclNullValid<T> {
+
+        public static readonly bool Value = GetValue();
+
+        private static bool GetValue() {
+            return null == default(T);
+        }
+    }
+
     public static partial class IsBclNullableValueType<T> {
 
         public static readonly bool Value = GetValue();
