@@ -235,26 +235,36 @@ namespace UltimateOrb.Plain.ValueTypes {
         object IDictionary.this[object key] {
 
             get {
+                var k = default(TKey);
                 if (key is TKey key0) {
-                    ref var num = ref this.FindEntry(key0, out var found);
-                    if (found) {
-                        return num.m_Value;
-                    }
+                    k = key0;
+                    goto L_0;
+                } else if (IsBclNullValid<TValue>.Value && null == key) {
+                    goto L_0;
                 }
+                goto L_1;
+                L_0:
+                ref var num = ref this.FindEntry(k, out var found);
+                if (found) {
+                    return num.m_Value;
+                }
+                L_1:
                 return null;
             }
 
             set {
-                // ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
+                if (!IsBclNullValid<TValue>.Value && null == value) {
+                    ThrowArgumentNullException_value();
+                }
                 try {
                     TKey key0 = (TKey)key;
                     try {
                         this[key0] = (TValue)value;
                     } catch (InvalidCastException) {
-                        // ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(TValue));
+                        ThrowArgumentException_WrongValueType(value, typeof(TValue));
                     }
                 } catch (InvalidCastException) {
-                    // ThrowHelper.ThrowWrongKeyTypeArgumentException(key, typeof(TKey));
+                    ThrowArgumentException_WrongValueType(key, typeof(TKey));
                 }
             }
         }
@@ -278,7 +288,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 this.m_EntryBuffer = Array_Empty<Entry>.Value;
                 return;
             }
-            // ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.capacity);
+            ThrowArgumentOutOfRangeException_capacity();
             this = default;
         }
 
@@ -653,10 +663,11 @@ namespace UltimateOrb.Plain.ValueTypes {
             for (var i = 0; entries.Length > i; ++i) {
                 entries[i].m_First = -1;
             }
-            Array.Copy(this.m_EntryBuffer, 0, entries, 0, this.m_EntryCount);
+            var entryCount = this.m_EntryCount;
+            Array.Copy(this.m_EntryBuffer, 0, entries, 0, entryCount);
             if (forceNewHashCodes) {
                 var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
-                for (var i = 0; this.m_EntryCount > i; ++i) {
+                for (var i = 0; entryCount > i; ++i) {
                     ref var entry = ref entries[i];
                     var hashCode = entry.m_HashCode;
                     if (0 <= entry.m_Flags) {
@@ -664,7 +675,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     }
                 }
             }
-            for (var i = 0; this.m_EntryCount > i; ++i) {
+            for (var i = 0; entryCount > i; ++i) {
                 ref var entry = ref entries[i];
                 var hashCode = entry.m_HashCode;
                 if (0 <= entry.m_Flags) {
@@ -818,7 +829,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         ///   -or-<paramref name="value" /> is of a type that is not assignable to <typeparamref name="TValue" />, the type of values in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
         ///   -or-A value with the same key already exists in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         void IDictionary.Add(object key, object value) {
-            // ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
+            if (!IsBclNullValid<TValue>.Value && null == value) {
+                ThrowArgumentNullException_value();
+            }
             try {
                 var key0 = (TKey)key;
                 try {
@@ -841,7 +854,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             if (key is TKey key0) {
                 k = key0;
                 goto L_0;
-            } else if (null == key && IsBclNullValid<TKey>.Value) {
+            } else if (IsBclNullValid<TKey>.Value && null == key) {
                 goto L_0;
             }
             return false;
@@ -864,7 +877,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             if (key is TKey key0) {
                 k = key0;
                 goto L_0;
-            } else if (null == key && IsBclNullValid<TKey>.Value) {
+            } else if (IsBclNullValid<TKey>.Value && null == key) {
                 goto L_0;
             }
             return;
@@ -1082,7 +1095,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                         entry.m_Key = default; // Good for GC.
                         var value0 = entry.m_Value;
                         entry.m_Value = default; // Good for GC.
-                        value = value0; // ignore
+                        value = value0;
                         return true;
                     }
                     index_tmp = index;

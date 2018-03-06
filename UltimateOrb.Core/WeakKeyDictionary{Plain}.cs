@@ -236,26 +236,36 @@ namespace UltimateOrb.Plain.ValueTypes {
         object IDictionary.this[object key] {
 
             get {
+                var k = default(TKey);
                 if (key is TKey key0) {
-                    ref var num = ref this.FindEntry(key0, out var found);
-                    if (found) {
-                        return num.m_Value;
-                    }
+                    k = key0;
+                    goto L_0;
+                } else if (IsBclNullValid<TValue>.Value && null == key) {
+                    goto L_0;
                 }
+                goto L_1;
+                L_0:
+                ref var num = ref this.FindEntry(k, out var found);
+                if (found) {
+                    return num.m_Value;
+                }
+                L_1:
                 return null;
             }
 
             set {
-                // ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
+                if (!IsBclNullValid<TValue>.Value && null == value) {
+                    ThrowArgumentNullException_value();
+                }
                 try {
                     TKey key0 = (TKey)key;
                     try {
                         this[key0] = (TValue)value;
                     } catch (InvalidCastException) {
-                        // ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(TValue));
+                        ThrowArgumentException_WrongValueType(value, typeof(TValue));
                     }
                 } catch (InvalidCastException) {
-                    // ThrowHelper.ThrowWrongKeyTypeArgumentException(key, typeof(TKey));
+                    ThrowArgumentException_WrongValueType(key, typeof(TKey));
                 }
             }
         }
@@ -921,7 +931,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         ///   -or-<paramref name="value" /> is of a type that is not assignable to <typeparamref name="TValue" />, the type of values in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.
         ///   -or-A value with the same key already exists in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         void IDictionary.Add(object key, object value) {
-            // ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
+            if (!IsBclNullValid<TValue>.Value && null == value) {
+                ThrowArgumentNullException_value();
+            }
             try {
                 var key0 = (TKey)key;
                 try {
@@ -944,7 +956,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             if (key is TKey key0) {
                 k = key0;
                 goto L_0;
-            } else if (null == key && IsBclNullValid<TKey>.Value) {
+            } else if (IsBclNullValid<TKey>.Value && null == key) {
                 goto L_0;
             }
             return false;
@@ -967,7 +979,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             if (key is TKey key0) {
                 k = key0;
                 goto L_0;
-            } else if (null == key && IsBclNullValid<TKey>.Value) {
+            } else if (IsBclNullValid<TKey>.Value && null == key) {
                 goto L_0;
             }
             return;
@@ -1008,12 +1020,14 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
             var value = valueFactory.Invoke(key);
             var index_free = 0;
-            if (this.m_FreeEntryCount > 0) {
+            var freeEntryCount = this.m_FreeEntryCount;
+            if (freeEntryCount > 0) {
                 index_free = this.m_FreeEntryFirst;
                 this.m_FreeEntryFirst = entries[index_free].m_Next;
                 unchecked {
-                    --this.m_FreeEntryCount;
+                    --freeEntryCount;
                 }
+                this.m_FreeEntryCount = freeEntryCount;
             } else {
                 var count = this.m_EntryCount;
                 if (count == length) {
@@ -1085,12 +1099,14 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
             value = addValueFactory.Invoke(key);
             var index_free = 0;
-            if (this.m_FreeEntryCount > 0) {
+            var freeEntryCount = this.m_FreeEntryCount;
+            if (freeEntryCount > 0) {
                 index_free = this.m_FreeEntryFirst;
                 this.m_FreeEntryFirst = entries[index_free].m_Next;
                 unchecked {
-                    --this.m_FreeEntryCount;
+                    --freeEntryCount;
                 }
+                this.m_FreeEntryCount = freeEntryCount;
             } else {
                 var count = this.m_EntryCount;
                 if (count == length) {
@@ -1156,12 +1172,14 @@ namespace UltimateOrb.Plain.ValueTypes {
                 index = entry.m_Next;
             }
             var index_free = 0;
-            if (this.m_FreeEntryCount > 0) {
+            var freeEntryCount = this.m_FreeEntryCount;
+            if (freeEntryCount > 0) {
                 index_free = this.m_FreeEntryFirst;
                 this.m_FreeEntryFirst = entries[index_free].m_Next;
                 unchecked {
-                    --this.m_FreeEntryCount;
+                    --freeEntryCount;
                 }
+                this.m_FreeEntryCount = freeEntryCount;
             } else {
                 var count = this.m_EntryCount;
                 if (count == length) {
@@ -1319,6 +1337,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                         return false;
                     }
                 }
+                index = entry.m_Next;
             }
             return false;
         }

@@ -29,8 +29,19 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowArgumentNullException_value() {
+            throw new ArgumentNullException(@"value");
+        }
+        
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
         public static void ThrowArgumentNullException_info() {
             throw new ArgumentNullException(@"info");
+        }
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)]
+        public static void ThrowArgumentOutOfRangeException_capacity() {
+            // TODO:
+            throw new ArgumentOutOfRangeException(@"capacity");
         }
         
         [MethodImplAttribute(MethodImplOptions.NoInlining)]
