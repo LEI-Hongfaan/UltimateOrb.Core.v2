@@ -18,11 +18,12 @@ namespace UltimateOrb.Plain.ValueTypes {
     [SerializableAttribute()]
     [DebuggerDisplayAttribute(@"Count = {LongCount}")]
     [ComVisibleAttribute(false)]
-    public partial struct Dictionary<TKey, TValue, TKeyEqualityComparer> :
-        IDictionary<TKey, TValue, Dictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, Dictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
+    public partial struct WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer> :
+        IDictionary<TKey, TValue, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
         IDictionary,
-        IReadOnlyDictionary<TKey, TValue, Dictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, Dictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, Dictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
+        IReadOnlyDictionary<TKey, TValue, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
         ISerializable, IDeserializationCallback
+        where TKey : class
         where TKeyEqualityComparer : IEqualityComparer<TKey>, new() {
 
         public partial struct Entry {
@@ -37,7 +38,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             public int m_Flags;
 
-            public TKey m_Key;
+            public WeakReference<TKey> m_WeakKey;
 
             public TValue m_Value;
         }
@@ -66,7 +67,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         private int m_FreeEntryCount;
 
         /// <summary>Gets the <see cref="IEqualityComparer{TKey}" /> that is used to determine equality of keys for the dictionary. </summary>
-        /// <returns>The <see cref="IEqualityComparer{TKey}" /> generic interface implementation that is used to determine equality of keys for the current <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> and to provide hash values for the keys.</returns>
+        /// <returns>The <see cref="IEqualityComparer{TKey}" /> generic interface implementation that is used to determine equality of keys for the current <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> and to provide hash values for the keys.</returns>
         public TKeyEqualityComparer Comparer {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -75,8 +76,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
-        /// <summary>Gets the number of key/value pairs contained in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-        /// <returns>The number of key/value pairs contained in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</returns>
+        /// <summary>Gets the number of key/value pairs contained in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</summary>
+        /// <returns>The number of key/value pairs contained in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</returns>
         public int Count {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -85,8 +86,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
-        /// <summary>Gets a collection containing the keys in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-        /// <returns>A <see cref="Dictionary{TKey,TValue,TEqualityComparer}.KeyCollection" /> containing the keys in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</returns>
+        /// <summary>Gets a collection containing the keys in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</summary>
+        /// <returns>A <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.KeyCollection" /> containing the keys in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</returns>
         public KeyCollection Keys {
 
             get {
@@ -110,8 +111,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
-        /// <summary>Gets a collection containing the values in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-        /// <returns>A <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> containing the values in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</returns>
+        /// <summary>Gets a collection containing the values in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</summary>
+        /// <returns>A <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> containing the values in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</returns>
 
         public ValueCollection Values {
 
@@ -164,7 +165,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         /// <summary>Gets a value indicating whether access to the <see cref="ICollection" /> is synchronized (thread safe).</summary>
-        /// <returns>true if access to the <see cref="ICollection" /> is synchronized (thread safe); otherwise, false.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />, this property always returns false.</returns>
+        /// <returns>true if access to the <see cref="ICollection" /> is synchronized (thread safe); otherwise, false.  In the default implementation of <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />, this property always returns false.</returns>
         bool ICollection.IsSynchronized {
 
             get {
@@ -180,7 +181,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         /// <summary>Gets a value indicating whether the <see cref="IDictionary" /> has a fixed size.</summary>
-        /// <returns>true if the <see cref="IDictionary" /> has a fixed size; otherwise, false.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />, this property always returns false.</returns>
+        /// <returns>true if the <see cref="IDictionary" /> has a fixed size; otherwise, false.  In the default implementation of <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />, this property always returns false.</returns>
         bool IDictionary.IsFixedSize {
 
             get {
@@ -189,7 +190,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         /// <summary>Gets a value indicating whether the <see cref="IDictionary" /> is read-only.</summary>
-        /// <returns>true if the <see cref="IDictionary" /> is read-only; otherwise, false.  In the default implementation of <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />, this property always returns false.</returns>
+        /// <returns>true if the <see cref="IDictionary" /> is read-only; otherwise, false.  In the default implementation of <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />, this property always returns false.</returns>
 
         bool IDictionary.IsReadOnly {
 
@@ -227,11 +228,11 @@ namespace UltimateOrb.Plain.ValueTypes {
         ValueCollection IReadOnlyDictionary<TKey, TValue, Enumerator, KeyCollection.Enumerator, KeyCollection, ValueCollection.Enumerator, ValueCollection>.Values => throw new NotImplementedException();
 
         /// <summary>Gets or sets the value with the specified key.</summary>
-        /// <returns>The value associated with the specified key, or null if <paramref name="key" /> is not in the dictionary or <paramref name="key" /> is of a type that is not assignable to the key type <paramref name="TKey" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</returns>
+        /// <returns>The value associated with the specified key, or null if <paramref name="key" /> is not in the dictionary or <paramref name="key" /> is of a type that is not assignable to the key type <paramref name="TKey" /> of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</returns>
         /// <param name="key">The key of the value to get.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
-        /// <exception cref="ArgumentException">A value is being assigned, and <paramref name="key" /> is of a type that is not assignable to the key type <typeparamref name="TKey" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.-or-A value is being assigned, and <paramref name="value" /> is of a type that is not assignable to the value type <typeparamref name="TValue" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
+        /// <exception cref="ArgumentException">A value is being assigned, and <paramref name="key" /> is of a type that is not assignable to the key type <typeparamref name="TKey" /> of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.-or-A value is being assigned, and <paramref name="value" /> is of a type that is not assignable to the value type <typeparamref name="TValue" /> of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         object IDictionary.this[object key] {
 
             get {
@@ -259,16 +260,16 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the default initial capacity, and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
-        public static Dictionary<TKey, TValue, TKeyEqualityComparer> Create() {
-            return new Dictionary<TKey, TValue, TKeyEqualityComparer>(0);
+        /// <summary>Initializes a new instance of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the default initial capacity, and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
+        public static WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer> Create() {
+            return new WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>(0);
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the specified initial capacity, and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
-        /// <param name="minCapacity">The initial number of elements that the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> can contain.</param>
+        /// <summary>Initializes a new instance of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> class that is empty, has the specified initial capacity, and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
+        /// <param name="minCapacity">The initial number of elements that the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> can contain.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         ///   <paramref name="minCapacity" /> is less than 0.</exception>
-        public Dictionary(int minCapacity) {
+        public WeakKeyDictionary(int minCapacity) {
             if (0 <= minCapacity) {
                 this = default;
                 if (minCapacity > 0) {
@@ -282,13 +283,13 @@ namespace UltimateOrb.Plain.ValueTypes {
             this = default;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class that contains elements copied from the specified <see cref="IDictionary{TKey,TValue}" /> and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
-        /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}" /> whose elements are copied to the new <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</param>
+        /// <summary>Initializes a new instance of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> class that contains elements copied from the specified <see cref="IDictionary{TKey,TValue}" /> and uses the specified <see cref="IEqualityComparer{TKey}" />.</summary>
+        /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}" /> whose elements are copied to the new <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="dictionary" /> is null.</exception>
         /// <exception cref="ArgumentException">
         ///   <paramref name="dictionary" /> contains one or more duplicate keys.</exception>
-        public Dictionary(IDictionary<TKey, TValue> dictionary)
+        public WeakKeyDictionary(IDictionary<TKey, TValue> dictionary)
             : this((dictionary != null) ? dictionary.Count : 0) {
             if (dictionary == null) {
                 ThrowArgumentNullException_dictionary();
@@ -298,10 +299,10 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> class with serialized data.</summary>
-        /// <param name="info">A <see cref="SerializationInfo" /> object containing the information required to serialize the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</param>
-        /// <param name="context">A <see cref="StreamingContext" /> structure containing the source and destination of the serialized stream associated with the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</param>
-        private Dictionary(SerializationInfo info, StreamingContext context) {
+        /// <summary>Initializes a new instance of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> class with serialized data.</summary>
+        /// <param name="info">A <see cref="SerializationInfo" /> object containing the information required to serialize the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</param>
+        /// <param name="context">A <see cref="StreamingContext" /> structure containing the source and destination of the serialized stream associated with the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</param>
+        private WeakKeyDictionary(SerializationInfo info, StreamingContext context) {
             // Create a new object as a key to the SerializationInfo.
             var key_SerializationInfo = new Entry[0];
             this = default;
@@ -314,7 +315,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <param name="value">The value of the element to add. The value can be null for reference types.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
-        /// <exception cref="ArgumentException">An element with the same key already exists in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
+        /// <exception cref="ArgumentException">An element with the same key already exists in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         public void Add(TKey key, TValue value) {
             this.Insert(key, value, true);
         }
@@ -344,19 +345,22 @@ namespace UltimateOrb.Plain.ValueTypes {
                 var valueComparer = EqualityComparer<TValue>.Default;
                 for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.m_HashCode == hashCode && comparer.Equals(entry.m_Key, key) && (null == value ? null == entry.m_Value : valueComparer.Equals(entry.m_Value, value))) {
-                        if (index_tmp < 0) {
-                            entries[index_prev].m_First = entry.m_Next;
-                        } else {
-                            entries[index_tmp].m_Next = entry.m_Next;
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                        var weakKey = entry.m_WeakKey;
+                        if (weakKey.TryGetTarget(out TKey entry_key) && (null == value ? null == entry.m_Value : valueComparer.Equals(entry.m_Value, value))) {
+                            if (index_tmp < 0) {
+                                entries[index_prev].m_First = entry.m_Next;
+                            } else {
+                                entries[index_tmp].m_Next = entry.m_Next;
+                            }
+                            entry.m_Flags |= int.MinValue; // This entry is not used. 
+                            entry.m_Next = this.m_FreeEntryFirst;
+                            weakKey.SetTarget(null); // Good for GC.
+                            entry.m_Value = default; // Good for GC.
+                            this.m_FreeEntryFirst = index;
+                            ++this.m_FreeEntryCount;
+                            return true;
                         }
-                        entry.m_Flags |= int.MinValue; // This entry is not used. 
-                        entry.m_Next = this.m_FreeEntryFirst;
-                        entry.m_Key = default; // Good for GC.
-                        entry.m_Value = default; // Good for GC.
-                        this.m_FreeEntryFirst = index;
-                        ++this.m_FreeEntryCount;
-                        return true;
                     }
                     index_tmp = index;
                     index = entry.m_Next;
@@ -370,7 +374,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             return false;
         }
 
-        /// <summary>Removes all keys and values from the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
+        /// <summary>Removes all keys and values from the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</summary>
         public void Clear() {
             var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check
@@ -392,18 +396,18 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
 
-        /// <summary>Determines whether the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> contains the specified key.</summary>
-        /// <returns>true if the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> contains an element with the specified key; otherwise, false.</returns>
-        /// <param name="key">The key to locate in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</param>
+        /// <summary>Determines whether the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> contains the specified key.</summary>
+        /// <returns>true if the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> contains an element with the specified key; otherwise, false.</returns>
+        /// <param name="key">The key to locate in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
         public bool ContainsKey(TKey key) {
             return 0 <= this.FindEntry(key);
         }
 
-        /// <summary>Determines whether the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> contains a specific value.</summary>
-        /// <returns>true if the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> contains an element with the specified value; otherwise, false.</returns>
-        /// <param name="value">The value to locate in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />. The value can be null for reference types.</param>
+        /// <summary>Determines whether the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> contains a specific value.</summary>
+        /// <returns>true if the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> contains an element with the specified value; otherwise, false.</returns>
+        /// <param name="value">The value to locate in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />. The value can be null for reference types.</param>
         public bool ContainsValue(TValue value) {
             var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check
@@ -441,13 +445,16 @@ namespace UltimateOrb.Plain.ValueTypes {
             for (var i = 0; count > i; ++i) {
                 ref var entry = ref entries[i];
                 if (0 <= entry.m_Flags) {
-                    array[index++] = new KeyValuePair<TKey, TValue>(entry.m_Key, entry.m_Value);
+                    var weakKey = entry.m_WeakKey;
+                    if (weakKey.TryGetTarget(out var key)) {
+                        array[index++] = new KeyValuePair<TKey, TValue>(key, entry.m_Value);
+                    }
                 }
             }
         }
 
-        /// <summary>Returns an enumerator that iterates through the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-        /// <returns>A <see cref="Dictionary{TKey,TValue,TEqualityComparer}.Enumerator" /> structure for the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</returns>
+        /// <summary>Returns an enumerator that iterates through the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</summary>
+        /// <returns>A <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.Enumerator" /> structure for the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</returns>
         public Enumerator GetEnumerator() {
             return new Enumerator(this);
         }
@@ -456,9 +463,9 @@ namespace UltimateOrb.Plain.ValueTypes {
             return new Enumerator(this);
         }
 
-        /// <summary>Implements the <see cref="ISerializable" /> interface and returns the data needed to serialize the <see cref="Dictionary{TKey, TValue, TEqualityComparer}" /> instance.</summary>
-        /// <param name="info">A <see cref="SerializationInfo" /> object that contains the information required to serialize the <see cref="Dictionary{TKey, TValue, TEqualityComparer}" /> instance.</param>
-        /// <param name="context">A <see cref="StreamingContext" /> structure that contains the source and destination of the serialized stream associated with the <see cref="Dictionary{TKey, TValue, TEqualityComparer}" /> instance.</param>
+        /// <summary>Implements the <see cref="ISerializable" /> interface and returns the data needed to serialize the <see cref="WeakKeyDictionary{TKey, TValue, TEqualityComparer}" /> instance.</summary>
+        /// <param name="info">A <see cref="SerializationInfo" /> object that contains the information required to serialize the <see cref="WeakKeyDictionary{TKey, TValue, TEqualityComparer}" /> instance.</param>
+        /// <param name="context">A <see cref="StreamingContext" /> structure that contains the source and destination of the serialized stream associated with the <see cref="WeakKeyDictionary{TKey, TValue, TEqualityComparer}" /> instance.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="info" /> is null.</exception>
         [SecurityCriticalAttribute()]
@@ -492,9 +499,12 @@ namespace UltimateOrb.Plain.ValueTypes {
                 var index_prev = unchecked((int)((uint)hashCode % (uint)length));
                 for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                        found = true;
-                        return ref entry;
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                        var weakKey = entry.m_WeakKey;
+                        if (weakKey.TryGetTarget(out TKey entry_key) && comparer.Equals(entry_key, key)) {
+                            found = true;
+                            return ref entry;
+                        }
                     }
                     index = entry.m_Next;
                 }
@@ -508,6 +518,36 @@ namespace UltimateOrb.Plain.ValueTypes {
             return ref Dummy<Entry>.Value;
         }
 
+        private ref Entry FindEntry(TKey key, out TKey @strongRef, out bool found) {
+            var entries = this.m_EntryBuffer;
+            var length = entries.Length; // null check;
+            if (length > 0) {
+                var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
+                var hashCode = comparer.GetHashCode(key);
+                var index_prev = unchecked((int)((uint)hashCode % (uint)length));
+                for (var index = entries[index_prev].m_First; 0 <= index;) {
+                    ref var entry = ref entries[index];
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                        var weakKey = entry.m_WeakKey;
+                        if (weakKey.TryGetTarget(out TKey entry_key) && comparer.Equals(entry_key, key)) {
+                            @strongRef = entry_key;
+                            found = true;
+                            return ref entry;
+                        }
+                    }
+                    index = entry.m_Next;
+                }
+                goto L_NotFound;
+            }
+            if (Array_Empty<Entry>.Value != entries) {
+                throw new InvalidOperationException(@"Serialization not completed.");
+            }
+            L_NotFound:
+            @strongRef = null;
+            found = false;
+            return ref Dummy<Entry>.Value;
+        }
+
         private int FindEntry(TKey key) {
             var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
@@ -517,8 +557,11 @@ namespace UltimateOrb.Plain.ValueTypes {
                 var index_prev = unchecked((int)((uint)hashCode % (uint)length));
                 for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                        return index;
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                        var weakKey = entry.m_WeakKey;
+                        if (weakKey.TryGetTarget(out TKey entry_key) && comparer.Equals(entry_key, key)) {
+                            return index;
+                        }
                     }
                     index = entry.m_Next;
                 }
@@ -567,12 +610,19 @@ namespace UltimateOrb.Plain.ValueTypes {
             var collision_count = 0;
             for (var index = entries[index_prev].m_First; 0 <= index;) {
                 ref var entry = ref entries[index];
-                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                    if (add) {
-                        ThrowArgumentException_AddingDuplicate();
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                    var weakKey = entry.m_WeakKey;
+                    if (weakKey.TryGetTarget(out TKey entry_key)) {
+                        if (comparer.Equals(entry_key, key)) {
+                            if (add) {
+                                ThrowArgumentException_AddingDuplicate();
+                            }
+                            entry.m_Value = value;
+                            return;
+                        }
+                    } else {
+                        // TODO:
                     }
-                    entry.m_Value = value;
-                    return;
                 }
                 ++collision_count;
                 index = entry.m_Next;
@@ -601,18 +651,24 @@ namespace UltimateOrb.Plain.ValueTypes {
                 entry.m_HashCode = hashCode;
                 entry.m_Flags &= ~int.MinValue; // This entry is used.
                 entry.m_Next = entryb;
-                entry.m_Key = key;
+                ref var weakKey = ref entry.m_WeakKey;
+                var w = weakKey;
+                if (null == w) {
+                    weakKey = new WeakReference<TKey>(key);
+                } else {
+                    w.SetTarget(key);
+                }
                 entry.m_Value = value;
                 entryb = index_free;
             }
             if (collision_count > 100) {
-                this.Resize(HashHelper.GetOddPrimeGreaterThanOrEqual(2 + length), true);
+                this.Resize(HashHelper.GetOddPrimeGreaterThanOrEqual(2 + (int)unchecked((ulong)(1.6180339887498948 * length))), true);
             }
         }
 
         /// <summary>Implements the <see cref="ISerializable" /> interface and raises the deserialization event when the deserialization is complete.</summary>
         /// <param name="sender">The source of the deserialization event.</param>
-        /// <exception cref="SerializationException">The <see cref="SerializationInfo" /> object associated with the current <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> instance is invalid.</exception>
+        /// <exception cref="SerializationException">The <see cref="SerializationInfo" /> object associated with the current <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> instance is invalid.</exception>
         public void OnDeserialization(object sender) {
             var serializationInfo = (SerializationInfo)null;
             var key_SerializationInfo = this.m_EntryBuffer;
@@ -653,18 +709,24 @@ namespace UltimateOrb.Plain.ValueTypes {
             for (var i = 0; entries.Length > i; ++i) {
                 entries[i].m_First = -1;
             }
-            Array.Copy(this.m_EntryBuffer, 0, entries, 0, this.m_EntryCount);
+            var entryCount = this.m_EntryCount;
+            Array.Copy(this.m_EntryBuffer, 0, entries, 0, entryCount);
             if (forceNewHashCodes) {
                 var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
-                for (var i = 0; this.m_EntryCount > i; ++i) {
+                for (var i = 0; entryCount > i; ++i) {
                     ref var entry = ref entries[i];
                     var hashCode = entry.m_HashCode;
                     if (0 <= entry.m_Flags) {
-                        entry.m_HashCode = comparer.GetHashCode(entry.m_Key);
+                        var weakKey = entry.m_WeakKey;
+                        if (weakKey.TryGetTarget(out var key)) {
+                            entry.m_HashCode = comparer.GetHashCode(key);
+                        } else {
+                            // TODO:
+                        }
                     }
                 }
             }
-            for (var i = 0; this.m_EntryCount > i; ++i) {
+            for (var i = 0; entryCount > i; ++i) {
                 ref var entry = ref entries[i];
                 var hashCode = entry.m_HashCode;
                 if (0 <= entry.m_Flags) {
@@ -678,8 +740,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             return entries;
         }
 
-        /// <summary>Removes the value with the specified key from the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</summary>
-        /// <returns>true if the element is successfully found and removed; otherwise, false.  This method returns false if <paramref name="key" /> is not found in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</returns>
+        /// <summary>Removes the value with the specified key from the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</summary>
+        /// <returns>true if the element is successfully found and removed; otherwise, false.  This method returns false if <paramref name="key" /> is not found in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</returns>
         /// <param name="key">The key of the element to remove.</param>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
@@ -691,24 +753,55 @@ namespace UltimateOrb.Plain.ValueTypes {
                 var hashCode = comparer.GetHashCode(key);
                 var index_prev = unchecked((int)((uint)hashCode % (uint)length));
                 var index_tmp = -1;
+                var freeEntryFirst = 0;
+                var freeEntryCount = -1;
                 for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                        if (index_tmp < 0) {
-                            entries[index_prev].m_First = entry.m_Next;
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                        var weakKey = entry.m_WeakKey;
+                        if (weakKey.TryGetTarget(out var entry_key)) {
+                            if (comparer.Equals(entry_key, key)) {
+                                if (index_tmp < 0) {
+                                    entries[index_prev].m_First = entry.m_Next;
+                                } else {
+                                    entries[index_tmp].m_Next = entry.m_Next;
+                                }
+                                entry.m_Flags |= int.MinValue; // This entry is not used. 
+                                if (0 > freeEntryCount) {
+                                    freeEntryFirst = this.m_FreeEntryFirst;
+                                    freeEntryCount = this.m_FreeEntryCount;
+                                }
+                                entry.m_Next = freeEntryFirst;
+                                this.m_FreeEntryFirst = index;
+                                ++freeEntryCount;
+                                this.m_FreeEntryCount = freeEntryCount;
+                                entry.m_Value = default; // Good for GC.
+                                weakKey.SetTarget(null); // Good for GC.
+                                return true;
+                            }
                         } else {
-                            entries[index_tmp].m_Next = entry.m_Next;
+                            if (index_tmp < 0) {
+                                entries[index_prev].m_First = entry.m_Next;
+                            } else {
+                                entries[index_tmp].m_Next = entry.m_Next;
+                            }
+                            entry.m_Flags |= int.MinValue; // This entry is not used. 
+                            if (0 > freeEntryCount) {
+                                freeEntryFirst = this.m_FreeEntryFirst;
+                                freeEntryCount = this.m_FreeEntryCount;
+                            }
+                            entry.m_Next = freeEntryFirst;
+                            freeEntryFirst = index;
+                            ++freeEntryCount;
+                            entry.m_Value = default; // Good for GC.
                         }
-                        entry.m_Flags |= int.MinValue; // This entry is not used. 
-                        entry.m_Next = this.m_FreeEntryFirst;
-                        entry.m_Key = default; // Good for GC.
-                        entry.m_Value = default; // Good for GC.
-                        this.m_FreeEntryFirst = index;
-                        ++this.m_FreeEntryCount;
-                        return true;
                     }
                     index_tmp = index;
                     index = entry.m_Next;
+                }
+                if (0 <= freeEntryCount) {
+                    this.m_FreeEntryFirst = freeEntryFirst;
+                    this.m_FreeEntryCount = freeEntryCount;
                 }
                 goto L_NotFound;
             }
@@ -720,7 +813,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         /// <summary>Gets the value associated with the specified key.</summary>
-        /// <returns>true if the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" /> contains an element with the specified key; otherwise, false.</returns>
+        /// <returns>true if the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> contains an element with the specified key; otherwise, false.</returns>
         /// <param name="key">The key of the value to get.</param>
         /// <param name="value">When this method returns, contains the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value" /> parameter. This parameter is passed uninitialized.</param>
         /// <exception cref="ArgumentNullException">
@@ -780,7 +873,12 @@ namespace UltimateOrb.Plain.ValueTypes {
                 for (int i = 0; i < count; i++) {
                     ref var entry = ref entries[i];
                     if (0 <= entry.m_Flags) {
-                        ngentries[index++] = new DictionaryEntry(entry.m_Key, entry.m_Value);
+                        var weakKey = entry.m_WeakKey;
+                        if (weakKey.TryGetTarget(out var key)) {
+                            ngentries[index++] = new DictionaryEntry(key, entry.m_Value);
+                        } else {
+                            // TODO:
+                        }
                     }
                 }
             } else {
@@ -791,7 +889,12 @@ namespace UltimateOrb.Plain.ValueTypes {
                         for (int j = 0; j < count; j++) {
                             ref var entry = ref entries[j];
                             if (0 <= entry.m_Flags) {
-                                objs[index++] = new KeyValuePair<TKey, TValue>(entry.m_Key, entry.m_Value);
+                                var weakKey = entry.m_WeakKey;
+                                if (weakKey.TryGetTarget(out var key)) {
+                                    objs[index++] = new KeyValuePair<TKey, TValue>(key, entry.m_Value);
+                                } else {
+                                    // TODO:
+                                }
                             }
                         }
                         return;
@@ -814,9 +917,9 @@ namespace UltimateOrb.Plain.ValueTypes {
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="key" /> is null.</exception>
         /// <exception cref="ArgumentException">
-        ///   <paramref name="key" /> is of a type that is not assignable to the key type <typeparamref name="TKey" /> of the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
-        ///   -or-<paramref name="value" /> is of a type that is not assignable to <typeparamref name="TValue" />, the type of values in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
-        ///   -or-A value with the same key already exists in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
+        ///   <paramref name="key" /> is of a type that is not assignable to the key type <typeparamref name="TKey" /> of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.
+        ///   -or-<paramref name="value" /> is of a type that is not assignable to <typeparamref name="TValue" />, the type of values in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.
+        ///   -or-A value with the same key already exists in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         void IDictionary.Add(object key, object value) {
             // ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
             try {
@@ -890,22 +993,27 @@ namespace UltimateOrb.Plain.ValueTypes {
             var collision_count = 0;
             for (var index = entries[index_prev].m_First; 0 <= index;) {
                 ref var entry = ref entries[index];
-                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                    return entry.m_Value;
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                    var weakKey = entry.m_WeakKey;
+                    if (weakKey.TryGetTarget(out TKey entry_key)) {
+                        if (comparer.Equals(entry_key, key)) {
+                            return entry.m_Value;
+                        }
+                    } else {
+                        // TODO:
+                    }
                 }
                 ++collision_count;
                 index = entry.m_Next;
             }
             var value = valueFactory.Invoke(key);
             var index_free = 0;
-            var freeEntryCount = this.m_FreeEntryCount;
-            if (freeEntryCount > 0) {
+            if (this.m_FreeEntryCount > 0) {
                 index_free = this.m_FreeEntryFirst;
                 this.m_FreeEntryFirst = entries[index_free].m_Next;
                 unchecked {
-                    --freeEntryCount;
+                    --this.m_FreeEntryCount;
                 }
-                this.m_FreeEntryCount = freeEntryCount;
             } else {
                 var count = this.m_EntryCount;
                 if (count == length) {
@@ -923,7 +1031,13 @@ namespace UltimateOrb.Plain.ValueTypes {
                 entry.m_HashCode = hashCode;
                 entry.m_Flags &= ~int.MinValue; // This entry is used.
                 entry.m_Next = entryb;
-                entry.m_Key = key;
+                ref var weakKey = ref entry.m_WeakKey;
+                var w = weakKey;
+                if (null == w) {
+                    weakKey = new WeakReference<TKey>(key);
+                } else {
+                    w.SetTarget(key);
+                }
                 entry.m_Value = value;
                 entryb = index_free;
             }
@@ -954,24 +1068,29 @@ namespace UltimateOrb.Plain.ValueTypes {
             TValue value;
             for (var index = entries[index_prev].m_First; 0 <= index;) {
                 ref var entry = ref entries[index];
-                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                    value = updateValueFactory.Invoke(entry.m_Key, entry.m_Value);
-                    entry.m_Value = value;
-                    return value;
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                    var weakKey = entry.m_WeakKey;
+                    if (weakKey.TryGetTarget(out TKey entry_key)) {
+                        if (comparer.Equals(entry_key, key)) {
+                            value = updateValueFactory.Invoke(entry_key, entry.m_Value);
+                            entry.m_Value = value;
+                            return value;
+                        }
+                    } else {
+                        // TODO:
+                    }
                 }
                 ++collision_count;
                 index = entry.m_Next;
             }
             value = addValueFactory.Invoke(key);
             var index_free = 0;
-            var freeEntryCount = this.m_FreeEntryCount;
-            if (freeEntryCount > 0) {
+            if (this.m_FreeEntryCount > 0) {
                 index_free = this.m_FreeEntryFirst;
                 this.m_FreeEntryFirst = entries[index_free].m_Next;
                 unchecked {
-                    --freeEntryCount;
+                    --this.m_FreeEntryCount;
                 }
-                this.m_FreeEntryCount = freeEntryCount;
             } else {
                 var count = this.m_EntryCount;
                 if (count == length) {
@@ -989,7 +1108,13 @@ namespace UltimateOrb.Plain.ValueTypes {
                 entry.m_HashCode = hashCode;
                 entry.m_Flags &= ~int.MinValue; // This entry is used.
                 entry.m_Next = entryb;
-                entry.m_Key = key;
+                ref var weakKey = ref entry.m_WeakKey;
+                var w = weakKey;
+                if (null == w) {
+                    weakKey = new WeakReference<TKey>(key);
+                } else {
+                    w.SetTarget(key);
+                }
                 entry.m_Value = value;
                 entryb = index_free;
             }
@@ -1017,21 +1142,26 @@ namespace UltimateOrb.Plain.ValueTypes {
             var collision_count = 0;
             for (var index = entries[index_prev].m_First; 0 <= index;) {
                 ref var entry = ref entries[index];
-                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                    return false;
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                    var weakKey = entry.m_WeakKey;
+                    if (weakKey.TryGetTarget(out TKey entry_key)) {
+                        if (comparer.Equals(entry_key, key)) {
+                            return false;
+                        }
+                    } else {
+                        // TODO:
+                    }
                 }
                 ++collision_count;
                 index = entry.m_Next;
             }
             var index_free = 0;
-            var freeEntryCount = this.m_FreeEntryCount;
-            if (freeEntryCount > 0) {
+            if (this.m_FreeEntryCount > 0) {
                 index_free = this.m_FreeEntryFirst;
                 this.m_FreeEntryFirst = entries[index_free].m_Next;
                 unchecked {
-                    --freeEntryCount;
+                    --this.m_FreeEntryCount;
                 }
-                this.m_FreeEntryCount = freeEntryCount;
             } else {
                 var count = this.m_EntryCount;
                 if (count == length) {
@@ -1049,7 +1179,13 @@ namespace UltimateOrb.Plain.ValueTypes {
                 entry.m_HashCode = hashCode;
                 entry.m_Flags &= ~int.MinValue; // This entry is used.
                 entry.m_Next = entryb;
-                entry.m_Key = key;
+                ref var weakKey = ref entry.m_WeakKey;
+                var w = weakKey;
+                if (null == w) {
+                    weakKey = new WeakReference<TKey>(key);
+                } else {
+                    w.SetTarget(key);
+                }
                 entry.m_Value = value;
                 entryb = index_free;
             }
@@ -1067,26 +1203,57 @@ namespace UltimateOrb.Plain.ValueTypes {
                 var hashCode = comparer.GetHashCode(key);
                 var index_prev = unchecked((int)((uint)hashCode % (uint)length));
                 var index_tmp = -1;
+                var freeEntryFirst = 0;
+                var freeEntryCount = -1;
                 for (var index = entries[index_prev].m_First; 0 <= index;) {
                     ref var entry = ref entries[index];
-                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                        this.m_FreeEntryFirst = index;
-                        ++this.m_FreeEntryCount;
-                        if (index_tmp < 0) {
-                            entries[index_prev].m_First = entry.m_Next;
+                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                        var weakKey = entry.m_WeakKey;
+                        if (weakKey.TryGetTarget(out var entry_key)) {
+                            if (comparer.Equals(entry_key, key)) {
+                                if (index_tmp < 0) {
+                                    entries[index_prev].m_First = entry.m_Next;
+                                } else {
+                                    entries[index_tmp].m_Next = entry.m_Next;
+                                }
+                                entry.m_Flags |= int.MinValue; // This entry is not used. 
+                                if (0 > freeEntryCount) {
+                                    freeEntryFirst = this.m_FreeEntryFirst;
+                                    freeEntryCount = this.m_FreeEntryCount;
+                                }
+                                entry.m_Next = freeEntryFirst;
+                                this.m_FreeEntryFirst = index;
+                                ++freeEntryCount;
+                                this.m_FreeEntryCount = freeEntryCount;
+                                var value0 = entry.m_Value;
+                                entry.m_Value = default; // Good for GC.
+                                weakKey.SetTarget(null); // Good for GC.
+                                value = value0;
+                                return true;
+                            }
                         } else {
-                            entries[index_tmp].m_Next = entry.m_Next;
+                            if (index_tmp < 0) {
+                                entries[index_prev].m_First = entry.m_Next;
+                            } else {
+                                entries[index_tmp].m_Next = entry.m_Next;
+                            }
+                            entry.m_Flags |= int.MinValue; // This entry is not used. 
+                            if (0 > freeEntryCount) {
+                                freeEntryFirst = this.m_FreeEntryFirst;
+                                freeEntryCount = this.m_FreeEntryCount;
+                            }
+                            entry.m_Next = freeEntryFirst;
+                            freeEntryFirst = index;
+                            ++freeEntryCount;
+                            entry.m_Value = default; // Good for GC.
                         }
-                        entry.m_Flags |= int.MinValue; // This entry is not used. 
-                        entry.m_Next = this.m_FreeEntryFirst;
-                        entry.m_Key = default; // Good for GC.
-                        var value0 = entry.m_Value;
-                        entry.m_Value = default; // Good for GC.
-                        value = value0; // ignore
-                        return true;
                     }
                     index_tmp = index;
                     index = entry.m_Next;
+                }
+                if (0 <= freeEntryCount) {
+                    this.m_FreeEntryFirst = freeEntryFirst;
+                    this.m_FreeEntryCount = freeEntryCount;
                 }
                 goto L_NotFound;
             }
@@ -1114,12 +1281,14 @@ namespace UltimateOrb.Plain.ValueTypes {
             var valueComparer = EqualityComparer<TValue>.Default;
             for (var index = entries[index_prev].m_First; 0 <= index;) {
                 ref var entry = ref entries[index];
-                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && comparer.Equals(entry.m_Key, key)) {
-                    if (valueComparer.Equals(entry.m_Value, comparisonValue)) {
-                        entry.m_Value = newValue;
-                        return true;
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                    if (entry.m_WeakKey.TryGetTarget(out var entry_key) && comparer.Equals(entry_key, key)) {
+                        if (valueComparer.Equals(entry.m_Value, comparisonValue)) {
+                            entry.m_Value = newValue;
+                            return true;
+                        }
+                        return false;
                     }
-                    return false;
                 }
                 index = entry.m_Next;
             }
@@ -1141,14 +1310,15 @@ namespace UltimateOrb.Plain.ValueTypes {
             var index_prev = unchecked((int)((uint)hashCode % (uint)length));
             for (var index = entries[index_prev].m_First; 0 <= index;) {
                 ref var entry = ref entries[index];
-                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags && keyComparer.Equals(entry.m_Key, key)) {
-                    if (valueComparer.Equals(entry.m_Value, comparisonValue)) {
-                        entry.m_Value = newValue;
-                        return true;
+                if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
+                    if (entry.m_WeakKey.TryGetTarget(out var entry_key) && keyComparer.Equals(entry_key, key)) {
+                        if (valueComparer.Equals(entry.m_Value, comparisonValue)) {
+                            entry.m_Value = newValue;
+                            return true;
+                        }
+                        return false;
                     }
-                    return false;
                 }
-                index = entry.m_Next;
             }
             return false;
         }
@@ -1160,122 +1330,5 @@ namespace UltimateOrb.Plain.ValueTypes {
         public bool Remove<TEqualityComparer>(TEqualityComparer comparer, KeyValuePair<TKey, TValue> item) where TEqualityComparer : IEqualityComparer<KeyValuePair<TKey, TValue>> {
             throw new NotImplementedException();
         }
-    }
-}
-
-namespace UltimateOrb.Plain.ValueTypes {
-    using UltimateOrb.Mathematics.NumberTheory;
-
-    internal static partial class HashHelper {
-
-        public static int GetOddPrimeGreaterThanOrEqual(int n) {
-            if (n > 3) {
-                for (var i = 1 | n; ; i += 2) {
-                    if (IsOddPrimePartial(unchecked((uint)i))) {
-                        return i;
-                    }
-                }
-            }
-            return 3;
-        }
-
-        private const ulong prime_table_odd = 0b_1000000101101101_0001001010011010_0110010010110100_1100101101101110;
-
-        private const uint primes_3_5_7 = 3 * 5 * 7;
-
-        private const ulong euler_3_5_7_lo = 0b_0110110000110000_1101101001100101_1010010011001011_0010100100010110;
-
-        private const ulong euler_3_5_7_hi = 0b________________________0110100010_0101001101001100_1001011010011001;
-
-        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
-        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
-        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        [System.Diagnostics.Contracts.PureAttribute()]
-        private static bool IsProbablePrimeTrialDivision(uint primes, ulong euler_lo, ulong euler_hi, UInt32 value) {
-            var a = unchecked((int)(value % primes));
-            var euler = 64 <= a ? euler_hi : euler_lo;
-            if (0 == ((euler >> a) & 1)) {
-                return false;
-            }
-            return true;
-        }
-
-        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
-        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
-        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        [System.Diagnostics.Contracts.PureAttribute()]
-        internal static bool IsMillerRabinPseudoprimeInternal(uint a, UInt64 n, UInt64 d, int s) {
-            unchecked {
-                var t = ZZOverNZZModule.Power(n, a, d);
-                if (t == 1) {
-                    return true;
-                }
-                if (t == n - 1u) {
-                    return true;
-                }
-                for (int i = s; i != 0; --i) {
-                    t = ZZOverNZZModule.Square(n, t);
-                    if (t == n - 1) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-
-        /// <summary>
-        ///     <para>Checks whether an input number is prime or not.</para>
-        /// </summary>
-        /// <param name="value">
-        ///     <para>The input number.</para>
-        /// </param>
-        /// <returns>
-        ///     <para>
-        ///         <c lang="cs">true</c> if the input number is prime;
-        ///         otherwise, <c lang="cs">false</c>.
-        ///     </para>
-        /// </returns>
-        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
-        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
-        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        [System.Diagnostics.Contracts.PureAttribute()]
-        public static bool IsOddPrimePartial(UInt32 value) {
-            System.Diagnostics.Contracts.Contract.Requires(1 == value % 2);
-            unchecked {
-                if (133u > value) {
-                    if (3u > value) {
-                        return false;
-                    }
-                    return 0 != (1 & (int)(prime_table_odd >> (int)(value >> 1)));
-                }
-                if (!IsProbablePrimeTrialDivision(primes_3_5_7, euler_3_5_7_lo, euler_3_5_7_hi, value)) {
-                    return false;
-                }
-                var d = value >> 1;
-                int s = 1;
-                while (0u == (1u & d)) {
-                    d >>= 1;
-                    ++s;
-                }
-                if (!IsMillerRabinPseudoprimeInternal(2, value, d, s)) {
-                    return false;
-                }
-                if (value < 2047u) {
-                    return true;
-                }
-                if (!IsMillerRabinPseudoprimeInternal(61, value, d, s)) {
-                    return false;
-                }
-                if (value < 916327u) {
-                    return true;
-                }
-                if (!IsMillerRabinPseudoprimeInternal(7, value, d, s)) {
-                    return false;
-                }
-                return true;
-            }
-        }
-
-        internal static readonly ConditionalWeakTable<object, SerializationInfo> SerializationInfoTable = new ConditionalWeakTable<object, SerializationInfo>();
     }
 }

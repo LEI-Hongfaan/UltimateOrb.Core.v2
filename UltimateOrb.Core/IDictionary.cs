@@ -35,5 +35,7 @@ namespace UltimateOrb.Collections.Generic {
         bool TryRemove(TKey key, out TValue value);
 
         bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue);
+
+        bool TryUpdate<TValueEqualityComparer>(TKey key, TValueEqualityComparer valueComparer, TValue newValue, TValue comparisonValue) where TValueEqualityComparer : IEqualityComparer<TValue>;
     }
 }

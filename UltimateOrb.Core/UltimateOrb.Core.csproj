@@ -12,11 +12,11 @@
     <PackageReleaseNotes>Experimental.
 This package does not include the test suite. See Project Site for more information.
 </PackageReleaseNotes>
-    <PackageTags>UltimateOrb Core BCL ref Int128 UInt128 Rational Rational64 Monad Linq</PackageTags>
+    <PackageTags>UltimateOrb Core BCL ref Int128 UInt128 Rational Rational64 Monad Linq WeakDictionay</PackageTags>
     <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
     <AssemblyVersion>1</AssemblyVersion>
     <FileVersion>1</FileVersion>
-    <Version>1.4.0.7</Version>
+    <Version>1.4.0.9-alpha</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
