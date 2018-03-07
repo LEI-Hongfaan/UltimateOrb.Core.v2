@@ -500,7 +500,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             info.AddValue(HashSizeName, length);
         }
 
-        private ref Entry FindEntry(TKey key, out bool found) {
+        public ref Entry FindEntry(TKey key, out bool found) {
             var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
@@ -524,36 +524,6 @@ namespace UltimateOrb.Plain.ValueTypes {
                 throw new InvalidOperationException(@"Serialization not completed.");
             }
             L_NotFound:
-            found = false;
-            return ref Dummy<Entry>.Value;
-        }
-
-        private ref Entry FindEntry(TKey key, out TKey @strongRef, out bool found) {
-            var entries = this.m_EntryBuffer;
-            var length = entries.Length; // null check;
-            if (length > 0) {
-                var comparer = DefaultConstructor.Invoke<TKeyEqualityComparer>();
-                var hashCode = comparer.GetHashCode(key);
-                var index_prev = unchecked((int)((uint)hashCode % (uint)length));
-                for (var index = entries[index_prev].m_First; 0 <= index;) {
-                    ref var entry = ref entries[index];
-                    if (entry.m_HashCode == hashCode && 0 <= entry.m_Flags) {
-                        var weakKey = entry.m_WeakKey;
-                        if (weakKey.TryGetTarget(out TKey entry_key) && comparer.Equals(entry_key, key)) {
-                            @strongRef = entry_key;
-                            found = true;
-                            return ref entry;
-                        }
-                    }
-                    index = entry.m_Next;
-                }
-                goto L_NotFound;
-            }
-            if (Array_Empty<Entry>.Value != entries) {
-                throw new InvalidOperationException(@"Serialization not completed.");
-            }
-            L_NotFound:
-            @strongRef = null;
             found = false;
             return ref Dummy<Entry>.Value;
         }

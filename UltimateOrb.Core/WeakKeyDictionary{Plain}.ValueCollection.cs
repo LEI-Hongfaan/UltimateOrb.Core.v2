@@ -26,8 +26,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
                 get => this.m_Dictionary.Count;
             }
-
-
+            
             bool ICollection<TValue>.IsReadOnly {
 
                 get => true;

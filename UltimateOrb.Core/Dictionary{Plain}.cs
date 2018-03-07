@@ -518,7 +518,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             return ref Dummy<Entry>.Value;
         }
 
-        private int FindEntry(TKey key) {
+        public int FindEntry(TKey key) {
             var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
