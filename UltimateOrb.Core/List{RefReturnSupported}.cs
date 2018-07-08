@@ -56,6 +56,21 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
             throw ThrowArgumentOutOfRangeException_capacity();
         }
 
+        /// <summary>
+        ///     <para>
+        ///         Initializes a new instance of the <see cref="List{T}"/> type that is empty and has default capacity.
+        ///     </para>
+        /// </summary>
+        /// <param name="ignored">
+        ///     <para>
+        ///         Ignored.
+        ///     </para>
+        /// </param>
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public List(Void ignored) : this(List.default_capacity) {
+        }
+
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         private List(T[] buffer, int count) {
@@ -408,8 +423,8 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                 var count = this.count;
                 if (count > 0) {
                     Array.Clear(buffer, 0, count); // Good for GC.
+                    this.count = 0;
                 }
-                this.count = 0;
             }
             throw (NullReferenceException)null;
         }

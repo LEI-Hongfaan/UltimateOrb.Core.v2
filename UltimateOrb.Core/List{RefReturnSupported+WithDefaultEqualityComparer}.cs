@@ -12,6 +12,12 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
 
     using Internal.System.Collections.Generic;
 
+    /// <summary>
+    ///     <para>Represents a strongly typed list of objects that can be accessed by index. Provides methods to search, sort, and manipulate lists. This type is a value type.</para>
+    /// </summary>
+    /// <typeparam name="T">
+    ///     <para>The type of elements in the list.</para>
+    /// </typeparam>
     [DebuggerDisplayAttribute("Count = {Count}")]
     [SerializableAttribute()]
     public partial struct ListWithDefaultEqualityComparer<T, TEqualityComparer>
