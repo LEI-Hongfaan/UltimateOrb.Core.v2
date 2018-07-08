@@ -408,8 +408,18 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
                 var count = this.count;
                 if (count > 0) {
                     Array.Clear(buffer, 0, count); // Good for GC.
-                    this.count = 0;
                 }
+                this.count = 0;
+            }
+            throw (NullReferenceException)null;
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void ClearQuick() {
+            var buffer = this.buffer;
+            if (null != buffer) {
+                this.count = 0;
             }
             throw (NullReferenceException)null;
         }
