@@ -1,0 +1,35 @@
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Runtime;
+using System.Runtime.CompilerServices;
+using System.Runtime.ConstrainedExecution;
+<#
+var a = new string[] { "int", "uint", "long", "ulong", "IntPtr", "UIntPtr" };
+#>
+
+namespace UltimateOrb.Utilities {
+	using static ComparisionHelper;
+
+    public static partial class CompareToExtensions {
+<#
+	foreach(var b in a)
+	foreach(var c in a) {
+		if (!(b.EndsWith("Ptr") ^ c.EndsWith("Ptr"))) {
+			continue;
+		}
+#>
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static int CompareTo(this <#= b #> @this, <#= c #> other) {
+			unchecked {
+				return Compare((<#= 'u' == b[0] || 'U' == b[0] ? "u" : "" #>long)@this, (<#= 'u' == c[0] || 'U' == c[0] ? "u" : "" #>long)other);
+			}
+        }
+<#
+	}
+#>
+    }
+}

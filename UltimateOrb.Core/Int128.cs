@@ -542,7 +542,52 @@ namespace UltimateOrb {
             return new UInt128(unchecked((UInt64)this.lo), unchecked((UInt64)this.hi));
         }
 
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        public UInt128 ToUnsignedUnchecked() {
+            return new UInt128(unchecked((UInt64)this.lo), unchecked((UInt64)this.hi));
+        }
+
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        public UInt128 ToUnsignedChecked() {
+            return new UInt128(unchecked((UInt64)this.lo), checked((UInt64)this.hi));
+        }
+
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        public UInt128 ToUnsigned() {
+            return new UInt128(unchecked((UInt64)this.lo), checked((UInt64)this.hi));
+        }
+
         #region Numeric Conversions
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        public static explicit operator Int128(UInt128 value) {
+            return value.ToSignedChecked();
+        }
+
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        public static Int128 op_ExplicitUnchecked(UInt128 value) {
+            return value.ToSignedUnchecked();
+        }
+
         [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
         [System.Runtime.TargetedPatchingOptOutAttribute(null)]
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

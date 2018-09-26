@@ -7,10 +7,8 @@ using System.Diagnostics.Contracts;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.CompilerServices;
 
-namespace UltimateOrb.Collections.Generic.RefReturnSupported {
+namespace UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic {
     using UltimateOrb;
-
-    using Internal.System.Collections.Generic;
 
     /// <summary>
     ///     <para>Represents a strongly typed list of objects that can be accessed by index. Provides methods to search, sort, and manipulate lists. This type is a value type.</para>
@@ -21,146 +19,220 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
     [DebuggerDisplayAttribute("Count = {Count}")]
     [SerializableAttribute()]
     public partial struct ListWithDefaultEqualityComparer<T, TEqualityComparer>
-        : IList<T, List<T>.Enumerator>, ExtraTypeParametersProvided.IList<T, List<T>.Enumerator, TEqualityComparer>, IReadOnlyList<T, List<T>.Enumerator>
-        where TEqualityComparer : struct, IEqualityComparer<T> {
+        : System.Collections.Generic.IList<T>
+        , System.Collections.Generic.IReadOnlyList<T>
+        , IList<T, List<T>.Enumerator>
+        , IReadOnlyList<T, List<T>.Enumerator>
+        , ExtraTypeParametersProvided.IList<T, List<T>.Enumerator, TEqualityComparer>
+        , ExtraTypeParametersProvided.IReadOnlyList<T, List<T>.Enumerator, TEqualityComparer>
+        where TEqualityComparer : Huge.Collections.Generic.IEqualityComparer<T>, new() {
 
         private List<T> value;
 
-        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ListWithDefaultEqualityComparer(List<T> value) {
             this.value = value;
         }
 
-        public ref T this[int index] {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get {
-                return ref this.value[index];
-            }
-        }
-
-        T IList<T>.this[int index] {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => TList<T>.get_Item(this.value, index);
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            set => TList<T>.set_Item(this.value, index, value);
-        }
-
-        T IReadOnlyList<T>.this[int index] {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => TReadOnlyList<T>.get_Item(this.value, index);
-        }
-
-        ref readonly T IReadOnlyList<T, List<T>.Enumerator>.this[int index] {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => ref TReadOnlyList<T, List<T>.Enumerator>.get_Item(this.value, index);
-        }
-
         public int Count {
 
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.value.Count;
-        }
-
-        public long LongCount {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.value.LongCount;
+            get => ((IList<T, List<T>.Enumerator>) this.value).Count;
         }
 
         public bool IsReadOnly {
 
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.value.IsReadOnly;
+            get => ((IList<T, List<T>.Enumerator>) this.value).IsReadOnly;
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        void ICollection<T>.Add(T item) {
-            this.value.Add(item);
+        public long LongCount {
+
+            get => ((IList<T, List<T>.Enumerator>) this.value).LongCount;
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private TEqualityComparer comparer {
+
+            get => DefaultConstructor.Invoke<TEqualityComparer>();
+        }
+
+        public ref T this[long index] {
+
+            get => ref ((IList<T, List<T>.Enumerator>) this.value)[index];
+        }
+
+        public ref T this[int index] {
+
+            get => ref ((IList<T, List<T>.Enumerator>) this.value)[index];
+        }
+
+
+
+
+        ref readonly T RefReturn_Huge.Collections.Generic.IReadOnlyList<T>.this[long index] {
+
+            get => ref ((IReadOnlyList<T, List<T>.Enumerator>) this.value)[index];
+        }
+
+        ref readonly T RefReturn.Collections.Generic.IReadOnlyList<T>.this[int index] {
+
+            get => ref ((IReadOnlyList<T, List<T>.Enumerator>) this.value)[index];
+        }
+
+        T Huge.Collections.Generic.IList<T>.this[long index] {
+
+            get => ((IList<T, List<T>.Enumerator>) this.value)[index];
+
+            set => ((IList<T, List<T>.Enumerator>) this.value)[index] = value;
+        }
+
+        T System.Collections.Generic.IList<T>.this[int index] {
+
+            get => ((IList<T, List<T>.Enumerator>) this.value)[index];
+
+            set => ((IList<T, List<T>.Enumerator>) this.value)[index] = value;
+        }
+
+        T System.Collections.Generic.IReadOnlyList<T>.this[int index] {
+
+            get => ((IReadOnlyList<T, List<T>.Enumerator>) this.value)[index];
+        }
+        T Huge.Collections.Generic.IReadOnlyList<T>.this[long index] {
+
+            get => ((IReadOnlyList<T, List<T>.Enumerator>) this.value)[index];
+        }
+
         public ref T Add(T item) {
-            return ref this.value.Add(item);
+            return ref ((IList<T, List<T>.Enumerator>) this.value).Add(item);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        void System.Collections.Generic.ICollection<T>.Add(T item) {
+            ((IList<T, List<T>.Enumerator>) this.value).Add(item);
+        }
+
         public void Clear() {
-            this.value.Clear();
+            ((IList<T, List<T>.Enumerator>) this.value).Clear();
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable 693
-        public bool Contains<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
-#pragma warning restore 693
-            return this.value.Contains(comparer, item);
+        bool Typed_Huge.Collections.Generic.ICollection<T, List<T>.Enumerator>.Contains<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((Typed_Huge.Collections.Generic.ICollection<T, List<T>.Enumerator>) this.value).Contains(item, comparer);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        bool Typed.Collections.Generic.ICollection<T, List<T>.Enumerator>.Contains<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((Typed.Collections.Generic.ICollection<T, List<T>.Enumerator>) this.value).Contains<TEqualityComparer1>(item, comparer);
+        }
+
         public bool Contains(T item) {
-            return this.value.Contains(default(TEqualityComparer), item);
+            return this.value.Contains(item, this.comparer);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        bool Typed_RefReturn.Collections.Generic.IReadOnlyCollection<T, List<T>.Enumerator>.Contains<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((Typed_RefReturn.Collections.Generic.IReadOnlyCollection<T, List<T>.Enumerator>) this.value).Contains(item, comparer);
+        }
+
+        bool Typed_RefReturn_Huge.Collections.Generic.IReadOnlyCollection<T, List<T>.Enumerator>.Contains<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((Typed_RefReturn_Huge.Collections.Generic.IReadOnlyCollection<T, List<T>.Enumerator>) this.value).Contains(item, comparer);
+        }
+
+        public void CopyTo(Array<T> array, long arrayIndex) {
+            ((IList<T, List<T>.Enumerator>) this.value).CopyTo(array, arrayIndex);
+        }
+
+        public void CopyTo(T[] array, long arrayIndex) {
+            ((IList<T, List<T>.Enumerator>) this.value).CopyTo(array, arrayIndex);
+        }
+
+        public void CopyTo(Array<T> array, int arrayIndex) {
+            ((IList<T, List<T>.Enumerator>) this.value).CopyTo(array, arrayIndex);
+        }
+
         public void CopyTo(T[] array, int arrayIndex) {
-            this.value.CopyTo(array, arrayIndex);
+            ((IList<T, List<T>.Enumerator>) this.value).CopyTo(array, arrayIndex);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public List<T>.Enumerator GetEnumerator() {
             return this.value.GetEnumerator();
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable 693
-        public int IndexOf<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
-#pragma warning restore 693
-            return this.value.IndexOf(comparer, item);
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+            return this.GetEnumerator();
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        List<T>.Enumerator Typed.Collections.Generic.IEnumerable<T, List<T>.Enumerator>.GetEnumerator() {
+            return this.GetEnumerator();
+        }
+
+        System.Collections.Generic.IEnumerator<T> System.Collections.Generic.IEnumerable<T>.GetEnumerator() {
+            return this.GetEnumerator();
+        }
+
+        RefReturn.Collections.Generic.IReadOnlyEnumerator<T> RefReturn.Collections.Generic.IReadOnlyEnumerable<T>.GetEnumerator() {
+            return this.GetEnumerator();
+        }
+
+        List<T>.Enumerator Typed.Collections.Generic.IReadOnlyEnumerable<T, List<T>.Enumerator>.GetEnumerator() {
+            return this.GetEnumerator();
+        }
+
+        RefReturn.Collections.Generic.IEnumerator<T> RefReturn.Collections.Generic.IEnumerable<T>.GetEnumerator() {
+            return this.GetEnumerator();
+        }
+
+        int Typed.Collections.Generic.IList<T, List<T>.Enumerator>.IndexOf<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((Typed.Collections.Generic.IList<T, List<T>.Enumerator>) this.value).IndexOf(item, comparer);
+        }
+
         public int IndexOf(T item) {
-            return this.value.IndexOf(default(TEqualityComparer), item);
+            return this.value.IndexOf(item, this.comparer);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        void IList<T>.Insert(int index, T item) {
-            TList<T>.Insert(ref this.value, index, item);
+        int Typed_RefReturn.Collections.Generic.IReadOnlyList<T, List<T>.Enumerator>.IndexOf<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((IReadOnlyList<T, List<T>.Enumerator>) this.value).IndexOf(item, comparer);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public ref T Insert(long index, T item) {
+            return ref ((IList<T, List<T>.Enumerator>) this.value).Insert(index, item);
+        }
+
         public ref T Insert(int index, T item) {
-            return ref this.value.Insert(index, item);
+            return ref ((IList<T, List<T>.Enumerator>) this.value).Insert(index, item);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public bool Remove<TEqualityComparer1>(TEqualityComparer1 comparer, T item) where TEqualityComparer1 : IEqualityComparer<T> {
-            return this.value.Remove(comparer, item);
+        void Huge.Collections.Generic.IList<T>.Insert(long index, T item) {
+            ((IList<T, List<T>.Enumerator>) this.value).Insert(index, item);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        void System.Collections.Generic.IList<T>.Insert(int index, T item) {
+            ((IList<T, List<T>.Enumerator>) this.value).Insert(index, item);
+        }
+
+        long Typed_Huge.Collections.Generic.IList<T, List<T>.Enumerator>.LongIndexOf<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((Typed_Huge.Collections.Generic.IList<T, List<T>.Enumerator>) this.value).LongIndexOf(item, comparer);
+        }
+
+        public long LongIndexOf(T item) {
+            return this.value.LongIndexOf(item, this.comparer);
+        }
+
+        long Typed_RefReturn_Huge.Collections.Generic.IReadOnlyList<T, List<T>.Enumerator>.LongIndexOf<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((IReadOnlyList<T, List<T>.Enumerator>) this.value).LongIndexOf(item, comparer);
+        }
+
+        bool Typed_Huge.Collections.Generic.ICollection<T, List<T>.Enumerator>.Remove<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((Typed_Huge.Collections.Generic.ICollection<T, List<T>.Enumerator>) this.value).Remove(item, comparer);
+        }
+
+        bool Typed.Collections.Generic.ICollection<T, List<T>.Enumerator>.Remove<TEqualityComparer1>(T item, TEqualityComparer1 comparer) {
+            return ((Typed.Collections.Generic.ICollection<T, List<T>.Enumerator>) this.value).Remove<TEqualityComparer1>(item, comparer);
+        }
+
         public bool Remove(T item) {
-            return this.value.Remove(item);
+            return this.value.Remove(item, this.comparer);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void RemoveAt(long index) {
+            ((IList<T, List<T>.Enumerator>) this.value).RemoveAt(index);
+        }
+
         public void RemoveAt(int index) {
-            this.value.RemoveAt(index);
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        System.Collections.Generic.IEnumerator<T> IEnumerable<T>.GetEnumerator() {
-            return this.value.GetEnumerator();
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        IEnumerator IEnumerable.GetEnumerator() {
-            return this.value.GetEnumerator();
+            ((IList<T, List<T>.Enumerator>) this.value).RemoveAt(index);
         }
     }
 }

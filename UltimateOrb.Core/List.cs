@@ -39,7 +39,9 @@ namespace Internal.System {
 namespace UltimateOrb.Collections.Generic {
     using global::System.Runtime.CompilerServices;
     using global::System.Runtime.ConstrainedExecution;
-    
+
+    using Generic = global::System.Collections.Generic;
+
     using IntT = Int32;
     using UIntT = UInt32;
 
@@ -49,40 +51,39 @@ namespace UltimateOrb.Collections.Generic {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static bool CheckIndex<T, TList>(TList collection, IntT index) where TList : IReadOnlyList<T> {
+        public static bool CheckIndex<T, TList>(TList collection, IntT index) where TList : Generic.IReadOnlyList<T> {
             Contract.Requires(null != collection);
             return collection.Count.ToUnsignedUnchecked() > unchecked((UIntT)index);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static bool CheckSegment<T, TList>(TList collection, IntT start, IntT count) where TList : IReadOnlyList<T> {
+        public static bool CheckSegment<T, TList>(TList collection, IntT start, IntT count) where TList : Generic.IReadOnlyList<T> {
             Contract.Requires(null != collection);
             return unchecked(start + count) <= collection.Count && 0 <= start && 0 <= count;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static bool CheckSegmentNonEmpty<T, TList>(TList collection, IntT start, IntT count) where TList : IReadOnlyList<T> {
+        public static bool CheckSegmentNonEmpty<T, TList>(TList collection, IntT start, IntT count) where TList : Generic.IReadOnlyList<T> {
             Contract.Requires(null != collection);
             return unchecked(start + count) <= collection.Count && 0 <= start && count > 0;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static bool CheckSegmentIndex<T, TList>(TList collection, IntT start, IntT count, IntT index) where TList : IReadOnlyList<T> {
+        public static bool CheckSegmentIndex<T, TList>(TList collection, IntT start, IntT count, IntT index) where TList : Generic.IReadOnlyList<T> {
             Contract.Requires(null != collection);
             return CheckSegment<T, TList>(collection, start, count) && start <= index && index < unchecked(start + count);
         }
     }
 }
 
-namespace UltimateOrb.Collections.Generic.RefReturnSupported {
+namespace UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic {
     using UltimateOrb;
 
     using System.Collections;
     using Internal.System;
-    using Internal.System.Collections.Generic;
     using static UltimateOrb.Utilities.ThrowHelper;
 
     using static List_ThrowHelper;

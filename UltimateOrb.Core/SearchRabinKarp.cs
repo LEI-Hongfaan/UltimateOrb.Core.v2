@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using UltimateOrb.Collections.Generic;
 
 namespace UltimateOrb {
+    using System.Collections.Generic;
+
     using IntT = Int32;
     using UIntT = UInt32;
 
     public static partial class SequenceSearchModule {
 
-        public partial interface ISequenceEqualityComparerWithRollingHash<in T, TRollingHashCodeBuilder>
+        public partial interface ISequenceEqualityComparerWithRollingHash<in T, out TRollingHashCodeBuilder>
             : ISequenceEqualityComparer<T>
             where TRollingHashCodeBuilder : IRollingHashCodeBuilder<T> {
 

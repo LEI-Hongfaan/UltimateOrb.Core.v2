@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using System.Security;
 
 namespace UltimateOrb.Plain.ValueTypes {
-    using UltimateOrb.Collections.Generic;
+    using UltimateOrb.Typed.Collections.Generic;
     using static ThrowHelper_Dictionary;
 
     /// <summary>Represents a collection of keys and values.</summary>
@@ -19,9 +19,9 @@ namespace UltimateOrb.Plain.ValueTypes {
     [DebuggerDisplayAttribute(@"Count = {LongCount}")]
     [ComVisibleAttribute(false)]
     public partial struct WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer> :
-        IDictionary<TKey, TValue, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
+        Typed.Collections.Generic.IDictionary<TKey, TValue, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
         IDictionary,
-        IReadOnlyDictionary<TKey, TValue, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
+        Typed.Collections.Generic.IReadOnlyDictionary<TKey, TValue, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.KeyCollection, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection.Enumerator, WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>.ValueCollection>,
         ISerializable, IDeserializationCallback
         where TKey : class
         where TKeyEqualityComparer : IEqualityComparer<TKey>, new() {
@@ -110,6 +110,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return new KeyCollection(this);
             }
         }
+
 
         /// <summary>Gets a collection containing the values in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</summary>
         /// <returns>A <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> containing the values in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</returns>
@@ -217,8 +218,6 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return this.Values;
             }
         }
-
-        ValueCollection IDictionary<TKey, TValue, Enumerator, KeyCollection.Enumerator, KeyCollection, ValueCollection.Enumerator, ValueCollection>.Values => throw new NotImplementedException();
 
         public long LongCount {
 
@@ -468,11 +467,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         public Enumerator GetEnumerator() {
             return new Enumerator(this);
         }
-
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() {
-            return new Enumerator(this);
-        }
-
+        
         /// <summary>Implements the <see cref="ISerializable" /> interface and returns the data needed to serialize the <see cref="WeakKeyDictionary{TKey, TValue, TEqualityComparer}" /> instance.</summary>
         /// <param name="info">A <see cref="SerializationInfo" /> object that contains the information required to serialize the <see cref="WeakKeyDictionary{TKey, TValue, TEqualityComparer}" /> instance.</param>
         /// <param name="context">A <see cref="StreamingContext" /> structure that contains the source and destination of the serialized stream associated with the <see cref="WeakKeyDictionary{TKey, TValue, TEqualityComparer}" /> instance.</param>
@@ -957,7 +952,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             this.Remove(k);
         }
 
-        public TValue GetOrAdd<TFunc>(TKey key, TFunc valueFactory) where TFunc : IFunc<TKey, TValue> {
+        public TValue GetOrAdd<TFunc>(TKey key, TFunc valueFactory) where TFunc : IO.IFunc<TKey, TValue> {
             var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
@@ -1032,8 +1027,8 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public TValue AddOrUpdate<TAdd, TUpdate>(TKey key, TAdd addValueFactory, TUpdate updateValueFactory)
-            where TAdd : IFunc<TKey, TValue>
-            where TUpdate : IFunc<TKey, TValue, TValue> {
+            where TAdd : IO.IFunc<TKey, TValue>
+            where TUpdate : IO.IFunc<TKey, TValue, TValue> {
             var entries = this.m_EntryBuffer;
             var length = entries.Length; // null check;
             if (length > 0) {
@@ -1312,12 +1307,56 @@ namespace UltimateOrb.Plain.ValueTypes {
             return false;
         }
 
-        public bool Contains<TEqualityComparer>(TEqualityComparer comparer, KeyValuePair<TKey, TValue> item) where TEqualityComparer : IEqualityComparer<KeyValuePair<TKey, TValue>> {
+        public bool Contains<TEqualityComparer>(KeyValuePair<TKey, TValue> item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<KeyValuePair<TKey, TValue>> {
             throw new NotImplementedException();
         }
 
-        public bool Remove<TEqualityComparer>(TEqualityComparer comparer, KeyValuePair<TKey, TValue> item) where TEqualityComparer : IEqualityComparer<KeyValuePair<TKey, TValue>> {
+        public bool Remove<TEqualityComparer>(KeyValuePair<TKey, TValue> item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<KeyValuePair<TKey, TValue>> {
             throw new NotImplementedException();
+        }
+
+        public TValue AddOrUpdate<TAdd, TUpdate>(TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory) {
+            throw new NotImplementedException();
+        }
+
+        public TValue GetOrAdd<TFunc>(TKey key, Func<TKey, TValue> valueFactory) {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, long arrayIndex) {
+            if (array == null) {
+                ThrowArgumentNullException_array();
+            }
+            var index = arrayIndex;
+            if (index < 0 || index > array.Length) {
+                ThrowArgumentOutOfRangeException_index_NeedNonNegNum();
+            }
+            if (array.Length - index < this.Count) {
+                ThrowArgumentException_ArrayPlusOffTooSmall();
+            }
+            var count = this.m_EntryCount;
+            var entries = this.m_EntryBuffer;
+            for (var i = (long)0; count > i; ++i) {
+                ref var entry = ref entries[i];
+                if (0 <= entry.m_Flags) {
+                    var weakKey = entry.m_WeakKey;
+                    if (weakKey.TryGetTarget(out var key)) {
+                        array[index++] = new KeyValuePair<TKey, TValue>(key, entry.m_Value);
+                    }
+                }
+            }
+        }
+
+        public void CopyTo(Array<KeyValuePair<TKey, TValue>> array, int arrayIndex) {
+            this.CopyTo(array.Value, arrayIndex);
+        }
+
+        public void CopyTo(Array<KeyValuePair<TKey, TValue>> array, long arrayIndex) {
+            this.CopyTo(array.Value, arrayIndex);
+        }
+
+        System.Collections.Generic.IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() {
+            return new Enumerator(this);
         }
     }
 }

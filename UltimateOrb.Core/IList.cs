@@ -1,34 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace UltimateOrb.Huge.Collections.Generic {
 
-namespace UltimateOrb.Collections.Generic {
-    using UltimateOrb;
+    public partial interface IList<T> {
 
-    public partial interface IList<T, out TEnumerator>
-        : IList<T>, ICollection<T, TEnumerator>
-        where TEnumerator : IEnumerator<T> {
+        T this[long index] {
 
-        int IndexOf<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T>;
+            get;
+
+            set;
+        }
+
+        void Insert(long index, T item);
+
+        long LongIndexOf(T item);
+
+        void RemoveAt(long index);
     }
 }
 
-namespace UltimateOrb.Collections.Generic.ExtraTypeParametersProvided {
-    using UltimateOrb;
+namespace UltimateOrb.RefReturn.Collections.Generic {
 
-    public partial interface IList<T, out TEnumerator, in TEqualityComparer>
-        : IList<T, TEnumerator>, ICollection<T, TEnumerator, TEqualityComparer>
-        where TEnumerator : IEnumerator<T>
-        where TEqualityComparer : struct, IEqualityComparer<T> {
-    }
-}
-
-namespace UltimateOrb.Collections.Generic.RefReturnSupported {
-    using UltimateOrb;
-    using Generic = UltimateOrb.Collections.Generic;
-
-    public partial interface IList<T, out TEnumerator>
-        : Generic.IList<T, TEnumerator>, ICollection<T, TEnumerator>
-        where TEnumerator : IEnumerator<T> {
+    public partial interface IList<T> {
 
         new ref T this[int index] {
 
@@ -39,52 +30,33 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
     }
 }
 
-namespace Internal.System.Collections.Generic {
-    using Internal;
+namespace UltimateOrb.RefReturn_Huge.Collections.Generic {
 
-    using UltimateOrb;
-    using Generic = global::System.Collections.Generic;
 
-    using global::System.Runtime.CompilerServices;
+    public partial interface IList<T> {
 
-    public static partial class TList<T> {
+        new ref T this[long index] {
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable IDE1006 // Naming Styles
-        public static T get_Item<TList>(TList @this, int index) where TList : Generic.IList<T> {
-#pragma warning restore IDE1006 // Naming Styles
-            return @this[index];
+            get;
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable IDE1006 // Naming Styles
-        public static T get_Item<TList>(ref TList @this, int index) where TList : struct, Generic.IList<T> {
-#pragma warning restore IDE1006 // Naming Styles
-            return @this[index];
-        }
+        new ref T Insert(long index, T item);
+    }
+}
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable IDE1006 // Naming Styles
-        public static void set_Item<TList>(TList @this, int index, T value) where TList : Generic.IList<T> {
-#pragma warning restore IDE1006 // Naming Styles
-            @this[index] = value;
-        }
+namespace UltimateOrb.Typed.Collections.Generic {
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable IDE1006 // Naming Styles
-        public static void set_Item<TList>(ref TList @this, int index, T value) where TList : struct, Generic.IList<T> {
-#pragma warning restore IDE1006 // Naming Styles
-            @this[index] = value;
-        }
+    public partial interface IList<T, out TEnumerator> {
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void Insert<TList>(TList @this, int index, T item) where TList : Generic.IList<T> {
-            @this.Insert(index, item);
-        }
+        int IndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : System.Collections.Generic.IEqualityComparer<T>;
+    }
+}
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void Insert<TList>(ref TList @this, int index, T item) where TList : struct, Generic.IList<T> {
-            @this.Insert(index, item);
-        }
+
+namespace UltimateOrb.Typed_Huge.Collections.Generic {
+
+    public partial interface IList<T, out TEnumerator> {
+
+        long LongIndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : Huge.Collections.Generic.IEqualityComparer<T>;
     }
 }

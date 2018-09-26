@@ -1,0 +1,212 @@
+﻿<#@ import namespace="System.Collections.Generic" #>
+using System;
+using System.Diagnostics.Contracts;
+using System.Runtime;
+using System.Runtime.CompilerServices;
+using System.Runtime.ConstrainedExecution;
+<#
+var sl = new List<string>() { "int", "long", "IntPtr", "Int128" };
+var ul = new List<string>() { "uint", "ulong", "UIntPtr", "UInt128" };
+
+var a = new List<string>();
+a.AddRange(sl);
+a.AddRange(ul);
+
+var ToUnsigned = new Dictionary<string, string>() {
+	{ "int", "uint" },
+	{ "long", "ulong" },
+	{ "IntPtr", "UIntPtr" },
+	{ "Int128", "UInt128" },
+};
+#>
+
+namespace UltimateOrb {
+	using static UltimateOrb.Utilities.SignConverter;
+
+	[DiscardableAttribute()]
+    public static partial class ComparisionHelper {
+		
+		[ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        private static long ExtendToXLong(this IntPtr value) {
+			return unchecked((long)value);
+		}
+
+		[ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        private static ulong ExtendToXLong(this UIntPtr value) {
+			return unchecked((ulong)value);
+		}
+<#
+	foreach(var b in a)
+	foreach(var c in a) {
+#>
+        
+<#
+		if (ul.Contains(b) || ul.Contains(c)) {
+#>
+        [CLSCompliantAttribute(false)]
+<#
+		}
+#>
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static bool LessThanOrEqual(<#= b #> first, <#= c #> second) {
+			unchecked {
+<#
+		if (sl.Contains(b) ^ sl.Contains(c)) {
+#>
+<#
+			if (sl.Contains(b)) {
+#>
+				return !(0 <= first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>) || first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>.ToUnsignedUnchecked() <= second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>;
+<#
+			}
+#>
+<#
+			if (sl.Contains(c)) {
+#>
+				return 0 <= second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> && first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> <= second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>.ToUnsignedUnchecked();
+<#
+			}
+#>
+<#
+		} else {
+#>
+				return first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> <= second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>;
+<#
+		}
+#>
+			}
+        }
+
+<#
+		if (ul.Contains(b) || ul.Contains(c)) {
+#>
+        [CLSCompliantAttribute(false)]
+<#
+		}
+#>
+		[ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static bool GreaterThan(<#= b #> first, <#= c #> second) {
+			unchecked {
+<#
+		if (sl.Contains(b) ^ sl.Contains(c)) {
+#>
+<#
+			if (sl.Contains(b)) {
+#>
+				return !(0 > first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>) && first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>.ToUnsignedUnchecked() > second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>;
+<#
+			}
+#>
+<#
+			if (sl.Contains(c)) {
+#>
+				return 0 > second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> || first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> > second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>.ToUnsignedUnchecked();
+<#
+			}
+#>
+<#
+		} else {
+#>
+				return first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> > second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>;
+<#
+		}
+#>
+			}
+        }
+        
+<#
+		if (ul.Contains(b) || ul.Contains(c)) {
+#>
+        [CLSCompliantAttribute(false)]
+<#
+		}
+#>
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static bool LessThan(<#= b #> first, <#= c #> second) {
+			unchecked {
+<#
+		if (sl.Contains(b) ^ sl.Contains(c)) {
+#>
+<#
+			if (sl.Contains(b)) {
+#>
+				return first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> < 0 || first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>.ToUnsignedUnchecked() < second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>;
+<#
+			}
+#>
+<#
+			if (sl.Contains(c)) {
+#>
+				return !(second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> < 0) && first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> < second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>.ToUnsignedUnchecked();
+<#
+			}
+#>
+<#
+		} else {
+#>
+				return first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> < second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>;
+<#
+		}
+#>
+			}
+        }
+        
+<#
+		if (ul.Contains(b) || ul.Contains(c)) {
+#>
+        [CLSCompliantAttribute(false)]
+<#
+		}
+#>
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        [PureAttribute()]
+        public static bool GreaterThenOrEqual(<#= b #> first, <#= c #> second) {
+			unchecked {
+<#
+		if (sl.Contains(b) ^ sl.Contains(c)) {
+#>
+<#
+			if (sl.Contains(b)) {
+#>
+				return first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> >= 0 && first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>.ToUnsignedUnchecked() >= second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>;
+<#
+			}
+#>
+<#
+			if (sl.Contains(c)) {
+#>
+				return !(second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> >= 0) || first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> >= second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>.ToUnsignedUnchecked();
+<#
+			}
+#>
+<#
+		} else {
+#>
+				return first<#= b.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #> >= second<#= c.EndsWith("Ptr") ? ".ExtendToXLong()" : "" #>;
+<#
+		}
+#>
+			}
+        }
+<#
+	}
+#>
+    }
+}

@@ -92,7 +92,7 @@ namespace UltimateOrb {
             }
         }
 
-        T IReadOnlyStrongBox<T>.Value {
+        T Core.IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.GetValue();

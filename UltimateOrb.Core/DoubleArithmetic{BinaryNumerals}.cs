@@ -7,7 +7,6 @@ namespace UltimateOrb.Mathematics {
     using Int = Int32;
     using Long = Int64;
 
-    using static UltimateOrb.Utilities.SizeOfModule;
     using Math = System.Math;
     using MathEx = DoubleArithmetic;
 
@@ -64,7 +63,7 @@ namespace UltimateOrb.Mathematics {
                     loV = lo & (ULong)(-(Long)lo);
                     hiV = hi & ((ULong)(-1u) - hi);
                     loV = MathEx.Divide(loT & (ULong)(-(Long)loT), hiT & ((0u == loT) ? (ULong)(-(Long)hiT) : ((ULong)(-1u) - hiT)), loV, hiV, out hiV);
-                    loV = (loV >> 1) | (hiV << (BitSizeOf<ULong>() - 1));
+                    loV = (loV >> 1) | (hiV << (Misc.ULong.BitSize - 1));
                     hiV = hiV >> 1;
                     if (0u == loV--) {
                         --hiV;

@@ -7,11 +7,10 @@ namespace UltimateOrb.Mathematics {
     using Int = Int32;
     using Long = Int64;
 
-    using static UltimateOrb.Utilities.SizeOfModule;
     using Math = Internal.System.Math;
 
     public static partial class DoubleArithmetic {
-
+        
         [System.CLSCompliantAttribute(false)]
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public static ULong BigDivRem(ULong lowDividend, ULong highDividend, ULong divisor, out ULong remainder) {
@@ -25,11 +24,11 @@ namespace UltimateOrb.Mathematics {
                         highDividend = checked(0u - highDividend);
                         throw (System.OverflowException)null;
                     }
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     qh = Math.DivRem(highDividend, divisor, out highDividend);
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     ql = Math.DivRem(highDividend, divisor, out remainder);
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 } else {
                     // 2013Dec24, 2014Jan08
                     if (divisor <= highDividend) {
@@ -42,14 +41,14 @@ namespace UltimateOrb.Mathematics {
                             ++c;
                             divisor <<= 1;
                         } while (0 <= (Long)divisor);
-                        highDividend = (highDividend << c) | (lowDividend >> (BitSizeOf<ULong>() - c));
+                        highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
                         lowDividend = lowDividend << c;
                     }
-                    var dh = (ULong)(UInt)(divisor >> BitSizeOf<UInt>());
+                    var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                     var dl = (ULong)(UInt)divisor;
                     qh = Math.DivRem(highDividend, dh, out highDividend);
                     p = qh * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     if (highDividend < p) {
                         {
                             --qh;
@@ -65,7 +64,7 @@ namespace UltimateOrb.Mathematics {
                     highDividend -= p;
                     ql = Math.DivRem(highDividend, dh, out highDividend);
                     p = ql * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     if (highDividend < p) {
                         {
                             --ql;
@@ -79,7 +78,7 @@ namespace UltimateOrb.Mathematics {
                         }
                     }
                     remainder = (highDividend - p) >> c;
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 }
             }
         }
@@ -92,11 +91,11 @@ namespace UltimateOrb.Mathematics {
                 if (0u == highDividend) {
                     return Math.DivRem(lowDividend, divisor, out remainder);
                 } else if (UInt.MaxValue > divisor) {
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     qh = Math.DivRem(highDividend, divisor, out highDividend);
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     ql = Math.DivRem(highDividend, divisor, out remainder);
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 } else {
                     // 2013Dec24
                     int c = 0;
@@ -105,14 +104,14 @@ namespace UltimateOrb.Mathematics {
                             ++c;
                             divisor <<= 1;
                         } while (0 <= (Long)divisor);
-                        highDividend = (highDividend << c) | (lowDividend >> (BitSizeOf<ULong>() - c));
+                        highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
                         lowDividend = lowDividend << c;
                     }
-                    var dh = (ULong)(UInt)(divisor >> BitSizeOf<UInt>());
+                    var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                     var dl = (ULong)(UInt)divisor;
                     qh = Math.DivRem(highDividend, dh, out highDividend);
                     p = qh * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     if (highDividend < p) {
                         {
                             --qh;
@@ -128,7 +127,7 @@ namespace UltimateOrb.Mathematics {
                     highDividend -= p;
                     ql = Math.DivRem(highDividend, dh, out highDividend);
                     p = ql * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     if (highDividend < p) {
                         {
                             --ql;
@@ -142,7 +141,7 @@ namespace UltimateOrb.Mathematics {
                         }
                     }
                     remainder = (highDividend - p) >> c;
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 }
             }
         }
@@ -155,11 +154,11 @@ namespace UltimateOrb.Mathematics {
                 if (0u == highDividend) {
                     return lowDividend / divisor;
                 } else if (UInt.MaxValue > divisor) {
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     qh = Math.DivRem(highDividend, divisor, out highDividend);
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     ql = highDividend / divisor;
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 } else {
                     // 2013Dec24
                     int c = 0;
@@ -168,14 +167,14 @@ namespace UltimateOrb.Mathematics {
                             ++c;
                             divisor <<= 1;
                         } while (0 <= (Long)divisor);
-                        highDividend = (highDividend << c) | (lowDividend >> (BitSizeOf<ULong>() - c));
+                        highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
                         lowDividend = lowDividend << c;
                     }
-                    var dh = (ULong)(UInt)(divisor >> BitSizeOf<UInt>());
+                    var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                     var dl = (ULong)(UInt)divisor;
                     qh = Math.DivRem(highDividend, dh, out highDividend);
                     p = qh * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     if (highDividend < p) {
                         {
                             --qh;
@@ -191,7 +190,7 @@ namespace UltimateOrb.Mathematics {
                     highDividend -= p;
                     ql = Math.DivRem(highDividend, dh, out highDividend);
                     p = ql * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     if (highDividend < p) {
                         {
                             --ql;
@@ -203,7 +202,7 @@ namespace UltimateOrb.Mathematics {
                             }
                         }
                     }
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 }
             }
         }
@@ -212,39 +211,39 @@ namespace UltimateOrb.Mathematics {
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public static ULong BigMul(ULong first, ULong second, out ULong highResult) {
             unchecked {
-                if (SizeOf<ULong>() > SizeOf<UIntPtr>()) {
+                if (Misc.ULong.Size > Misc.UIntPtr.Size) {
                     // 2013Oct04, 2013Dec24
                     var fl = (UInt)first;
-                    var fh = (UInt)(first >> BitSizeOf<UInt>());
+                    var fh = (UInt)(first >> Misc.UInt.BitSize);
                     var sl = (UInt)second;
-                    var sh = (UInt)(second >> BitSizeOf<UInt>());
+                    var sh = (UInt)(second >> Misc.UInt.BitSize);
                     var ll = (ULong)fl * sl;
                     var lh = (ULong)fl * sh;
                     var hl = (ULong)fh * sl;
                     var hh = (ULong)fh * sh;
-                    lh += (UInt)(ll >> BitSizeOf<UInt>());
+                    lh += (UInt)(ll >> Misc.UInt.BitSize);
                     lh += hl;
                     if (lh < hl) {
-                        hh += (ULong)1u << BitSizeOf<UInt>();
+                        hh += (ULong)1u << Misc.UInt.BitSize;
                     }
-                    highResult = hh + (UInt)(lh >> BitSizeOf<UInt>());
-                    return ((ULong)(UInt)lh << BitSizeOf<UInt>()) | (UInt)(ll);
+                    highResult = hh + (UInt)(lh >> Misc.UInt.BitSize);
+                    return ((ULong)(UInt)lh << Misc.UInt.BitSize) | (UInt)(ll);
                 }
                 {
                     // 2013Oct04, 2013Dec24
                     var fl = (ULong)(UInt)first;
-                    var fh = (ULong)(UInt)(first >> BitSizeOf<UInt>());
+                    var fh = (ULong)(UInt)(first >> Misc.UInt.BitSize);
                     var sl = (ULong)(UInt)second;
-                    var sh = (ULong)(UInt)(second >> BitSizeOf<UInt>());
+                    var sh = (ULong)(UInt)(second >> Misc.UInt.BitSize);
                     var ll = fl * sl;
                     var hh = fh * sh;
                     var fm = fh + fl;
                     var sm = sh + sl;
                     var mm = fm * sm - (hh + ll);
-                    var mh = mm >> BitSizeOf<UInt>();
-                    var ml = mm << BitSizeOf<UInt>();
+                    var mh = mm >> Misc.UInt.BitSize;
+                    var ml = mm << Misc.UInt.BitSize;
                     ll += ml;
-                    highResult = hh + mh + ((ll < ml) ? (ULong)1u : (ULong)0u) + ((((fm + sm) >> 1) - mh) & ((ULong)UInt.MaxValue << BitSizeOf<UInt>()));
+                    highResult = hh + mh + ((ll < ml) ? (ULong)1u : (ULong)0u) + ((((fm + sm) >> 1) - mh) & ((ULong)UInt.MaxValue << Misc.UInt.BitSize));
                     return ll;
                 }
             }
@@ -255,7 +254,7 @@ namespace UltimateOrb.Mathematics {
         public static ULong BigMul(Long first, Long second, out Long highResult) {
             ULong r;
             var q = BigMul(unchecked((ULong)first), unchecked((ULong)second), out r);
-            highResult = unchecked((Long)r - (-(Long)((ULong)first >> (BitSizeOf<ULong>() - 1)) & second) - (-(Long)((ULong)second >> (BitSizeOf<ULong>() - 1)) & first));
+            highResult = unchecked((Long)r - (-(Long)((ULong)first >> (Misc.ULong.BitSize - 1)) & second) - (-(Long)((ULong)second >> (Misc.ULong.BitSize - 1)) & first));
             return q;
         }
 
@@ -264,45 +263,45 @@ namespace UltimateOrb.Mathematics {
         // primary overload
         public static ULong BigMul_A_Karatsuba(ULong first, ULong second, out ULong highResult) {
             unchecked {
-                if (SizeOf<ULong>() > SizeOf<UIntPtr>()) {
+                if (Misc.ULong.Size > Misc.UIntPtr.Size) {
                     // 2013Oct04
                     // 我很滿意。
                     var fl = (UInt)first;
-                    var fh = (UInt)(first >> BitSizeOf<UInt>());
+                    var fh = (UInt)(first >> Misc.UInt.BitSize);
                     var sl = (UInt)second;
-                    var sh = (UInt)(second >> BitSizeOf<UInt>());
+                    var sh = (UInt)(second >> Misc.UInt.BitSize);
                     var ll = (ULong)fl * sl;
                     var hh = (ULong)fh * sh;
                     var fm = (UInt)fh + fl;
                     var sm = (UInt)sh + sl;
                     var mm = (ULong)(UInt)fm * (UInt)sm - (hh + ll);
-                    var mh = (UInt)(mm >> BitSizeOf<UInt>()) + (((UInt)fm < fl) ? (UInt)sm : 0u) + (((UInt)sm < sl) ? (UInt)fm : 0u);
+                    var mh = (UInt)(mm >> Misc.UInt.BitSize) + (((UInt)fm < fl) ? (UInt)sm : 0u) + (((UInt)sm < sl) ? (UInt)fm : 0u);
                     var fs = ((ULong)fh + fl) + ((ULong)sh + sl);
-                    var ml = mm << BitSizeOf<UInt>();
+                    var ml = mm << Misc.UInt.BitSize;
                     ll += ml;
-                    highResult = hh + ((ULong)mh + ((ll < ml) ? 1u : 0u)) + (((fs >> 1) - mh) & ((ULong)UInt.MaxValue << BitSizeOf<UInt>()));
+                    highResult = hh + ((ULong)mh + ((ll < ml) ? 1u : 0u)) + (((fs >> 1) - mh) & ((ULong)UInt.MaxValue << Misc.UInt.BitSize));
                     return ll;
                 }
                 {
                     // 2013Oct03
                     // 我很滿意。
                     var fl = (ULong)(UInt)first;
-                    var fh = (ULong)(UInt)(first >> BitSizeOf<UInt>());
+                    var fh = (ULong)(UInt)(first >> Misc.UInt.BitSize);
                     var sl = (ULong)(UInt)second;
-                    var sh = (ULong)(UInt)(second >> BitSizeOf<UInt>());
+                    var sh = (ULong)(UInt)(second >> Misc.UInt.BitSize);
                     var ll = fl * sl;
                     var hh = fh * sh;
                     var fm = fh + fl;
                     var sm = sh + sl;
                     var mm = fm * sm - (hh + ll);
                     // Bod for jitter:
-                    // var mh = (ULong)(UInt)(mm >> BitSizeOf<UInt>());
-                    var mh = mm >> BitSizeOf<UInt>();
-                    var ml = mm << BitSizeOf<UInt>();
+                    // var mh = (ULong)(UInt)(mm >> Misc.UInt.BitSize);
+                    var mh = mm >> Misc.UInt.BitSize;
+                    var ml = mm << Misc.UInt.BitSize;
                     ll += ml;
                     // Bod for jitter:
-                    // highResult = hh + mh + ((ll < ml) ? 1u : 0u) + ((((fm + sm) >> 1) - mh) & ((ULong)UInt.MaxValue << BitSizeOf<UInt>()));
-                    highResult = hh + mh + ((ll < ml) ? (ULong)1u : (ULong)0u) + ((((fm + sm) >> 1) - mh) & ((ULong)UInt.MaxValue << BitSizeOf<UInt>()));
+                    // highResult = hh + mh + ((ll < ml) ? 1u : 0u) + ((((fm + sm) >> 1) - mh) & ((ULong)UInt.MaxValue << Misc.UInt.BitSize));
+                    highResult = hh + mh + ((ll < ml) ? (ULong)1u : (ULong)0u) + ((((fm + sm) >> 1) - mh) & ((ULong)UInt.MaxValue << Misc.UInt.BitSize));
                     return ll;
                 }
             }
@@ -313,26 +312,26 @@ namespace UltimateOrb.Mathematics {
         // primary overload
         public static ULong BigMul_A_Long(ULong first, ULong second, out ULong highResult) {
             unchecked {
-                if (SizeOf<ULong>() > SizeOf<UIntPtr>()) {
+                if (Misc.ULong.Size > Misc.UIntPtr.Size) {
                     // 2013Oct03
                     // 我很滿意。
                     var fl = (UInt)first;
-                    var fh = (UInt)(first >> BitSizeOf<UInt>());
+                    var fh = (UInt)(first >> Misc.UInt.BitSize);
                     var sl = (UInt)second;
-                    var sh = (UInt)(second >> BitSizeOf<UInt>());
+                    var sh = (UInt)(second >> Misc.UInt.BitSize);
                     var ll = (ULong)fl * sl;
                     var lh = (ULong)fl * sh;
                     var hl = (ULong)fh * sl;
                     var hh = (ULong)fh * sh;
-                    lh += (UInt)(ll >> BitSizeOf<UInt>());
+                    lh += (UInt)(ll >> Misc.UInt.BitSize);
                     lh += hl;
                     if (lh < hl) {
-                        hh += (ULong)1u << BitSizeOf<UInt>();
+                        hh += (ULong)1u << Misc.UInt.BitSize;
                     }
-                    highResult = hh + (UInt)(lh >> BitSizeOf<UInt>());
+                    highResult = hh + (UInt)(lh >> Misc.UInt.BitSize);
                     // Bad for jitter:
-                    // return (lh << BitSizeOf<UInt>()) + (UInt)(ll);
-                    return ((ULong)(UInt)lh << BitSizeOf<UInt>()) | (UInt)(ll);
+                    // return (lh << Misc.UInt.BitSize) + (UInt)(ll);
+                    return ((ULong)(UInt)lh << Misc.UInt.BitSize) | (UInt)(ll);
                 }
                 {
                     // 2013Oct03
@@ -341,10 +340,10 @@ namespace UltimateOrb.Mathematics {
                     // fl = (UInt)first;
                     var fl = (ULong)(UInt)first;
                     // Bad for jitter:
-                    // var fh = (ULong)(first >> BitSizeOf<UInt>());
-                    var fh = (ULong)(UInt)(first >> BitSizeOf<UInt>());
+                    // var fh = (ULong)(first >> Misc.UInt.BitSize);
+                    var fh = (ULong)(UInt)(first >> Misc.UInt.BitSize);
                     var sl = (ULong)(UInt)second;
-                    var sh = (ULong)(UInt)(second >> BitSizeOf<UInt>());
+                    var sh = (ULong)(UInt)(second >> Misc.UInt.BitSize);
                     // Bad for jitter:
                     // var ll = (ULong)(UInt)fl * (ULong)(UInt)sl;
                     var ll = fl * sl;
@@ -352,26 +351,26 @@ namespace UltimateOrb.Mathematics {
                     var hl = fh * sl;
                     var hh = fh * sh;
                     // Bad for jitter:
-                    // lh += (UInt)(ll >> BitSizeOf<UInt>());
-                    lh += ll >> BitSizeOf<UInt>();
+                    // lh += (UInt)(ll >> Misc.UInt.BitSize);
+                    lh += ll >> Misc.UInt.BitSize;
                     lh += hl;
                     if (lh < hl) {
-                        hh += (ULong)1u << BitSizeOf<UInt>();
+                        hh += (ULong)1u << Misc.UInt.BitSize;
                     }
-                    highResult = hh + (lh >> BitSizeOf<UInt>());
-                    return (lh << BitSizeOf<UInt>()) + (UInt)(ll);
+                    highResult = hh + (lh >> Misc.UInt.BitSize);
+                    return (lh << Misc.UInt.BitSize) + (UInt)(ll);
                 }
             }
             /* // old version
-            var xh = first >> BitSizeOf<UInt>();
-            var yh = second >> BitSizeOf<UInt>();
+            var xh = first >> Misc.UInt.BitSize;
+            var yh = second >> Misc.UInt.BitSize;
             var lo = unchecked((ULong)(UInt)first * (UInt)second);
             var xl = unchecked((UInt)first * yh);
             var yl = unchecked(xh * (UInt)second);
             xl = unchecked(xl + yl);
             xh = unchecked(xh * yh);
-            yh = unchecked(lo + (xl << BitSizeOf<UInt>()));
-            highResult = unchecked((xh + (UInt)(xl >> BitSizeOf<UInt>())) + ((lo > yh ? (ULong)1 : 0) + (yl > xl ? (ULong)1 << BitSizeOf<UInt>() : 0)));
+            yh = unchecked(lo + (xl << Misc.UInt.BitSize));
+            highResult = unchecked((xh + (UInt)(xl >> Misc.UInt.BitSize)) + ((lo > yh ? (ULong)1 : 0) + (yl > xl ? (ULong)1 << Misc.UInt.BitSize : 0)));
             return yh;
             */
         }
@@ -380,10 +379,10 @@ namespace UltimateOrb.Mathematics {
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public static UInt BigMul_M(ULong first, UInt second, out ULong lowResult) {
             var lo = unchecked((ULong)(UInt)first * (UInt)second);
-            var yl = unchecked((first >> BitSizeOf<UInt>()) * (UInt)second);
-            var yh = unchecked(lo + (yl << BitSizeOf<UInt>()));
+            var yl = unchecked((first >> Misc.UInt.BitSize) * (UInt)second);
+            var yh = unchecked(lo + (yl << Misc.UInt.BitSize));
             lowResult = yh;
-            return unchecked(((UInt)(yl >> BitSizeOf<UInt>())) + ((lo > yh ? (UInt)1 : 0)));
+            return unchecked(((UInt)(yl >> Misc.UInt.BitSize)) + ((lo > yh ? (UInt)1 : 0)));
         }
 
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -503,9 +502,9 @@ namespace UltimateOrb.Mathematics {
                 if (0u == highDividend) {
                     return lowDividend % divisor;
                 } else if (UInt.MaxValue > divisor) {
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     highDividend %= divisor;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     return highDividend % divisor;
                 } else {
                     // 2013Dec24
@@ -515,13 +514,13 @@ namespace UltimateOrb.Mathematics {
                             divisor <<= 1;
                             ++c;
                         } while (0 <= (Long)divisor);
-                        highDividend = (highDividend << c) | (lowDividend >> (BitSizeOf<ULong>() - c));
+                        highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
                         lowDividend = lowDividend << c;
                     }
-                    var dh = (ULong)(UInt)(divisor >> BitSizeOf<UInt>());
+                    var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                     var dl = (ULong)(UInt)divisor;
                     p = Math.DivRem(highDividend, dh, out highDividend) * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     if (highDividend < p) {
                         {
                             highDividend += divisor;
@@ -534,7 +533,7 @@ namespace UltimateOrb.Mathematics {
                     }
                     highDividend -= p;
                     p = Math.DivRem(highDividend, dh, out highDividend) * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     if (highDividend < p) {
                         {
                             highDividend += divisor;
@@ -634,37 +633,37 @@ namespace UltimateOrb.Mathematics {
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public static ULong BigSquare(ULong value, out ULong highResult) {
             unchecked {
-                if (SizeOf<ULong>() > SizeOf<UIntPtr>()) {
+                if (Misc.ULong.Size > Misc.UIntPtr.Size) {
                     // 2013Oct04
                     var fl = (UInt)value;
-                    var fh = (UInt)(value >> BitSizeOf<UInt>());
+                    var fh = (UInt)(value >> Misc.UInt.BitSize);
                     var ll = (ULong)fl * fl;
                     var lh = (ULong)fl * fh;
                     var hl = lh;
                     var hh = (ULong)fh * fh;
-                    lh += (UInt)(ll >> BitSizeOf<UInt>());
+                    lh += (UInt)(ll >> Misc.UInt.BitSize);
                     lh += hl;
                     if (lh < hl) {
-                        hh += (ULong)1u << BitSizeOf<UInt>();
+                        hh += (ULong)1u << Misc.UInt.BitSize;
                     }
-                    highResult = hh + (UInt)(lh >> BitSizeOf<UInt>());
-                    return ((ULong)(UInt)lh << BitSizeOf<UInt>()) | (UInt)(ll);
+                    highResult = hh + (UInt)(lh >> Misc.UInt.BitSize);
+                    return ((ULong)(UInt)lh << Misc.UInt.BitSize) | (UInt)(ll);
                 }
                 {
                     // 2013Oct04
                     var fl = (ULong)(UInt)value;
-                    var fh = (ULong)(UInt)(value >> BitSizeOf<UInt>());
+                    var fh = (ULong)(UInt)(value >> Misc.UInt.BitSize);
                     var ll = fl * fl;
                     var lh = fl * fh;
                     var hl = lh;
                     var hh = fh * fh;
-                    lh += ll >> BitSizeOf<UInt>();
+                    lh += ll >> Misc.UInt.BitSize;
                     lh += hl;
                     if (lh < hl) {
-                        hh += (ULong)1u << BitSizeOf<UInt>();
+                        hh += (ULong)1u << Misc.UInt.BitSize;
                     }
-                    highResult = hh + (lh >> BitSizeOf<UInt>());
-                    return (lh << BitSizeOf<UInt>()) + (UInt)(ll);
+                    highResult = hh + (lh >> Misc.UInt.BitSize);
+                    return (lh << Misc.UInt.BitSize) + (UInt)(ll);
                 }
             }
         }
@@ -703,11 +702,11 @@ namespace UltimateOrb.Mathematics {
                 if (0u == highDividend) {
                     return Math.DivRem(lowDividend, divisor, out remainder);
                 } else if (UInt.MaxValue > divisor) {
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     qh = Math.DivRem(highDividend, divisor, out highDividend);
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     ql = Math.DivRem(highDividend, divisor, out remainder);
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 } else {
                     // 2013Dec24
                     int c = 0;
@@ -716,14 +715,14 @@ namespace UltimateOrb.Mathematics {
                             divisor <<= 1;
                             ++c;
                         } while (0 <= (Long)divisor);
-                        highDividend = (highDividend << c) | (lowDividend >> (BitSizeOf<ULong>() - c));
+                        highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
                         lowDividend = lowDividend << c;
                     }
-                    var dh = (ULong)(UInt)(divisor >> BitSizeOf<UInt>());
+                    var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                     var dl = (ULong)(UInt)divisor;
                     qh = Math.DivRem(highDividend, dh, out highDividend);
                     p = qh * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     if (highDividend < p) {
                         {
                             --qh;
@@ -739,7 +738,7 @@ namespace UltimateOrb.Mathematics {
                     highDividend -= p;
                     ql = Math.DivRem(highDividend, dh, out highDividend);
                     p = ql * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     if (highDividend < p) {
                         {
                             --ql;
@@ -753,7 +752,7 @@ namespace UltimateOrb.Mathematics {
                         }
                     }
                     remainder = (highDividend - p) >> c;
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 }
             }
         }
@@ -767,9 +766,9 @@ namespace UltimateOrb.Mathematics {
                 if (0u == highDividend) {
                     return lowDividend % divisor;
                 } else if (UInt.MaxValue > divisor) {
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     highDividend = highDividend % divisor;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     return highDividend % divisor;
                 } else {
                     // 2013Dec24
@@ -779,14 +778,14 @@ namespace UltimateOrb.Mathematics {
                             divisor <<= 1;
                             ++c;
                         } while (0 <= (Long)divisor);
-                        highDividend = (highDividend << c) | (lowDividend >> (BitSizeOf<ULong>() - c));
+                        highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
                         lowDividend = lowDividend << c;
                     }
-                    var dh = (ULong)(UInt)(divisor >> BitSizeOf<UInt>());
+                    var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                     var dl = (ULong)(UInt)divisor;
                     qh = Math.DivRem(highDividend, dh, out highDividend);
                     p = qh * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     if (highDividend < p) {
                         {
                             --qh;
@@ -802,7 +801,7 @@ namespace UltimateOrb.Mathematics {
                     highDividend -= p;
                     ql = Math.DivRem(highDividend, dh, out highDividend);
                     p = ql * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     if (highDividend < p) {
                         {
                             highDividend += divisor;
@@ -827,11 +826,11 @@ namespace UltimateOrb.Mathematics {
                 if (0u == highDividend) {
                     return lowDividend / divisor;
                 } else if (UInt.MaxValue > divisor) {
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     qh = Math.DivRem(highDividend, divisor, out highDividend);
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     ql = highDividend / divisor;
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 } else {
                     // 2013Dec24
                     int c = 0;
@@ -840,14 +839,14 @@ namespace UltimateOrb.Mathematics {
                             divisor <<= 1;
                             ++c;
                         } while (0 <= (Long)divisor);
-                        highDividend = (highDividend << c) | (lowDividend >> (BitSizeOf<ULong>() - c));
+                        highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
                         lowDividend = lowDividend << c;
                     }
-                    var dh = (ULong)(UInt)(divisor >> BitSizeOf<UInt>());
+                    var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                     var dl = (ULong)(UInt)divisor;
                     qh = Math.DivRem(highDividend, dh, out highDividend);
                     p = qh * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                     if (highDividend < p) {
                         {
                             --qh;
@@ -863,7 +862,7 @@ namespace UltimateOrb.Mathematics {
                     highDividend -= p;
                     ql = Math.DivRem(highDividend, dh, out highDividend);
                     p = ql * dl;
-                    highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                     if (highDividend < p) {
                         {
                             --ql;
@@ -877,7 +876,7 @@ namespace UltimateOrb.Mathematics {
                         }
                     }
                     // remainder = (highDividend - p) >> c;
-                    return (qh << BitSizeOf<UInt>()) | ql;
+                    return (qh << Misc.UInt.BitSize) | ql;
                 }
             }
         }
@@ -886,11 +885,11 @@ namespace UltimateOrb.Mathematics {
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         internal static ULong BigDivRemPartialInternal(ULong lowDividend, ULong highDividend, ULong divisor, out ULong remainder) {
             unchecked {
-                var dh = (ULong)(UInt)(divisor >> BitSizeOf<UInt>());
+                var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                 var dl = (ULong)(UInt)divisor;
                 var qh = Math.DivRem(highDividend, dh, out highDividend);
                 var p = qh * dl;
-                highDividend = (highDividend << BitSizeOf<UInt>()) | (lowDividend >> BitSizeOf<UInt>());
+                highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
                 if (highDividend < p) {
                     {
                         --qh;
@@ -906,7 +905,7 @@ namespace UltimateOrb.Mathematics {
                 highDividend -= p;
                 var ql = Math.DivRem(highDividend, dh, out highDividend);
                 p = ql * dl;
-                highDividend = (highDividend << BitSizeOf<UInt>()) | (UInt)lowDividend;
+                highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
                 if (highDividend < p) {
                     {
                         --ql;
@@ -920,7 +919,7 @@ namespace UltimateOrb.Mathematics {
                     }
                 }
                 remainder = highDividend - p;
-                return (qh << BitSizeOf<UInt>()) | ql;
+                return (qh << Misc.UInt.BitSize) | ql;
             }
         }
     }

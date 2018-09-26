@@ -433,7 +433,9 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
-        public partial struct NodeNextNodeIdEnumerator : Collections.Generic.RefReturnSupported.IEnumerator<NodeId>, Collections.Generic.RefReturnSupported.IReadOnlyEnumerator<NodeId> {
+        public partial struct NodeNextNodeIdEnumerator
+            : Typed_RefReturn_Wrapped_Huge.Collections.Generic.IEnumerator<NodeId>
+            , Typed_RefReturn_Wrapped_Huge.Collections.Generic.IReadOnlyEnumerator<NodeId> {
 
             public readonly (TLinkValue LinkValue, NodeId Target)[] m_buffer;
             public SourceNodeLocalLinkId m_current;
@@ -456,7 +458,7 @@ namespace UltimateOrb.Core.Tests {
                 get => this.m_buffer[this.m_current].Target;
             }
 
-            ref readonly NodeId Collections.Generic.RefReturnSupported.IReadOnlyEnumerator<NodeId>.Current {
+            ref readonly NodeId RefReturn.Collections.Generic.IReadOnlyEnumerator<NodeId>.Current {
 
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 get => ref this.m_buffer[this.m_current].Target;

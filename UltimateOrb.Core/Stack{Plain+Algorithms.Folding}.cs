@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
-using UltimateOrb.Collections.Generic.RefReturnSupported;
 
 namespace UltimateOrb.Plain.ValueTypes {
+    using UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic;
 
     public partial struct FoldingStack<T, TAccumulate, TFunc, TStack>
         : IStack<T>

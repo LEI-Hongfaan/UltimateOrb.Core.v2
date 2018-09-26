@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
-using UltimateOrb.Collections.Generic.RefReturnSupported;
 
 namespace UltimateOrb.Plain.ValueTypes {
     using NodeId = Int32;
     using NodeCount = Int32;
-    using System.Collections;
 
     public partial struct Tree<T> {
 
@@ -202,7 +200,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
 
         public static Tree<T> FromPreorderNodeInfo<TEnumerator, TEnumerable>(TEnumerable data)
-            where TEnumerable : Collections.Generic.IEnumerable<(long ChildCount, T Value), TEnumerator>
+            where TEnumerable : Typed.Collections.Generic.IEnumerable<(long ChildCount, T Value), TEnumerator>
             where TEnumerator : System.Collections.Generic.IEnumerator<(long ChildCount, T Value)> {
             var e = data.GetEnumerator();
             var r = FromPreorderNodeInfo_Enumerator(e);
@@ -271,7 +269,8 @@ namespace UltimateOrb.Plain.ValueTypes {
             return default;
         }
 
-        public struct PreorderNodeInfoEnumerable : Collections.Generic.IEnumerable<(long ChildCount, T Value), PreorderNodeInfoEnumerator> {
+        public struct PreorderNodeInfoEnumerable
+            : Typed_Wrapped_Huge.Collections.Generic.IEnumerable<(long ChildCount, T Value), PreorderNodeInfoEnumerator> {
             
             internal readonly Tree<T> tree;
 
@@ -287,7 +286,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return tree.GetPreorderNodeInfoEnumerator();
             }
 
-            IEnumerator IEnumerable.GetEnumerator() {
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
                 return tree.GetPreorderNodeInfoEnumerator();
             }
         }
@@ -300,7 +299,9 @@ namespace UltimateOrb.Plain.ValueTypes {
             return new PreorderNodeInfoEnumerator(this);
         }
         
-        public partial struct PreorderNodeInfoEnumerator : System.Collections.Generic.IEnumerator<(long ChildCount, T Value)> {
+        public partial struct PreorderNodeInfoEnumerator 
+
+            : Typed_Wrapped_Huge.Collections.Generic.IEnumerator<(long ChildCount, T Value)> {
 
             readonly Node[] data;
 

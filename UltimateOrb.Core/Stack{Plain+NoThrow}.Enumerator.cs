@@ -2,11 +2,12 @@
 using System.Runtime.ConstrainedExecution;
 
 namespace UltimateOrb.Plain.ValueTypes.NoThrow {
-    using UltimateOrb.Collections.Generic.RefReturnSupported;
+    using UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic;
 
     public partial struct Stack<T> {
 
-        public partial struct Enumerator : IEnumerator<T> {
+        public partial struct Enumerator
+            : IEnumerator<T> {
 
             private readonly T[] buffer;
 
@@ -32,7 +33,7 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
                 }
             }
 
-            ref T IEnumerator<T>.Current {
+            ref T RefReturn.Collections.Generic.IEnumerator<T>.Current {
 
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

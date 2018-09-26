@@ -1,32 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+namespace UltimateOrb.Huge.Collections.Generic {
 
-namespace UltimateOrb.Collections.Generic {
-    using UltimateOrb;
+    public partial interface IReadOnlyList<out T> {
 
-    public partial interface IReadOnlyList<out T, out TEnumerator>
-        : IReadOnlyList<T>, IReadOnlyCollection<T, TEnumerator>
-        where TEnumerator : IEnumerator<T> {
+        T this[long index] {
+
+            get;
+        }
     }
 }
 
-namespace UltimateOrb.Collections.Generic.ExtraTypeParametersProvided {
-    using UltimateOrb;
+namespace UltimateOrb.RefReturn.Collections.Generic {
 
-    public partial interface IReadOnlyList<T, out TEnumerator, in TEqualityComparer>
-        : IReadOnlyList<T, TEnumerator>, IReadOnlyCollection<T, TEnumerator, TEqualityComparer>
-        where TEnumerator : IEnumerator<T>
-        where TEqualityComparer : struct, IEqualityComparer<T> {
-    }
-}
-
-namespace UltimateOrb.Collections.Generic.RefReturnSupported {
-    using UltimateOrb;
-    using Generic = UltimateOrb.Collections.Generic;
-
-    public partial interface IReadOnlyList<T, out TEnumerator>
-        : Generic.IReadOnlyList<T, TEnumerator>, IReadOnlyCollection<T, TEnumerator>
-        where TEnumerator : IReadOnlyEnumerator<T> {
+    public partial interface IReadOnlyList<T> {
 
         new ref readonly T this[int index] {
 
@@ -35,46 +21,46 @@ namespace UltimateOrb.Collections.Generic.RefReturnSupported {
     }
 }
 
-namespace UltimateOrb.Collections.Generic.RefReturnSupported {
-    using UltimateOrb;
-    using Generic = UltimateOrb.Collections.Generic;
+namespace UltimateOrb.RefReturn_Huge.Collections.Generic {
 
-    using global::System.Runtime.CompilerServices;
+    public partial interface IReadOnlyList<T> {
 
-    public static partial class TReadOnlyList<T, TEnumerator>
-        where TEnumerator : IReadOnlyEnumerator<T> {
+        new ref readonly T this[long index] {
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable IDE1006 // Naming Styles
-        public static ref readonly T get_Item<TReadOnlyList>(TReadOnlyList @this, int index) where TReadOnlyList : IReadOnlyList<T, TEnumerator> {
-#pragma warning restore IDE1006 // Naming Styles
-            return ref @this[index];
+            get;
         }
     }
 }
 
-namespace Internal.System.Collections.Generic {
-    using Internal;
 
-    using UltimateOrb;
-    using Generic = global::System.Collections.Generic;
+namespace UltimateOrb.RefReturn.Collections.Generic {
 
-    using global::System.Runtime.CompilerServices;
+    public partial interface IReadOnlyList<T> {
 
-    public static partial class TReadOnlyList<T> {
+        int IndexOf(T item);
+    }
+}
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable IDE1006 // Naming Styles
-        public static T get_Item<TReadOnlyList>(TReadOnlyList @this, int index) where TReadOnlyList : Generic.IReadOnlyList<T> {
-#pragma warning restore IDE1006 // Naming Styles
-            return @this[index];
-        }
+namespace UltimateOrb.RefReturn_Huge.Collections.Generic {
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable IDE1006 // Naming Styles
-        public static T get_Item<TReadOnlyList>(ref TReadOnlyList @this, int index) where TReadOnlyList : struct, Generic.IReadOnlyList<T> {
-#pragma warning restore IDE1006 // Naming Styles
-            return @this[index];
-        }
+    public partial interface IReadOnlyList<T> {
+
+        long LongIndexOf(T item);
+    }
+}
+
+namespace UltimateOrb.Typed_RefReturn.Collections.Generic {
+
+    public partial interface IReadOnlyList<T, out TEnumerator> {
+
+        int IndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : System.Collections.Generic.IEqualityComparer<T>;
+    }
+}
+
+namespace UltimateOrb.Typed_RefReturn_Huge.Collections.Generic {
+
+    public partial interface IReadOnlyList<T, out TEnumerator> {
+
+        long LongIndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : Huge.Collections.Generic.IEqualityComparer<T>;
     }
 }

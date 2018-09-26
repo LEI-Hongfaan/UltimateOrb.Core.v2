@@ -14,9 +14,9 @@ This package does not include the test suite. See Project Site for more informat
 </PackageReleaseNotes>
     <PackageTags>UltimateOrb Core BCL ref Int128 UInt128 Rational Rational64 Monad Linq WeakDictionay</PackageTags>
     <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
-    <AssemblyVersion>1</AssemblyVersion>
-    <FileVersion>1</FileVersion>
-    <Version>1.4.0.10-alpha</Version>
+    <AssemblyVersion>2</AssemblyVersion>
+    <FileVersion>2</FileVersion>
+    <Version>2.0.0.2-alpha</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
@@ -35,11 +35,26 @@ This package does not include the test suite. See Project Site for more informat
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BclArrayAsArray.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Nonstrict.ToNonstrictCachedResults.cs~RF651267b7.TMP" />
     <None Remove="Wrapper{Module}.tt~RF8e349e36.TMP" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Collections.Generic.InterfaceGenerators.Commons.tt">
+      <Generator></Generator>
+    </None>
+    <None Update="CompareToExtensions{IntPtr,UIntPtr}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CompareToExtensions{IntPtr,UIntPtr}.cs</LastGenOutput>
+    </None>
+    <None Update="ComparisionHelper.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ComparisionHelper.cs</LastGenOutput>
+    </None>
     <None Update="DoubleArithmetic{Compare}.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DoubleArithmetic{Compare}.cs</LastGenOutput>
@@ -60,6 +75,10 @@ This package does not include the test suite. See Project Site for more informat
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>IInitializable.cs</LastGenOutput>
     </None>
+    <None Update="IReadOnlyDictionary{Typed,RefReturn,Wrapped,Huge}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IReadOnlyDictionary{Typed,RefReturn,Wrapped,Huge}.cs</LastGenOutput>
+    </None>
     <None Update="SignConverter.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SignConverter.cs</LastGenOutput>
@@ -79,6 +98,16 @@ This package does not include the test suite. See Project Site for more informat
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="CompareToExtensions{IntPtr,UIntPtr}.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CompareToExtensions{IntPtr,UIntPtr}.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ComparisionHelper.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComparisionHelper.tt</DependentUpon>
+    </Compile>
     <Compile Update="DoubleArithmetic{Compare}.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

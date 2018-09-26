@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace UltimateOrb.Collections.Generic {
+    using System.Collections.Generic;
+
     using IntT = Int32;
     using UIntT = UInt32;
 

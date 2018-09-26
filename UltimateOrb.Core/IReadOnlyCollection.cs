@@ -1,36 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace UltimateOrb.Huge.Collections.Generic {
 
-namespace UltimateOrb.Collections.Generic {
-    using UltimateOrb;
-
-    public partial interface IReadOnlyCollection<out T, out TEnumerator>
-        : IReadOnlyCollection<T>, IEnumerable<T, TEnumerator>
-        where TEnumerator : IEnumerator<T> {
+    public partial interface IReadOnlyCollection<out T> {
 
         long LongCount {
-
             get;
         }
     }
 }
 
-namespace UltimateOrb.Collections.Generic.ExtraTypeParametersProvided {
-    using UltimateOrb;
+namespace UltimateOrb.RefReturn_Huge.Collections.Generic {
 
-    public partial interface IReadOnlyCollection<T, out TEnumerator, in TEqualityComparer>
-        : IReadOnlyCollection<T, TEnumerator>
-        where TEnumerator : IEnumerator<T>
-        where TEqualityComparer : struct, IEqualityComparer<T> {
+    public partial interface IReadOnlyCollection<T> {
+
+        void CopyTo(T[] array, long arrayIndex);
     }
 }
 
-namespace UltimateOrb.Collections.Generic.RefReturnSupported {
-    using UltimateOrb;
-    using Generic = UltimateOrb.Collections.Generic;
+namespace UltimateOrb.RefReturn_Wrapped.Collections.Generic {
 
-    public partial interface IReadOnlyCollection<T, out TEnumerator>
-        : Generic.IReadOnlyCollection<T, TEnumerator>, IReadOnlyEnumerable<T, TEnumerator>
-        where TEnumerator : IReadOnlyEnumerator<T> {
+    public partial interface IReadOnlyCollection<T> {
+
+        void CopyTo(Array<T> array, int arrayIndex);
+    }
+}
+
+namespace UltimateOrb.RefReturn_Wrapped_Huge.Collections.Generic {
+
+    public partial interface IReadOnlyCollection<T> {
+
+        void CopyTo(Array<T> array, long arrayIndex);
+    }
+}
+
+namespace UltimateOrb.Typed_RefReturn.Collections.Generic {
+
+    public partial interface IReadOnlyCollection<T, out TEnumerator> {
+
+        bool Contains<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : System.Collections.Generic.IEqualityComparer<T>;
+    }
+}
+
+namespace UltimateOrb.Typed_RefReturn_Huge.Collections.Generic {
+
+    public partial interface IReadOnlyCollection<T, out TEnumerator> {
+
+        new bool Contains<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : Huge.Collections.Generic.IEqualityComparer<T>;
     }
 }

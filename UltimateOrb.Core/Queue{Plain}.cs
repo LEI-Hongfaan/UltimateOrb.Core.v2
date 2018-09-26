@@ -6,9 +6,10 @@ using System.Collections.Generic;
 
 namespace UltimateOrb.Plain.ValueTypes {
     using ArrayModule = Internal.System.ArrayModule;
-    using UltimateOrb.Collections.Generic.RefReturnSupported;
+    using UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic;
 
-    public partial struct Queue<T> : IEnumerable<T, Queue<T>.Enumerator>, IDeque_2_A1_B1_1<T> {
+    public partial struct Queue<T>
+        : IEnumerable<T, Queue<T>.Enumerator>, IDeque_2_A1_B1_1<T> {
 
         public T[] m_buffer;
 
@@ -87,7 +88,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     return;
                 }
             }
-            throw (NullReferenceException)null;
+            throw (NullReferenceException) null;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -114,7 +115,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 }
                 throw new InvalidOperationException();
             }
-            throw (NullReferenceException)null;
+            throw (NullReferenceException) null;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -138,7 +139,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     this.m_current = d;
                 }
             }
-            throw (NullReferenceException)null;
+            throw (NullReferenceException) null;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -157,7 +158,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 }
                 throw new InvalidOperationException();
             }
-            throw (NullReferenceException)null;
+            throw (NullReferenceException) null;
         }
 
         public T Last {
@@ -197,7 +198,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 }
                 throw new InvalidOperationException();
             }
-            throw (NullReferenceException)null;
+            throw (NullReferenceException) null;
         }
 
         public void AddFirst(T item) {
@@ -223,7 +224,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     this.m_offset = d;
                 }
             }
-            throw (NullReferenceException)null;
+            throw (NullReferenceException) null;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -255,7 +256,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     return result;
                 }
             }
-            throw (NullReferenceException)null;
+            throw (NullReferenceException) null;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -303,7 +304,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                     return;
                 }
             }
-            throw (NullReferenceException)null;
+            throw (NullReferenceException) null;
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
@@ -362,7 +363,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public Queue<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> => Select<TResult, TSelector>(default);
+        public Queue<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult> => this.Select<TResult, TSelector>(default);
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -428,7 +429,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             var buffer_Length = buffer.Length;
             if (min > buffer_Length) {
                 var new_capacity = buffer_Length == 0 ? List.default_capacity : unchecked(buffer_Length * 2);
-                if (unchecked((uint)new_capacity) > ArrayModule.MaxArrayLength) {
+                if (unchecked((uint) new_capacity) > ArrayModule.MaxArrayLength) {
                     new_capacity = ArrayModule.MaxArrayLength;
                 }
                 if (min > new_capacity) {
@@ -464,8 +465,14 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return new Enumerator(@this);
             }
             {
-                throw (NullReferenceException)null;
+                throw (NullReferenceException) null;
             }
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        RefReturn.Collections.Generic.IEnumerator<T> RefReturn.Collections.Generic.IEnumerable<T>.GetEnumerator() {
+            return this.GetEnumerator();
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]

@@ -6,35 +6,11 @@ using UltimateOrb.Collections.Generic;
 using UltimateOrb.RefReturnSupported;
 
 namespace UltimateOrb {
+    using Local = Typed_RefReturn_Wrapped_Huge;
 
-    public partial class StrongBox<T> : RefReturnSupported.IStrongBox<T>, RefReturnSupported.IReadOnlyStrongBox<T> {
-
-        ref T RefReturnSupported.IStrongBox<T>.Value {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => ref this.Value;
-        }
-
-        T IStrongBox<T>.Value {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.Value;
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            set => this.Value = value;
-        }
-        
-        ref readonly T RefReturnSupported.IReadOnlyStrongBox<T>.Value {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => ref this.Value;
-        }
-
-        T IReadOnlyStrongBox<T>.Value {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.Value;
-        }
+    public partial class StrongBox<T>
+        : Local.IStrongBox<T>
+        , Local.IReadOnlyStrongBox<T> {
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public StrongBox() {
@@ -46,98 +22,156 @@ namespace UltimateOrb {
         }
 
         public T Value;
-    }
 
-    public partial class ReadOnlyStrongBox<T> : RefReturnSupported.IReadOnlyStrongBox<T> {
-
-        ref readonly T RefReturnSupported.IReadOnlyStrongBox<T>.Value {
+        ref T RefReturn.IStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.Value;
         }
 
-        T IReadOnlyStrongBox<T>.Value {
+        ref readonly T RefReturn.IReadOnlyStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.Value;
+        }
+
+        T Core.IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.Value;
         }
-        
+
+        T Core.IStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.Value;
+
+            set => this.Value = value;
+        }
+    }
+
+    public partial class ReadOnlyStrongBox<T>
+        : Local.IStrongBox<T>
+        , Local.IReadOnlyStrongBox<T> {
+      
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ReadOnlyStrongBox() {
         }
-        
+
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ReadOnlyStrongBox(in T value) {
             this.Value = value;
         }
 
         public readonly T Value;
+
+        ref T RefReturn.IStrongBox<T>.Value {
+
+            get => throw new NotSupportedException();
+        }
+
+        ref readonly T RefReturn.IReadOnlyStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.Value;
+        }
+
+        T Core.IReadOnlyStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.Value;
+        }
+
+        T Core.IStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.Value;
+
+            set => throw new NotSupportedException();
+        }
     }
 
-    public partial class StrongBoxBase<T> : RefReturnSupported.IStrongBox<T>, RefReturnSupported.IReadOnlyStrongBox<T> {
 
-        ref T RefReturnSupported.IStrongBox<T>.Value {
+    public partial class StrongBoxBase<T>
+        : Local.IStrongBox<T>
+        , Local.IReadOnlyStrongBox<T> {
 
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => ref this.Value;
-        }
-
-        T IStrongBox<T>.Value {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.Value;
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            set => this.Value = value;
-        }
-        
-        ref readonly T RefReturnSupported.IReadOnlyStrongBox<T>.Value {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => ref this.Value;
-        }
-
-        T IReadOnlyStrongBox<T>.Value {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.Value;
-        }
-        
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        protected StrongBoxBase() {
+        public StrongBoxBase() {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        protected StrongBoxBase(in T value) {
+        public StrongBoxBase(in T value) {
             this.Value = value;
         }
 
         protected T Value;
-    }
 
-    public partial class ReadOnlyStrongBoxBase<T> : RefReturnSupported.IReadOnlyStrongBox<T> {
-
-        ref readonly T RefReturnSupported.IReadOnlyStrongBox<T>.Value {
+        ref T RefReturn.IStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.Value;
         }
 
-        T IReadOnlyStrongBox<T>.Value {
+        ref readonly T RefReturn.IReadOnlyStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.Value;
+        }
+
+        T Core.IReadOnlyStrongBox<T>.Value {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.Value;
         }
-        
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        protected ReadOnlyStrongBoxBase() {
+
+        T Core.IStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.Value;
+
+            set => this.Value = value;
         }
-        
+    }
+
+    public partial class ReadOnlyStrongBoxBase<T>
+        : Local.IStrongBox<T>
+        , Local.IReadOnlyStrongBox<T> {
+
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        protected ReadOnlyStrongBoxBase(in T value) {
+        public ReadOnlyStrongBoxBase() {
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public ReadOnlyStrongBoxBase(in T value) {
             this.Value = value;
         }
 
         protected readonly T Value;
+
+        ref T RefReturn.IStrongBox<T>.Value {
+
+            get => throw new NotSupportedException();
+        }
+
+        ref readonly T RefReturn.IReadOnlyStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.Value;
+        }
+
+        T Core.IReadOnlyStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.Value;
+        }
+
+        T Core.IStrongBox<T>.Value {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.Value;
+
+            set => throw new NotSupportedException();
+        }
     }
 }

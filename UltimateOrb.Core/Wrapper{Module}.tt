@@ -13,6 +13,7 @@ var compareOnly = new System.Collections.Generic.List<string> { "Min", "Max", };
 var numTypes = new [] { "int", "uint", "byte", "sbyte", "short", "ushort", "long", "ulong", "float", "double", "decimal", "Int128", "UInt128", "Mathematics.Exact.Rational64" };
 var ints = new System.Collections.Generic.List<string> { "int", "uint", "byte", "sbyte", "short", "ushort", "long", "ulong", "Int128", "UInt128", };
 var unsigneds = new System.Collections.Generic.List<string> { "uint", "byte", "ushort", "ulong", "UInt128", };
+var clsnc = new System.Collections.Generic.List<string> { "uint", "sbyte", "ushort", "ulong", "UInt128", };
 #>
 
 namespace UltimateOrb {
@@ -356,21 +357,49 @@ namespace UltimateOrb {
 			foreach(var numType in numTypes) {
 #>
 
+<#
+				if (clsnc.Contains(numType)) {
+#>
+		[CLSCompliantAttribute(false)]
+<#
+				}
+#>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static <#= numType #>? <#= method #><TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, <#= numType #>?> selector) {
             return selector.Invoke(source.Value);
         }
 
+<#
+				if (clsnc.Contains(numType)) {
+#>
+		[CLSCompliantAttribute(false)]
+<#
+				}
+#>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static <#= numType #> <#= method #><TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source, Func<TSource, <#= numType #>> selector) {
             return selector.Invoke(source.Value);
         }
         
+<#
+				if (clsnc.Contains(numType)) {
+#>
+		[CLSCompliantAttribute(false)]
+<#
+				}
+#>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static <#= numType #>? <#= method #><#= "" == wGT ? "" : $@"<{wGT.Substring(2)}>" #>(this <#= wrapper #><<#= numType #>?<#= wGT #>> source) {
             return source.Value;
         }
 
+<#
+				if (clsnc.Contains(numType)) {
+#>
+		[CLSCompliantAttribute(false)]
+<#
+				}
+#>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static <#= numType #> <#= method #><#= "" == wGT ? "" : $@"<{wGT.Substring(2)}>" #>(this <#= wrapper #><<#= numType #><#= wGT #>> source) {
             return source.Value;
@@ -447,8 +476,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
-            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
+        public static Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource> ToList<TSource<#= wGT #>>(this <#= wrapper #><TSource<#= wGT #>> source) {
+            return new Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

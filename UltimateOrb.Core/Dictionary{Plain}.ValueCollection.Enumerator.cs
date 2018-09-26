@@ -12,7 +12,7 @@ namespace UltimateOrb.Plain.ValueTypes {
 
             /// <summary>Enumerates the elements of a <see cref="Dictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
             [SerializableAttribute()]
-            public struct Enumerator : IEnumerator<TValue> {
+            public struct Enumerator : Typed.Collections.Generic.IEnumerator<TValue> {
 
                 public readonly Entry[] m_Entries;
 

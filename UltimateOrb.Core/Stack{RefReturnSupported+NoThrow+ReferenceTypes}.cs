@@ -1,7 +1,7 @@
 ﻿using System;
 using UltimateOrb.Plain.ValueTypes.NoThrow;
 
-namespace UltimateOrb.Collections.Generic.RefReturnSupported.NoThrow.ReferenceTypes {
+namespace UltimateOrb.Collections.Generic.NoThrow.ReferenceTypes {
 
     public partial interface IStackEx<T> : Plain.ValueTypes.IStackEx<T> {
     }

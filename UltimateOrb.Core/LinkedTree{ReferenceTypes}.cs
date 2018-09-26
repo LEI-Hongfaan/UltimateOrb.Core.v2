@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace UltimateOrb.Collections.Generic.ReferenceTypes {
+    using Local = Typed_Wrapped_Huge;
     using UltimateOrb.Collections.Generic.Testing;
     using ThrowHelper = UltimateOrb.Utilities.ThrowHelper;
 
@@ -20,7 +21,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
         }
 
         public long Count {
-            
+
             get {
                 return this.AsDepthFirstEnumerable().LongCount();
             }
@@ -30,7 +31,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             return $@"{{Count = {this.Count}}}";
         }
 
-        public readonly struct PostorderNodeEnumerable : IEnumerable<Node, PostorderNodeEnumerator> {
+        public readonly struct PostorderNodeEnumerable : Local.Collections.Generic.IEnumerable<Node, PostorderNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -51,7 +52,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public readonly struct PreorderReversedNodeEnumerable : IEnumerable<Node, PreorderReversedNodeEnumerator> {
+        public readonly struct PreorderReversedNodeEnumerable : Local.Collections.Generic.IEnumerable<Node, PreorderReversedNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -72,7 +73,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public readonly struct PreorderNodeEnumerable : IEnumerable<Node, PreorderNodeEnumerator> {
+        public readonly struct PreorderNodeEnumerable : Local.Collections.Generic.IEnumerable<Node, PreorderNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -93,7 +94,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public readonly struct BreadthFirstNodeEnumerable : IEnumerable<Node, BreadthFirstNodeEnumerator> {
+        public readonly struct BreadthFirstNodeEnumerable : Local.Collections.Generic.IEnumerable<Node, BreadthFirstNodeEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -114,7 +115,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public readonly struct PostorderEnumerable : IEnumerable<T, PostorderEnumerator> {
+        public readonly struct PostorderEnumerable : Local.Collections.Generic.IEnumerable<T, PostorderEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -135,7 +136,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public readonly struct PreorderReversedEnumerable : IEnumerable<T, PreorderReversedEnumerator> {
+        public readonly struct PreorderReversedEnumerable : Local.Collections.Generic.IEnumerable<T, PreorderReversedEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -157,7 +158,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
         }
 
 
-        public readonly struct PreorderNodeModifiableEnumerable : IEnumerable<Node, PreorderNodeModifiableEnumerator> {
+        public readonly struct PreorderNodeModifiableEnumerable : Local.Collections.Generic.IEnumerable<Node, PreorderNodeModifiableEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -178,7 +179,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public readonly struct PreorderEnumerable : IEnumerable<T, PreorderEnumerator> {
+        public readonly struct PreorderEnumerable : Local.Collections.Generic.IEnumerable<T, PreorderEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -210,9 +211,9 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             public IEnumerator<T> GetEnumerator() {
                 Stack<Node.ChildrenEnumerator> s
                     = new Stack<Node.ChildrenEnumerator>(5);
-                if (null != tree.root) {
-                    yield return tree.root.value;
-                    s.Push(tree.root.GetChildrenEnumerator());
+                if (null != this.tree.root) {
+                    yield return this.tree.root.value;
+                    s.Push(this.tree.root.GetChildrenEnumerator());
                 }
                 for (; ; ) {
                     if (0 == s.Count) {
@@ -238,7 +239,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
         }
 
-        public readonly struct BreadthFirstEnumerable : IEnumerable<T, BreadthFirstEnumerator> {
+        public readonly struct BreadthFirstEnumerable : Local.Collections.Generic.IEnumerable<T, BreadthFirstEnumerator> {
 
             internal readonly LinkedTree<T> tree;
 
@@ -275,12 +276,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             public Node Current {
 
                 get {
-                    return node;
+                    return this.node;
                 }
             }
 
             public void Dispose() {
-                node = null;
+                this.node = null;
             }
 
             object System.Collections.IEnumerator.Current {
@@ -294,16 +295,16 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 if (null == this.node) {
                     ThrowHelper.Throw<InvalidOperationException>();
                 }
-                if (null == node.next_sibling) {
-                    if (null == node.parent) {
+                if (null == this.node.next_sibling) {
+                    if (null == this.node.parent) {
                         return false;
                     } else {
-                        node = node.parent;
+                        this.node = this.node.parent;
                         return true;
                     }
                 } else {
-                    node = node.next_sibling;
-                    for (; null != node.first_child; node = node.first_child) {
+                    this.node = this.node.next_sibling;
+                    for (; null != this.node.first_child; this.node = this.node.first_child) {
                     }
                     return true;
                 }
@@ -330,12 +331,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             public Node Current {
 
                 get {
-                    return node;
+                    return this.node;
                 }
             }
 
             public void Dispose() {
-                node = null;
+                this.node = null;
             }
 
             object System.Collections.IEnumerator.Current {
@@ -346,19 +347,19 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
 
             public bool MoveNext() {
-                if (null == node) {
+                if (null == this.node) {
                     ThrowHelper.Throw<InvalidOperationException>();
                 }
-                if (null == node.previous_sibling) {
-                    if (null == node.parent) {
+                if (null == this.node.previous_sibling) {
+                    if (null == this.node.parent) {
                         return false;
                     } else {
-                        node = node.parent;
+                        this.node = this.node.parent;
                         return true;
                     }
                 } else {
-                    node = node.previous_sibling;
-                    for (; null != node.last_child; node = node.last_child) {
+                    this.node = this.node.previous_sibling;
+                    for (; null != this.node.last_child; this.node = this.node.last_child) {
                     }
                     return true;
                 }
@@ -389,12 +390,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             public Node Current {
 
                 get {
-                    return node;
+                    return this.node;
                 }
             }
 
             public void Dispose() {
-                node = null;
+                this.node = null;
             }
 
             object System.Collections.IEnumerator.Current {
@@ -408,19 +409,19 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 if (null == this.node) {
                     ThrowHelper.Throw<InvalidOperationException>();
                 }
-                if (null == node.first_child) {
-                    for (var temp = node; ; temp = temp.parent) {
+                if (null == this.node.first_child) {
+                    for (var temp = this.node; ; temp = temp.parent) {
                         if (null == temp.next_sibling) {
                             if (null == temp.parent) {
                                 return false;
                             }
                         } else {
-                            node = temp.next_sibling;
+                            this.node = temp.next_sibling;
                             return true;
                         }
                     }
                 } else {
-                    node = node.first_child;
+                    this.node = this.node.first_child;
                     return true;
                 }
             }
@@ -446,12 +447,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             public Node Current {
 
                 get {
-                    return node;
+                    return this.node;
                 }
             }
 
             public void Dispose() {
-                node = null;
+                this.node = null;
             }
 
             object System.Collections.IEnumerator.Current {
@@ -486,7 +487,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                         this.node = node;
                         return true;
                     }
-                    L_0001:;
+                L_0001:
+                    ;
                     temp = node.first_child;
                     if (null != temp) {
                         unchecked {
@@ -494,7 +496,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                         }
                         continue;
                     }
-                    L_0002:;
+                L_0002:
+                    ;
                     temp = node.next_sibling;
                     if (null == temp) {
                         node = node.parent;
@@ -531,9 +534,9 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             internal Node node;
 
-            private Stack<Node> s;
+            private readonly Stack<Node> s;
 
-            private static Stack<Node> s_ReadOnlyEmptyStack = new Stack<Node>(0);
+            private static readonly Stack<Node> s_ReadOnlyEmptyStack = new Stack<Node>(0);
 
             [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
             private static Stack<Node> GetReadOnlyEmptyStack() {
@@ -562,7 +565,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             public Node Current {
 
                 get {
-                    return node;
+                    return this.node;
                 }
             }
 
@@ -582,23 +585,23 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 if (null == node) {
                     ThrowHelper.Throw<InvalidOperationException>();
                 }
-                if (first_child != null) {
-                    if (next_sibling != null) {
-                        s.Push(next_sibling);
+                if (this.first_child != null) {
+                    if (this.next_sibling != null) {
+                        this.s.Push(this.next_sibling);
                     }
-                    this.node = first_child;
-                    next_sibling = first_child.next_sibling;
-                    first_child = first_child.first_child;
+                    this.node = this.first_child;
+                    this.next_sibling = this.first_child.next_sibling;
+                    this.first_child = this.first_child.first_child;
                 } else {
-                    if (next_sibling != null) {
-                    } else if (s.Count == 0) {
+                    if (this.next_sibling != null) {
+                    } else if (this.s.Count == 0) {
                         return false;
                     } else {
-                        next_sibling = s.Pop();
+                        this.next_sibling = this.s.Pop();
                     }
-                    this.node = next_sibling;
-                    first_child = next_sibling.first_child;
-                    next_sibling = next_sibling.next_sibling;
+                    this.node = this.next_sibling;
+                    this.first_child = this.next_sibling.first_child;
+                    this.next_sibling = this.next_sibling.next_sibling;
                 }
                 return true;
             }
@@ -613,22 +616,22 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             internal PostorderNodeEnumerator @this;
 
             public PostorderEnumerator(LinkedTree<T> tree) {
-                @this = new PostorderNodeEnumerator(tree);
+                this.@this = new PostorderNodeEnumerator(tree);
 #if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
-                    Node.NodesSkippingVerification.Add(@this.node);
+                    Node.NodesSkippingVerification.Add(this.@this.node);
                 }
 #endif
             }
 
             public T Current {
                 get {
-                    return @this.Current.value;
+                    return this.@this.Current.value;
                 }
             }
 
             public void Dispose() {
-                @this.Dispose();
+                this.@this.Dispose();
             }
 
             object System.Collections.IEnumerator.Current {
@@ -638,11 +641,11 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
 
             public bool MoveNext() {
-                return @this.MoveNext();
+                return this.@this.MoveNext();
             }
 
             public void Reset() {
-                @this.Reset();
+                this.@this.Reset();
             }
         }
 
@@ -651,22 +654,22 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             internal PreorderReversedNodeEnumerator @this;
 
             public PreorderReversedEnumerator(LinkedTree<T> tree) {
-                @this = new PreorderReversedNodeEnumerator(tree);
+                this.@this = new PreorderReversedNodeEnumerator(tree);
 #if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
-                    Node.NodesSkippingVerification.Add(@this.node);
+                    Node.NodesSkippingVerification.Add(this.@this.node);
                 }
 #endif
             }
 
             public T Current {
                 get {
-                    return @this.Current.value;
+                    return this.@this.Current.value;
                 }
             }
 
             public void Dispose() {
-                @this.Dispose();
+                this.@this.Dispose();
             }
 
             object System.Collections.IEnumerator.Current {
@@ -676,11 +679,11 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
 
             public bool MoveNext() {
-                return @this.MoveNext();
+                return this.@this.MoveNext();
             }
 
             public void Reset() {
-                @this.Reset();
+                this.@this.Reset();
             }
         }
 
@@ -689,22 +692,22 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             internal PreorderNodeEnumerator @this;
 
             public PreorderEnumerator(LinkedTree<T> tree) {
-                @this = new PreorderNodeEnumerator(tree);
+                this.@this = new PreorderNodeEnumerator(tree);
 #if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
-                    Node.NodesSkippingVerification.Add(@this.node);
+                    Node.NodesSkippingVerification.Add(this.@this.node);
                 }
 #endif
             }
 
             public T Current {
                 get {
-                    return @this.Current.value;
+                    return this.@this.Current.value;
                 }
             }
 
             public void Dispose() {
-                @this.Dispose();
+                this.@this.Dispose();
             }
 
             object System.Collections.IEnumerator.Current {
@@ -714,11 +717,11 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
 
             public bool MoveNext() {
-                return @this.MoveNext();
+                return this.@this.MoveNext();
             }
 
             public void Reset() {
-                @this.Reset();
+                this.@this.Reset();
             }
         }
 
@@ -727,22 +730,22 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             internal BreadthFirstNodeEnumerator @this;
 
             public BreadthFirstEnumerator(LinkedTree<T> tree) {
-                @this = new BreadthFirstNodeEnumerator(tree);
+                this.@this = new BreadthFirstNodeEnumerator(tree);
 #if DEBUG_LOGIC_LINKEDTREE
                 lock (Node.NodesSkippingVerification) {
-                    Node.NodesSkippingVerification.Add(@this.node);
+                    Node.NodesSkippingVerification.Add(this.@this.node);
                 }
 #endif
             }
 
             public T Current {
                 get {
-                    return @this.Current.value;
+                    return this.@this.Current.value;
                 }
             }
 
             public void Dispose() {
-                @this.Dispose();
+                this.@this.Dispose();
             }
 
             object System.Collections.IEnumerator.Current {
@@ -752,11 +755,11 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             }
 
             public bool MoveNext() {
-                return @this.MoveNext();
+                return this.@this.MoveNext();
             }
 
             public void Reset() {
-                @this.Reset();
+                this.@this.Reset();
             }
         }
 
@@ -940,10 +943,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             Node dstPreviousSibling;
             Node srcNode;
             Node dstNode;
-            L_0001:;
+        L_0001:
+            ;
             srcPreviousSibling = null;
             dstPreviousSibling = null;
-            L_0002:;
+        L_0002:
+            ;
             srcNode = srcPreviousSibling == null ? srcParent.first_child : srcPreviousSibling.next_sibling;
             if (srcNode == null) {
                 dstParent.last_child = dstPreviousSibling;
@@ -963,7 +968,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 q.Enqueue(dstNode);
                 goto L_0002;
             }
-            L_0003:;
+        L_0003:
+            ;
             return result;
         }
 
@@ -1066,7 +1072,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
             if (null != value.root) {
                 return null;
             }
-            Node result = SubtreeClone(value);
+            Node result = this.SubtreeClone(value);
             AddAfter_PatchNewLinks(node, result);
             AddAfter_PatchOldLinks(node, result);
             return result;
@@ -1349,19 +1355,21 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                     }
                     goto L_0002;
                 }
-                L_0002:;
+            L_0002:
+                ;
             }
-            L_0003:;
+        L_0003:
+            ;
             return true;
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-            return ((IEnumerable<T>)this).GetEnumerator();
+            return ((IEnumerable<T>) this).GetEnumerator();
         }
 
         public long RadialHeight {
             get {
-                if (root == null) {
+                if (this.root == null) {
                     return 0;
                 }
                 var t = 0L;
@@ -1414,9 +1422,11 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                         }
                         goto L_0002;
                     }
-                    L_0002:;
+                L_0002:
+                    ;
                 }
-                L_0003:;
+            L_0003:
+                ;
                 return result;
             }
         }
@@ -1546,10 +1556,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                         } else {
                             return null;
                         }
-                        L_0001:;
+                    L_0001:
+                        ;
                         temp = node.previous_sibling;
                         if (null != temp) {
-                            L_0002:;
+                        L_0002:
+                            ;
                             node = temp.last_child;
                             if (null != node) {
                                 if (1 == depth) {
@@ -1586,10 +1598,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                         } else {
                             return null;
                         }
-                        L_0001:;
+                    L_0001:
+                        ;
                         temp = node.next_sibling;
                         if (null != temp) {
-                            L_0002:;
+                        L_0002:
+                            ;
                             node = temp.first_child;
                             if (null != node) {
                                 if (1 == depth) {
@@ -1637,7 +1651,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                         if (0 == depth) {
                             return node;
                         }
-                        L_0001:;
+                    L_0001:
+                        ;
                         temp = node.first_child;
                         if (null != temp) {
                             unchecked {
@@ -1645,7 +1660,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                             }
                             continue;
                         }
-                        L_0002:;
+                    L_0002:
+                        ;
                         temp = node.next_sibling;
                         if (null == temp) {
                             node = node.parent;
@@ -1676,7 +1692,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                         if (0 == depth) {
                             return node;
                         }
-                        L_0001:;
+                    L_0001:
+                        ;
                         temp = node.last_child;
                         if (null != temp) {
                             unchecked {
@@ -1684,7 +1701,8 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                             }
                             continue;
                         }
-                        L_0002:;
+                    L_0002:
+                        ;
                         temp = node.previous_sibling;
                         if (null == temp) {
                             node = node.parent;
@@ -1919,7 +1937,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
 
                 public void Dispose() {
-                    node = null;
+                    this.node = null;
                 }
 
                 object System.Collections.IEnumerator.Current {
@@ -1945,12 +1963,12 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 return new ChildrenEnumerator(this);
             }
 
-            public readonly struct ChildrenEnumerable : IEnumerable<Node, ChildrenEnumerator> {
+            public readonly struct ChildrenEnumerable : Local.Collections.Generic.IEnumerable<Node, ChildrenEnumerator> {
 
                 internal readonly Node node;
 
                 public ChildrenEnumerable(Node parent) {
-                    node = parent;
+                    this.node = parent;
                 }
 
                 public ChildrenEnumerator GetEnumerator() {
@@ -1958,11 +1976,11 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
 
                 IEnumerator<Node> IEnumerable<Node>.GetEnumerator() {
-                    return GetEnumerator();
+                    return this.GetEnumerator();
                 }
 
                 System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-                    return GetEnumerator();
+                    return this.GetEnumerator();
                 }
             }
 
@@ -1982,7 +2000,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
 
             public override string ToString() {
                 // TODO: ...
-                return $@"{{{value.ToString()}}}";
+                return $@"{{{this.value.ToString()}}}";
             }
 
             IEnumerator<ITreeNode> IEnumerable<ITreeNode>.GetEnumerator() {

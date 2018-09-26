@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
-using UltimateOrb.Collections.Generic.RefReturnSupported;
 
 namespace UltimateOrb.Plain.ValueTypes.NoThrow {
+    using UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic;
 
     /// <summary>
     ///     <para>Represents a variable size last-in-first-out (LIFO) collection of instances of the same specified type. This type is a value type.</para>
@@ -16,7 +16,9 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
     /// <remarks>
     ///     <para>Value assignments of the <see cref="Stack{T}"/> have move semantics.</para>
     /// </remarks>
-    public partial struct Stack<T> : IEnumerable<T, Stack<T>.Enumerator>, IStack_2_A1_B1_1<T>, IStackEx<T>, IInitializable, IInitializable<int> {
+    public partial struct Stack<T>
+        : IEnumerable<T, Stack<T>.Enumerator>
+        , IStack_2_A1_B1_1<T>, IStackEx<T>, IInitializable, IInitializable<int> {
 
         public T[] buffer;
 
@@ -514,6 +516,10 @@ namespace UltimateOrb.Plain.ValueTypes.NoThrow {
         }
 
         System.Collections.Generic.IEnumerator<T> IEnumerable<T>.GetEnumerator() {
+            return new Enumerator(this);
+        }
+
+        RefReturn.Collections.Generic.IEnumerator<T> RefReturn.Collections.Generic.IEnumerable<T>.GetEnumerator() {
             return new Enumerator(this);
         }
 

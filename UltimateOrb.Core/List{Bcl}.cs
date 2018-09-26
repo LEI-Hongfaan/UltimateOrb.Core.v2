@@ -6,11 +6,15 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 
 namespace UltimateOrb.Collections.Generic {
+    using Local = UltimateOrb.Typed;
     using UltimateOrb;
 
     [SerializableAttribute()]
     public readonly partial struct BclListAsList<T>
-        : IList<T, System.Collections.Generic.List<T>.Enumerator>, IReadOnlyList<T, System.Collections.Generic.List<T>.Enumerator> {
+        : IList<T>
+        , IReadOnlyList<T>
+        , Local.Collections.Generic.IList<T, System.Collections.Generic.List<T>.Enumerator>
+        , Local.Collections.Generic.IReadOnlyList<T, System.Collections.Generic.List<T>.Enumerator> {
 
         private readonly System.Collections.Generic.List<T> m_value;
 
@@ -20,19 +24,16 @@ namespace UltimateOrb.Collections.Generic {
             this.m_value = value;
         }
 
-        public T this[int index] {
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => this.m_value[index];
-
-            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            set => this.m_value[index] = value;
-        }
-
         public int Count {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.m_value.Count;
+        }
+
+        public bool IsReadOnly {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => Private.TCollection.get_IsReadOnly(this.m_value);
         }
 
         public long LongCount {
@@ -41,21 +42,22 @@ namespace UltimateOrb.Collections.Generic {
             get => this.m_value.Count;
         }
 
-        private static partial class Private {
-
-            public static partial class TCollection {
-
-                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                public static bool get_IsReadOnly<TCollection>(TCollection @this) where TCollection : ICollection<T> {
-                    return @this.IsReadOnly;
-                }
-            }
-        }
-
-        public bool IsReadOnly {
+        public T this[long index] {
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            get => Private.TCollection.get_IsReadOnly(this.m_value);
+            get => this.m_value[checked((int) index)];
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            set => this.m_value[checked((int) index)] = value;
+        }
+
+        public T this[int index] {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => this.m_value[index];
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            set => this.m_value[index] = value;
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -74,7 +76,7 @@ namespace UltimateOrb.Collections.Generic {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public bool Contains<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
+        public bool Contains<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
             throw new NotImplementedException();
         }
 
@@ -104,13 +106,13 @@ namespace UltimateOrb.Collections.Generic {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public int IndexOf<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
+        public int IndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
             return this.m_value.FindIndex(new EqualityPredicate<T, TEqualityComparer>(comparer, item).Invoke);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public int IndexOf<TEqualityComparer>(T item) where TEqualityComparer : struct, IEqualityComparer<T> {
-            return this.IndexOf(default(TEqualityComparer), item);
+            return this.IndexOf(item, default(TEqualityComparer));
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -124,8 +126,8 @@ namespace UltimateOrb.Collections.Generic {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public bool Remove<TEqualityComparer>(TEqualityComparer comparer, T item) where TEqualityComparer : IEqualityComparer<T> {
-            var index = this.IndexOf(comparer, item);
+        public bool Remove<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
+            var index = this.IndexOf(item, comparer);
             if (0 <= index) {
                 this.m_value.RemoveAt(index);
                 return true;
@@ -134,13 +136,59 @@ namespace UltimateOrb.Collections.Generic {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public bool Remove<TEqualityComparer>(T item) where TEqualityComparer : struct, IEqualityComparer<T> {
-            return this.Remove(default(TEqualityComparer), item);
+        public bool Remove<TEqualityComparer>(T item) where TEqualityComparer : IEqualityComparer<T>, new() {
+            return this.Remove(item, DefaultConstructor.Invoke<TEqualityComparer>());
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void RemoveAt(int index) {
             this.m_value.RemoveAt(index);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public long LongIndexOf(T item) {
+            return this.m_value.IndexOf(item);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void Insert(long index, T item) {
+            this.m_value.Insert(checked((int) index), item);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void RemoveAt(long index) {
+            this.m_value.RemoveAt(checked((int) index));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void CopyTo(T[] array, long arrayIndex) {
+            this.m_value.CopyTo(array, checked((int) arrayIndex));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void CopyTo(Array<T> array, int arrayIndex) {
+            this.m_value.CopyTo(array.Value, arrayIndex);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public void CopyTo(Array<T> array, long arrayIndex) {
+            this.m_value.CopyTo(array.Value, checked((int) arrayIndex));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public long LongIndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
+            return this.IndexOf(item, comparer);
+        }
+
+        private static partial class Private {
+
+            public static partial class TCollection {
+
+                [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+                public static bool get_IsReadOnly<TCollection>(TCollection @this) where TCollection : System.Collections.Generic.ICollection<T> {
+                    return @this.IsReadOnly;
+                }
+            }
         }
     }
 

@@ -4,11 +4,13 @@ using System.Diagnostics.Contracts;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
-using UltimateOrb.Collections.Generic;
 
 namespace UltimateOrb.Linq {
+    using Local = UltimateOrb.Typed_Wrapped_Huge;
 
-    public readonly partial struct SingletonEnumerable<T> : IEnumerable<T, SingletonEnumerable<T>.Enumerator> {
+    public readonly partial struct SingletonEnumerable<T>
+        : Local.Collections.Generic.IEnumerable<T, SingletonEnumerable<T>.Enumerator>
+        , Local.Collections.Generic.IReadOnlyEnumerable<T, SingletonEnumerable<T>.Enumerator> {
 
         private readonly T Value;
 
@@ -44,7 +46,10 @@ namespace UltimateOrb.Linq {
             return new Enumerator(this);
         }
 
-        public partial struct Enumerator : System.Collections.Generic.IEnumerator<T> {
+
+        public partial struct Enumerator
+            : Local.Collections.Generic.IEnumerator<T>
+            , Local.Collections.Generic.IReadOnlyEnumerator<T> {
 
             private readonly SingletonEnumerable<T> sinletonEnumerable;
 

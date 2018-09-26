@@ -24,7 +24,7 @@ namespace UltimateOrb {
             }
         }
 
-        internal static void GetUncurried0(Type func, ref Collections.Generic.RefReturnSupported.List<Type> list) {
+        internal static void GetUncurried0(Type func, ref Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<Type> list) {
             var t = func.GetGenericTypeDefinition();
             var gtas = func.GenericTypeArguments;
             for (var i = 0; gtas.Length - 1 > i; ++i) {
@@ -43,7 +43,7 @@ namespace UltimateOrb {
             if (func.IsGenericType) {
                 var t = func.GetGenericTypeDefinition();
                 var gtas = func.GenericTypeArguments;
-                var list = new Collections.Generic.RefReturnSupported.List<Type>(17);
+                var list = new Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<Type>(17);
                 for (var i = 0; gtas.Length - 1 > i; ++i) {
                     list.Add(gtas[i]);
                 }
@@ -122,7 +122,7 @@ namespace UltimateOrb {
             if (func.IsGenericType) {
                 var t = func.GetGenericTypeDefinition();
                 var gtas = func.GenericTypeArguments;
-                var list = new Collections.Generic.RefReturnSupported.List<Type>(17);
+                var list = new Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<Type>(17);
                 for (var i = 0; gtas.Length - 1 > i; ++i) {
                     list.Add(gtas[i]);
                 }

@@ -7,7 +7,6 @@ namespace UltimateOrb.Mathematics {
     using Int = Int32;
     using Long = Int64;
 
-    using static UltimateOrb.Utilities.SizeOfModule;
     using Math = Internal.System.Math;
     using MathEx = DoubleArithmetic;
 
@@ -33,9 +32,9 @@ namespace UltimateOrb.Mathematics {
                                 ++cc;
                             }
                             lowResult = MathEx.BigDivInternal(
-                                lowDividend >> (BitSizeOf<ULong>() - cc) | (highDividend << cc),
-                                highDividend >> (BitSizeOf<ULong>() - cc),
-                                (lowDivisor >> (BitSizeOf<ULong>() - cc)) | t);
+                                lowDividend >> (Misc.ULong.BitSize - cc) | (highDividend << cc),
+                                highDividend >> (Misc.ULong.BitSize - cc),
+                                (lowDivisor >> (Misc.ULong.BitSize - cc)) | t);
                         }
                         t = lowResult * highDivisor;
                         lowProduct = MathEx.BigMul(lowResult, lowDivisor, out highProduct);
@@ -95,9 +94,9 @@ namespace UltimateOrb.Mathematics {
                                 ++cc;
                             }
                             lowResult = MathEx.BigDivInternal(
-                                lowDividend >> (BitSizeOf<ULong>() - cc) | (highDividend << cc),
-                                highDividend >> (BitSizeOf<ULong>() - cc),
-                                (lowDivisor >> (BitSizeOf<ULong>() - cc)) | t);
+                                lowDividend >> (Misc.ULong.BitSize - cc) | (highDividend << cc),
+                                highDividend >> (Misc.ULong.BitSize - cc),
+                                (lowDivisor >> (Misc.ULong.BitSize - cc)) | t);
                         }
                         t = lowResult * highDivisor;
                         lowProduct = MathEx.BigMul(lowResult, lowDivisor, out highProduct);
@@ -151,12 +150,12 @@ namespace UltimateOrb.Mathematics {
                 ULong lowResult;
                 ULong t;
                 {
-                    var cc = BitSizeOf<ULong>() - 1;
+                    var cc = Misc.ULong.BitSize - 1;
                     t = highDivisor << cc;
                     lowResult = MathEx.BigDivInternal(
-                        lowDividend >> (BitSizeOf<ULong>() - cc) | (highDividend << cc),
-                        highDividend >> (BitSizeOf<ULong>() - cc),
-                        (lowDivisor >> (BitSizeOf<ULong>() - cc)) | t);
+                        lowDividend >> (Misc.ULong.BitSize - cc) | (highDividend << cc),
+                        highDividend >> (Misc.ULong.BitSize - cc),
+                        (lowDivisor >> (Misc.ULong.BitSize - cc)) | t);
                 }
                 t = lowResult * highDivisor;
                 lowProduct = MathEx.BigMul(lowResult, lowDivisor, out highProduct);
@@ -194,9 +193,9 @@ namespace UltimateOrb.Mathematics {
                                 ++cc;
                             }
                             lowResult = MathEx.BigDivInternal(
-                                lowDividend >> (BitSizeOf<ULong>() - cc) | (highDividend << cc),
-                                highDividend >> (BitSizeOf<ULong>() - cc),
-                                (lowDivisor >> (BitSizeOf<ULong>() - cc)) | t);
+                                lowDividend >> (Misc.ULong.BitSize - cc) | (highDividend << cc),
+                                highDividend >> (Misc.ULong.BitSize - cc),
+                                (lowDivisor >> (Misc.ULong.BitSize - cc)) | t);
                         }
                         t = lowResult * highDivisor;
                         lowProduct = MathEx.BigMul(lowResult, lowDivisor, out highProduct);

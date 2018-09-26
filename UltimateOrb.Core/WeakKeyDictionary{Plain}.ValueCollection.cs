@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace UltimateOrb.Plain.ValueTypes {
-    using UltimateOrb.Collections.Generic;
     using static ThrowHelper_Dictionary;
 
     public partial struct WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer>
@@ -15,18 +14,24 @@ namespace UltimateOrb.Plain.ValueTypes {
         [SerializableAttribute()]
         // [DebuggerTypeProxyAttribute(typeof(Mscorlib_DictionaryValueCollectionDebugView<,>))]
         [DebuggerDisplayAttribute(@"Count = {LongCount}")]
-        public readonly partial struct ValueCollection : ICollection<TValue, ValueCollection.Enumerator>, ICollection, IReadOnlyCollection<TValue, ValueCollection.Enumerator> {
+        public readonly partial struct ValueCollection
+            : ICollection
+            , Typed.Collections.Generic.ICollection<TValue, ValueCollection.Enumerator>
+            , Typed.Collections.Generic.IReadOnlyCollection<TValue, ValueCollection.Enumerator> {
 
             private readonly WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer> m_Dictionary;
 
             /// <summary>Gets the number of elements contained in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
             /// <returns>The number of elements contained in the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</returns>
+            public ValueCollection(WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer> dictionary) {
+                this.m_Dictionary = dictionary;
+            }
 
             public int Count {
 
                 get => this.m_Dictionary.Count;
             }
-            
+
             bool ICollection<TValue>.IsReadOnly {
 
                 get => true;
@@ -43,40 +48,37 @@ namespace UltimateOrb.Plain.ValueTypes {
             /// <summary>Gets an object that can be used to synchronize access to the <see cref="ICollection" />.</summary>
             /// <returns>An object that can be used to synchronize access to the <see cref="ICollection" />.  In the default implementation of <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />, this property always returns the current instance.</returns>
 
-            object ICollection.SyncRoot {
-
-                get => null;
-            }
-
             public long LongCount {
 
                 get => this.m_Dictionary.LongCount;
             }
 
+            object ICollection.SyncRoot {
+
+                get => null;
+            }
             /// <summary>Initializes a new instance of the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> class that reflects the values in the specified <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" />.</summary>
             /// <param name="dictionary">The <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}" /> whose values are reflected in the new <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</param>
             /// <exception cref="ArgumentNullException">
             ///   <paramref name="dictionary" /> is null.</exception>
-
-            public ValueCollection(WeakKeyDictionary<TKey, TValue, TKeyEqualityComparer> dictionary) {
-                this.m_Dictionary = dictionary;
-            }
-
             /// <summary>Returns an enumerator that iterates through the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</summary>
             /// <returns>A <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection.Enumerator" /> for the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />.</returns>
 
-            public Enumerator GetEnumerator() {
-                return new Enumerator(this.m_Dictionary);
+            void ICollection<TValue>.Add(TValue item) {
+                ThrowNotSupportedException_ValueCollectionSet();
             }
 
-            /// <summary>Copies the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> elements to an existing one-dimensional <see cref="Array" />, starting at the specified array index.</summary>
-            /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />. The <see cref="Array" /> must have zero-based indexing.</param>
-            /// <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-            /// <exception cref="ArgumentNullException">
-            ///   <paramref name="array" /> is null.</exception>
-            /// <exception cref="ArgumentOutOfRangeException">
-            ///   <paramref name="index" /> is less than zero.</exception>
-            /// <exception cref="ArgumentException">The number of elements in the source <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.</exception>
+            void ICollection<TValue>.Clear() {
+                ThrowNotSupportedException_ValueCollectionSet();
+            }
+
+            bool ICollection<TValue>.Contains(TValue item) {
+                return this.m_Dictionary.ContainsValue(item);
+            }
+
+            public bool Contains<TEqualityComparer>(TValue item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<TValue> {
+                return this.m_Dictionary.ContainsValue(comparer, item);
+            }
 
             public void CopyTo(TValue[] array, int index) {
                 if (array == null) {
@@ -96,34 +98,6 @@ namespace UltimateOrb.Plain.ValueTypes {
                         array[index++] = entry.m_Value;
                     }
                 }
-            }
-
-            void ICollection<TValue>.Add(TValue item) {
-                ThrowNotSupportedException_ValueCollectionSet();
-            }
-
-            void ICollection<TValue>.Clear() {
-                ThrowNotSupportedException_ValueCollectionSet();
-            }
-
-
-            bool ICollection<TValue>.Contains(TValue item) {
-                return this.m_Dictionary.ContainsValue(item);
-            }
-
-            bool ICollection<TValue>.Remove(TValue item) {
-                ThrowNotSupportedException_ValueCollectionSet();
-                return default;
-            }
-
-            IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() {
-                return new Enumerator(this.m_Dictionary);
-            }
-
-            /// <summary>Returns an enumerator that iterates through a collection.</summary>
-            /// <returns>An <see cref="IEnumerator" /> that can be used to iterate through the collection.</returns>
-            IEnumerator IEnumerable.GetEnumerator() {
-                return new Enumerator(this.m_Dictionary);
             }
 
             /// <summary>Copies the elements of the <see cref="ICollection" /> to an <see cref="Array" />, starting at a particular <see cref="Array" /> index.</summary>
@@ -171,11 +145,63 @@ namespace UltimateOrb.Plain.ValueTypes {
                 }
             }
 
-            public bool Contains<TEqualityComparer>(TEqualityComparer comparer, TValue item) where TEqualityComparer : IEqualityComparer<TValue> {
-                return this.m_Dictionary.ContainsValue(comparer, item);
+            public void CopyTo(TValue[] array, long arrayIndex) {
+                if (array == null) {
+                    ThrowArgumentNullException_array();
+                }
+                var index = arrayIndex;
+                if (index < 0 || index > array.Length) {
+                    ThrowArgumentOutOfRangeException_index_NeedNonNegNum();
+                }
+                if (array.Length - index < this.m_Dictionary.Count) {
+                    ThrowArgumentException_ArrayPlusOffTooSmall();
+                }
+                var count = this.m_Dictionary.m_EntryCount;
+                var entries = this.m_Dictionary.m_EntryBuffer;
+                for (var i = (long)0; count > i; ++i) {
+                    ref var entry = ref entries[i];
+                    if (0 <= entry.m_Flags) {
+                        array[index++] = entry.m_Value;
+                    }
+                }
             }
 
-            public bool Remove<TEqualityComparer>(TEqualityComparer comparer, TValue item) where TEqualityComparer : IEqualityComparer<TValue> {
+            public void CopyTo(Array<TValue> array, int arrayIndex) {
+                this.CopyTo(array.Value, arrayIndex);
+            }
+
+            public void CopyTo(Array<TValue> array, long arrayIndex) {
+                this.CopyTo(array.Value, arrayIndex);
+            }
+
+            public Enumerator GetEnumerator() {
+                return new Enumerator(this.m_Dictionary);
+            }
+
+            IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() {
+                return new Enumerator(this.m_Dictionary);
+            }
+
+            /// <summary>Returns an enumerator that iterates through a collection.</summary>
+            /// <returns>An <see cref="IEnumerator" /> that can be used to iterate through the collection.</returns>
+            IEnumerator IEnumerable.GetEnumerator() {
+                return new Enumerator(this.m_Dictionary);
+            }
+
+            /// <summary>Copies the <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> elements to an existing one-dimensional <see cref="Array" />, starting at the specified array index.</summary>
+            /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" />. The <see cref="Array" /> must have zero-based indexing.</param>
+            /// <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+            /// <exception cref="ArgumentNullException">
+            ///   <paramref name="array" /> is null.</exception>
+            /// <exception cref="ArgumentOutOfRangeException">
+            ///   <paramref name="index" /> is less than zero.</exception>
+            /// <exception cref="ArgumentException">The number of elements in the source <see cref="WeakKeyDictionary{TKey,TValue,TEqualityComparer}.ValueCollection" /> is greater than the available space from <paramref name="index" /> to the end of the destination <paramref name="array" />.</exception>
+            bool ICollection<TValue>.Remove(TValue item) {
+                ThrowNotSupportedException_ValueCollectionSet();
+                return default;
+            }
+
+            public bool Remove<TEqualityComparer>(TValue item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<TValue> {
                 ThrowNotSupportedException_ValueCollectionSet();
                 return default;
             }

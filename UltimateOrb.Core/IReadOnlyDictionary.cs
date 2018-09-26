@@ -1,17 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace UltimateOrb.Collections.Generic {
+/*
+namespace UltimateOrb.Collections {
 
-    public partial interface IReadOnlyDictionary<TKey, TValue, TEnumerator, TKeyEnumerator, TKeyCollection, TValueEnumerator, TValueCollection>
+    public partial interface IReadOnlyDictionary<TKey, TValue>
         : System.Collections.Generic.IReadOnlyDictionary<TKey, TValue>
-        , IReadOnlyCollection<KeyValuePair<TKey, TValue>, TEnumerator>
-        where TEnumerator : IEnumerator<KeyValuePair<TKey, TValue>>
-        where TKeyEnumerator : IEnumerator<TKey>
-        where TKeyCollection : IReadOnlyCollection<TKey, TKeyEnumerator>
-        where TValueEnumerator : IEnumerator<TValue>
-        where TValueCollection : IReadOnlyCollection<TValue, TValueEnumerator> {
+        , IReadOnlyCollection<KeyValuePair<TKey, TValue>> {
+
+        new IReadOnlyCollection<TKey> Keys {
+
+            get;
+        }
+
+        new IReadOnlyCollection<TValue> Values {
+
+            get;
+        }
+    }
+}
+*/
+namespace UltimateOrb.Typed.Collections.Generic {
+
+    public partial interface IReadOnlyDictionary<TKey, TValue, out TEnumerator, out TKeyEnumerator, out TKeyCollection, out TValueEnumerator, out TValueCollection> {
 
         new TKeyCollection Keys {
 

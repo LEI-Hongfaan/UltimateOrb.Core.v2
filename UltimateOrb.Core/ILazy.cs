@@ -3,7 +3,7 @@
 namespace UltimateOrb {
     using UltimateOrb.Collections.Generic;
 
-    public partial interface ILazy<T> : IReadOnlyStrongBox<T> {
+    public partial interface ILazy<T> : Core.IReadOnlyStrongBox<T> {
 
         bool IsEvaluated {
 
@@ -25,9 +25,9 @@ namespace UltimateOrb {
 }
 
 namespace UltimateOrb.RefReturnSupported {
-    using UltimateOrb.Collections.Generic.RefReturnSupported;
+    using UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic;
 
-    public partial interface ILazy<T> : UltimateOrb.ILazy<T>, IReadOnlyStrongBox<T> {
+    public partial interface ILazy<T> : UltimateOrb.ILazy<T>, Core.IReadOnlyStrongBox<T> {
 
         ref readonly T Cache {
 

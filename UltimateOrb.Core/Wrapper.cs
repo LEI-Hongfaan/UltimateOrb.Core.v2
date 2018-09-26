@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 
 namespace UltimateOrb {
+    using Local = Typed_Wrapped_Huge;
 
     public static partial class WrapperModule {
 
@@ -57,7 +58,9 @@ namespace UltimateOrb {
         }
     }
 
-    public partial struct Wrapper<T> : IStrongBox<T>, IReadOnlyStrongBox<T> {
+    public partial struct Wrapper<T>
+        : Local.IStrongBox<T>
+        , Local.IReadOnlyStrongBox<T> {
 
         public T Value;
 
@@ -69,7 +72,7 @@ namespace UltimateOrb {
             this.Value = value;
         }
 
-        T IStrongBox<T>.Value {
+        T Core.IStrongBox<T>.Value {
 
             [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -84,7 +87,7 @@ namespace UltimateOrb {
             set => this.Value = value;
         }
 
-        T IReadOnlyStrongBox<T>.Value {
+        T Core.IReadOnlyStrongBox<T>.Value {
 
             [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -118,7 +121,9 @@ namespace UltimateOrb {
         }
     }
 
-    public readonly partial struct ReadOnlyWrapper<T> : IReadOnlyStrongBox<T> {
+    public readonly partial struct ReadOnlyWrapper<T>
+        : Local.IStrongBox<T>
+        , Local.IReadOnlyStrongBox<T> {
 
         public readonly T Value;
 
@@ -130,13 +135,24 @@ namespace UltimateOrb {
             this.Value = value;
         }
 
-        T IReadOnlyStrongBox<T>.Value {
+        T Core.IReadOnlyStrongBox<T>.Value {
 
             [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get => this.Value;
+        }
+
+        T Core.IStrongBox<T>.Value {
+
+            [TargetedPatchingOptOutAttribute(null)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            [PureAttribute()]
+            get => this.Value;
+
+            set => throw new NotSupportedException();
         }
 
         [TargetedPatchingOptOutAttribute(null)]
@@ -164,7 +180,9 @@ namespace UltimateOrb {
         }
     }
 
-    public partial struct Wrapper<T, TWrapper> : IStrongBox<T>, IReadOnlyStrongBox<T> {
+    public partial struct Wrapper<T, TWrapper>
+        : Local.IStrongBox<T>
+        , Local.IReadOnlyStrongBox<T> {
 
         public T Value;
 
@@ -176,7 +194,7 @@ namespace UltimateOrb {
             this.Value = value;
         }
 
-        T IStrongBox<T>.Value {
+        T Core.IStrongBox<T>.Value {
 
             [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -191,7 +209,7 @@ namespace UltimateOrb {
             set => this.Value = value;
         }
 
-        T IReadOnlyStrongBox<T>.Value {
+        T Core.IReadOnlyStrongBox<T>.Value {
 
             [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -217,7 +235,9 @@ namespace UltimateOrb {
         }
     }
 
-    public readonly partial struct ReadOnlyWrapper<T, TWrapper> : IReadOnlyStrongBox<T> {
+    public readonly partial struct ReadOnlyWrapper<T, TWrapper>
+        : Local.IStrongBox<T>
+        , Local.IReadOnlyStrongBox<T> {
 
         public readonly T Value;
 
@@ -229,13 +249,24 @@ namespace UltimateOrb {
             this.Value = value;
         }
 
-        T IReadOnlyStrongBox<T>.Value {
+        T Core.IReadOnlyStrongBox<T>.Value {
 
             [TargetedPatchingOptOutAttribute(null)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]
             get => this.Value;
+        }
+
+        T Core.IStrongBox<T>.Value {
+
+            [TargetedPatchingOptOutAttribute(null)]
+            [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            [PureAttribute()]
+            get => this.Value;
+
+            set => throw new NotSupportedException();
         }
 
         [TargetedPatchingOptOutAttribute(null)]

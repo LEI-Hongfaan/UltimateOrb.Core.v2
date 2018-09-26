@@ -32,7 +32,8 @@ namespace UltimateOrb {
             return new BclArrayAsReadOnly<T>(value);
         }
 
-
+        // TODO: IMPORTANT
+        /*
         [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -40,6 +41,7 @@ namespace UltimateOrb {
         public static BclArrayAsArray<T> AsArray<T>(this T[] value) {
             return new BclArrayAsArray<T>(value);
         }
+        */
 
         [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]

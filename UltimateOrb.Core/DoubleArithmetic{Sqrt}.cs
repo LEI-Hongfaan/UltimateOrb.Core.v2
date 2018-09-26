@@ -7,7 +7,6 @@ namespace UltimateOrb.Mathematics {
     using Int = Int32;
     using Long = Int64;
 
-    using static UltimateOrb.Utilities.SizeOfModule;
     using Math = System.Math;
     using MathEx = DoubleArithmetic;
 
@@ -49,7 +48,7 @@ namespace UltimateOrb.Mathematics {
                 if (0u == hi) {
                     return Mathematics.Elementary.Math.Sqrt(lo);
                 }
-                var old = (ULong)Math.Sqrt((0.0 + ((ULong)1u << (BitSizeOf<ULong>() - 1)) + ((ULong)1u << (BitSizeOf<ULong>() - 1))) * hi + lo);
+                var old = (ULong)Math.Sqrt((0.0 + ((ULong)1u << (Misc.ULong.BitSize - 1)) + ((ULong)1u << (Misc.ULong.BitSize - 1))) * hi + lo);
                 ULong h;
                 var l = MathEx.BigSquare(old, out h);
                 l += lo;
@@ -74,7 +73,7 @@ namespace UltimateOrb.Mathematics {
                 if (0u == hi) {
                     return Mathematics.Elementary.Math.SqrtRem(lo, out remainder);
                 }
-                var old = (ULong)Math.Sqrt((0.0 + ((ULong)1u << (BitSizeOf<ULong>() - 1)) + ((ULong)1u << (BitSizeOf<ULong>() - 1))) * hi + lo);
+                var old = (ULong)Math.Sqrt((0.0 + ((ULong)1u << (Misc.ULong.BitSize - 1)) + ((ULong)1u << (Misc.ULong.BitSize - 1))) * hi + lo);
                 ULong h;
                 var l = MathEx.BigSquare(old, out h);
                 l += lo;
@@ -114,7 +113,7 @@ namespace UltimateOrb.Mathematics {
                     return Mathematics.Elementary.Math.Sqrt(lo);
                 }
                 if (hi <= ~(ULong)0 >> 2) {
-                    var old = (ULong)Math.Sqrt((0.0 + ((ULong)1u << (BitSizeOf<ULong>() - 1)) + ((ULong)1u << (BitSizeOf<ULong>() - 1))) * hi + lo);
+                    var old = (ULong)Math.Sqrt((0.0 + ((ULong)1u << (Misc.ULong.BitSize - 1)) + ((ULong)1u << (Misc.ULong.BitSize - 1))) * hi + lo);
                     ULong h;
                     var l = MathEx.BigSquare(old, out h);
                     l += lo;
@@ -134,9 +133,9 @@ namespace UltimateOrb.Mathematics {
                     if (hi == ~(ULong)0) {
                         return ~(ULong)0;
                     }
-                    var old = (ULong)(((ULong)1u << (BitSizeOf<UInt>() - 1)) * Math.Sqrt(hi));
+                    var old = (ULong)(((ULong)1u << (Misc.UInt.BitSize - 1)) * Math.Sqrt(hi));
                     var a = lo;
-                    lo = (lo >> 2) | (hi << (BitSizeOf<ULong>() - 2));
+                    lo = (lo >> 2) | (hi << (Misc.ULong.BitSize - 2));
                     hi = hi >> 2;
                     ULong h;
                     var l = MathEx.BigSquare(old, out h);
@@ -150,22 +149,22 @@ namespace UltimateOrb.Mathematics {
                     if ((h > hi) || ((h == hi) && (l > lo))) {
                         --@new;
                         @new <<= 1;
-                        hi = (hi << 2) | (lo >> (BitSizeOf<ULong>() - 2));
+                        hi = (hi << 2) | (lo >> (Misc.ULong.BitSize - 2));
                         lo = a;
                         a = (@new << 1) + 1u;
                         var b = l;
                         l <<= 2;
-                        h = (h << 2) + (ULong)(((l < a) ? -1 : 0) + ((0 > (Long)@new) ? -1 : 0) + ((int)(b >> (BitSizeOf<ULong>() - 2))));
+                        h = (h << 2) + (ULong)(((l < a) ? -1 : 0) + ((0 > (Long)@new) ? -1 : 0) + ((int)(b >> (Misc.ULong.BitSize - 2))));
                         l -= a;
                     } else {
                         @new <<= 1;
-                        hi = (hi << 2) | (lo >> (BitSizeOf<ULong>() - 2));
+                        hi = (hi << 2) | (lo >> (Misc.ULong.BitSize - 2));
                         lo = a;
                         a = (@new << 1) + 1u;
                         var b = l;
                         l <<= 2;
                         l += a;
-                        h = (h << 2) + (((l < a) ? 1u : 0u) + ((0 > (Long)@new) ? 1u : 0u) + ((uint)(b >> (BitSizeOf<ULong>() - 2))));
+                        h = (h << 2) + (((l < a) ? 1u : 0u) + ((0 > (Long)@new) ? 1u : 0u) + ((uint)(b >> (Misc.ULong.BitSize - 2))));
                     }
                     if ((h > hi) || ((h == hi) && (l > lo))) {
                     } else {
@@ -203,7 +202,7 @@ namespace UltimateOrb.Mathematics {
                 }
                 /*
                 if (radicand <= ~(ULong)0 >> 2) {
-                    var old = (ULong)(((ULong)1u << (BitSizeOf<UInt>() - 0)) * Math.Sqrt(radicand));
+                    var old = (ULong)(((ULong)1u << (Misc.UInt.BitSize - 0)) * Math.Sqrt(radicand));
                     ULong h;
                     var l = MathEx.BigSquare(old, out h);
                     h += radicand;
@@ -220,9 +219,9 @@ namespace UltimateOrb.Mathematics {
                     if (radicand == ~(ULong)0) {
                         return ~(ULong)0;
                     }
-                    var old = (ULong)(((ULong)1u << (BitSizeOf<UInt>() - 1)) * Math.Sqrt(radicand));
+                    var old = (ULong)(((ULong)1u << (Misc.UInt.BitSize - 1)) * Math.Sqrt(radicand));
                     var a = (ULong)0u;
-                    var lo = radicand << (BitSizeOf<ULong>() - 2);
+                    var lo = radicand << (Misc.ULong.BitSize - 2);
                     radicand = radicand >> 2;
                     ULong h;
                     var l = MathEx.BigSquare(old, out h);
@@ -236,22 +235,22 @@ namespace UltimateOrb.Mathematics {
                     if ((h > radicand) || ((h == radicand) && (l > lo))) {
                         --@new;
                         @new <<= 1;
-                        radicand = (radicand << 2) | (lo >> (BitSizeOf<ULong>() - 2));
+                        radicand = (radicand << 2) | (lo >> (Misc.ULong.BitSize - 2));
                         lo = a;
                         a = (@new << 1) + 1u;
                         var b = l;
                         l <<= 2;
-                        h = (h << 2) + (ULong)(((l < a) ? -1 : 0) + ((0 > (Long)@new) ? -1 : 0) + ((int)(b >> (BitSizeOf<ULong>() - 2))));
+                        h = (h << 2) + (ULong)(((l < a) ? -1 : 0) + ((0 > (Long)@new) ? -1 : 0) + ((int)(b >> (Misc.ULong.BitSize - 2))));
                         l -= a;
                     } else {
                         @new <<= 1;
-                        radicand = (radicand << 2) | (lo >> (BitSizeOf<ULong>() - 2));
+                        radicand = (radicand << 2) | (lo >> (Misc.ULong.BitSize - 2));
                         lo = a;
                         a = (@new << 1) + 1u;
                         var b = l;
                         l <<= 2;
                         l += a;
-                        h = (h << 2) + (((l < a) ? 1u : 0u) + ((0 > (Long)@new) ? 1u : 0u) + ((uint)(b >> (BitSizeOf<ULong>() - 2))));
+                        h = (h << 2) + (((l < a) ? 1u : 0u) + ((0 > (Long)@new) ? 1u : 0u) + ((uint)(b >> (Misc.ULong.BitSize - 2))));
                     }
                     if ((h > radicand) || ((h == radicand) && (l > lo))) {
                     } else {

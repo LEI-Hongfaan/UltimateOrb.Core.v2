@@ -65,7 +65,7 @@ namespace UltimateOrb.Mathematics.Functional {
         public static partial class FoldLeft<T, TAccumulate, TBinaryOperator, TBinaryOperatorB1, TEnumerable, TEnumerator>
             where TBinaryOperator : IO.IFunc<TAccumulate, TBinaryOperatorB1>
             where TBinaryOperatorB1 : IO.IFunc<T, TAccumulate>
-            where TEnumerable : IEnumerable<T, TEnumerator>
+            where TEnumerable : Typed.Collections.Generic.IEnumerable<T, TEnumerator>
             where TEnumerator : IEnumerator<T> {
 
             public static readonly C0 Value = default;

@@ -21,7 +21,7 @@ namespace UltimateOrb.Core.Tests {
                 return arg1 == arg2;
             }
         }
-
+        /*
         [Property(MaxTest = 50000, QuietOnSuccess = true)]
         public static bool Test_SearchKnuthMorrisPratt_1(string a, string b) {
             if (null == a || null == b) {
@@ -37,6 +37,6 @@ namespace UltimateOrb.Core.Tests {
             }
             return r0 == r1;
         }
-
+        */
     }
 }

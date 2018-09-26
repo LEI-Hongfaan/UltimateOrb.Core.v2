@@ -357,21 +357,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Average<TSource>(this Wrapper<TSource> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Average<TSource>(this Wrapper<TSource> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Average(this Wrapper<uint?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Average(this Wrapper<uint> source) {
             return source.Value;
@@ -397,21 +401,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Average<TSource>(this Wrapper<TSource> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Average<TSource>(this Wrapper<TSource> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Average(this Wrapper<sbyte?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Average(this Wrapper<sbyte> source) {
             return source.Value;
@@ -437,21 +445,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Average<TSource>(this Wrapper<TSource> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Average<TSource>(this Wrapper<TSource> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Average(this Wrapper<ushort?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Average(this Wrapper<ushort> source) {
             return source.Value;
@@ -477,21 +489,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Average<TSource>(this Wrapper<TSource> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Average<TSource>(this Wrapper<TSource> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Average(this Wrapper<ulong?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Average(this Wrapper<ulong> source) {
             return source.Value;
@@ -577,21 +593,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Average<TSource>(this Wrapper<TSource> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Average<TSource>(this Wrapper<TSource> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Average(this Wrapper<UInt128?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Average(this Wrapper<UInt128> source) {
             return source.Value;
@@ -638,21 +658,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Min<TSource>(this Wrapper<TSource> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Min<TSource>(this Wrapper<TSource> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Min(this Wrapper<uint?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Min(this Wrapper<uint> source) {
             return source.Value;
@@ -678,21 +702,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Min<TSource>(this Wrapper<TSource> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min<TSource>(this Wrapper<TSource> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Min(this Wrapper<sbyte?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min(this Wrapper<sbyte> source) {
             return source.Value;
@@ -718,21 +746,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Min<TSource>(this Wrapper<TSource> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Min<TSource>(this Wrapper<TSource> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Min(this Wrapper<ushort?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Min(this Wrapper<ushort> source) {
             return source.Value;
@@ -758,21 +790,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Min<TSource>(this Wrapper<TSource> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Min<TSource>(this Wrapper<TSource> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Min(this Wrapper<ulong?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Min(this Wrapper<ulong> source) {
             return source.Value;
@@ -858,21 +894,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Min<TSource>(this Wrapper<TSource> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min<TSource>(this Wrapper<TSource> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Min(this Wrapper<UInt128?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min(this Wrapper<UInt128> source) {
             return source.Value;
@@ -924,21 +964,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Max<TSource>(this Wrapper<TSource> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Max<TSource>(this Wrapper<TSource> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Max(this Wrapper<uint?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Max(this Wrapper<uint> source) {
             return source.Value;
@@ -964,21 +1008,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Max<TSource>(this Wrapper<TSource> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Max<TSource>(this Wrapper<TSource> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Max(this Wrapper<sbyte?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Max(this Wrapper<sbyte> source) {
             return source.Value;
@@ -1004,21 +1052,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Max<TSource>(this Wrapper<TSource> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Max<TSource>(this Wrapper<TSource> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Max(this Wrapper<ushort?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Max(this Wrapper<ushort> source) {
             return source.Value;
@@ -1044,21 +1096,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Max<TSource>(this Wrapper<TSource> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Max<TSource>(this Wrapper<TSource> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Max(this Wrapper<ulong?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Max(this Wrapper<ulong> source) {
             return source.Value;
@@ -1144,21 +1200,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Max<TSource>(this Wrapper<TSource> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Max<TSource>(this Wrapper<TSource> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Max(this Wrapper<UInt128?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Max(this Wrapper<UInt128> source) {
             return source.Value;
@@ -1210,21 +1270,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Sum<TSource>(this Wrapper<TSource> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Sum<TSource>(this Wrapper<TSource> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Sum(this Wrapper<uint?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Sum(this Wrapper<uint> source) {
             return source.Value;
@@ -1250,21 +1314,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Sum<TSource>(this Wrapper<TSource> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Sum<TSource>(this Wrapper<TSource> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Sum(this Wrapper<sbyte?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Sum(this Wrapper<sbyte> source) {
             return source.Value;
@@ -1290,21 +1358,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Sum<TSource>(this Wrapper<TSource> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Sum<TSource>(this Wrapper<TSource> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Sum(this Wrapper<ushort?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Sum(this Wrapper<ushort> source) {
             return source.Value;
@@ -1330,21 +1402,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Sum<TSource>(this Wrapper<TSource> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Sum<TSource>(this Wrapper<TSource> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Sum(this Wrapper<ulong?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Sum(this Wrapper<ulong> source) {
             return source.Value;
@@ -1430,21 +1506,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Sum<TSource>(this Wrapper<TSource> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum<TSource>(this Wrapper<TSource> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Sum(this Wrapper<UInt128?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum(this Wrapper<UInt128> source) {
             return source.Value;
@@ -1525,8 +1605,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource>(this Wrapper<TSource> source) {
-            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
+        public static Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource> ToList<TSource>(this Wrapper<TSource> source) {
+            return new Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -1870,21 +1950,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Average<TWrapper>(this Wrapper<uint?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Average<TWrapper>(this Wrapper<uint, TWrapper> source) {
             return source.Value;
@@ -1910,21 +1994,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Average<TWrapper>(this Wrapper<sbyte?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Average<TWrapper>(this Wrapper<sbyte, TWrapper> source) {
             return source.Value;
@@ -1950,21 +2038,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Average<TWrapper>(this Wrapper<ushort?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Average<TWrapper>(this Wrapper<ushort, TWrapper> source) {
             return source.Value;
@@ -1990,21 +2082,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Average<TWrapper>(this Wrapper<ulong?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Average<TWrapper>(this Wrapper<ulong, TWrapper> source) {
             return source.Value;
@@ -2090,21 +2186,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Average<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Average<TWrapper>(this Wrapper<UInt128?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Average<TWrapper>(this Wrapper<UInt128, TWrapper> source) {
             return source.Value;
@@ -2151,21 +2251,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Min<TWrapper>(this Wrapper<uint?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Min<TWrapper>(this Wrapper<uint, TWrapper> source) {
             return source.Value;
@@ -2191,21 +2295,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Min<TWrapper>(this Wrapper<sbyte?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min<TWrapper>(this Wrapper<sbyte, TWrapper> source) {
             return source.Value;
@@ -2231,21 +2339,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Min<TWrapper>(this Wrapper<ushort?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Min<TWrapper>(this Wrapper<ushort, TWrapper> source) {
             return source.Value;
@@ -2271,21 +2383,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Min<TWrapper>(this Wrapper<ulong?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Min<TWrapper>(this Wrapper<ulong, TWrapper> source) {
             return source.Value;
@@ -2371,21 +2487,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Min<TWrapper>(this Wrapper<UInt128?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min<TWrapper>(this Wrapper<UInt128, TWrapper> source) {
             return source.Value;
@@ -2437,21 +2557,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Max<TWrapper>(this Wrapper<uint?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Max<TWrapper>(this Wrapper<uint, TWrapper> source) {
             return source.Value;
@@ -2477,21 +2601,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Max<TWrapper>(this Wrapper<sbyte?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Max<TWrapper>(this Wrapper<sbyte, TWrapper> source) {
             return source.Value;
@@ -2517,21 +2645,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Max<TWrapper>(this Wrapper<ushort?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Max<TWrapper>(this Wrapper<ushort, TWrapper> source) {
             return source.Value;
@@ -2557,21 +2689,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Max<TWrapper>(this Wrapper<ulong?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Max<TWrapper>(this Wrapper<ulong, TWrapper> source) {
             return source.Value;
@@ -2657,21 +2793,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Max<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Max<TWrapper>(this Wrapper<UInt128?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Max<TWrapper>(this Wrapper<UInt128, TWrapper> source) {
             return source.Value;
@@ -2723,21 +2863,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Sum<TWrapper>(this Wrapper<uint?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Sum<TWrapper>(this Wrapper<uint, TWrapper> source) {
             return source.Value;
@@ -2763,21 +2907,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Sum<TWrapper>(this Wrapper<sbyte?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Sum<TWrapper>(this Wrapper<sbyte, TWrapper> source) {
             return source.Value;
@@ -2803,21 +2951,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Sum<TWrapper>(this Wrapper<ushort?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Sum<TWrapper>(this Wrapper<ushort, TWrapper> source) {
             return source.Value;
@@ -2843,21 +2995,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Sum<TWrapper>(this Wrapper<ulong?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Sum<TWrapper>(this Wrapper<ulong, TWrapper> source) {
             return source.Value;
@@ -2943,21 +3099,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Sum<TWrapper>(this Wrapper<UInt128?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum<TWrapper>(this Wrapper<UInt128, TWrapper> source) {
             return source.Value;
@@ -3038,8 +3198,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source) {
-            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
+        public static Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource> ToList<TSource, TWrapper>(this Wrapper<TSource, TWrapper> source) {
+            return new Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -3383,21 +3543,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Average(this ReadOnlyWrapper<uint?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Average(this ReadOnlyWrapper<uint> source) {
             return source.Value;
@@ -3423,21 +3587,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Average(this ReadOnlyWrapper<sbyte?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Average(this ReadOnlyWrapper<sbyte> source) {
             return source.Value;
@@ -3463,21 +3631,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Average(this ReadOnlyWrapper<ushort?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Average(this ReadOnlyWrapper<ushort> source) {
             return source.Value;
@@ -3503,21 +3675,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Average(this ReadOnlyWrapper<ulong?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Average(this ReadOnlyWrapper<ulong> source) {
             return source.Value;
@@ -3603,21 +3779,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Average<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Average(this ReadOnlyWrapper<UInt128?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Average(this ReadOnlyWrapper<UInt128> source) {
             return source.Value;
@@ -3664,21 +3844,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Min(this ReadOnlyWrapper<uint?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Min(this ReadOnlyWrapper<uint> source) {
             return source.Value;
@@ -3704,21 +3888,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Min(this ReadOnlyWrapper<sbyte?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min(this ReadOnlyWrapper<sbyte> source) {
             return source.Value;
@@ -3744,21 +3932,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Min(this ReadOnlyWrapper<ushort?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Min(this ReadOnlyWrapper<ushort> source) {
             return source.Value;
@@ -3784,21 +3976,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Min(this ReadOnlyWrapper<ulong?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Min(this ReadOnlyWrapper<ulong> source) {
             return source.Value;
@@ -3884,21 +4080,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Min(this ReadOnlyWrapper<UInt128?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min(this ReadOnlyWrapper<UInt128> source) {
             return source.Value;
@@ -3950,21 +4150,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Max(this ReadOnlyWrapper<uint?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Max(this ReadOnlyWrapper<uint> source) {
             return source.Value;
@@ -3990,21 +4194,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Max(this ReadOnlyWrapper<sbyte?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Max(this ReadOnlyWrapper<sbyte> source) {
             return source.Value;
@@ -4030,21 +4238,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Max(this ReadOnlyWrapper<ushort?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Max(this ReadOnlyWrapper<ushort> source) {
             return source.Value;
@@ -4070,21 +4282,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Max(this ReadOnlyWrapper<ulong?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Max(this ReadOnlyWrapper<ulong> source) {
             return source.Value;
@@ -4170,21 +4386,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Max<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Max(this ReadOnlyWrapper<UInt128?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Max(this ReadOnlyWrapper<UInt128> source) {
             return source.Value;
@@ -4236,21 +4456,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Sum(this ReadOnlyWrapper<uint?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Sum(this ReadOnlyWrapper<uint> source) {
             return source.Value;
@@ -4276,21 +4500,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Sum(this ReadOnlyWrapper<sbyte?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Sum(this ReadOnlyWrapper<sbyte> source) {
             return source.Value;
@@ -4316,21 +4544,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Sum(this ReadOnlyWrapper<ushort?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Sum(this ReadOnlyWrapper<ushort> source) {
             return source.Value;
@@ -4356,21 +4588,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Sum(this ReadOnlyWrapper<ulong?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Sum(this ReadOnlyWrapper<ulong> source) {
             return source.Value;
@@ -4456,21 +4692,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum<TSource>(this ReadOnlyWrapper<TSource> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Sum(this ReadOnlyWrapper<UInt128?> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum(this ReadOnlyWrapper<UInt128> source) {
             return source.Value;
@@ -4551,8 +4791,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource>(this ReadOnlyWrapper<TSource> source) {
-            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
+        public static Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource> ToList<TSource>(this ReadOnlyWrapper<TSource> source) {
+            return new Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -4896,21 +5136,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Average<TWrapper>(this ReadOnlyWrapper<uint?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Average<TWrapper>(this ReadOnlyWrapper<uint, TWrapper> source) {
             return source.Value;
@@ -4936,21 +5180,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Average<TWrapper>(this ReadOnlyWrapper<sbyte?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Average<TWrapper>(this ReadOnlyWrapper<sbyte, TWrapper> source) {
             return source.Value;
@@ -4976,21 +5224,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Average<TWrapper>(this ReadOnlyWrapper<ushort?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Average<TWrapper>(this ReadOnlyWrapper<ushort, TWrapper> source) {
             return source.Value;
@@ -5016,21 +5268,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Average<TWrapper>(this ReadOnlyWrapper<ulong?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Average<TWrapper>(this ReadOnlyWrapper<ulong, TWrapper> source) {
             return source.Value;
@@ -5116,21 +5372,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Average<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Average<TWrapper>(this ReadOnlyWrapper<UInt128?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Average<TWrapper>(this ReadOnlyWrapper<UInt128, TWrapper> source) {
             return source.Value;
@@ -5177,21 +5437,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Min<TWrapper>(this ReadOnlyWrapper<uint?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Min<TWrapper>(this ReadOnlyWrapper<uint, TWrapper> source) {
             return source.Value;
@@ -5217,21 +5481,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Min<TWrapper>(this ReadOnlyWrapper<sbyte?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min<TWrapper>(this ReadOnlyWrapper<sbyte, TWrapper> source) {
             return source.Value;
@@ -5257,21 +5525,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Min<TWrapper>(this ReadOnlyWrapper<ushort?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Min<TWrapper>(this ReadOnlyWrapper<ushort, TWrapper> source) {
             return source.Value;
@@ -5297,21 +5569,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Min<TWrapper>(this ReadOnlyWrapper<ulong?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Min<TWrapper>(this ReadOnlyWrapper<ulong, TWrapper> source) {
             return source.Value;
@@ -5397,21 +5673,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Min<TWrapper>(this ReadOnlyWrapper<UInt128?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Min<TWrapper>(this ReadOnlyWrapper<UInt128, TWrapper> source) {
             return source.Value;
@@ -5463,21 +5743,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Max<TWrapper>(this ReadOnlyWrapper<uint?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Max<TWrapper>(this ReadOnlyWrapper<uint, TWrapper> source) {
             return source.Value;
@@ -5503,21 +5787,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Max<TWrapper>(this ReadOnlyWrapper<sbyte?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Max<TWrapper>(this ReadOnlyWrapper<sbyte, TWrapper> source) {
             return source.Value;
@@ -5543,21 +5831,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Max<TWrapper>(this ReadOnlyWrapper<ushort?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Max<TWrapper>(this ReadOnlyWrapper<ushort, TWrapper> source) {
             return source.Value;
@@ -5583,21 +5875,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Max<TWrapper>(this ReadOnlyWrapper<ulong?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Max<TWrapper>(this ReadOnlyWrapper<ulong, TWrapper> source) {
             return source.Value;
@@ -5683,21 +5979,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Max<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Max<TWrapper>(this ReadOnlyWrapper<UInt128?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Max<TWrapper>(this ReadOnlyWrapper<UInt128, TWrapper> source) {
             return source.Value;
@@ -5749,21 +6049,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, uint?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, uint> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint? Sum<TWrapper>(this ReadOnlyWrapper<uint?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static uint Sum<TWrapper>(this ReadOnlyWrapper<uint, TWrapper> source) {
             return source.Value;
@@ -5789,21 +6093,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, sbyte?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, sbyte> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte? Sum<TWrapper>(this ReadOnlyWrapper<sbyte?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static sbyte Sum<TWrapper>(this ReadOnlyWrapper<sbyte, TWrapper> source) {
             return source.Value;
@@ -5829,21 +6137,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ushort?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ushort> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort? Sum<TWrapper>(this ReadOnlyWrapper<ushort?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ushort Sum<TWrapper>(this ReadOnlyWrapper<ushort, TWrapper> source) {
             return source.Value;
@@ -5869,21 +6181,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ulong?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, ulong> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong? Sum<TWrapper>(this ReadOnlyWrapper<ulong?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static ulong Sum<TWrapper>(this ReadOnlyWrapper<ulong, TWrapper> source) {
             return source.Value;
@@ -5969,21 +6285,25 @@ namespace UltimateOrb {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, UInt128?> selector) {
             return selector.Invoke(source.Value);
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source, Func<TSource, UInt128> selector) {
             return selector.Invoke(source.Value);
         }
         
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128? Sum<TWrapper>(this ReadOnlyWrapper<UInt128?, TWrapper> source) {
             return source.Value;
         }
 
+		[CLSCompliantAttribute(false)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static UInt128 Sum<TWrapper>(this ReadOnlyWrapper<UInt128, TWrapper> source) {
             return source.Value;
@@ -6064,8 +6384,8 @@ namespace UltimateOrb {
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static Collections.Generic.RefReturnSupported.List<TSource> ToList<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source) {
-            return new Collections.Generic.RefReturnSupported.List<TSource>(1) { source.Value, };
+        public static Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource> ToList<TSource, TWrapper>(this ReadOnlyWrapper<TSource, TWrapper> source) {
+            return new Typed_RefReturn_Wrapped_Huge.Collections.Generic.List<TSource>(1) { source.Value, };
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

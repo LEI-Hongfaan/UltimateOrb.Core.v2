@@ -906,7 +906,9 @@ namespace UltimateOrb.Mathematics.Exact {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static Rational64 ToRatioanl64ContinuedFractionBestApproximation(Double value) {
+            // TODO: Perf
             if (Double.IsInfinity(value) || Double.IsNaN(value)) {
+                // TODO: Perf
                 throw new NotFiniteNumberException(value);
             }
             // Interval "( 2 ^ 32 - 1 - 1 / 2, 2 ^ 32 - 1 + 1 / 2 )"
@@ -914,6 +916,7 @@ namespace UltimateOrb.Mathematics.Exact {
             var a = (Double)(s ? -value : value);
             const Double b = 4.294967296e9;
             if (b <= a) {
+                // TODO: Perf
                 throw new OverflowException();
             }
             if (a <= 4.6566128709089882341637330901978e-10) {
@@ -997,7 +1000,9 @@ namespace UltimateOrb.Mathematics.Exact {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static explicit operator Rational64(Double value) {
+            // TODO: Perf
             if (Double.IsInfinity(value) || Double.IsNaN(value)) {
+                // TODO: Perf
                 throw new NotFiniteNumberException(value);
             }
             // Interval "( 2 ^ 32 - 1 - 1 / 2, 2 ^ 32 - 1 + 1 / 2 )"
@@ -1005,6 +1010,7 @@ namespace UltimateOrb.Mathematics.Exact {
             var a = (Double)(s ? -value : value);
             const Double b = 4.294967296e9;
             if (b <= a) {
+                // TODO: Perf
                 throw new OverflowException();
             }
             if (a <= 4.6566128709089882341637330901978e-10) {

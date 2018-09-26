@@ -1,4 +1,5 @@
-﻿namespace UltimateOrb.Collections.Generic.RefReturnSupported {
+﻿namespace UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic {
+    using Generic = UltimateOrb.Collections.Generic;
 
     public partial interface IDeque<T> : Generic.IDeque<T> {
 
