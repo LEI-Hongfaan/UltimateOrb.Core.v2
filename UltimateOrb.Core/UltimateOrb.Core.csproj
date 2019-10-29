@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Authors>LEI Hongfaan</Authors>
     <Company>LEI Hongfaan</Company>
     <Product>UltimateOrb Libraries</Product>
@@ -16,7 +16,7 @@ This package does not include the test suite. See Project Site for more informat
     <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
     <AssemblyVersion>2</AssemblyVersion>
     <FileVersion>2</FileVersion>
-    <Version>2.0.0.2-alpha</Version>
+    <Version>2.0.0.3-alpha</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RunPostBuildEvent>Always</RunPostBuildEvent>

@@ -32,7 +32,6 @@ namespace UltimateOrb.RefReturn.Collections.Generic {
 
 namespace UltimateOrb.RefReturn_Huge.Collections.Generic {
 
-
     public partial interface IList<T> {
 
         new ref T this[long index] {
