@@ -336,6 +336,5 @@ namespace UltimateOrb.Plain.ValueTypes {
                 throw new NotImplementedException();
             }
         }
-
     }
 }
