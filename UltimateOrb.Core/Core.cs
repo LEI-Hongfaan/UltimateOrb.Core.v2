@@ -36,12 +36,12 @@ namespace UltimateOrb {
     /// </summary>
     /// <typeparam name="T1">
     ///     <para>
-    ///         The specified type.
+    ///         The first specified type.
     ///     </para>
     /// </typeparam>
     /// <typeparam name="T2">
     ///     <para>
-    ///         The specified type.
+    ///         The second specified type.
     ///     </para>
     /// </typeparam>
     [ComVisibleAttribute(true)]

@@ -2071,9 +2071,9 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
     }
 }
 
+#if DEBUG_LOGIC_LINKEDTREE
 namespace UltimateOrb.Collections.Generic.Testing {
 
-#if DEBUG_LOGIC_LINKEDTREE
     [System.Runtime.CompilerServices.DiscardableAttribute()]
     public interface IVerifiable {
 
@@ -2119,5 +2119,5 @@ namespace UltimateOrb.Collections.Generic.Testing {
             }
         }
     }
-#endif
 }
+#endif
