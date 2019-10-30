@@ -24,7 +24,7 @@ namespace UltimateOrb.Wrapped.Collections.Immutable.Unchecked {
     public partial struct ListIterator<T, TList>
         : IListIterator<T, ListIterator<T, TList>>
         , IReadOnlyListIterator<T, ListIterator<T, TList>>
-        where TList : Wrapped_Huge.Collections.Generic.IList<T> {
+        where TList : Wrapped.Collections.Generic.IList<T> {
 
         private readonly TList @base;
 

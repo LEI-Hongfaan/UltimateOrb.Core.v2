@@ -236,3 +236,41 @@ namespace UltimateOrb.Typed_RefReturn_Wrapped.Collections.Immutable {
         #endregion
     }
 }
+
+
+namespace UltimateOrb.Typed_RefReturn_Wrapped.Collections.Immutable {
+    using UltimateOrb.Typed_RefReturn_Wrapped;
+    using UltimateOrb.Typed_RefReturn_Wrapped.Collections.Immutable;
+    using static UltimateOrb.Collections.Immutable.ListIterator;
+
+    public partial struct ListSegment<T, TIterator>
+        where TIterator : IListIterator<T, TIterator> {
+
+        private readonly TIterator @base;
+
+        internal readonly int count;
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public ListSegment(TIterator @base, int count) {
+            this.@base = @base;
+            this.count = count;
+        }
+
+        public ref T this[int offset] {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.@base[offset];
+        }
+
+        public ref T Current {
+
+            [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+            get => ref this.@base.Current;
+        }
+
+        #region Explicit Interface Implementations
+        #endregion
+        #region Explicit Interface Implementations (Default)
+        #endregion
+    }
+}

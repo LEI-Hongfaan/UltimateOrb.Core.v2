@@ -472,5 +472,86 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
             m_data.m_count = a;
         }
+
+        [MethodImplAttribute(default(MethodImplOptions))]
+        public void Collect<TAction>(TAction action)
+            where TAction : IO.IAction<NodeId, NodeId> {
+            var n = RootIndex;
+            if (m_data.m_buffer[n].firstChild == NilIndex) {
+                return;
+            }
+            Stack<NodeId> s = Stack<NodeId>.Create();
+            s.Push(m_data.m_buffer[n].nextSibling);
+            var a = 2;
+            for (NodeId ni = m_data.m_buffer[n].firstChild; ; ++a) {
+                n = ni;
+                m_data.m_buffer[n].forwarding = ~RootIndex;
+                ni = m_data.m_buffer[n].firstChild;
+                if (ni != NilIndex) {
+                    s.Push(m_data.m_buffer[n].nextSibling);
+                    continue;
+                }
+                ni = m_data.m_buffer[n].nextSibling;
+                if (ni != NilIndex) {
+                    continue;
+                }
+                for (; ; ) {
+                    if (s.Count == 0) {
+                        goto L_CompactS;
+                    }
+                    if ((ni = s.Pop()) == NilIndex) {
+                        continue;
+                    }
+                    break;
+                }
+            }
+        L_CompactS:
+            ;
+            for (NodeId i = RootIndex + 1, j = a - 1, k = i; j > 0; --j, ++k) {
+            L_2:
+                ;
+                if (m_data.m_buffer.Length <= i) {
+                    break;
+                }
+                n = ++i;
+                if (m_data.m_buffer[n].forwarding == RootIndex) {
+                    goto L_2;
+                }
+                m_data.m_buffer[n].forwarding = k;
+                try {
+                    action.Invoke(n, k);
+                } catch (Exception) {
+                }
+            }
+            // L_CompactM:;
+            var m = RootIndex;
+            m_data.m_buffer[m].firstChild = m_data.m_buffer[m_data.m_buffer[m].firstChild].forwarding;
+            for (NodeId i = RootIndex + 1, j = a - 1, k = i; j > 0; --j, ++k) {
+            L_3:
+                ;
+                if (m_data.m_buffer.Length <= i) {
+                    break;
+                }
+                n = ++i;
+                if (m_data.m_buffer[n].forwarding == RootIndex) {
+                    goto L_3;
+                }
+                if (i == k) {
+                    continue;
+                }
+                m = k;
+                m_data.m_buffer[m].firstChild = m_data.m_buffer[m_data.m_buffer[n].firstChild].forwarding;
+                m_data.m_buffer[m].nextSibling = m_data.m_buffer[m_data.m_buffer[n].nextSibling].forwarding;
+                m_data.m_buffer[m].Value = m_data.m_buffer[n].Value;
+            }
+            for (NodeId i = RootIndex + 1, j = a - 1; m_data.m_buffer.Length <= i && j > 0;) {
+                n = ++i;
+                if (m_data.m_buffer[n].forwarding != RootIndex) {
+                    m_data.m_buffer[n].forwarding = RootIndex;
+                    --j;
+                }
+            }
+            m_data.m_count = a;
+        }
     }
 }
