@@ -474,6 +474,12 @@ namespace UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public List<T> Clone() {
+            return new List<T>(this.buffer.Clone() as T[], this.count);
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public ref T Add(T item) {
             var @this = this;
             if (null != @this.buffer) {
@@ -1925,6 +1931,31 @@ public void ForEach(Action<T> action) {
             }
         }
         */
+
+        public Span<T> AsSpan(Range range) {
+            // TODO: Check
+            var (start, length) = range.GetOffsetAndLength(this.count);
+            return this.buffer.AsSpan(start, length);
+        }
+        
+        public Span<T> AsSpan(int start, int length) {
+            // TODO: Check
+            return this.buffer.AsSpan(start, length);
+        }
+        
+        public Span<T> AsSpan(int start) {
+            // TODO: Check
+            return this.buffer.AsSpan(start, this.count - start);
+        }
+
+        public Span<T> AsSpan() {
+            return this.buffer.AsSpan(0, this.count);
+        }
+
+        public Span<T> AsSpan(Index startIndex) {
+            return this.AsSpan(startIndex.GetOffset(this.count));
+        }
+
         /// <summary>
         ///     <para>Enumerates the elements of a <see cref="List{T}"/>. This type is a value type.</para>
         /// </summary>
