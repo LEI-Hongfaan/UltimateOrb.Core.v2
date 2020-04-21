@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Collections.ObjectModel;
@@ -1165,6 +1166,7 @@ namespace UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic {
             this.RemoveAt(index);
         }
 
+        [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void ResetData() {
@@ -1174,6 +1176,7 @@ namespace UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic {
             }
         }
 
+        [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void ResetDataRange(int start, int length) {
@@ -1932,6 +1935,7 @@ public void ForEach(Action<T> action) {
         }
         */
 
+#if NETSTANDARD2_1
         public Span<T> AsSpan(Range range) {
             // TODO: Check
             var (start, length) = range.GetOffsetAndLength(this.count);
@@ -1955,6 +1959,7 @@ public void ForEach(Action<T> action) {
         public Span<T> AsSpan(Index startIndex) {
             return this.AsSpan(startIndex.GetOffset(this.count));
         }
+#endif
 
         /// <summary>
         ///     <para>Enumerates the elements of a <see cref="List{T}"/>. This type is a value type.</para>
@@ -2125,9 +2130,10 @@ public void ForEach(Action<T> action) {
             /// <remarks>
             ///     <para>After calling <see cref="System.Collections.IEnumerator.Reset"/>, you must call <see cref="MoveNext"/> to advance the enumerator to the first element of the collection before reading the value of <see cref="Current"/>.</para>
             /// </remarks>
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            void System.Collections.IEnumerator.Reset() {
+            public void Reset() {
                 this.index = -1;
             }
         }

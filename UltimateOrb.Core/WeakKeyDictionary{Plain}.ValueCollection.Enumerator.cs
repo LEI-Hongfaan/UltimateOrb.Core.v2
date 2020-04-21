@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace UltimateOrb.Plain.ValueTypes {
@@ -95,6 +96,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 }
 
                 /// <summary>Sets the enumerator to its initial position, which is before the first element in the collection.</summary>
+                [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 public void Reset() {
                     this.m_Index = 0;

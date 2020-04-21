@@ -20,7 +20,7 @@ namespace UltimateOrb {
         }
     }
 
-    public partial class Lazy<T> : ILazy<T>, RefReturnSupported.ILazy<T> {
+    public partial class Lazy<T> : ILazy<T>, RefReturn.ILazy<T> {
 
         internal object m_info;
 

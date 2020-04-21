@@ -249,7 +249,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 if (key is TKey key0) {
                     k = key0;
                     goto L_0;
-                } else if (IsBclNullValid<TValue>.Value && null == key) {
+                } else if (IsStandardNullAssignable<TValue>.Value && null == key) {
                     goto L_0;
                 }
                 goto L_1;
@@ -263,7 +263,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
 
             set {
-                if (!IsBclNullValid<TValue>.Value && null == value) {
+                if (!IsStandardNullAssignable<TValue>.Value && null == value) {
                     ThrowArgumentNullException_value();
                 }
                 try {
@@ -308,7 +308,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         ///   -or-<paramref name="value" /> is of a type that is not assignable to <typeparamref name="TValue" />, the type of values in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.
         ///   -or-A value with the same key already exists in the <see cref="Dictionary{TKey,TValue,TEqualityComparer}" />.</exception>
         void IDictionary.Add(object key, object value) {
-            if (!IsBclNullValid<TValue>.Value && null == value) {
+            if (!IsStandardNullAssignable<TValue>.Value && null == value) {
                 ThrowArgumentNullException_value();
             }
             try {
@@ -433,7 +433,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             if (key is TKey key0) {
                 k = key0;
                 goto L_0;
-            } else if (IsBclNullValid<TKey>.Value && null == key) {
+            } else if (IsStandardNullAssignable<TKey>.Value && null == key) {
                 goto L_0;
             }
             return false;
@@ -850,7 +850,7 @@ namespace UltimateOrb.Plain.ValueTypes {
             if (key is TKey key0) {
                 k = key0;
                 goto L_0;
-            } else if (IsBclNullValid<TKey>.Value && null == key) {
+            } else if (IsStandardNullAssignable<TKey>.Value && null == key) {
                 goto L_0;
             }
             return;

@@ -3,6 +3,7 @@ using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Diagnostics.Contracts;
+using static UltimateOrb.Utilities.BooleanIntegerModule;
 
 namespace UltimateOrb.Mathematics.Elementary {
 
@@ -325,7 +326,8 @@ namespace UltimateOrb.Mathematics.Elementary {
         public static ulong DivideCeilingNoThrow(ulong dividend, ulong divisor) {
             unchecked {
                 if (divisor > 0u) {
-                    return (dividend / divisor) + ((dividend % divisor) == 0u ? 0u : 1u);
+                    var t = Internal.System.Math.DivRem(dividend, divisor, out var remainder);
+                    return t + unchecked((uint)(0 < remainder).AsIntegerUnsafe());
                 }
                 return 0u;
             }

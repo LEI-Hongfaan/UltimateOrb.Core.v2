@@ -166,9 +166,9 @@ namespace UltimateOrb.Mathematics {
                 if (highDividend > highProduct || lowProduct <= lowDividend) {
                     goto L_0002;
                 }
-                L_0001:
+            L_0001:;
                 --lowResult;
-                L_0002:
+            L_0002:;
                 return lowResult;
             }
         }

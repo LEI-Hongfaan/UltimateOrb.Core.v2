@@ -23,11 +23,11 @@ namespace UltimateOrb {
         // bool Invoke(T obj);
     }
 
-    public partial struct BclFuncAsFunc<TResult> : IFunc<TResult> {
+    public partial struct StandardFuncAsFunc<TResult> : IFunc<TResult> {
 
         private readonly Func<TResult> value;
 
-        public BclFuncAsFunc(Func<TResult> value) {
+        public StandardFuncAsFunc(Func<TResult> value) {
             this.value = value;
         }
 
@@ -42,11 +42,11 @@ namespace UltimateOrb {
         */
     }
 
-    public partial struct BclFuncAsFunc<T, TResult> : IFunc<T, TResult> {
+    public partial struct StandardFuncAsFunc<T, TResult> : IFunc<T, TResult> {
 
         private readonly Func<T, TResult> value;
 
-        public BclFuncAsFunc(Func<T, TResult> value) {
+        public StandardFuncAsFunc(Func<T, TResult> value) {
             this.value = value;
         }
 
@@ -61,11 +61,11 @@ namespace UltimateOrb {
         */
     }
 
-    public partial struct BclFuncAsFunc<T1, T2, TResult> : IFunc<T1, T2, TResult> {
+    public partial struct StandardFuncAsFunc<T1, T2, TResult> : IFunc<T1, T2, TResult> {
 
         private readonly Func<T1, T2, TResult> value;
 
-        public BclFuncAsFunc(Func<T1, T2, TResult> value) {
+        public StandardFuncAsFunc(Func<T1, T2, TResult> value) {
             this.value = value;
         }
 
@@ -80,11 +80,11 @@ namespace UltimateOrb {
         */
     }
 
-    public partial struct BclPredicateAsPredicate<T> : IPredicate<T> {
+    public partial struct StandardPredicateAsPredicate<T> : IPredicate<T> {
 
         private readonly Predicate<T> value;
 
-        public BclPredicateAsPredicate(Predicate<T> value) {
+        public StandardPredicateAsPredicate(Predicate<T> value) {
             this.value = value;
         }
 
@@ -101,35 +101,35 @@ namespace UltimateOrb {
 
     public static partial class DelegateConverter {
 
-        public static BclFuncAsFunc<TResult> AsFunc<TResult>(this Func<TResult> value) {
-            return new BclFuncAsFunc<TResult>(value);
+        public static StandardFuncAsFunc<TResult> AsFunc<TResult>(this Func<TResult> value) {
+            return new StandardFuncAsFunc<TResult>(value);
         }
 
-        public static Func<TResult> AsBclFunc<TResult, TFunc>(this TFunc value) where TFunc : IFunc<TResult> {
+        public static Func<TResult> AsStandardFunc<TResult, TFunc>(this TFunc value) where TFunc : IFunc<TResult> {
             return value.Invoke;
         }
 
-        public static BclFuncAsFunc<T, TResult> AsFunc<T, TResult>(this Func<T, TResult> value) {
-            return new BclFuncAsFunc<T, TResult>(value);
+        public static StandardFuncAsFunc<T, TResult> AsFunc<T, TResult>(this Func<T, TResult> value) {
+            return new StandardFuncAsFunc<T, TResult>(value);
         }
 
-        public static Func<T, TResult> AsBclFunc<T, TResult, TFunc>(this TFunc value) where TFunc : IFunc<T, TResult> {
+        public static Func<T, TResult> AsStandardFunc<T, TResult, TFunc>(this TFunc value) where TFunc : IFunc<T, TResult> {
             return value.Invoke;
         }
 
-        public static BclFuncAsFunc<T1, T2, TResult> AsFunc<T1, T2, TResult>(this Func<T1, T2, TResult> value) {
-            return new BclFuncAsFunc<T1, T2, TResult>(value);
+        public static StandardFuncAsFunc<T1, T2, TResult> AsFunc<T1, T2, TResult>(this Func<T1, T2, TResult> value) {
+            return new StandardFuncAsFunc<T1, T2, TResult>(value);
         }
 
-        public static Func<T1, T2, TResult> AsBclFunc<T1, T2, TResult, TFunc>(this TFunc value) where TFunc : IFunc<T1, T2, TResult> {
+        public static Func<T1, T2, TResult> AsStandardFunc<T1, T2, TResult, TFunc>(this TFunc value) where TFunc : IFunc<T1, T2, TResult> {
             return value.Invoke;
         }
 
-        public static BclPredicateAsPredicate<T> AsPredicate<T>(this Predicate<T> value) {
-            return new BclPredicateAsPredicate<T>(value);
+        public static StandardPredicateAsPredicate<T> AsPredicate<T>(this Predicate<T> value) {
+            return new StandardPredicateAsPredicate<T>(value);
         }
 
-        public static Predicate<T> AsBclPredicate<T, TPredicate>(this TPredicate value) where TPredicate : IPredicate<T> {
+        public static Predicate<T> AsStandardPredicate<T, TPredicate>(this TPredicate value) where TPredicate : IPredicate<T> {
             return value.Invoke;
         }
     }

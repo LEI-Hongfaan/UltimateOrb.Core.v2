@@ -6,14 +6,14 @@ using System.Runtime.ConstrainedExecution;
 
 namespace UltimateOrb {
 
-    public static partial class BclTypeExtensions {
+    public static partial class StandardTypeExtensions {
 
         [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static BclStringAsReadOnlyList AsReadOnlyList(this string value) {
-            return new BclStringAsReadOnlyList(value);
+        public static StandardStringAsReadOnlyList AsReadOnlyList(this string value) {
+            return new StandardStringAsReadOnlyList(value);
         }
 
         [TargetedPatchingOptOutAttribute(null)]
@@ -28,20 +28,17 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static BclArrayAsReadOnly<T> AsReadOnly<T>(this T[] value) {
-            return new BclArrayAsReadOnly<T>(value);
+        public static StandardArrayAsReadOnlyList<T> AsReadOnly<T>(this T[] value) {
+            return new StandardArrayAsReadOnlyList<T>(value);
         }
 
-        // TODO: IMPORTANT
-        /*
         [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static BclArrayAsArray<T> AsArray<T>(this T[] value) {
-            return new BclArrayAsArray<T>(value);
+        public static StandardArrayAsList<T> AsArray<T>(this T[] value) {
+            return new StandardArrayAsList<T>(value);
         }
-        */
 
         [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -139,8 +136,8 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static BclRandomAsRandomNumberGenerator AsRandomNumberGenerator(this Random value) {
-            return new BclRandomAsRandomNumberGenerator(value);
+        public static StandardRandomAsRandomNumberGenerator AsRandomNumberGenerator(this Random value) {
+            return new StandardRandomAsRandomNumberGenerator(value);
         }
 
         [TargetedPatchingOptOutAttribute(null)]

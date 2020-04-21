@@ -1,0 +1,127 @@
+﻿<#
+
+var operation_name = "Add";
+var variant = "";
+var variant_np = string.IsNullOrEmpty(variant) ? "" : "." + variant;
+
+var hardcoded = new (string Type, string Expr)[] {
+    ("Int32", @"checked(arg1 + arg2)"),
+    ("Int64", @"checked(arg1 + arg2)"),
+    ("UInt32", @"checked(arg1 + arg2)"),
+    ("UInt64", @"checked(arg1 + arg2)"),
+    ("Int16", @"checked((Int16)unchecked(arg1 + arg2))"),
+    ("UInt16", @"checked((UInt16)unchecked(arg1 + arg2))"),
+    ("Byte", @"checked((Byte)unchecked(arg1 + arg2))"),
+    ("SByte", @"checked((SByte)unchecked(arg1 + arg2))"),
+    ("IntPtr", @"CilVerifiable.Add(arg1, arg2)"),
+    ("UIntPtr", @"CilVerifiable.Add(arg1, arg2)"),
+    ("Int128", @"Int128.Add(arg1, arg2)"),
+    ("UInt128", @"UInt128.Add(arg1, arg2)"),
+    ("Double", @"(arg1 + arg2)"),
+    ("Single", @"(Single)(arg1 + arg2)"),
+    ("Quadruple", @"(arg1 + arg2)"),
+};
+#>
+using System;
+using System.Runtime.CompilerServices;
+using UltimateOrb.Utilities;
+
+namespace UltimateOrb.Functional<#= variant_np #> {
+
+    public static partial class <#= operation_name #> {
+<#
+for (var i = 0; hardcoded.Length > i; ++i) {
+    var item = hardcoded[i];
+    var type = item.Type;
+    var expr = item.Expr;
+#>
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static <#= type #> Invoke(<#= type #> arg1, <#= type #> arg2) {
+            return <#= expr #>;
+        }
+<#
+}
+#>
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static T Invoke<T>(T arg1, T arg2) {
+<#
+    for (var i = 0; hardcoded.Length > i; ++i) {
+        var item = hardcoded[i];
+        var type = item.Type;
+        var expr = item.Expr;
+#>
+            if (typeof(<#= type #>) == typeof(T)) {
+                return (T)(object)<#= expr.Replace("arg1", $@"({type})(object)arg1").Replace("arg2", $@"({type})(object)arg2") #>;
+            }
+<#
+    }
+#>
+            return StandardFunctor<T>().Invoke(arg1, arg2);
+        }
+    }
+
+    public partial struct <#= operation_name #>T
+<#
+for (var i = 0; hardcoded.Length > i; ++i) {
+    var item = hardcoded[i];
+#>
+        <#= i > 0 ? "," : ":" #> IBinOp<<#= item.Type #>>
+<#
+}
+#>
+    {
+<#
+for (var i = 0; hardcoded.Length > i; ++i) {
+    var item = hardcoded[i];
+    var type = item.Type;
+    var expr = item.Expr;
+#>
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public <#= type #> Invoke(<#= type #> arg1, <#= type #> arg2) {
+            return <#= expr #>;
+        }
+<#
+}
+#>
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public T Invoke<T>(T arg1, T arg2) {
+            return <#= operation_name #>.Invoke(arg1, arg2);
+        }
+
+        public static void Register<T>(Func<T, T, T> func) {
+            Add.RegisterStandardFunctor(func);
+        }
+    }
+
+    public partial struct <#= operation_name #>T<T> : IBinOp<T> {
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public T Invoke(T arg1, T arg2) {
+            return <#= operation_name #>.Invoke(arg1, arg2);
+        }
+    }
+}
+
+namespace UltimateOrb.Functional {
+    using Local = UltimateOrb.Functional<#= variant_np #>;
+
+    public static partial class Functors {
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static Func<T, T, T> <#= operation_name #><#= variant #><T>() {
+            return Local.<#= operation_name #>.StandardFunctor<T>();
+        }
+    }
+
+    public static partial class Methods {
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static T <#= operation_name #><#= variant #><T>(T first, T second) {
+            return Local.<#= operation_name #>.Invoke(first, second);
+        }
+    }
+}

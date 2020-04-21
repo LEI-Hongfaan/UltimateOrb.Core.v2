@@ -1,4 +1,5 @@
 ﻿using System;
+using static UltimateOrb.Utilities.BooleanIntegerModule;
 
 namespace UltimateOrb.Mathematics {
 
@@ -49,10 +50,7 @@ namespace UltimateOrb.Mathematics {
                 if (0 > value_hi) {
                     return -1;
                 }
-                if (0 != value_hi || 0 != value_lo) {
-                    return 1;
-                }
-                return 0;
+                return (0 != (value_hi | (Long)value_lo)).AsIntegerUnsafe();
             }
         }
     }

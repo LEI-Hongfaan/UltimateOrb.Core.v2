@@ -9,7 +9,7 @@ namespace UltimateOrb.Collections.Generic {
     using UltimateOrb;
 
     [SerializableAttribute()]
-    public readonly partial struct BclListAsList<T>
+    public readonly partial struct StandardListAsList<T>
         : System.Collections.Generic.IList<T>
         , System.Collections.Generic.IReadOnlyList<T>
         , Local.Collections.Generic.IList<T, System.Collections.Generic.List<T>.Enumerator>
@@ -19,7 +19,7 @@ namespace UltimateOrb.Collections.Generic {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public BclListAsList(System.Collections.Generic.List<T> value) {
+        public StandardListAsList(System.Collections.Generic.List<T> value) {
             this.m_value = value;
         }
 
@@ -171,14 +171,14 @@ namespace UltimateOrb.Collections.Generic {
     }
 
     [DiscardableAttribute()]
-    public static partial class BclListModule {
+    public static partial class StandardListModule {
 
         [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static BclListAsList<T> AsList<T>(this System.Collections.Generic.List<T> value) {
-            return new BclListAsList<T>(value);
+        public static StandardListAsList<T> AsList<T>(this System.Collections.Generic.List<T> value) {
+            return new StandardListAsList<T>(value);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using static UltimateOrb.Utilities.BooleanIntegerModule;
 
 namespace UltimateOrb.Mathematics {
 
@@ -10,75 +11,151 @@ namespace UltimateOrb.Mathematics {
     using Math = Internal.System.Math;
 
     public static partial class DoubleArithmetic {
-        
+
+        private static Double ToDoubleFUnchecked(UInt64 value, out Double result_hi) {
+            unchecked {
+                result_hi = (Double)(value >> (64 - (1 + 52)));
+                return (Double)((((UInt64)1 << (64 - (1 + 52))) - 1) & value);
+            }
+        }
+
+        private static UInt64 FromDoubleFUnchecked(Double value_lo, Double value_hi) {
+            unchecked {
+                return (UInt64)value_lo + (UInt64)value_hi;
+            }
+        }
+
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public static UInt64 DivRem_A_F(UInt64 dividend, UInt64 divisor, out UInt64 remainder) {
+            unchecked {
+                if (0 == divisor) {
+                    goto L_Z;
+                }
+                var r_lo = ToDoubleFUnchecked(dividend, out var r_hi);
+                var d_lo = ToDoubleFUnchecked(divisor, out var d_hi);
+                var q_lo = DoubleArithmeticF.DividePartial(r_lo, r_hi, d_lo, d_hi, out var q_hi);
+                var q = FromDoubleFUnchecked(q_lo, q_hi);
+                var p = divisor * q;
+                var r = dividend - p;
+                if (dividend < p) {
+                    r += divisor;
+                    --q;
+                } else {
+                    var t = r - divisor;
+                    if (r >= divisor) {
+                        r = t;
+                        ++q;
+                    }
+                }
+                remainder = r;
+                return q;
+            L_Z:;
+                {
+                    _ = dividend / 0u;
+                    throw (DivideByZeroException)null;
+                }
+            }
+        }
+        /*
+         * BigDivRem, BigDiv, BigRem:
+         *   - The dividend should be a fused-bigmul-add result.
+         *   - The quotient can not overflow.
+         *   - Throws DivideByZeroException on 0 == divisor.
+         *   - Throws OverflowException on quotient overflowed.
+         * DivRem, Divide, Remainder:
+         *   - The dividend should be a fused-bigmul-add result.
+         *   - (Signed cases) The quotient can not overflow. 
+         *   - Throws DivideByZeroException on 0 == divisor.
+         *   - Throws OverflowException on quotient overflowed.
+         * ~Unchecked:
+         *   - Overflowed results are truncated.
+         * ~Unsafe:
+         *   - No check on exceptionl conditions.
+         * ~Partial:
+         *   - Works only on specialized conditions.
+         * ~Internal:
+         *   - Users should not use them directly.
+         * ~NoThrowOnDivideByZero:
+         *   - No throw on divide-by-zero conditions.
+         * ~NoThrow:
+         *   - No throw on exceptionl conditions.
+         */
         [System.CLSCompliantAttribute(false)]
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public static ULong BigDivRem(ULong lowDividend, ULong highDividend, ULong divisor, out ULong remainder) {
             unchecked {
                 ULong p, ql, qh;
-                if (0u == highDividend) {
-                    return Math.DivRem(lowDividend, divisor, out remainder);
-                } else if (UInt.MaxValue > divisor) {
-                    // 2014Jan08
-                    if (divisor <= highDividend && 0u != divisor) {
-                        highDividend = checked(0u - highDividend);
-                        throw (System.OverflowException)null;
-                    }
-                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
-                    qh = Math.DivRem(highDividend, divisor, out highDividend);
-                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
-                    ql = Math.DivRem(highDividend, divisor, out remainder);
-                    return (qh << Misc.UInt.BitSize) | ql;
-                } else {
-                    // 2013Dec24, 2014Jan08
-                    if (divisor <= highDividend) {
-                        highDividend = checked(0u - highDividend);
-                        throw (System.OverflowException)null;
-                    }
-                    int c = 0;
-                    if (0 <= (Long)divisor) {
-                        do {
-                            ++c;
-                            divisor <<= 1;
-                        } while (0 <= (Long)divisor);
-                        highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
-                        lowDividend = lowDividend << c;
-                    }
-                    var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
-                    var dl = (ULong)(UInt)divisor;
-                    qh = Math.DivRem(highDividend, dh, out highDividend);
-                    p = qh * dl;
-                    highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
-                    if (highDividend < p) {
+                // 2020Jan01
+                if (0u != highDividend) {
+                    if (UInt.MaxValue <= divisor) {
+                        // 2013Dec24, 2014Jan08
+                        //if (divisor <= highDividend) {
+                        //    highDividend = checked(0u - highDividend);
+                        //    throw (System.OverflowException)null;
+                        //}
                         {
-                            --qh;
-                            highDividend += divisor;
+                            // 2020Jan01
+                            _ = checked(divisor - highDividend);
                         }
-                        if (highDividend >= divisor) {
-                            if (highDividend < p) {
+                        int c = 0;
+                        if (0 <= (Long)divisor) {
+                            do {
+                                ++c;
+                                divisor <<= 1;
+                            } while (0 <= (Long)divisor);
+                            highDividend = (highDividend << c) | (lowDividend >> (Misc.ULong.BitSize - c));
+                            lowDividend = lowDividend << c;
+                        }
+                        var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
+                        var dl = (ULong)(UInt)divisor;
+                        qh = Math.DivRem(highDividend, dh, out highDividend);
+                        p = qh * dl;
+                        highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
+                        if (highDividend < p) {
+                            {
                                 --qh;
                                 highDividend += divisor;
                             }
+                            if (highDividend >= divisor) {
+                                if (highDividend < p) {
+                                    --qh;
+                                    highDividend += divisor;
+                                }
+                            }
                         }
-                    }
-                    highDividend -= p;
-                    ql = Math.DivRem(highDividend, dh, out highDividend);
-                    p = ql * dl;
-                    highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
-                    if (highDividend < p) {
-                        {
-                            --ql;
-                            highDividend += divisor;
-                        }
-                        if (highDividend >= divisor) {
-                            if (highDividend < p) {
+                        highDividend -= p;
+                        ql = Math.DivRem(highDividend, dh, out highDividend);
+                        p = ql * dl;
+                        highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
+                        if (highDividend < p) {
+                            {
                                 --ql;
                                 highDividend += divisor;
                             }
+                            if (highDividend >= divisor) {
+                                if (highDividend < p) {
+                                    --ql;
+                                    highDividend += divisor;
+                                }
+                            }
                         }
+                        remainder = (highDividend - p) >> c;
+                        return (qh << Misc.UInt.BitSize) | ql;
+                    } else {
+                        // 2014Jan08
+                        if (0u != divisor) {
+                            // 2020Jan01
+                            _ = checked(divisor - highDividend);
+                        }
+                        highDividend = (highDividend << Misc.UInt.BitSize) | (lowDividend >> Misc.UInt.BitSize);
+                        qh = Math.DivRem(highDividend, divisor, out highDividend);
+                        highDividend = (highDividend << Misc.UInt.BitSize) | (UInt)lowDividend;
+                        ql = Math.DivRem(highDividend, divisor, out remainder);
+                        return (qh << Misc.UInt.BitSize) | ql;
                     }
-                    remainder = (highDividend - p) >> c;
-                    return (qh << Misc.UInt.BitSize) | ql;
+                } else {
+                    return Math.DivRem(lowDividend, divisor, out remainder);
                 }
             }
         }
@@ -211,7 +288,9 @@ namespace UltimateOrb.Mathematics {
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public static ULong BigMul(ULong first, ULong second, out ULong highResult) {
             unchecked {
-                if (Misc.ULong.Size > Misc.UIntPtr.Size) {
+                // 2019Dec15
+                // Currently, we have fast multiplication instructions on most platforms.
+                if (true || Misc.ULong.Size > Misc.UIntPtr.Size) {
                     // 2013Oct04, 2013Dec24
                     var fl = (UInt)first;
                     var fh = (UInt)(first >> Misc.UInt.BitSize);
@@ -223,9 +302,11 @@ namespace UltimateOrb.Mathematics {
                     var hh = (ULong)fh * sh;
                     lh += (UInt)(ll >> Misc.UInt.BitSize);
                     lh += hl;
-                    if (lh < hl) {
-                        hh += (ULong)1u << Misc.UInt.BitSize;
-                    }
+                    // if (lh < hl) {
+                    //     hh += (ULong)1u << Misc.UInt.BitSize;
+                    // }
+                    // 2020Jan01
+                    hh += (ULong)((lh < hl).AsIntegerUnsafe()) << Misc.UInt.BitSize;
                     highResult = hh + (UInt)(lh >> Misc.UInt.BitSize);
                     return ((ULong)(UInt)lh << Misc.UInt.BitSize) | (UInt)(ll);
                 }
@@ -881,9 +962,11 @@ namespace UltimateOrb.Mathematics {
             }
         }
 
-        // [System.CLSCompliantAttribute(false)]
+        [System.CLSCompliantAttribute(false)]
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        internal static ULong BigDivRemPartialInternal(ULong lowDividend, ULong highDividend, ULong divisor, out ULong remainder) {
+        public static ULong BigDivRemPartialInternal(ULong lowDividend, ULong highDividend, ULong divisor, out ULong remainder) {
+            System.Diagnostics.Debug.Assert(0 != highDividend);
+            System.Diagnostics.Debug.Assert(divisor > highDividend);
             unchecked {
                 var dh = (ULong)(UInt)(divisor >> Misc.UInt.BitSize);
                 var dl = (ULong)(UInt)divisor;
@@ -922,5 +1005,146 @@ namespace UltimateOrb.Mathematics {
                 return (qh << Misc.UInt.BitSize) | ql;
             }
         }
+
+        [System.CLSCompliantAttribute(false)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public static ULong BigDivRemPartialInternal(ULong dividend_lo_lo, ULong dividend_lo_hi, ULong dividend_hi_lo, ULong dividend_hi_hi, ULong divisor_lo, ULong divisor_hi, out ULong remainder_lo, out ULong remainder_hi, out ULong quotient_hi) {
+            System.Diagnostics.Debug.Assert(0 != dividend_hi_hi);
+            System.Diagnostics.Debug.Assert(divisor_hi > dividend_hi_hi);
+            unchecked {
+                var rl = dividend_hi_lo;
+                var rh = dividend_hi_hi;
+                var rc = dividend_lo_hi;
+                var qh = DivRemPartialInternal(rc, rl, rh, divisor_lo, divisor_hi, out rl, out rh);
+                rc = dividend_lo_lo;
+                var ql = DivRemPartialInternal(rc, rl, rh, divisor_lo, divisor_hi, out rl, out rh);
+                remainder_lo = rl;
+                remainder_hi = rh;
+                quotient_hi = qh;
+                return ql;
+            }
+        }
+
+        // [System.CLSCompliantAttribute(false)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        static ULong DivRemPartialInternal(ULong dividend_cy, ULong dividend_lo, ULong dividend_hi, ULong divisor_lo, ULong divisor_hi, out ULong remainder_lo, out ULong remainder_hi) {
+            System.Diagnostics.Debug.Assert(0 != dividend_hi);
+            System.Diagnostics.Debug.Assert(divisor_hi > dividend_hi);
+            unchecked {
+                var rl = dividend_lo;
+                var rh = dividend_hi;
+                var quotient = BigDivRemPartialInternal(rl, rh, divisor_hi, out rh);
+                rl = dividend_cy;
+                var pl = BigMul(quotient, divisor_hi, out var ph);
+                if (GreaterThan(pl, ph, rl, rh)) {
+                    {
+                        --quotient;
+                        rl = AddUnchecked(rl, rh, divisor_lo, divisor_hi, out rh);
+                    }
+                    if (LessThanOrEqual(divisor_lo, divisor_hi, rl, rh)) {
+                        if (GreaterThan(pl, ph, rl, rh)) {
+                            --quotient;
+                            rl = AddUnchecked(rl, rh, divisor_lo, divisor_hi, out rh);
+                        }
+                    }
+                }
+                rl = SubtractUnchecked(rl, rh, pl, ph, out rh);
+                remainder_lo = rl;
+                remainder_hi = rh;
+                return quotient;
+            }
+        }
+
+        public static ULong BigDivRemByInverseInternal(Void _, ULong dividend_hi, ULong divisorReciprocal, ULong divisor, out ULong remainder) {
+            unchecked {
+                var pl = BigMul(divisorReciprocal, dividend_hi, out var ph);
+                ph += 1 + dividend_hi;
+                var r = divisor * (ULong)(-(Long)ph);
+                var mask = r >/*=*/ pl ? (ULong)(-(Long)(ULong)1) : 0;
+                ph += mask;
+                r += mask & divisor;
+                remainder = r;
+                return ph;
+            }
+        }
+
+        public static ULong BigDivRemByInverseInternal(ULong dividend_lo, ULong dividend_hi, ULong divisorReciprocal, ULong divisor, out ULong remainder) {
+            unchecked {
+                var pl = BigMul(divisorReciprocal, dividend_hi, out var ph);
+                pl = AddUnchecked(pl, ph, dividend_lo, 1 + dividend_hi, out ph);
+                var r = dividend_lo - divisor * ph;
+                var _mask = r >/*=*/ pl ? (ULong)(-(Long)(ULong)1) : 0;
+                ph += _mask;
+                r += _mask & (divisor);
+                if (r >= divisor) {
+                    goto L_C;
+                }
+            L_1:;
+                remainder = r;
+                return ph;
+            L_C:;
+                r -= divisor;
+                ph++;
+                goto L_1;
+            }
+        }
+
+        public static ULong BigRemByInverseInternal(Void _, ULong dividend_hi, ULong divisorReciprocal, ULong divisor) {
+            unchecked {
+                var pl = BigMul(divisorReciprocal, dividend_hi, out var ph);
+                var r = divisor * ~(ULong)(dividend_hi + ph);
+                if (r >/*=*/ pl) {
+                    r += divisor;
+                }
+                return r;
+            }
+        }
+
+        public static ULong BigRemByInverseInternal(ULong dividend_lo, ULong dividend_hi, ULong divisorReciprocal, ULong divisor) {
+            unchecked {
+                var pl = BigMul(divisorReciprocal, dividend_hi, out var ph);
+                pl = AddUnchecked(pl, ph, dividend_lo, 1 + dividend_hi, out ph);
+                var r = dividend_lo - divisor * ph;
+                if (r >/*=*/ pl) {
+                    r += divisor;
+                }
+                if (r >= divisor) {
+                    r -= divisor;
+                }
+                return r;
+            }
+        }
+
+        public static ULong BigDivRemByInverseInternal(ULong dividend_cy, ULong dividend_lo, ULong dividend_hi, ULong divisorReciprocal, ULong divisor_lo, ULong divisor_hi, out ULong remainder_lo, out ULong remainder_hi) {
+            unchecked {
+                var pl = BigMul(divisorReciprocal, dividend_hi, out var ph);
+                pl = AddUnchecked(pl, ph, dividend_lo, dividend_hi, out ph);
+
+                var rh = dividend_lo - divisor_hi * ph;
+                var rl = SubtractUnchecked(dividend_cy, rh, divisor_lo, divisor_hi, out rh);
+                var tl = BigMul(divisor_lo, ph, out var th);
+                rl = SubtractUnchecked(rl, rh, tl, th, out rh);
+                ++ph;
+
+                var _mask = rh >= pl ? (ULong)(-(Long)(ULong)1) : 0;
+                ph += _mask;
+                rl = AddUnchecked(rl, rh, _mask & divisor_lo, _mask & divisor_hi, out rh);
+                if (rh >= divisor_hi) {
+                    goto L_C;
+                }
+            L_1:;
+                remainder_lo = rl;
+                remainder_hi = rh;
+                return ph;
+            L_C:;
+                if (rh > divisor_hi || rl >= divisor_lo) {
+                    ++ph;
+                    rl = SubtractUnchecked(rl, rh, divisor_lo, divisor_hi, out rh);
+                }
+                goto L_1;
+            }
+        }
+
+
     }
 }

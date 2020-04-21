@@ -24,7 +24,7 @@ namespace UltimateOrb {
     }
 }
 
-namespace UltimateOrb.RefReturnSupported {
+namespace UltimateOrb.RefReturn {
     using UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic;
 
     public partial interface ILazy<T> : UltimateOrb.ILazy<T>, Core.IReadOnlyStrongBox<T> {

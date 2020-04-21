@@ -110,9 +110,29 @@ namespace UltimateOrb.Utilities {
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void ThrowOnNotEqual(this int first, int second) {
-            checked(-unchecked((uint)(first - second))).Ignore();
+            checked(-unchecked(int.MinValue ^ (int)(first - second))).Ignore();
         }
 
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void ThrowOnNotEqual(this uint first, uint second) {
+            checked(-unchecked(int.MinValue ^ (int)(first - second))).Ignore();
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void ThrowOnNotEqual(this long first, long second) {
+            checked(-unchecked(long.MinValue ^ (long)(first - second))).Ignore();
+        }
+
+        [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
+        [TargetedPatchingOptOutAttribute(null)]
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static void ThrowOnNotEqual(this ulong first, ulong second) {
+            checked(-unchecked(long.MinValue ^ (long)(first - second))).Ignore();
+        }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [TargetedPatchingOptOutAttribute(null)]

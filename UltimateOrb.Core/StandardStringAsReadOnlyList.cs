@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Runtime;
 using System.Runtime.CompilerServices;
@@ -9,14 +10,16 @@ using System.Runtime.ConstrainedExecution;
 namespace UltimateOrb {
 
     [SerializableAttribute()]
-    public readonly partial struct BclStringAsReadOnlyList : IList<char>, IReadOnlyList<char>/*, Collections.Generic.IList<char, BclStringAsReadOnlyList.Enumerator>, Collections.Generic.IReadOnlyList<char, BclStringAsReadOnlyList.Enumerator>*/ {
+    public readonly partial struct StandardStringAsReadOnlyList
+        : IList<char>
+        , IReadOnlyList<char>/*, Collections.Generic.IList<char, StandardStringAsReadOnlyList.Enumerator>, Collections.Generic.IReadOnlyList<char, StandardStringAsReadOnlyList.Enumerator>*/ {
 
         private readonly string m_value;
 
         [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public BclStringAsReadOnlyList(string value) {
+        public StandardStringAsReadOnlyList(string value) {
             this.m_value = value;
         }
 
@@ -80,15 +83,15 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static implicit operator BclStringAsReadOnlyList(string value) {
-            return new BclStringAsReadOnlyList(value);
+        public static implicit operator StandardStringAsReadOnlyList(string value) {
+            return new StandardStringAsReadOnlyList(value);
         }
 
         [TargetedPatchingOptOutAttribute(null)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static implicit operator string(BclStringAsReadOnlyList value) {
+        public static implicit operator string(StandardStringAsReadOnlyList value) {
             return value.m_value;
         }
 
@@ -234,6 +237,7 @@ namespace UltimateOrb {
             }
 
             [TargetedPatchingOptOutAttribute(null)]
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {

@@ -3,12 +3,12 @@ using System.Runtime.CompilerServices;
 
 namespace UltimateOrb {
 
-    public readonly struct BclRandomAsRandomNumberGenerator : IRandomNumberGenerator {
+    public readonly struct StandardRandomAsRandomNumberGenerator : IRandomNumberGenerator {
 
         private readonly Random random;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public BclRandomAsRandomNumberGenerator(Random value) {
+        public StandardRandomAsRandomNumberGenerator(Random value) {
             this.random = value;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Runtime;
 using System.Runtime.CompilerServices;
@@ -365,6 +366,7 @@ namespace UltimateOrb.Linq {
             }
 
             [TargetedPatchingOptOutAttribute(null)]
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             [PureAttribute()]

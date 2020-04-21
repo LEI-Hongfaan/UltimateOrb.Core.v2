@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -60,13 +61,13 @@ namespace UltimateOrb.Plain.ValueTypes {
 
         public Tree<TResult> Select<TResult, TSelector>(TSelector selector) where TSelector : IO.IFunc<T, TResult> {
             var @this = this;
-            @this.Collect();
+            // @this.Collect();
             return new Tree<TResult>(@this.m_data.Select<Tree<TResult>.Node, NodeSelector1<TResult, TSelector>>(new NodeSelector1<TResult, TSelector>(selector)));
         }
 
         public Tree<TResult> Select<TResult, TSelector>() where TSelector : IO.IFunc<T, TResult>, new() {
             var @this = this;
-            @this.Collect();
+            // @this.Collect();
             return null == default(TSelector) ? @this.Select<TResult, TSelector>(DefaultConstructor.Invoke<TSelector>()) : new Tree<TResult>(@this.m_data.Select<Tree<TResult>.Node, NodeSelector0<TResult, TSelector>>(default));
         }
 
@@ -375,6 +376,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return true;
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {
                 this.ancestors.m_count = 0;
@@ -398,6 +400,24 @@ namespace UltimateOrb.Plain.ValueTypes {
                     id = data[node].nextSibling;
                 }
             }
+        }
+
+        public Tree<T> Clone<TItemValueCloner>(bool collect = false)
+            where TItemValueCloner : IO.IFunc<T, T>, new() {
+            var @this = this;
+            if (collect) {
+                @this.Collect();
+            }
+            return null == default(TItemValueCloner) ? @this.Select<T, TItemValueCloner>(DefaultConstructor.Invoke<TItemValueCloner>()) : new Tree<T>(@this.m_data.Select<Tree<T>.Node, NodeSelector0<T, TItemValueCloner>>(default));
+        }
+
+        public Tree<T> Clone<TItemValueCloner>(TItemValueCloner cloner, bool collect = false)
+            where TItemValueCloner : IO.IFunc<T, T> {
+            var @this = this;
+            if (collect) {
+                @this.Collect();
+            }
+            return new Tree<T>(@this.m_data.Select<Tree<T>.Node, NodeSelector1<T, TItemValueCloner>>(new NodeSelector1<T, TItemValueCloner>(cloner)));
         }
 
         [MethodImplAttribute(default(MethodImplOptions))]

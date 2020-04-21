@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic;
 
@@ -88,6 +89,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return true;
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {
                 this.ancestors.m_count = 0;

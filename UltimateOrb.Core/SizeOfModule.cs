@@ -38,12 +38,12 @@ namespace UltimateOrb.Utilities {
         /// </returns>
         /// <remarks>
         ///     <para>
-        ///         For a reference type, the size returned is the size of a reference value of the corresponding type, not the size of the data stored in objects referred to by a reference value.
+        ///         For a reference type, the size returned is the size of the object reference itself (same as <c>sizeof(IntPtr)</c>), not the actural size of the data stored in the object.
         ///     </para>
         /// </remarks>
         /// <devdoc>
         ///     <para>
-        ///         ECMA-335: Note that the runtime size of a value type shall not exceed 1 MByte (0x100000 bytes).
+        ///         ECMA-335: Note that the runtime size of a value type shall not exceed 1 MiB (0x100000 bytes).
         ///     </para>
         /// </devdoc>
         [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
@@ -71,23 +71,28 @@ namespace UltimateOrb.Utilities {
         /// </returns>
         /// <remarks>
         ///     <para>
-        ///         For a reference type, the size returned is the size of a reference value of the corresponding type, not the size of the data stored in objects referred to by a reference value.
+        ///         For a reference type, the size returned is the size of the object reference itself (same as <c>sizeof(IntPtr)</c>), not the actural size of the data stored in the object.
         ///     </para>
         /// </remarks>
         /// <devdoc>
         ///     <para>
-        ///         ECMA-335: Note that the runtime size of a value type shall not exceed 1 MByte (0x100000 bytes).
+        ///         ECMA-335: Note that the runtime size of a value type shall not exceed 1 MiB (0x100000 bytes).
         ///     </para>
         ///     <para>
         ///         The body of this method will be modified by the build tools.
-        ///         The build tools identify the method by their names.
+        ///         The build tools identify the method by its names.
         ///         Whenever you rename this method, update the build tools accordingly.
         ///     </para>
         /// </devdoc>
+        
         [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
         [System.Runtime.TargetedPatchingOptOutAttribute(null)]
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         // [System.Diagnostics.Contracts.PureAttribute()]
+        [ILMethodBodyAttribute(@"
+            sizeof !!0
+            ret
+        ")]
         public static int SizeOf<T>() {
             throw (NotImplementedException)null;
         }

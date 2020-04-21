@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using UltimateOrb.RefReturn.Collections.Generic;
+using UltimateOrb.Typed_RefReturn.Collections.Generic;
 
 namespace UltimateOrb {
 
     [SerializableAttribute()]
     [StructLayoutAttribute(LayoutKind.Sequential)]
-    public partial struct BclArrayAsArray<T> : IList<T>, IReadOnlyList<T>, Collections.Generic.RefReturnSupported.IList<T, BclArrayAsArray<T>.Enumerator>, Collections.Generic.RefReturnSupported.IReadOnlyList<T, BclArrayAsArray<T>.Enumerator> {
+    public readonly partial struct StandardArrayAsList<T> : System.Collections.Generic.IList<T>, System.Collections.Generic.IReadOnlyList<T>, Typed_RefReturn_Wrapped_Huge.Collections.Generic.IList<T, StandardArrayAsList<T>.Enumerator>, Typed_RefReturn_Wrapped_Huge.Collections.Generic.IReadOnlyList<T, StandardArrayAsList<T>.Enumerator> {
 
         private readonly T[] m_value;
 
@@ -18,9 +20,19 @@ namespace UltimateOrb {
             throw new NotSupportedException();
         }
 
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator StandardArrayAsList<T>(T[] value) {
+            return new StandardArrayAsList<T>(value);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator T[](StandardArrayAsList<T> value) {
+            return value.m_value;
+        }
+
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public BclArrayAsArray(T[] value) {
+        public StandardArrayAsList(T[] value) {
             this.m_value = value;
         }
 
@@ -34,7 +46,7 @@ namespace UltimateOrb {
             var length = buffer.Length; // null check
             var count = length;
             if (null != item) {
-                EqualityComparer<T> c = EqualityComparer<T>.Default;
+                System.Collections.Generic.EqualityComparer<T> c = System.Collections.Generic.EqualityComparer<T>.Default;
                 for (var i = 0; count > i; ++i) {
                     if (c.Equals(buffer[i], item)) {
                         return true;
@@ -50,18 +62,6 @@ namespace UltimateOrb {
                 }
                 return false;
             }
-        }
-
-        public bool Contains<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
-            var buffer = this.m_value;
-            var length = buffer.Length; // null check
-            var count = length;
-            for (int i = 0; count > i; i++) {
-                if (comparer.Equals(buffer[i], item)) {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public void CopyTo(Array<T> array, int arrayIndex) {
@@ -88,18 +88,18 @@ namespace UltimateOrb {
             return new Enumerator(this.m_value);
         }
 
-        ref T Collections.Generic.RefReturnSupported.ICollection<T, BclArrayAsArray<T>.Enumerator>.Add(T item) {
+        ref T RefReturn.Collections.Generic.ICollection<T>.Add(T item) {
             // TODO
             throw new NotSupportedException();
         }
 
-        int ICollection<T>.Count {
+        int System.Collections.Generic.ICollection<T>.Count {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => checked((int)this.m_value.Length);
         }
 
-        long Collections.ICollection<T>.LongCount {
+        long Huge.Collections.Generic.ICollection<T>.LongCount {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.m_value.Length;
@@ -113,7 +113,7 @@ namespace UltimateOrb {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() {
+        System.Collections.Generic.IEnumerator<T> System.Collections.Generic.IEnumerable<T>.GetEnumerator() {
             return new Enumerator(this.m_value);
         }
 
@@ -143,13 +143,13 @@ namespace UltimateOrb {
             get => ref this.m_value[index];
         }
 
-        ref readonly T Collections.Generic.RefReturnSupported.IReadOnlyList<T, Enumerator>.this[int index] {
+        ref readonly T RefReturn.Collections.Generic.IReadOnlyList<T>.this[int index] {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.m_value[index];
         }
 
-        ref readonly T Collections.Generic.RefReturnSupported.IReadOnlyList<T, Enumerator>.this[long index] {
+        ref readonly T RefReturn_Huge.Collections.Generic.IReadOnlyList<T>.this[long index] {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => ref this.m_value[index];
@@ -161,7 +161,7 @@ namespace UltimateOrb {
             get => this.m_value[index];
         }
 
-        T Collections.IReadOnlyList<T>.this[long index] {
+        T Huge.Collections.Generic.IReadOnlyList<T>.this[long index] {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.m_value[index];
@@ -177,7 +177,7 @@ namespace UltimateOrb {
             set => this.m_value[index] = value;
         }
 
-        T Collections.IList<T>.this[long index] {
+        T Huge.Collections.Generic.IList<T>.this[long index] {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => this.m_value[index];
@@ -221,7 +221,7 @@ namespace UltimateOrb {
             get => this.m_value.LongLength;
         }
 
-        int IReadOnlyCollection<T>.Count {
+        int System.Collections.Generic.IReadOnlyCollection<T>.Count {
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             get => checked((int)this.m_value.Length);
@@ -232,7 +232,7 @@ namespace UltimateOrb {
             return Array.IndexOf<T>(this.m_value, item);
         }
 
-        public int IndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
+        public int IndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : System.Collections.Generic.IEqualityComparer<T> {
             var buffer = this.m_value;
             for (var i = 0; buffer.Length > i; ++i) {
                 if (comparer.Equals(item, buffer[i])) {
@@ -251,8 +251,16 @@ namespace UltimateOrb {
             throw new NotImplementedException();
         }
 
-        public long LongIndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
+        public long LongIndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : System.Collections.Generic.IEqualityComparer<T> {
             throw new NotImplementedException();
+        }
+
+        long Typed_Huge.Collections.Generic.IList<T, Enumerator>.LongIndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) {
+            return LongIndexOf(item, comparer);
+        }
+
+        long Typed_RefReturn_Huge.Collections.Generic.IReadOnlyList<T, Enumerator>.LongIndexOf<TEqualityComparer>(T item, TEqualityComparer comparer) {
+            return LongIndexOf(item, comparer);
         }
 
         public long LongIndexOf(T item) {
@@ -264,9 +272,13 @@ namespace UltimateOrb {
             throw new NotSupportedException();
         }
 
-        public bool Remove<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
+        public bool Remove<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : System.Collections.Generic.IEqualityComparer<T> {
             // TODO
             throw new NotSupportedException();
+        }
+
+        bool Typed_Huge.Collections.Generic.ICollection<T, Enumerator>.Remove<TEqualityComparer>(T item, TEqualityComparer comparer) {
+            return Remove(item, comparer);
         }
 
         public void RemoveAt(int index) {
@@ -281,17 +293,45 @@ namespace UltimateOrb {
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        ref T UltimateOrb.Collections.Generic.RefReturnSupported.IList<T, BclArrayAsArray<T>.Enumerator>.Insert(int index, T item) {
+        ref T UltimateOrb.RefReturn.Collections.Generic.IList<T>.Insert(int index, T item) {
             // TODO
             throw new NotSupportedException();
         }
 
-        void Collections.IList<T>.Insert(long index, T item) {
+        void UltimateOrb.Huge.Collections.Generic.IList<T>.Insert(long index, T item) {
             // TODO
             throw new NotSupportedException();
         }
 
-        public struct Enumerator : IEnumerator<T>, Collections.Generic.RefReturnSupported.IEnumerator<T>, Collections.Generic.RefReturnSupported.IReadOnlyEnumerator<T> {
+        RefReturn.Collections.Generic.IReadOnlyEnumerator<T> RefReturn.Collections.Generic.IReadOnlyEnumerable<T>.GetEnumerator() {
+            return GetEnumerator();
+        }
+
+        RefReturn.Collections.Generic.IEnumerator<T> RefReturn.Collections.Generic.IEnumerable<T>.GetEnumerator() {
+            return GetEnumerator();
+        }
+
+        public bool Contains<TEqualityComparer>(T item, TEqualityComparer comparer) where TEqualityComparer : IEqualityComparer<T> {
+            var buffer = this.m_value;
+            var length = buffer.Length; // null check
+            var count = length;
+            for (int i = 0; count > i; i++) {
+                if (comparer.Equals(buffer[i], item)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool Typed_RefReturn_Huge.Collections.Generic.IReadOnlyCollection<T, Enumerator>.Contains<TEqualityComparer>(T item, TEqualityComparer comparer) {
+            return Contains(item, comparer);
+        }
+
+        bool Typed_Huge.Collections.Generic.ICollection<T, Enumerator>.Contains<TEqualityComparer>(T item, TEqualityComparer comparer) {
+            return Contains(item, comparer);
+        }
+
+        public struct Enumerator : System.Collections.Generic.IEnumerator<T>, Typed_RefReturn.Collections.Generic.IEnumerator<T>, Typed_RefReturn.Collections.Generic.IReadOnlyEnumerator<T> {
 
             private readonly T[] array;
 
@@ -310,12 +350,12 @@ namespace UltimateOrb {
                 get => ref this.array[this.index];
             }
 
-            ref readonly T Collections.Generic.RefReturnSupported.IReadOnlyEnumerator<T>.Current {
+            ref readonly T RefReturn.Collections.Generic.IReadOnlyEnumerator<T>.Current {
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 get => ref this.array[this.index];
             }
 
-            T IEnumerator<T>.Current {
+            T System.Collections.Generic.IEnumerator<T>.Current {
 
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

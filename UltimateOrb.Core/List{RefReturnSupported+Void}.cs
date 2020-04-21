@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Collections.ObjectModel;
@@ -612,9 +613,11 @@ namespace UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic {
                 }
                 return false;
             }
+
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-            void System.Collections.IEnumerator.Reset() {
+            public void Reset() {
                 this.index = -1;
             }
         }

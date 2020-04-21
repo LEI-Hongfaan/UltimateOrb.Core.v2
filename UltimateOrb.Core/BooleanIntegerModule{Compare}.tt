@@ -1,0 +1,93 @@
+﻿using System;
+<#
+
+var TS = new string[] { "uint", "int", "ulong", "long", "float", "double", "UIntPtr", "IntPtr" };
+
+for (var i = 0; i < TS.Length; ++i) {
+	var T = TS[i];
+#>
+
+namespace UltimateOrb.Utilities {
+
+    public static partial class BooleanIntegerModule {
+
+<# if (T.StartsWith("U") || T.StartsWith("u")) { #>
+		[System.CLSCompliantAttribute(false)]
+<# } #>
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [ILBodyAttribute(@"
+            LdArg.0
+            LdArg.1
+<# if (T.ToUpperInvariant().StartsWith("U")) { #>
+            CLT.Un
+<# } else { #>
+            CLT
+<# } #>
+            Ret
+        ")]
+        public static int LessThan(<#= T #> first, <#= T #> second) {
+            throw null;
+        }
+
+<# if (T.StartsWith("U") || T.StartsWith("u")) { #>
+		[System.CLSCompliantAttribute(false)]
+<# } #>
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [ILBodyAttribute(@"
+            LdArg.0
+            LdArg.1
+<# if (T.ToUpperInvariant().StartsWith("U") || T == "Single" || T == "Double") { #>
+            CGT.Un
+<# } else { #>
+            CGT
+<# } #>
+            LdC.I4.0
+            CEq
+            Ret
+        ")]
+        public static int LessThanOrEqual(<#= T #> first, <#= T #> second) {
+            throw null;
+        }
+
+<# if (T.StartsWith("U") || T.StartsWith("u")) { #>
+		[System.CLSCompliantAttribute(false)]
+<# } #>
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [ILBodyAttribute(@"
+            LdArg.0
+            LdArg.1
+<# if (T.ToUpperInvariant().StartsWith("U")) { #>
+            CGT.Un
+<# } else { #>
+            CGT
+<# } #>
+            Ret
+        ")]
+        public static int GreaterThan(<#= T #> first, <#= T #> second) {
+            throw null;
+        }
+
+<# if (T.StartsWith("U") || T.StartsWith("u")) { #>
+		[System.CLSCompliantAttribute(false)]
+<# } #>
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [ILBodyAttribute(@"
+            LdArg.0
+            LdArg.1
+<# if (T.ToUpperInvariant().StartsWith("U") || T == "Single" || T == "Double") { #>
+            CLT.Un
+<# } else { #>
+            CLT
+<# } #>
+            LdC.I4.0
+            CEq
+            Ret
+        ")]
+        public static int GreaterThanOrEqual(<#= T #> first, <#= T #> second) {
+            throw null;
+        }
+    }
+}
+<#
+}
+#>

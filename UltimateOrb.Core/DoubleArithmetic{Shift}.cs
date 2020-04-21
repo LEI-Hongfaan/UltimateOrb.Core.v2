@@ -58,13 +58,13 @@ namespace UltimateOrb.Mathematics {
 		[System.CLSCompliantAttribute(false)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static HIntT ShiftLeft(LIntT low, HIntT high, int count) {
-			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count))));
+			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */))));
 		}
 
 		[System.CLSCompliantAttribute(false)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRight(LIntT low, HIntT high, int count) {
-			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count))));
+			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */))));
 		}
 
 #pragma warning disable 162
@@ -72,16 +72,18 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftLeft(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > 64) {
-					highResult = (HIntT)(low << (count - 64));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -93,25 +95,32 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
-				} else if (count > 64) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - 64)) | (UIntT.MaxValue << (64 + 64 - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - 64));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -120,18 +129,20 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > 64) {
-						return (LIntT)((UIntT)high >> (count - 64));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}
@@ -146,15 +157,17 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftLeft(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > 64) {
-					highResult = (HIntT)(low << (count - 64));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -167,24 +180,31 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
-				} else if (count > 64) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - 64)) | (UIntT.MaxValue << (64 + 64 - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - 64));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -194,17 +214,19 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > 64) {
-						return (LIntT)((UIntT)high >> (count - 64));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}
@@ -234,13 +256,13 @@ namespace UltimateOrb.Mathematics {
 		[System.CLSCompliantAttribute(false)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static HIntT ShiftLeft(LIntT low, HIntT high, int count) {
-			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count))));
+			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */))));
 		}
 
 		[System.CLSCompliantAttribute(false)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRight(LIntT low, HIntT high, int count) {
-			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count))));
+			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */))));
 		}
 
 #pragma warning disable 162
@@ -248,16 +270,18 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftLeft(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > 64) {
-					highResult = (HIntT)(low << (count - 64));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -269,25 +293,32 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
-				} else if (count > 64) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - 64)) | (UIntT.MaxValue << (64 + 64 - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - 64));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -296,18 +327,20 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > 64) {
-						return (LIntT)((UIntT)high >> (count - 64));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}
@@ -322,15 +355,17 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftLeft(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > 64) {
-					highResult = (HIntT)(low << (count - 64));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -343,24 +378,31 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
-				} else if (count > 64) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - 64)) | (UIntT.MaxValue << (64 + 64 - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - 64));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -370,17 +412,19 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > 64) {
-						return (LIntT)((UIntT)high >> (count - 64));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}
@@ -410,13 +454,13 @@ namespace UltimateOrb.Mathematics {
 		[System.CLSCompliantAttribute(false)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static HIntT ShiftLeft(LIntT low, HIntT high, int count) {
-			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count))));
+			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */))));
 		}
 
 		[System.CLSCompliantAttribute(false)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRight(LIntT low, HIntT high, int count) {
-			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count))));
+			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */))));
 		}
 
 #pragma warning disable 162
@@ -424,16 +468,18 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftLeft(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > 64) {
-					highResult = (HIntT)(low << (count - 64));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -445,25 +491,32 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
-				} else if (count > 64) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - 64)) | (UIntT.MaxValue << (64 + 64 - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - 64));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -472,18 +525,20 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > 64) {
-						return (LIntT)((UIntT)high >> (count - 64));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}
@@ -498,15 +553,17 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftLeft(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > 64) {
-					highResult = (HIntT)(low << (count - 64));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -519,24 +576,31 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
-				} else if (count > 64) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - 64)) | (UIntT.MaxValue << (64 + 64 - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - 64));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -546,17 +610,19 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > 64) {
-						return (LIntT)((UIntT)high >> (count - 64));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}
@@ -586,13 +652,13 @@ namespace UltimateOrb.Mathematics {
 		[System.CLSCompliantAttribute(true)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static HIntT ShiftLeft(LIntT low, HIntT high, int count) {
-			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count))));
+			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */))));
 		}
 
 		[System.CLSCompliantAttribute(true)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRight(LIntT low, HIntT high, int count) {
-			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count))));
+			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */))));
 		}
 
 #pragma warning disable 162
@@ -600,16 +666,18 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftLeft(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > 64) {
-					highResult = (HIntT)(low << (count - 64));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -621,25 +689,32 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
-				} else if (count > 64) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - 64)) | (UIntT.MaxValue << (64 + 64 - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - 64));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -648,18 +723,20 @@ namespace UltimateOrb.Mathematics {
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high, int count, out HIntT highResult) {
 			unchecked {
-				count &= 2 * 64 - 1;
-				if (count < 64) {
+				count &= 2 * sizeof(IntT) - 1;
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > 64) {
-						return (LIntT)((UIntT)high >> (count - 64));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}
@@ -674,15 +751,17 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftLeft(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (64 - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > 64) {
-					highResult = (HIntT)(low << (count - 64));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -695,24 +774,31 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
-				} else if (count > 64) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - 64)) | (UIntT.MaxValue << (64 + 64 - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - 64));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -722,17 +808,19 @@ namespace UltimateOrb.Mathematics {
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high, out HIntT highResult) {
 			unchecked {
 				const int count = 1;
-				if (count < 64) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (64 - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > 64) {
-						return (LIntT)((UIntT)high >> (count - 64));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}

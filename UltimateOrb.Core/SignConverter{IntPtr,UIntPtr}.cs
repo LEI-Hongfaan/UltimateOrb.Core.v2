@@ -21,6 +21,11 @@ namespace UltimateOrb.Utilities {
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
+        [ILMethodBodyAttribute(@"
+            ldarg.0
+            conv.ovf.u
+            ret
+        ")]
         public static UIntPtr ToUnsignedChecked(this IntPtr value) {
             return unchecked((UIntPtr)checked((ulong)unchecked((long)value)));
         }
@@ -29,6 +34,11 @@ namespace UltimateOrb.Utilities {
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
+        [ILMethodBodyAttribute(@"
+            ldarg.0
+            conv.ovf.i.un
+            ret
+        ")]
         public static IntPtr ToSignedChecked(this UIntPtr value) {
             return unchecked((IntPtr)checked((long)unchecked((ulong)value)));
         }
@@ -46,6 +56,10 @@ namespace UltimateOrb.Utilities {
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
+        [ILMethodBodyAttribute(@"
+            ldarg.0
+            ret
+        ")]
         public static IntPtr ToSignedUnchecked(this UIntPtr value) {
             return unchecked((IntPtr)(long)(ulong)value);
         }
@@ -72,6 +86,10 @@ namespace UltimateOrb.Utilities {
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
+        [ILMethodBodyAttribute(@"
+            ldarg.0
+            ret
+        ")]
         public static UIntPtr ToUnsignedUnchecked(this IntPtr value) {
             return unchecked((UIntPtr)(ulong)(long)value);
         }

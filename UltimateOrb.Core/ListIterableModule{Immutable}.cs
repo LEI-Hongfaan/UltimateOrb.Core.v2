@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 
@@ -64,6 +65,7 @@ namespace UltimateOrb.Wrapped.Collections.Generic {
             return false;
         }
 
+        [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Reset() {
@@ -142,6 +144,7 @@ namespace UltimateOrb.Wrapped.Collections.Generic {
             return false;
         }
 
+        [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public void Reset() {
@@ -311,28 +314,29 @@ namespace UltimateOrb.Wrapped.Collections.Generic {
             public TResult Current {
 
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => ((IEnumerator<TResult>)this.@base).Current;
+                get => this.@base.Current;
             }
 
             object IEnumerator.Current {
 
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-                get => ((IEnumerator<TResult>)this.@base).Current;
+                get => this.@base.Current;
             }
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Dispose() {
-                ((IEnumerator<TResult>)this.@base).Dispose();
+                this.@base.Dispose();
             }
 
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public bool MoveNext() {
-                return ((IEnumerator<TResult>)this.@base).MoveNext();
+                return this.@base.MoveNext();
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {
-                ((IEnumerator<TResult>)this.@base).Reset();
+                this.@base.Reset();
             }
         }
     }

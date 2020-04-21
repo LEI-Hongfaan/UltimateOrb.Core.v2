@@ -2,6 +2,7 @@
 using System.Runtime.ConstrainedExecution;
 
 namespace UltimateOrb.Plain.ValueTypes {
+    using System.ComponentModel;
     using UltimateOrb.Typed_RefReturn_Wrapped_Huge.Collections.Generic;
 
     public partial struct Queue<T> {
@@ -84,6 +85,7 @@ namespace UltimateOrb.Plain.ValueTypes {
                 return false;
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {

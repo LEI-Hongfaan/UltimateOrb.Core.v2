@@ -70,37 +70,46 @@ namespace UltimateOrb.Mathematics {
         [TargetedPatchingOptOutAttribute(null)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [System.Diagnostics.Contracts.PureAttribute()]
-        public static int CountLeadingZeros(UInt64 v) {
+        public static int CountLeadingZeros(UInt64 w) {
             System.Diagnostics.Contracts.Contract.Ensures(0 <= System.Diagnostics.Contracts.Contract.Result<int>());
             System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.Result<int>() <= 64);
-            if (v == 0u) {
+#if NETCOREAPP3_0 || NETCOREAPP3_1
+            return System.Numerics.BitOperations.LeadingZeroCount(w);
+#else
+            if (0u == w) {
                 return 64;
             }
-            var r = 0;
-            if ((v & 0xFFFFFFFF00000000u) == 0u) {
-                v <<= 32;
-                r = unchecked(r + 32);
+            var v = unchecked((UInt32)(w >> 32));
+            var r = 31;
+            if (0u == v) {
+                v = unchecked((UInt32)w);
+                r = 63;
             }
-            if ((v & 0xFFFF000000000000u) == 0u) {
-                v <<= 16;
-                r = unchecked(r + 16);
+            if (v > 0xFFFFu) {
+                v >>= 16;
+                unchecked {
+                    r -= 16;
+                }
             }
-            if ((v & 0xFF00000000000000u) == 0u) {
-                v <<= 8;
-                r = unchecked(r + 8);
+            if (v > 0xFFu) {
+                v >>= 8;
+                unchecked {
+                    r -= 8;
+                }
             }
-            if ((v & 0xF000000000000000u) == 0u) {
-                v <<= 4;
-                r = unchecked(r + 4);
+            if (v > 0xFu) {
+                v >>= 4;
+                unchecked {
+                    r -= 4;
+                }
             }
-            if ((v & 0xC000000000000000u) == 0u) {
-                v <<= 2;
-                r = unchecked(r + 2);
-            }
-            if ((v & 0x8000000000000000u) == 0u) {
-                r = unchecked(r + 1);
+            {
+                unchecked {
+                    r -= 0x3 & unchecked((int)((Int32)0b11111111_11111111_10101010_01010011 >> ((int)v << 1)));
+                }
             }
             return r;
+#endif
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
@@ -111,24 +120,25 @@ namespace UltimateOrb.Mathematics {
             System.Diagnostics.Contracts.Contract.Ensures(0 <= System.Diagnostics.Contracts.Contract.Result<int>());
             System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.Result<int>() <= 32);
             var v = unchecked((uint)value);
-            if (v == (byte)0u) {
+            if (0u == v) {
                 return 8;
             }
-            var r = 0;
-            if ((v & 0xF0u) == 0u) {
-                v <<= 4;
-                r = unchecked(r + 4);
+            var r = 7;
+            if (v > 0xFu) {
+                v >>= 4;
+                unchecked {
+                    r -= 4;
+                }
             }
-            if ((v & 0xC0u) == 0u) {
-                v <<= 2;
-                r = unchecked(r + 2);
-            }
-            if ((v & 0x80u) == 0u) {
-                r = unchecked(r + 1);
+            {
+                unchecked {
+                    r -= 0x3 & unchecked((int)((Int32)0b11111111_11111111_10101010_01010011 >> ((int)v << 1)));
+                }
             }
             return r;
         }
 
+        // 5.00 Cyc
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [TargetedPatchingOptOutAttribute(null)]
@@ -137,28 +147,32 @@ namespace UltimateOrb.Mathematics {
         public static int CountLeadingZeros(UInt32 v) {
             System.Diagnostics.Contracts.Contract.Ensures(0 <= System.Diagnostics.Contracts.Contract.Result<int>());
             System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.Result<int>() <= 32);
-            if (v == 0u) {
+            if (0u == v) {
                 return 32;
             }
-            var r = 0;
-            if ((v & 0xFFFF0000u) == 0u) {
-                v <<= 16;
-                r = unchecked(r + 16);
+            var r = 31;
+            if (v > 0xFFFFu) {
+                v >>= 16;
+                unchecked {
+                    r -= 16;
+                }
             }
-            if ((v & 0xFF000000u) == 0u) {
-                v <<= 8;
-                r = unchecked(r + 8);
+            if (v > 0xFFu) {
+                v >>= 8;
+                unchecked {
+                    r -= 8;
+                }
             }
-            if ((v & 0xF0000000u) == 0u) {
-                v <<= 4;
-                r = unchecked(r + 4);
+            if (v > 0xFu) {
+                v >>= 4;
+                unchecked {
+                    r -= 4;
+                }
             }
-            if ((v & 0xC0000000u) == 0u) {
-                v <<= 2;
-                r = unchecked(r + 2);
-            }
-            if ((v & 0x80000000u) == 0u) {
-                r = unchecked(r + 1);
+            {
+                unchecked {
+                    r -= 0x3 & unchecked((int)((Int32)0b11111111_11111111_10101010_01010011 >> ((int)v << 1)));
+                }
             }
             return r;
         }
@@ -249,7 +263,7 @@ namespace UltimateOrb.Mathematics {
                 }
             }
             return -1;
-        L_1: ;
+        L_1:;
             if (0 == (i & 0x0F)) {
                 r = unchecked(r + 4);
             }
@@ -415,7 +429,7 @@ namespace UltimateOrb.Mathematics {
         public static bool HasZeroBytes(Int64 v) {
             return HasZeroBytes(unchecked((UInt64)v));
         }
-        
+
         [System.CLSCompliantAttribute(false)]
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [TargetedPatchingOptOutAttribute(null)]

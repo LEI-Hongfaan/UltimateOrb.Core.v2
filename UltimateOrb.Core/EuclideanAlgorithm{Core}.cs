@@ -30,7 +30,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 } else if (first > second) {
                     goto L_Gt;
                 }
-                L_Lt:
+            L_Lt:
                 ;
                 if (0u != ((first ^ second) & 2u)) {
                     second = (first >> 2) + (second >> 2) + 1u;
@@ -48,7 +48,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 } else if (first < second) {
                     goto L_Lt;
                 }
-                L_Gt:
+            L_Gt:
                 ;
                 if (0u != ((first ^ second) & 2u)) {
                     first = (first >> 2) + (second >> 2) + 1u;
@@ -94,7 +94,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 } else if (first > second) {
                     goto L_Gt;
                 }
-                L_Lt:
+            L_Lt:
                 ;
                 if (0u != (((uint)first ^ (uint)second) & 2u)) {
                     second = (first >> 2) + (second >> 2) + 1u;
@@ -112,7 +112,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 } else if (first < second) {
                     goto L_Lt;
                 }
-                L_Gt:
+            L_Gt:
                 ;
                 if (0u != (((uint)first ^ (uint)second) & 2u)) {
                     first = (first >> 2) + (second >> 2) + 1u;
@@ -444,7 +444,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 if (second > first) {
                     goto L_02;
                 }
-                L_01:
+            L_01:
                 uint q;
                 q = Math.DivRem(first, second, out first);
                 if (0u == first) {
@@ -454,7 +454,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 }
                 u0 -= (int)q * u1;
                 v0 -= (int)q * v1;
-                L_02:
+            L_02:
                 q = Math.DivRem(second, first, out second);
                 if (0u == second) {
                     firstCoefficient = u0;
@@ -484,7 +484,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 if (second > first) {
                     goto L_02;
                 }
-                L_01:
+            L_01:
                 ulong q;
                 q = Math.DivRem(first, second, out first);
                 if (0u == first) {
@@ -494,7 +494,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 }
                 u0 -= (long)q * u1;
                 v0 -= (long)q * v1;
-                L_02:
+            L_02:
                 q = Math.DivRem(second, first, out second);
                 if (0u == second) {
                     firstCoefficient = u0;
@@ -521,7 +521,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 if (value > module) {
                     goto L_02;
                 }
-                L_01:
+            L_01:
                 ulong q;
                 q = Math.DivRem(module, value, out module);
                 if (0u == module) {
@@ -529,7 +529,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                     return value;
                 }
                 v0 -= (long)q * v1;
-                L_02:
+            L_02:
                 q = Math.DivRem(value, module, out value);
                 if (0u == value) {
                     pseudoinverse = v0;
@@ -588,7 +588,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 if (0u == value && 0u != module) {
                     goto L_03;
                 }
-                L_01:
+            L_01:
                 ulong q;
                 q = Math.DivRem(n, value, out n);
                 if (0u == n) {
@@ -599,7 +599,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                     return value;
                 }
                 v0 -= (long)q * v1;
-                L_02:
+            L_02:
                 q = Math.DivRem(value, n, out value);
                 if (0u == value) {
                     if (0 == v0) {
@@ -610,7 +610,7 @@ namespace UltimateOrb.Mathematics.NumberTheory {
                 }
                 v1 -= (long)q * v0;
                 goto L_01;
-                L_03:
+            L_03:
                 pseudoinverse = 0u;
                 return 0u;
             }
@@ -634,14 +634,17 @@ namespace Internal.System {
             System.Diagnostics.Contracts.Contract.Requires(0u != divisor);
             System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(divisor) > System.Diagnostics.Contracts.Contract.ValueAtReturn(out remainder));
             System.Diagnostics.Contracts.Contract.EnsuresOnThrow<DivideByZeroException>(!(0u != System.Diagnostics.Contracts.Contract.OldValue(divisor)));
-            if (SizeOfModule.SizeOf<UInt64>() > SizeOfModule.SizeOf<UIntPtr>()) {
-                var q = dividend / divisor;
-                remainder = unchecked(dividend - q * divisor);
-                return q;
-            }
-            {
-                remainder = dividend % divisor;
-                return dividend / divisor;
+            unchecked {
+                // 2019Dec27
+                if (true || SizeOfModule.SizeOf<UInt64>() > SizeOfModule.SizeOf<UIntPtr>()) {
+                    var q = dividend / divisor;
+                    remainder = dividend - q * divisor;
+                    return q;
+                }
+                {
+                    remainder = dividend % divisor;
+                    return dividend / divisor;
+                }
             }
         }
 
@@ -654,8 +657,10 @@ namespace Internal.System {
             System.Diagnostics.Contracts.Contract.Requires(0u != divisor);
             System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(divisor) > System.Diagnostics.Contracts.Contract.ValueAtReturn(out remainder));
             System.Diagnostics.Contracts.Contract.EnsuresOnThrow<DivideByZeroException>(!(0u != System.Diagnostics.Contracts.Contract.OldValue(divisor)));
-            remainder = dividend % divisor;
-            return dividend / divisor;
+            // 2019Dec27
+            var q = dividend / divisor;
+            remainder = dividend - q * divisor;
+            return q;
         }
 
         [System.CLSCompliantAttribute(false)]

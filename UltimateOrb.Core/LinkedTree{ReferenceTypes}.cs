@@ -8,6 +8,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
     using Local = Typed_Wrapped_Huge;
     using UltimateOrb.Collections.Generic.Testing;
     using ThrowHelper = UltimateOrb.Utilities.ThrowHelper;
+    using System.ComponentModel;
 
     public partial class LinkedTree<T> : IEnumerable<T> {
 
@@ -310,6 +311,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 ThrowHelper.Throw<NotSupportedException>();
             }
@@ -365,6 +367,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 ThrowHelper.Throw<NotSupportedException>();
             }
@@ -426,6 +429,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 ThrowHelper.Throw<NotSupportedException>();
             }
@@ -514,6 +518,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 }
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 ThrowHelper.Throw<NotSupportedException>();
             }
@@ -606,6 +611,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 return true;
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 ThrowHelper.Throw<NotSupportedException>();
             }
@@ -644,6 +650,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 return this.@this.MoveNext();
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 this.@this.Reset();
             }
@@ -682,6 +689,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 return this.@this.MoveNext();
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 this.@this.Reset();
             }
@@ -720,6 +728,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 return this.@this.MoveNext();
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 this.@this.Reset();
             }
@@ -758,6 +767,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                 return this.@this.MoveNext();
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Never)]
             public void Reset() {
                 this.@this.Reset();
             }
@@ -1954,6 +1964,7 @@ namespace UltimateOrb.Collections.Generic.ReferenceTypes {
                     return null != (this.node = this.node.next_sibling);
                 }
 
+                [EditorBrowsableAttribute(EditorBrowsableState.Never)]
                 public void Reset() {
                     ThrowHelper.Throw<NotSupportedException>();
                 }

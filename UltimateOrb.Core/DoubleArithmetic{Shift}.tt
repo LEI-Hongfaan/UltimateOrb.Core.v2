@@ -10,7 +10,7 @@ var HS = new string[] { "U", "", "U", "" };
 var CS = new string[] { "false", "false", "false", "true" };
 
 var CP = new string[] { ", int count", "" };
-var CQ = new string[] { "count &= 2 * " + T + " - 1;", "const int count = 1;" };
+var CQ = new string[] { "count &= 2 * sizeof(IntT) - 1;", "const int count = 1;" };
 #>
 
 namespace UltimateOrb.Mathematics {
@@ -77,13 +77,13 @@ namespace UltimateOrb.Mathematics {
 		[System.CLSCompliantAttribute(<#= C #>)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static HIntT ShiftLeft(LIntT low, HIntT high, int count) {
-			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (<#= T #> - count))));
+			return unchecked((HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */))));
 		}
 
 		[System.CLSCompliantAttribute(<#= C #>)]
 		[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
 		public static LIntT ShiftRight(LIntT low, HIntT high, int count) {
-			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (<#= T #> - count))));
+			return unchecked((LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */))));
 		}
 <#
 for (var j = 0; j < CP.Length; ++j) {
@@ -97,15 +97,17 @@ for (var j = 0; j < CP.Length; ++j) {
 		public static LIntT ShiftLeft(LIntT low, HIntT high<#= P #>, out HIntT highResult) {
 			unchecked {
 				<#= Q #>
-				if (count < <#= T #>) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
-					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (<#= T #> - count)));
+					*/
+					highResult = (HIntT)(((UIntT)high << count) | ((UIntT)low >> (-count/* sizeof(IntT) - count */)));
 					return (LIntT)(low << count);
-				} else if (count > <#= T #>) {
-					highResult = (HIntT)(low << (count - <#= T #>));
+				} else if (count > sizeof(IntT)) {
+					highResult = (HIntT)(low << (count/* - sizeof(IntT)*/));
 				} else {
 					highResult = (HIntT)low;
 				}
@@ -118,24 +120,31 @@ for (var j = 0; j < CP.Length; ++j) {
 		public static LIntT ShiftRightSigned(LIntT low, HIntT high<#= P #>, out HIntT highResult) {
 			unchecked {
 				<#= Q #>
-				if (count < <#= T #>) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((IntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (<#= T #> - count)));
-				} else if (count > <#= T #>) {
-					if (0 > (IntT)high) {
-						highResult = (HIntT)(IntT)(-1);
-						return (LIntT)(((UIntT)high >> (count - <#= T #>)) | (UIntT.MaxValue << (<#= T #> + <#= T #> - count)));
-					} else {
-						highResult = (HIntT)0;
-						return (LIntT)((UIntT)high >> (count - <#= T #>));
-					}
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
-					highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
-					return (LIntT)high;
+					var mask = (UIntT)(-((IntT)high >> (sizeof(IntT) - 1)));
+					highResult = (HIntT)mask;
+					if (count > sizeof(IntT)) {
+						// if (0 > (IntT)high) {
+						//     highResult = (HIntT)(IntT)(-1);
+						//     return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (UIntT.MaxValue << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+						// } else {
+						//     highResult = (HIntT)0;
+						//     return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
+						// }
+						return (LIntT)(((UIntT)high >> (count/* - sizeof(IntT)*/)) | (mask << (-count/* sizeof(IntT) + sizeof(IntT) - count */)));
+					} else {
+						// highResult = (0 > (IntT)high) ? (HIntT)(IntT)(-1) : (HIntT)0;
+						return (LIntT)high;
+					}
 				}
 			}
 		}
@@ -145,17 +154,19 @@ for (var j = 0; j < CP.Length; ++j) {
 		public static LIntT ShiftRightUnsigned(LIntT low, HIntT high<#= P #>, out HIntT highResult) {
 			unchecked {
 				<#= Q #>
-				if (count < <#= T #>) {
+				if (count < sizeof(IntT)) {
+					/*
 					if (count == 0) {
 						highResult = high;
 						return low;
 					}
+					*/
 					highResult = (HIntT)((UIntT)high >> count);
-					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (<#= T #> - count)));
+					return (LIntT)(((UIntT)low >> count) | ((UIntT)high << (-count/* sizeof(IntT) - count */)));
 				} else {
 					highResult = (HIntT)0;
-					if (count > <#= T #>) {
-						return (LIntT)((UIntT)high >> (count - <#= T #>));
+					if (count > sizeof(IntT)) {
+						return (LIntT)((UIntT)high >> (count/* - sizeof(IntT)*/));
 					} else {
 						return (LIntT)high;
 					}

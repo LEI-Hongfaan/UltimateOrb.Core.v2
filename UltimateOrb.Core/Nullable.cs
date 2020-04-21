@@ -14,7 +14,7 @@ namespace UltimateOrb {
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
-        public static T? ToBclNullable<T>(this Nullable_A<T> value) where T : struct {
+        public static T? ToStandardNullable<T>(this Nullable_A<T> value) where T : struct {
             if (value.HasValue) {
                 return new T?(value.GetValueOrDefault());
             }

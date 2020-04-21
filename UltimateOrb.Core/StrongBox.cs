@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UltimateOrb.Collections;
 using UltimateOrb.Collections.Generic;
-using UltimateOrb.RefReturnSupported;
+using UltimateOrb.RefReturn;
 
 namespace UltimateOrb {
     using Local = Typed_RefReturn_Wrapped_Huge;

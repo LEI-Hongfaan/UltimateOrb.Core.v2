@@ -1,4 +1,5 @@
 ﻿using System;
+using static UltimateOrb.Utilities.BooleanIntegerModule;
 
 namespace UltimateOrb.Mathematics {
 	using UInt = UInt32;
@@ -24,7 +25,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((HIntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? unchecked(++result_hi_) : result_hi_);
+			unchecked {
+				result_hi_ += unchecked((HIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -37,7 +40,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((IntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			checked {
+				result_hi_ += unchecked((IntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -50,7 +55,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((UIntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			checked {
+				result_hi_ += unchecked((UIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -63,7 +70,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((HIntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? unchecked(--result_hi_) : result_hi_);
+			unchecked {
+				result_hi_ -= unchecked((HIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -76,7 +85,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((IntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			checked {
+				result_hi_ -= unchecked((IntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -89,7 +100,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((UIntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			checked {
+				result_hi_ -= unchecked((UIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -120,7 +133,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((HIntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? unchecked(++result_hi_) : result_hi_);
+			unchecked {
+				result_hi_ += unchecked((HIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -133,7 +148,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((IntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			checked {
+				result_hi_ += unchecked((IntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -146,7 +163,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((UIntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			checked {
+				result_hi_ += unchecked((UIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -159,7 +178,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((HIntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? unchecked(--result_hi_) : result_hi_);
+			unchecked {
+				result_hi_ -= unchecked((HIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -172,7 +193,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((IntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			checked {
+				result_hi_ -= unchecked((IntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -185,7 +208,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((UIntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			checked {
+				result_hi_ -= unchecked((UIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -216,7 +241,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((HIntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? unchecked(++result_hi_) : result_hi_);
+			unchecked {
+				result_hi_ += unchecked((HIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -229,7 +256,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((IntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			checked {
+				result_hi_ += unchecked((IntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -242,7 +271,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((UIntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			checked {
+				result_hi_ += unchecked((UIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -255,7 +286,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((HIntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? unchecked(--result_hi_) : result_hi_);
+			unchecked {
+				result_hi_ -= unchecked((HIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -268,7 +301,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((IntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			checked {
+				result_hi_ -= unchecked((IntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -281,7 +316,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((UIntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			checked {
+				result_hi_ -= unchecked((UIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -312,7 +349,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((HIntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? unchecked(++result_hi_) : result_hi_);
+			unchecked {
+				result_hi_ += unchecked((HIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -325,7 +364,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((IntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			checked {
+				result_hi_ += unchecked((IntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -338,7 +379,9 @@ namespace UltimateOrb.Mathematics {
 				++result_lo_;
 			}
 			var result_hi_ = unchecked((UIntT)value_hi);
-			result_hi_ = (~(LIntT)0 == value_lo ? checked(++result_hi_) : result_hi_);
+			checked {
+				result_hi_ += unchecked((UIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -351,7 +394,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((HIntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? unchecked(--result_hi_) : result_hi_);
+			unchecked {
+				result_hi_ -= unchecked((HIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -364,7 +409,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((IntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			checked {
+				result_hi_ -= unchecked((IntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}
@@ -377,7 +424,9 @@ namespace UltimateOrb.Mathematics {
 				--result_lo_;
 			}
 			var result_hi_ = unchecked((UIntT)value_hi);
-			result_hi_ = ((LIntT)0 == value_lo ? checked(--result_hi_) : result_hi_);
+			checked {
+				result_hi_ -= unchecked((UIntT)(~(LIntT)0 == value_lo).AsIntegerUnsafe());
+			}
 			result_hi = unchecked((HIntT)result_hi_);
 			return result_lo_;
 		}

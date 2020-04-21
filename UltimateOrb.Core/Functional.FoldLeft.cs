@@ -4,7 +4,7 @@ using UltimateOrb.Collections.Generic;
 
 namespace UltimateOrb.Mathematics.Functional {
 
-    public static partial class BclNullable {
+    public static partial class StandardNullable {
 
         public static partial class FoldLeft<T, TAccumulate, TBinaryOperator, TBinaryOperatorB1>
             where T : struct

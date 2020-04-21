@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
@@ -10,17 +10,17 @@ namespace UltimateOrb {
 
     [SerializableAttribute()]
     [StructLayoutAttribute(LayoutKind.Sequential)]
-    public readonly partial struct BclArrayAsReadOnly<T>
+    public readonly partial struct StandardArrayAsReadOnlyList<T>
         : IList<T>
         , IReadOnlyList<T>
-        , Local.Collections.Generic.IList<T, BclArrayAsReadOnly<T>.Enumerator>
-        , Local.Collections.Generic.IReadOnlyList<T, BclArrayAsReadOnly<T>.Enumerator> {
+        , Local.Collections.Generic.IList<T, StandardArrayAsReadOnlyList<T>.Enumerator>
+        , Local.Collections.Generic.IReadOnlyList<T, StandardArrayAsReadOnlyList<T>.Enumerator> {
 
         private readonly T[] m_value;
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public BclArrayAsReadOnly(T[] value) {
+        public StandardArrayAsReadOnlyList(T[] value) {
             this.m_value = value;
         }
 
@@ -611,7 +611,7 @@ namespace UltimateOrb {
                 get => this.array[this.index];
             }
 
-            object IEnumerator.Current {
+            object System.Collections.IEnumerator.Current {
 
                 [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.MayFail)]
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -639,6 +639,7 @@ namespace UltimateOrb {
                 return false;
             }
 
+            [EditorBrowsableAttribute(EditorBrowsableState.Advanced)]
             [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
             [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
             public void Reset() {

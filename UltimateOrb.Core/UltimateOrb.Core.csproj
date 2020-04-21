@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>LEI Hongfaan</Authors>
     <Company>LEI Hongfaan</Company>
     <Product>UltimateOrb Libraries</Product>
     <Description>UltimateOrb Base Class Library.</Description>
     <Copyright>Copyright © 2017 LEI Hongfaan. Distributed under the MIT License.</Copyright>
-    <PackageLicenseUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Core/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Core</PackageProjectUrl>
     <PackageReleaseNotes>Experimental.
 This package does not include the test suite. See Project Site for more information.
@@ -16,34 +16,45 @@ This package does not include the test suite. See Project Site for more informat
     <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
     <AssemblyVersion>2</AssemblyVersion>
     <FileVersion>2</FileVersion>
-    <Version>2.0.0.3-alpha</Version>
+    <Version>2.0.0.4-alpha2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\Release\netstandard2.0\UltimateOrb.Core.xml</DocumentationFile>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\Debug\netstandard2.0\UltimateOrb.Core.xml</DocumentationFile>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="BclArrayAsArray.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Nonstrict.ToNonstrictCachedResults.cs~RF651267b7.TMP" />
     <None Remove="Wrapper{Module}.tt~RF8e349e36.TMP" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="BooleanIntegerModule{Compare}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BooleanIntegerModule{Compare}.cs</LastGenOutput>
+    </None>
+    <None Update="CilVerifiable{Unchecked,Bitwise}.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CilVerifiable{Unchecked,Bitwise}.cs</LastGenOutput>
+    </None>
     <None Update="Collections.Generic.InterfaceGenerators.Commons.tt">
       <Generator></Generator>
     </None>
@@ -70,6 +81,14 @@ This package does not include the test suite. See Project Site for more informat
     <None Update="DoubleArithmetic{Shift}.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DoubleArithmetic{Shift}.cs</LastGenOutput>
+    </None>
+    <None Update="Functional.Add.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Functional.Add.cs</LastGenOutput>
+    </None>
+    <None Update="Functional\CommomDelegates\CommonDelegates.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CommonDelegates.cs</LastGenOutput>
     </None>
     <None Update="IInitializable.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -98,6 +117,16 @@ This package does not include the test suite. See Project Site for more informat
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="BooleanIntegerModule{Compare}.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BooleanIntegerModule{Compare}.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CilVerifiable{Unchecked,Bitwise}.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CilVerifiable{Unchecked,Bitwise}.tt</DependentUpon>
+    </Compile>
     <Compile Update="CompareToExtensions{IntPtr,UIntPtr}.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -127,6 +156,16 @@ This package does not include the test suite. See Project Site for more informat
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>DoubleArithmetic{Shift}.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Functional.Add.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Functional.Add.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Functional\CommomDelegates\CommonDelegates.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CommonDelegates.tt</DependentUpon>
     </Compile>
     <Compile Update="IInitializable.cs">
       <DesignTime>True</DesignTime>

@@ -32,7 +32,6 @@ namespace UltimateOrb.RefReturn_Huge.Collections.Generic {
     }
 }
 
-
 namespace UltimateOrb.RefReturn.Collections.Generic {
 
     public partial interface IReadOnlyList<T> {
