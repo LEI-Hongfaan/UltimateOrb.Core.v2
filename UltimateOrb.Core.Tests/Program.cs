@@ -3,7 +3,8 @@
 using System;
 
 namespace UltimateOrb.Core.Tests {
-
+    using System.Runtime.InteropServices;
+    using System.Threading;
     using UltimateOrb.Plain.ValueTypes;
 
 
@@ -11,6 +12,107 @@ namespace UltimateOrb.Core.Tests {
     internal static class Program {
 
         private static int Main(string[] args) {
+            {
+                var a1 = 1;
+                var a2 = 2;
+                var a3 = 3;
+                var a4 = 4;
+                var b = (double)(1L << (52 + 2));
+                for (var i = 0; i < 64; i++) {
+                    var bb = Math.ScaleB(b, i);
+
+                    for (var j = 0; j < 8; ++j) {
+                        Console.WriteLine($@"{UltimateOrb.Utilities.CilVerifiable.AddThenSubtractFirst(bb, j):R}");
+                    }
+                }
+                return 0;
+
+            }
+            {
+                var sdf = (object)(-4);
+
+                Console.WriteLine(UltimateOrb.Utilities.CilVerifiable.UnboxRef<int>(sdf));
+
+                return 0;
+            }
+            {
+                var aaa = Volatile.Read(ref UltimateOrb.Dummy<int>.Value);
+                var bbb = Volatile.Read(ref UltimateOrb.Dummy<int>.Value);
+                var a = 0L;
+                for (var i = 0L; i < 400000000000L; i++) {
+                    a ^= UltimateOrb.Utilities.BooleanIntegerModule.GreaterThanOrEqual(aaa, bbb);
+
+                }
+                Console.WriteLine(a);
+
+                return 0;
+            }
+            {
+                var sdffa = new int[] {
+                    UltimateOrb.Utilities.BooleanIntegerModule.GreaterThanOrEqual(0.3, Double.NaN),
+                    UltimateOrb.Utilities.BooleanIntegerModule.GreaterThanOrEqual(0.3, 0.2),
+                };
+
+                foreach (var item in sdffa) {
+                    Console.WriteLine(item);
+                }
+
+
+                return 0;
+            }
+            {
+                var a = (1UL << 52) + 1;
+                var b = (1UL << 52);
+                var c = (1UL << 52) - 1;
+                var d = (1UL << 52) - 1;
+
+                var p = a + 0.5;
+                var q = b + 0.5;
+                var r = c + 0.5;
+                var s = d + 0.75;
+                var sp = d + 0.76;
+                var sm = d + 0.74;
+
+                Console.WriteLine($@"{double.Epsilon:R}");
+                Console.WriteLine($@"{double.Epsilon * d:R}");
+                Console.WriteLine($@"{p:R}");
+                Console.WriteLine($@"{q:R}");
+                Console.WriteLine($@"{r:R}");
+                Console.WriteLine($@"{s:R}");
+                Console.WriteLine($@"{sp:R}");
+                Console.WriteLine($@"{sm:R}");
+                return 0;
+            }
+            {
+
+                var sdfada = 0u;
+                sdfada ^= sdfada;
+                var sdaf = System.Numerics.BitOperations.LeadingZeroCount(sdfada);
+                _ = sdaf.GetHashCode();
+
+            }
+            {
+                var sfassss = BitConverter.Int64BitsToDouble(0x7FFF400000000000);
+                var sfas = sfassss;
+                var vdsa = 0.0 - sfas;
+                var sfad = BitConverter.DoubleToInt64Bits(sfas);
+                var asdsd = BitConverter.DoubleToInt64Bits(vdsa);
+                _ = (sfad ^ asdsd).GetHashCode();
+
+            }
+            {
+
+
+                var ccc = (Quadruple)0.0 < (Quadruple)Double.NegativeInfinity;
+                Console.WriteLine(ccc);
+            }
+            {
+                var ccc = Double.NaN != Double.NaN;
+                var a = Quadruple.IsNaN(Quadruple.NaN);
+                Console.WriteLine(a);
+                var sdfa = +Quadruple.MinValue;
+                Console.WriteLine(sdfa);
+            }
             {
                 var sdfa = (NodeId_A)3;
                 var dsafsd = 7 * sdfa;
@@ -138,7 +240,7 @@ namespace UltimateOrb.Plain.ValueTypes {
         }
     }
 }
-    namespace UltimateOrb.Plain.ValueTypes {
+namespace UltimateOrb.Plain.ValueTypes {
     using System.Collections;
     using System.Collections.Generic;
     using static UltimateOrb.Utilities.SignConverter;
@@ -338,9 +440,10 @@ namespace UltimateOrb.Plain.ValueTypes {
             }
         }
     }
-}namespace UltimateOrb {
+}
+namespace UltimateOrb {
 
-    public struct BclArrayAccessorBasic<T>
+    public struct StandardArrayAccessorBasic<T>
         : IArrayAccessorBasic<T> {
 
         ref T IArrayAccessorBasic<T>.this[int index] => throw new NotImplementedException();

@@ -30,8 +30,8 @@ namespace UltimateOrb.Core.Tests {
 
     public static partial class AAAf {
 
-        public static BclStringAsReadOnlyList AsIReadOnlyList(this string str) {
-            return new BclStringAsReadOnlyList(str);
+        public static StandardStringAsReadOnlyList AsIReadOnlyList(this string str) {
+            return new StandardStringAsReadOnlyList(str);
         }
 
         public partial interface IAsEnumerable<out T, TEnumerable, out TEnumerator>
@@ -1404,18 +1404,18 @@ namespace UltimateOrb.Core.Tests {
             }
         }
 
-        public abstract class KindAsBclType : TypeDelegator {
+        public abstract class KindAsStandardType : TypeDelegator {
 
-            protected KindAsBclType(Type delegatingType) : base(delegatingType) {
+            protected KindAsStandardType(Type delegatingType) : base(delegatingType) {
             }
 
-            protected KindAsBclType() : base() {
+            protected KindAsStandardType() : base() {
             }
         }
 
-        internal abstract class KindUnsafeInstanceAsBclType<T> : TypeDelegator {
+        internal abstract class KindUnsafeInstanceAsStandardType<T> : TypeDelegator {
 
-            protected KindUnsafeInstanceAsBclType() : base(typeof(T)) {
+            protected KindUnsafeInstanceAsStandardType() : base(typeof(T)) {
             }
         }
 
@@ -1428,7 +1428,7 @@ namespace UltimateOrb.Core.Tests {
 
             public static readonly FunctionKindExpression Array = FunctionKindExpression.Create(typeof(Array<>));
 
-            public static readonly FunctionKindExpression BclArray = FunctionKindExpression.Create(typeof(System.Array));
+            public static readonly FunctionKindExpression StandardArray = FunctionKindExpression.Create(typeof(System.Array));
 
             protected abstract string NameImpl {
 
@@ -2048,7 +2048,7 @@ namespace UltimateOrb.Core.Tests {
                 }
             }
 
-            public static partial class BclArray {
+            public static partial class StandardArray {
 
                 [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
                 public static Type Invoke(Type arg) {
@@ -2469,7 +2469,7 @@ namespace UltimateOrb.Core.Tests {
             }
             {
 
-                var asdfa = new UltimateOrb.Ex0005.BclArray();
+                var asdfa = new UltimateOrb.Ex0005.StandardArray();
                 asdfa._fmap = x => (Func<object, object>)(y => {
                     return ((object[])y).Select(((Func<object, object>)x)).ToArray();
                 });
@@ -2486,7 +2486,7 @@ namespace UltimateOrb.Core.Tests {
             }
             {
 
-                var asdfa = new UltimateOrb.Ex0004.BclArray();
+                var asdfa = new UltimateOrb.Ex0004.StandardArray();
                 asdfa._fmap = (x => y => {
                     return ((object[])y).Select(x).ToArray();
                 });
@@ -2926,8 +2926,8 @@ namespace UltimateOrb.Core.Tests {
                     Int128,
                     Curry<Int128, Int128, Int128, MultiplyChecked.Functor<Int128>>.C0.C1,
                     Curry<Int128, Int128, Int128, MultiplyChecked.Functor<Int128>>.C0.C1.C2,
-                    BclArrayAsArray<Int128>,
-                    BclArrayAsArray<Int128>.Enumerator
+                    StandardArrayAsArray<Int128>,
+                    StandardArrayAsArray<Int128>.Enumerator
                 >.Value.Invoke(default).Invoke(100).Invoke(adfs);
                 Printf(System.Console.Out, c);
                 Console.ReadKey(true);
@@ -2953,8 +2953,8 @@ namespace UltimateOrb.Core.Tests {
                     int,
                     Curry<int, int, int, MultiplyChecked.Functor<int>>.C0.C1,
                     Curry<int, int, int, MultiplyChecked.Functor<int>>.C0.C1.C2,
-                    BclArrayAsArray<int>,
-                    BclArrayAsArray<int>.Enumerator
+                    StandardArrayAsArray<int>,
+                    StandardArrayAsArray<int>.Enumerator
                 >.Value.Invoke(default).Invoke(100).Invoke(adfs);
                 Printf(System.Console.Out, c);
                 Console.ReadKey(true);
@@ -3042,7 +3042,7 @@ namespace UltimateOrb.Core.Tests {
                     }
                 }
                 {
-                    var asdfa = KindExpression.BclArray.Invoke(TypeKindExpression.Create(typeof(ulong)));
+                    var asdfa = KindExpression.StandardArray.Invoke(TypeKindExpression.Create(typeof(ulong)));
                     if (asdfa is TypeKindExpression t) {
                         var dsfa = t.Implement;
                         Console.WriteLine(dsfa.FullName);

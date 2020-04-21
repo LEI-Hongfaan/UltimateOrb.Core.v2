@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace UltimateOrb.Core.Tests {
     using UltimateOrb.Typed_Huge.Collections.Generic;
     using UltimateOrb.Utilities;
-
+    
     //public readonly partial struct Polynomial64OfInt16
     //    : IList<int, Polynomial64OfInt16.Enumerator>
     //    , IList<Int16, Polynomial64OfInt16.Enumerator>

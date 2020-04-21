@@ -25,11 +25,11 @@ namespace UltimateOrb.Ex0005 {
         ITypeConstructor Invoke(ITypeConstructor type);
     }
 
-    public readonly partial struct BclTypeAsTypeConstructor : ITypeConstructor {
+    public readonly partial struct StandardTypeAsTypeConstructor : ITypeConstructor {
 
         private readonly Type m_type;
 
-        public BclTypeAsTypeConstructor(Type type) {
+        public StandardTypeAsTypeConstructor(Type type) {
             this.m_type = type;
         }
 
@@ -51,16 +51,16 @@ namespace UltimateOrb.Ex0005 {
             throw new NotSupportedException();
         }
 
-        public static implicit operator Type(BclTypeAsTypeConstructor value) {
+        public static implicit operator Type(StandardTypeAsTypeConstructor value) {
             return value.m_type;
         }
 
-        public static implicit operator BclTypeAsTypeConstructor(Type value) {
-            return new BclTypeAsTypeConstructor(value);
+        public static implicit operator StandardTypeAsTypeConstructor(Type value) {
+            return new StandardTypeAsTypeConstructor(value);
         }
     }
 
-    public readonly partial struct BclTypeAsTypeConstructor<T> : ITypeConstructor {
+    public readonly partial struct StandardTypeAsTypeConstructor<T> : ITypeConstructor {
 
         public readonly static Type type = typeof(T);
 
@@ -85,12 +85,12 @@ namespace UltimateOrb.Ex0005 {
 
     public static partial class Module {
 
-        public static BclTypeAsTypeConstructor ToTypeConstructor(this Type type) {
+        public static StandardTypeAsTypeConstructor ToTypeConstructor(this Type type) {
             return type;
         }
     }
 
-    public readonly partial struct BclArray : ITypeConstructor {
+    public readonly partial struct StandardArray : ITypeConstructor {
 
         public Type Type {
 
@@ -176,7 +176,7 @@ namespace UltimateOrb.Ex0005 {
 
     }
 
-    public readonly partial struct BclArray : IFunctor<BclArray> {
+    public readonly partial struct StandardArray : IFunctor<StandardArray> {
 
         private readonly partial struct s__fmap {
 

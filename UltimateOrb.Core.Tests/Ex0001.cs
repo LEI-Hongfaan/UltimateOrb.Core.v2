@@ -837,14 +837,14 @@ namespace UltimateOrb.Ex0002 {
 
             private readonly T[] atoms;
 
-            public BclArrayAsReadOnly<T> Atoms {
+            public StandardArrayAsReadOnlyList<T> Atoms {
 
                 get => this.atoms.AsReadOnly();
             }
 
             private readonly MetaAnd<T>[] nonatoms;
 
-            public BclArrayAsReadOnly<T> Nonatoms {
+            public StandardArrayAsReadOnlyList<T> Nonatoms {
 
                 get => this.atoms.AsReadOnly();
             }
@@ -871,14 +871,14 @@ namespace UltimateOrb.Ex0002 {
 
             private readonly T[] atoms;
 
-            public BclArrayAsReadOnly<T> Atoms {
+            public StandardArrayAsReadOnlyList<T> Atoms {
 
                 get => this.atoms.AsReadOnly();
             }
 
             private readonly MetaOr<T>[] nonatoms;
 
-            public BclArrayAsReadOnly<T> Nonatoms {
+            public StandardArrayAsReadOnlyList<T> Nonatoms {
 
                 get => this.atoms.AsReadOnly();
             }
@@ -1040,7 +1040,7 @@ namespace UltimateOrb.Ex0001 {
         T GetValue<T>();
     }
 
-    public partial struct BclNullable : IQuantified {
+    public partial struct StandardNullable : IQuantified {
 
         public TConstructor GetValue<T, TConstructor>() {
             throw new NotImplementedException();
@@ -1052,14 +1052,14 @@ namespace UltimateOrb.Ex0001 {
 
         private readonly T[] atoms;
 
-        public BclArrayAsReadOnly<T> Atoms {
+        public StandardArrayAsReadOnlyList<T> Atoms {
 
             get => this.atoms.AsReadOnly();
         }
 
         private readonly MetaAnd<T>[] nonatoms;
 
-        public BclArrayAsReadOnly<T> Nonatoms {
+        public StandardArrayAsReadOnlyList<T> Nonatoms {
 
             get => this.atoms.AsReadOnly();
         }
@@ -1081,14 +1081,14 @@ namespace UltimateOrb.Ex0001 {
 
         private readonly T[] atoms;
 
-        public BclArrayAsReadOnly<T> Atoms {
+        public StandardArrayAsReadOnlyList<T> Atoms {
 
             get => this.atoms.AsReadOnly();
         }
 
         private readonly MetaOr<T>[] nonatoms;
 
-        public BclArrayAsReadOnly<T> Nonatoms {
+        public StandardArrayAsReadOnlyList<T> Nonatoms {
 
             get => this.atoms.AsReadOnly();
         }
