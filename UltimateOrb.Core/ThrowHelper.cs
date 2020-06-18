@@ -22,9 +22,7 @@ namespace UltimateOrb.Utilities {
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         [PureAttribute()]
         public static void IgnoreOutParameter<T>(out T value) {
-            var t = Contract.ValueAtReturn(out value);
-            value = t;
-            Contract.Ensures(t.Comma(true));
+            Miscellaneous.IgnoreOutParameter(out value);
         }
 
         [ReliabilityContractAttribute(Consistency.WillNotCorruptState, Cer.Success)]
