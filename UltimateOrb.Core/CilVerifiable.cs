@@ -699,7 +699,7 @@ namespace UltimateOrb.Utilities {
     /*
     public static partial class CilVerifiable {
 
-        [ILBodyAttribute(@"
+        [ILMethodBodyAttribute(@"
             ldarg.0
             ldarg.1
             ceq
@@ -709,7 +709,7 @@ namespace UltimateOrb.Utilities {
             throw null!;
         }
 
-        [ILBodyAttribute(@"
+        [ILMethodBodyAttribute(@"
             ldarg.0
             ldarg.1
             cgt
@@ -719,7 +719,7 @@ namespace UltimateOrb.Utilities {
             throw null!;
         }
 
-        [ILBodyAttribute(@"
+        [ILMethodBodyAttribute(@"
             ldarg.0
             ldarg.1
             cgt.un
@@ -729,7 +729,7 @@ namespace UltimateOrb.Utilities {
             throw null!;
         }
 
-        [ILBodyAttribute(@"
+        [ILMethodBodyAttribute(@"
             ldarg.0
             ldarg.1
             clt
@@ -739,7 +739,7 @@ namespace UltimateOrb.Utilities {
             throw null!;
         }
 
-        [ILBodyAttribute(@"
+        [ILMethodBodyAttribute(@"
             ldarg.0
             ldarg.1
             clt.un
@@ -749,7 +749,7 @@ namespace UltimateOrb.Utilities {
             throw null!;
         }
 
-        [ILBodyAttribute(@"
+        [ILMethodBodyAttribute(@"
             ldarg.0
             ldarg.1
             ceq
@@ -759,7 +759,7 @@ namespace UltimateOrb.Utilities {
             throw null!;
         }
 
-        [ILBodyAttribute(@"
+        [ILMethodBodyAttribute(@"
             ldarg.0
             ldarg.1
             cgt.un

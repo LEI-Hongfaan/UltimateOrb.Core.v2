@@ -648,6 +648,10 @@ namespace UltimateOrb {
         static class Helper {
 
 
+
+
+
+
             static UInt64 GetHi64BitsFromParts112(int sign, int exponent, UInt64 fraction) {
                 return unchecked(((UInt64)sign << (64 - 1)) + ((UInt64)exponent << (FractionBitCount - 64)) + fraction);
             }
@@ -703,7 +707,7 @@ namespace UltimateOrb {
                 result_dM1 = r;
             }
 
-            static void ShiftRight128WithJammingPartial(UInt64 value_d1, UInt64 value_d0, UInt64 value_dM1, int count, out UInt64 result_d1, out UInt64 result_d0, out UInt64 result_dM1) {
+            internal static void ShiftRight128WithJammingPartial(UInt64 value_d1, UInt64 value_d0, UInt64 value_dM1, int count, out UInt64 result_d1, out UInt64 result_d0, out UInt64 result_dM1) {
                 var minus_count = unchecked(-count);
                 result_d1 = value_d1 >> count;
                 result_d0 = (value_d1 << (/*63 & */minus_count)) | (value_d0 >> count);
@@ -806,7 +810,7 @@ namespace UltimateOrb {
                 return new Quadruple(fraction_d0, GetHi64BitsFromParts112(sign, exponent, fraction_d1));
             }
 
-            static int GetRawExponentFromHi64Bits(UInt64 hi) {
+            internal static int GetRawExponentFromHi64Bits(UInt64 hi) {
                 const int ExponentMask = (1 << ExponentBitCount) - 1;
                 return ExponentMask & unchecked((int)(hi >> (FractionBitCount - 64)));
             }
@@ -986,6 +990,10 @@ namespace UltimateOrb {
                 Multiply,
 
                 Divide,
+            }
+
+            internal static UInt64 softfloat_subMagsF128(UInt64 uiA64, UInt64 uiA0, UInt64 uiB64, UInt64 uiB0, FloatingPointRounding rounding, out UInt64 a) {
+                throw new NotImplementedException();
             }
 
             internal static UInt64 ComposeNaNs(UInt64 first_lo, UInt64 first_hi, UInt64 second_lo, UInt64 second_hi, BinaryArithmeticOperationKind op, out UInt64 result_hi) {

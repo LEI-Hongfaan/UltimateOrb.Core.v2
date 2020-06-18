@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Authors>LEI Hongfaan</Authors>
     <Company>LEI Hongfaan</Company>
     <Product>UltimateOrb Libraries</Product>
     <Description>UltimateOrb Base Class Library.</Description>
-    <Copyright>Copyright © 2017 LEI Hongfaan. Distributed under the MIT License.</Copyright>
+    <Copyright>Copyright © 2020 LEI Hongfaan. Distributed under the MIT License.</Copyright>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Core</PackageProjectUrl>
     <PackageReleaseNotes>Experimental.
@@ -16,11 +16,12 @@ This package does not include the test suite. See Project Site for more informat
     <Title>UltimateOrb.Core - UltimateOrb Libraries</Title>
     <AssemblyVersion>2</AssemblyVersion>
     <FileVersion>2</FileVersion>
-    <Version>2.0.0.4-alpha2</Version>
+    <Version>2.0.0.4-alpha3</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RootNamespace>UltimateOrb</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

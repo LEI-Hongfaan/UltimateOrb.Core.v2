@@ -35,6 +35,27 @@
             return canonical.ToInteger();
         }
 
+        /// <devdoc>
+        ///     <para>
+        ///         ECMA-335: (III.1.1.1 Numeric data types - Short integers)
+        ///         <c>bool</c> or <see cref="System.Boolean"/> (8-bit) is zero-extended.
+        ///     </para>
+        ///     <para>
+        ///         The body of this method will be modified by the build tools.
+        ///     </para>
+        /// </devdoc>
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        [ILMethodBodyAttribute(@"
+            LdArg.0
+            Ret
+        ")]
+        public static uint AsUIntegerUnsafe(this bool canonical) {
+            return unchecked((uint)canonical.ToInteger());
+        }
+
         [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
         [System.Runtime.TargetedPatchingOptOutAttribute(null)]
         [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
